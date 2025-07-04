@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | IELTS Vocabulary Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #0a5b8c;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #0a5b8c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .switch a {
+      color: #0a5b8c;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2 id="form-title">Login</h2>
+
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button id="login-btn">Login</button>
+    <button id="signup-btn" class="hidden">Sign Up</button>
+
+    <div class="switch">
+      <span id="switch-msg">Don't have an account?</span>
+      <a onclick="toggleForm()">Sign Up</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyBdPRZlDerpE3NZWqkUqAujxNBKOZEy9MU",
+  authDomain: "vocabulary-practice-7b841.firebaseapp.com",
+  projectId: "vocabulary-practice-7b841",
+  storageBucket: "vocabulary-practice-7b841.firebasestorage.app",
+  messagingSenderId: "638062499497",
+  appId: "1:638062499497:web:39527051597e814d58fbb8",
+  measurementId: "G-KN1157XT7X"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+
+    loginBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          alert('Logged in successfully!');
+          window.location.href = 'index.html';
+        })
+        .catch(error => alert(error.message));
+    });
+
+    signupBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          alert('Account created! Please log in.');
+          toggleForm();
+        })
+        .catch(error => alert(error.message));
+    });
+
+    function toggleForm() {
+      const login = document.getElementById('login-btn');
+      const signup = document.getElementById('signup-btn');
+      const title = document.getElementById('form-title');
+      const msg = document.getElementById('switch-msg');
+
+      login.classList.toggle('hidden');
+      signup.classList.toggle('hidden');
+      title.textContent = signup.classList.contains('hidden') ? 'Login' : 'Sign Up';
+      msg.textContent = signup.classList.contains('hidden') ? "Don't have an account?" : "Already have an account?";
+    }
+  </script>
+</body>
+</html>
