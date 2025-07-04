@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Definitions Activity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .group {
+      margin: 30px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .group.locked {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .word-box {
+      margin-bottom: 15px;
+    }
+    .word-box input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 Definitions Activity</h1>
+  <div id="container"></div>
+
+  <script>
+    const groups = [[{"word": "To be ranked as", "definition": "To be placed in a list based on how good someone is."}, {"word": "The likes of", "definition": "Famous or important people of a group."}, {"word": "To name just a few", "definition": "Used to show that more examples exist."}, {"word": "To be regarded as", "definition": "To be thought of in a certain way."}, {"word": "Outsider", "definition": "Someone who is not expected to win or succeed."}, {"word": "To account for", "definition": "To explain the reason for something."}], [{"word": "Widely publicized", "definition": "Known by many people."}, {"word": "Former", "definition": "Someone who had a job or title in the past."}, {"word": "Subtle", "definition": "Small and not easy to notice."}, {"word": "Pass unnoticed", "definition": "Not be seen or noticed."}, {"word": "Synthetic", "definition": "Made by people, not natural."}, {"word": "Underestimated", "definition": "Thought to be less important than it really is."}], [{"word": "Modification", "definition": "A small change to improve something."}, {"word": "Tweak", "definition": "A small change."}, {"word": "Customized", "definition": "Changed to fit someone\u2019s needs."}, {"word": "Elite", "definition": "The best and most skilled."}, {"word": "Readily available", "definition": "Easy to get."}, {"word": "Specifications", "definition": "Detailed description of something."}], [{"word": "Customization", "definition": "The act of changing something to fit needs."}, {"word": "To adjust", "definition": "To make a small change."}, {"word": "To weigh", "definition": "To have a certain weight."}, {"word": "The line between X and Y becomes thinner and thinner", "definition": "The difference between two things gets smaller."}, {"word": "To date back to", "definition": "To come from a certain time in the past."}, {"word": "Equal in significance", "definition": "Just as important."}], [{"word": "The former/the latter", "definition": "The first/the second thing mentioned."}, {"word": "Climatic conditions", "definition": "Weather and temperature."}, {"word": "Gut/intestines", "definition": "Animal parts used in strings."}, {"word": "Durable", "definition": "Strong and lasting a long time."}, {"word": "Stiff", "definition": "Hard to bend."}, {"word": "By far", "definition": "Much more than others."}], [{"word": "Revolutionise", "definition": "To completely change something."}, {"word": "Go beyond X", "definition": "To do more than X."}, {"word": "X was attributed to Y", "definition": "X was believed to be caused by Y."}, {"word": "Lead (noun)", "definition": "A heavy metal."}, {"word": "Grips", "definition": "The handle part of a racket."}, {"word": "To anticipate", "definition": "To expect something to happen."}], [{"word": "Light (adjective)", "definition": "Not heavy."}]];
+    const container = document.getElementById("container");
+
+    groups.forEach((group, groupIndex) => {
+      const section = document.createElement("div");
+      section.className = "group" + (groupIndex > 0 ? " locked" : "");
+      section.id = "group-" + groupIndex;
+
+      const heading = document.createElement("h2");
+      heading.textContent = "Group " + (groupIndex + 1);
+      section.appendChild(heading);
+
+      group.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "word-box";
+
+        const def = document.createElement("p");
+        def.textContent = item.definition;
+        div.appendChild(def);
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.dataset.answer = item.word.toLowerCase();
+        div.appendChild(input);
+
+        section.appendChild(div);
+      });
+
+      const button = document.createElement("button");
+      button.textContent = "Check Answers";
+      button.onclick = () => {
+        const inputs = section.querySelectorAll("input");
+        let allCorrect = true;
+        inputs.forEach(inp => {
+          if (inp.value.trim().toLowerCase() === inp.dataset.answer) {
+            inp.style.border = "2px solid green";
+          } else {
+            inp.style.border = "2px solid red";
+            allCorrect = false;
+          }
+        });
+        if (allCorrect && groupIndex < groups.length - 1) {
+          const next = document.getElementById("group-" + (groupIndex + 1));
+          next.classList.remove("locked");
+          window.scrollTo({ top: next.offsetTop, behavior: 'smooth' });
+        }
+      };
+      section.appendChild(button);
+
+      container.appendChild(section);
+    });
+  </script>
+</body>
+</html>
