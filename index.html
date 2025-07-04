@@ -9,7 +9,8 @@
     body {
       font-family: Arial, sans-serif;
       background: #f0f4f8;
-      padding: 40px;
+      padding: 40px 20px;
+      margin: 0;
       text-align: center;
     }
     h1 {
@@ -17,22 +18,38 @@
       margin-bottom: 30px;
     }
     .link-button {
-      display: inline-block;
-      padding: 16px 30px;
+      display: block;
+      margin: 10px auto;
+      padding: 14px 24px;
       font-size: 18px;
       background: #3498db;
       color: white;
       border-radius: 10px;
       text-decoration: none;
       transition: background 0.3s ease;
+      max-width: 90%;
     }
     .link-button:hover {
       background: #2980b9;
+    }
+    .coming-soon {
+      background: #95a5a6;
+      cursor: default;
+    }
+    .coming-soon:hover {
+      background: #95a5a6;
     }
   </style>
 </head>
 <body>
   <h1>Welcome to the Vocabulary Practice Site</h1>
+
   <a class="link-button" href="passage1.html">Cambridge 19, Test 1, Passage 1</a>
+  <a class="link-button coming-soon">Cambridge 19, Test 1, Passage 2 (Coming Soon)</a>
+  <a class="link-button coming-soon">Cambridge 19, Test 1, Passage 3 (Coming Soon)</a>
+  <a class="link-button coming-soon">Cambridge 19, Test 2, Passage 1 (Coming Soon)</a>
+  <a class="link-button coming-soon">Cambridge 19, Test 2, Passage 2 (Coming Soon)</a>
+  <a class="link-button coming-soon">Cambridge 19, Test 2, Passage 3 (Coming Soon)</a>
+
 </body>
 </html>
