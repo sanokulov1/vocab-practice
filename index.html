@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Vocabulary Practice</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+    header {
+      background-color: #0a5b8c;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .container {
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .intro {
+      background-color: #e8f4ff;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #0a5b8c;
+    }
+    ul.passages {
+      list-style: none;
+      padding: 0;
+    }
+    ul.passages li {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul.passages li a {
+      text-decoration: none;
+      color: #0a5b8c;
+      font-weight: bold;
+    }
+    .status {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      header h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IELTS Vocabulary Practice</h1>
+    <nav>
+      <a onclick="showSection('home')">Home</a>
+      <a onclick="showSection('progress')">Progress</a>
+      <a onclick="showSection('about')">About</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="home" class="section">
+      <div class="intro">
+        <p>Welcome to IELTS Vocabulary Practice! Choose a passage below to begin your personalized learning journey.</p>
+        <p>Each passage includes flashcards, matching games, quizzes, writing tasks, and a daily challenge to help you master vocabulary step by step.</p>
+      </div>
+
+      <div class="section">
+        <h2>Cambridge IELTS 19 – Test 1</h2>
+        <ul class="passages">
+          <li><a href="passage1.html">Passage 1</a><span class="status">✅ Completed</span></li>
+          <li>Passage 2 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 3 <span class="status">🕒 Coming Soon</span></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Cambridge IELTS 19 – Test 2</h2>
+        <ul class="passages">
+          <li>Passage 1 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 2 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 3 <span class="status">🕒 Coming Soon</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="progress" class="section hidden">
+      <h2>Your Progress</h2>
+      <p>⏱️ Time spent on this site: <span id="time-spent">0 minutes</span></p>
+    </div>
+
+    <div id="about" class="section hidden">
+      <h2>About This Website</h2>
+      <p>This website was created specifically for Diyorbek's IELTS students to make their IELTS journey easier and more fun!</p>
+    </div>
+
+    <footer>
+      <p>📩 Found a mistake? <a href="mailto:support@example.com">Let us know</a> | 🚀 More features coming soon!</p>
+    </footer>
+  </div>
+
+  <script>
+    const sections = ['home', 'progress', 'about'];
+    let minutesSpent = 0;
+
+    function showSection(id) {
+      sections.forEach(sec => {
+        document.getElementById(sec).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    setInterval(() => {
+      minutesSpent++;
+      document.getElementById('time-spent').innerText = `${minutesSpent} minute${minutesSpent > 1 ? 's' : ''}`;
+    }, 60000);
+  </script>
+</body>
+</html>
