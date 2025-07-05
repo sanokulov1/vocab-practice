@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Matching – Group 5</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #0a3d62;
+    }
+    .score-board {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .word, .definition {
+      background-color: #d0e6f7;
+      border: 2px solid #2980b9;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: grab;
+      width: 280px;
+      font-weight: bold;
+    }
+    .definition {
+      background-color: #f0f9ff;
+      border-style: dashed;
+    }
+    .matched {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .buttons a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧩 Matching – Group 5</h1>
+  <div class="score-board">Score: <span id="score">0</span> / 10</div>
+  <div class="container">
+    <div class="column" id="words-col"></div>
+    <div class="column" id="defs-col"></div>
+  </div>
+  <div class="buttons">
+    <a href="../index.html">🏠 Home</a>
+  </div>
+
+  <audio id="correct-sound" src="../assets/sounds/cash-register.mp3"></audio>
+  <audio id="wrong-sound" src="../assets/sounds/wrong.mp3"></audio>
+
+  <script>
+    const pairs = [
+      { word: "ransom", def: "Money demanded for the release of a person." },
+      { word: "hostage", def: "A person held to force demands from others." },
+      { word: "outlive", def: "To live longer than someone else." },
+      { word: "concerted action", def: "Planned or coordinated effort by a group." },
+      { word: "to grant", def: "To officially give or allow something." },
+      { word: "combat", def: "To fight or struggle against something." },
+      { word: "menace", def: "A serious threat or danger." },
+      { word: "cleansing", def: "The act of making something clean or pure." },
+      { word: "maritime", def: "Connected with the sea or ships." },
+      { word: "denial", def: "Refusal to accept or admit something." }
+    ];
+
+    const shuffledWords = [...pairs].sort(() => Math.random() - 0.5);
+    const shuffledDefs = [...pairs].sort(() => Math.random() - 0.5);
+
+    const wordsCol = document.getElementById("words-col");
+    const defsCol = document.getElementById("defs-col");
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+
+    let score = 0;
+
+    function renderColumns() {
+      wordsCol.innerHTML = "";
+      defsCol.innerHTML = "";
+
+      shuffledWords.forEach(({ word }) => {
+        const el = document.createElement("div");
+        el.className = "word";
+        el.draggable = true;
+        el.textContent = word;
+        el.dataset.word = word;
+        wordsCol.appendChild(el);
+      });
+
+      shuffledDefs.forEach(({ word, def }) => {
+        const el = document.createElement("div");
+        el.className = "definition";
+        el.textContent = def;
+        el.dataset.match = word;
+        defsCol.appendChild(el);
+      });
+    }
+
+    function enableDragDrop() {
+      let dragged = null;
+
+      document.querySelectorAll(".word").forEach(el => {
+        el.addEventListener("dragstart", () => {
+          dragged = el;
+        });
+      });
+
+      document.querySelectorAll(".definition").forEach(el => {
+        el.addEventListener("dragover", e => e.preventDefault());
+        el.addEventListener("drop", () => {
+          if (!dragged) return;
+          if (dragged.dataset.word === el.dataset.match) {
+            correctSound.play();
+            dragged.classList.add("matched");
+            el.classList.add("matched");
+            score++;
+            document.getElementById("score").textContent = score;
+            defsCol.appendChild(el); // move correct ones to bottom
+          } else {
+            wrongSound.play();
+          }
+        });
+      });
+    }
+
+    renderColumns();
+    setTimeout(enableDragDrop, 100);
+  </script>
+</body>
+</html>

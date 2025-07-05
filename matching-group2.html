@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Matching – Group 2</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f6fd;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #023e8a;
+    }
+    .score-board {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    .matching-columns {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-height: 500px;
+      
+    }
+    .word, .definition {
+      width: 260px;
+      padding: 15px;
+      background-color: #dbeafe;
+      border: 2px solid #3b82f6;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      cursor: grab;
+    }
+    .definition {
+      background-color: #f0f9ff;
+      border-style: dashed;
+    }
+    .matched {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .buttons a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  
+    .matching-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        justify-content: center;
+        align-items: start;
+        flex-wrap: wrap;
+    }
+    .column {
+        max-height: none;
+        overflow: visible;
+    }
+    .word, .definition {
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+<h1>🧩 Matching – Group 2</h1>
+<div class="score-board">Score: <span id="score">0</span> / 10</div>
+<div class="matching-columns">
+<div class="column" id="words-col"></div>
+<div class="column" id="defs-col"></div>
+</div>
+<div class="buttons">
+<a href="../index.html">🏠 Home</a>
+<a href="matching-group3.html">➡️ Next Group</a>
+</div>
+<audio id="correct-sound" src="../assets/sounds/cash-register.mp3"></audio>
+<audio id="wrong-sound" src="../assets/sounds/wrong.mp3"></audio>
+<script>
+    const words = [
+      { word: "eliminate", def: "To completely remove or get rid of." },
+      { word: "eradicate", def: "To destroy or wipe out completely." },
+      { word: "reign", def: "The period during which a ruler is in power." },
+      { word: "predate", def: "To exist or happen before something else." },
+      { word: "fertile", def: "Able to produce many plants or crops." },
+      { word: "rugged", def: "Rough or uneven in surface or character." },
+      { word: "marine resources", def: "Natural materials found in oceans." },
+      { word: "seafaring skills", def: "Abilities for sailing and navigation." },
+      { word: "unsurpassed knowledge", def: "Knowledge not exceeded by anyone." },
+      { word: "laden with", def: "Heavily loaded or full of something." }
+    ];
+
+    const shuffled = words.sort(() => Math.random() - 0.5);
+    const wordsCol = document.getElementById("words-col");
+    const defsCol = document.getElementById("defs-col");
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+
+    let score = 0;
+
+    function renderGame() {
+      wordsCol.innerHTML = "";
+      defsCol.innerHTML = "";
+
+      const shuffledDefs = [...shuffled].sort(() => Math.random() - 0.5);
+
+      shuffled.forEach(({ word }) => {
+        const w = document.createElement("div");
+        w.className = "word";
+        w.draggable = true;
+        w.textContent = word;
+        w.dataset.word = word;
+        wordsCol.appendChild(w);
+      });
+
+      shuffledDefs.forEach(({ word, def }) => {
+        const d = document.createElement("div");
+        d.className = "definition";
+        d.textContent = def;
+        d.dataset.match = word;
+        defsCol.appendChild(d);
+      });
+    }
+
+    function handleDragDrop() {
+      let dragged = null;
+
+      document.querySelectorAll(".word").forEach(wordEl => {
+        wordEl.addEventListener("dragstart", () => {
+          dragged = wordEl;
+        });
+      });
+
+      document.querySelectorAll(".definition").forEach(defEl => {
+        defEl.addEventListener("dragover", e => e.preventDefault());
+
+        defEl.addEventListener("drop", () => {
+          if (!dragged) return;
+          if (dragged.dataset.word === defEl.dataset.match) {
+            correctSound.play();
+            dragged.classList.add("matched");
+            defEl.classList.add("matched");
+            score++;
+            defsCol.appendChild(defEl);
+            document.getElementById("score").textContent = score;
+            wordsCol.removeChild(dragged);
+            wordsCol.appendChild(dragged); // sink to bottom
+
+            if (score === 10) {
+              setTimeout(() => {
+                window.location.href = "matching-group3.html";
+              }, 1000);
+            }
+          } else {
+            wrongSound.play();
+          }
+        });
+      });
+    }
+
+    renderGame();
+    setTimeout(handleDragDrop, 100);
+  </script>
+</body>
+</html>
