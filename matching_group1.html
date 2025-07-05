@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matching Group 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef7ff;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #003366;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .card, .drop-zone {
+      width: 280px;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      font-size: 18px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .card {
+      background-color: #d0e6ff;
+      border: 2px solid #0077cc;
+      cursor: grab;
+    }
+    .drop-zone {
+      background-color: #fff;
+      border: 2px dashed #aaa;
+      min-height: 60px;
+    }
+    .buttons {
+      margin-top: 30px;
+    }
+    .buttons a {
+      text-decoration: none;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Passage 2 - Matching Group 1</h1>
+  <div class="container" id="cards"></div>
+  <div class="container" id="zones"></div>
+
+  <div class="buttons">
+    <a href="index.html">🏠 Home</a>
+    <a href="matching.html">⬅️ Previous</a>
+  </div>
+
+  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b17b4391e0.mp3?filename=cash-register-purchase-87313.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_20d1c57a6c.mp3?filename=wrong-2-46133.mp3"></audio>
+
+  <script>
+    const pairs = [
+      ["Spring to", "To move or jump suddenly or quickly"],
+      ["Misfits", "People who do not fit into a group or society"],
+      ["Daredevils", "People who enjoy doing dangerous things"],
+      ["In command of", "In control of something"],
+      ["Millennium", "A period of 1,000 years"],
+      ["Prowl", "To move around quietly, like a predator"],
+      ["To raid", "To attack suddenly"],
+      ["Trade routes", "Paths used by traders to transport goods"],
+      ["Might", "Great strength or power"],
+      ["Fleet", "A group of ships"]
+    ];
+
+    let correctMatches = 0;
+
+    const shuffledWords = pairs.map(p => p[0]).sort(() => 0.5 - Math.random());
+    const shuffledDefs = pairs.map(p => p[1]).sort(() => 0.5 - Math.random());
+
+    const cardsContainer = document.getElementById('cards');
+    const zonesContainer = document.getElementById('zones');
+
+    shuffledWords.forEach(word => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.draggable = true;
+      div.textContent = word;
+      div.id = "word-" + word.replace(/\s+/g, '-');
+      div.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", div.textContent);
+      });
+      cardsContainer.appendChild(div);
+    });
+
+    shuffledDefs.forEach(def => {
+      const zone = document.createElement('div');
+      zone.className = 'drop-zone';
+      zone.textContent = def;
+      zone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+      zone.addEventListener("drop", (e) => {
+        const word = e.dataTransfer.getData("text/plain");
+        const match = pairs.find(p => p[0] === word && p[1] === zone.textContent);
+        const card = [...document.querySelectorAll('.card')].find(c => c.textContent === word);
+        if (match) {
+          zone.textContent = `${word} ✅`;
+          if (card) card.remove();
+          correctMatches++;
+          document.getElementById("correctSound").play();
+          if (correctMatches === pairs.length) {
+            setTimeout(() => {
+              window.location.href = "matching_group2.html";
+            }, 1500);
+          }
+        } else {
+          document.getElementById("wrongSound").play();
+        }
+      });
+      zonesContainer.appendChild(zone);
+    });
+  </script>
+</body>
+</html>
