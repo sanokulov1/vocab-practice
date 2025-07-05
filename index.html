@@ -1,93 +1,170 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IELTS Vocab Practice Hub</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    function toggleSection(id) {
-      const content = document.getElementById(id);
-      content.classList.toggle('hidden');
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Vocabulary Practice</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
     }
-  </script>
+    header {
+      background-color: #0a5b8c;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .container {
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .intro {
+      background-color: #e8f4ff;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #0a5b8c;
+    }
+    ul.passages {
+      list-style: none;
+      padding: 0;
+    }
+    ul.passages li {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul.passages li a {
+      text-decoration: none;
+      color: #0a5b8c;
+      font-weight: bold;
+    }
+    .status {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      header h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-10">
-    <h1 class="text-2xl font-bold">📘 IELTS Vocab Hub</h1>
+<body>
+  <header>
+    <h1>IELTS Vocabulary Practice</h1>
     <nav>
-      <a href="#" class="mx-2 text-blue-600 hover:underline">Login</a>
-      <a href="#" class="mx-2 text-blue-600 hover:underline">About</a>
+      <a onclick="showSection('home')">Home</a>
+      <a onclick="showSection('progress')">Progress</a>
+      <a onclick="showSection('about')">About</a>
     </nav>
   </header>
 
-  <section class="text-center py-10 px-4 bg-blue-100">
-    <h2 class="text-3xl font-semibold mb-2">Master IELTS Vocabulary with Engaging Tools</h2>
-    <p class="text-gray-700 mb-6">Cambridge-based tasks, quizzes, writing, and more</p>
-    <img src="https://undraw.co/api/illustrations/9cf1071d-8d91-4c10-b5b7-f34eb2c7bc6b" alt="IELTS Learning" class="mx-auto max-w-sm rounded-xl shadow">
-  </section>
+  <div class="container">
+    <div id="home" class="section">
+      <div class="intro">
+        <p>Welcome to IELTS Vocabulary Practice! Choose a passage below to begin your personalized learning journey.</p>
+        <p>Each passage includes flashcards, matching games, quizzes, writing tasks, and a daily challenge to help you master vocabulary step by step.</p>
+      </div>
 
-  <section class="px-4 py-10 max-w-6xl mx-auto">
-    <h3 class="text-2xl font-bold mb-6">📚 Practice by Cambridge Collection</h3>
+      <div class="section">
+        <h2>Cambridge IELTS 19 – Test 1</h2>
+        <ul class="passages">
+          <li><a href="passage1.html">Passage 1</a><span class="status">✅ Completed</span></li>
+          <li>Passage 2 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 3 <span class="status">🕒 Coming Soon</span></li>
+        </ul>
+      </div>
 
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge19')" class="w-full text-left px-4 py-3 bg-blue-600 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 19
-      </button>
-      <div id="cambridge19" class="p-4 bg-white hidden">
-        <p class="text-gray-700">Test 1 – Passage 1 ✅ <br> Test 1 – Passage 2 🚧 <br> Test 1 – Passage 3 🚧 <br> Test 2 – Passage 1 🚧 <br> Test 2 – Passage 2 🚧 <br> Test 2 – Passage 3 🚧 <br> Test 3 – Passage 1 🚧 <br> Test 3 – Passage 2 🚧 <br> Test 3 – Passage 3 🚧 <br> Test 4 – Passage 1 🚧 <br> Test 4 – Passage 2 🚧 <br> Test 4 – Passage 3 🚧</p>
+      <div class="section">
+        <h2>Cambridge IELTS 19 – Test 2</h2>
+        <ul class="passages">
+          <li>Passage 1 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 2 <span class="status">🕒 Coming Soon</span></li>
+          <li>Passage 3 <span class="status">🕒 Coming Soon</span></li>
+        </ul>
       </div>
     </div>
 
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge18')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 18
-      </button>
-      <div id="cambridge18" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
+    <div id="progress" class="section hidden">
+      <h2>Your Progress</h2>
+      <p>⏱️ Time spent on this site: <span id="time-spent">0 minutes</span></p>
     </div>
 
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge17')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 17
-      </button>
-      <div id="cambridge17" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
+    <div id="about" class="section hidden">
+      <h2>About This Website</h2>
+      <p>This website was created specifically for Diyorbek's IELTS students to make their IELTS journey easier and more fun!</p>
     </div>
 
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge16')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 16
-      </button>
-      <div id="cambridge16" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
-    </div>
-  </section>
+    <footer>
+      <p>📩 Found a mistake? <a href="mailto:support@example.com">Let us know</a> | 🚀 More features coming soon!</p>
+    </footer>
+  </div>
 
-  <section class="bg-white py-10 px-4">
-    <h3 class="text-2xl font-bold text-center mb-6">🎓 Why Use This Site?</h3>
-    <div class="max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">💡 Smart Learning Tools</h4>
-        <p class="text-sm text-gray-700">Flashcards, Daily Challenges, Typing Tasks</p>
-      </div>
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">📈 Track Progress</h4>
-        <p class="text-sm text-gray-700">Unlock levels, review words, see your growth</p>
-      </div>
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">🧠 Real IELTS Vocab</h4>
-        <p class="text-sm text-gray-700">Built from authentic Cambridge reading tests</p>
-      </div>
-    </div>
-  </section>
+  <script>
+    const sections = ['home', 'progress', 'about'];
+    let minutesSpent = 0;
 
-  <footer class="bg-gray-100 text-center py-4 mt-10 text-sm text-gray-600">
-    © 2025 IELTS Vocab Hub | <a href="#" class="text-blue-600 hover:underline">Privacy</a>
-  </footer>
+    function showSection(id) {
+      sections.forEach(sec => {
+        document.getElementById(sec).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    setInterval(() => {
+      minutesSpent++;
+      document.getElementById('time-spent').innerText = `${minutesSpent} minute${minutesSpent > 1 ? 's' : ''}`;
+    }, 60000);
+  </script>
 </body>
 </html>
