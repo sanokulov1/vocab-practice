@@ -86,8 +86,8 @@
 
   <div class="card-container">
     <div class="card" id="flashcard">
-      <div class="card-face card-front" id="card-front">A strike back or revenge</div>
-      <div class="card-face card-back" id="card-back">Retaliation</div>
+      <div class="card-face card-front" id="card-front">Retaliation</div>
+      <div class="card-face card-back" id="card-back">A strike back or revenge</div>
     </div>
   </div>
 
@@ -104,26 +104,23 @@
   const back = document.getElementById("card-back");
 
   const cards = [
-    { front: "A strike back or revenge", back: "Retaliation" },
-    { front: "To violently rob a ship at sea", back: "Piracy" },
-    { front: "A ship used in battles", back: "Warship" },
-    { front: "A written record of a ship's journey", back: "Logbook" },
-    { front: "To stop and search a vehicle or ship", back: "Intercept" }
+    { word: "Retaliation", def: "A strike back or revenge" },
+    { word: "Piracy", def: "To violently rob a ship at sea" },
+    { word: "Warship", def: "A ship used in battles" },
+    { word: "Logbook", def: "A written record of a ship's journey" },
+    { word: "Intercept", def: "To stop and search a vehicle or ship" }
   ];
 
   let current = 0;
-  let isFlipped = false;
 
   function updateCard() {
-    front.textContent = cards[current].front;
-    back.textContent = cards[current].back;
+    front.textContent = cards[current].word;
+    back.textContent = cards[current].def;
     flashcard.classList.remove("flip");
-    isFlipped = false;
   }
 
   function flipCard() {
     flashcard.classList.toggle("flip");
-    isFlipped = !isFlipped;
   }
 
   function nextCard() {
