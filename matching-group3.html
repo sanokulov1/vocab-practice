@@ -3,161 +3,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matching – Group 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Matching Group 3 – Compact</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f6fd;
+      background: #f9fbfd;
       margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     h1 {
       text-align: center;
-      color: #023e8a;
+      font-size: 22px;
     }
-    .score-board {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 18px;
-    }
-    .matching-columns {
+    .game-area {
       display: flex;
-      justify-content: center;
-      gap: 30px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 850px;
     }
-    .column {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .word, .definition {
-      width: 250px;
-      padding: 15px;
-      background-color: #dbeafe;
-      border: 2px solid #3b82f6;
-      border-radius: 10px;
+    .card, .drop-zone {
+      padding: 6px 8px;
+      background: white;
+      border: 2px solid #3498db;
+      border-radius: 6px;
       text-align: center;
-      font-weight: bold;
-      cursor: grab;
+      font-size: 14px;
+      min-width: 140px;
+      max-width: 140px;
+      line-height: 1.2;
+      word-wrap: break-word;
     }
-    .definition {
-      background-color: #f0f9ff;
+    .drop-zone {
       border-style: dashed;
+      background: #ecf4fa;
     }
     .matched {
-      opacity: 0.4;
+      background: #d4edda !important;
+      border-color: #28a745 !important;
       pointer-events: none;
     }
-    .buttons {
-      text-align: center;
-      margin-top: 30px;
+    #scoreboard {
+      margin: 10px 0;
+      font-weight: bold;
     }
-    .buttons a {
-      margin: 0 10px;
-      text-decoration: none;
-      font-size: 16px;
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #next-btn, #home-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    #next-btn:hover, #home-btn:hover {
+      background: #2980b9;
     }
   </style>
 </head>
 <body>
-  <h1>🧩 Matching – Group 3</h1>
-  <div class="score-board">Score: <span id="score">0</span> / 10</div>
-  <div class="matching-columns">
-    <div class="column" id="words-col"></div>
-    <div class="column" id="defs-col"></div>
-  </div>
-  <div class="buttons">
-    <a href="../index.html">🏠 Home</a>
-    <a href="matching-group4.html">➡️ Next Group</a>
-  </div>
 
-  <audio id="correct-sound" src="../assets/sounds/cash-register.mp3"></audio>
-  <audio id="wrong-sound" src="../assets/sounds/wrong.mp3"></audio>
+<h1>🧩 Matching Group 3</h1>
+<div id="scoreboard">Score: 0 / 10</div>
+<div class="game-area" id="words"></div>
+<div class="game-area" id="defs"></div>
+<div>
+  <button id="home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button id="next-btn" onclick="window.location.href='matching_group4_compact.html'">➡️ Next Group</button>
+</div>
+<div id="result"></div>
 
-  <script>
-    const words = [
-      { word: "surrender", def: "To give up or yield to someone or something." },
-      { word: "retaliation", def: "An act of revenge or striking back." },
-      { word: "resort to", def: "To use something as a final option." },
-      { word: "correspondence", def: "Communication by exchanging letters or emails." },
-      { word: "to be troubled by", def: "To feel worried or upset about something." },
-      { word: "pressing issues", def: "Important problems needing immediate attention." },
-      { word: "commerce", def: "The activity of buying and selling." },
-      { word: "to assure", def: "To promise or say something with confidence." },
-      { word: "subjects", def: "People under the rule of a monarch or government." },
-      { word: "condone", def: "To accept or allow something wrong or offensive." }
-    ];
+<script>
+const wordPairs = [
+  { word: "surrender", def: "To stop resisting and give up control." },
+  { word: "retaliation", def: "The act of fighting back after being attacked." },
+  { word: "resort to", def: "To use something bad as a solution." },
+  { word: "correspondence", def: "Letters or communication by writing." },
+  { word: "to be troubled by", def: "To feel worried or bothered by something." },
+  { word: "pressing issues", def: "Important problems needing quick attention." },
+  { word: "commerce", def: "The activity of buying and selling goods." },
+  { word: "to assure", def: "To promise or say something with confidence." },
+  { word: "subjects", def: "People under the rule of a leader or king." },
+  { word: "condone", def: "To accept or allow bad behavior." }
+];
 
-    const shuffled = words.sort(() => Math.random() - 0.5);
-    const wordsCol = document.getElementById("words-col");
-    const defsCol = document.getElementById("defs-col");
-    const correctSound = document.getElementById("correct-sound");
-    const wrongSound = document.getElementById("wrong-sound");
+let score = 0;
 
-    let score = 0;
+const wordsContainer = document.getElementById("words");
+const defsContainer = document.getElementById("defs");
+const scoreboard = document.getElementById("scoreboard");
 
-    function renderGame() {
-      wordsCol.innerHTML = "";
-      defsCol.innerHTML = "";
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
-      const shuffledDefs = [...shuffled].sort(() => Math.random() - 0.5);
+function renderGame() {
+  const shuffledWords = shuffle(wordPairs);
+  const shuffledDefs = shuffle(wordPairs);
 
-      shuffled.forEach(({ word }) => {
-        const w = document.createElement("div");
-        w.className = "word";
-        w.draggable = true;
-        w.textContent = word;
-        w.dataset.word = word;
-        wordsCol.appendChild(w);
-      });
+  shuffledWords.forEach(({ word }) => {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.textContent = word;
+    el.setAttribute("data-word", word);
+    el.setAttribute("draggable", "true");
+    el.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", word);
+    });
+    wordsContainer.appendChild(el);
+  });
 
-      shuffledDefs.forEach(({ word, def }) => {
-        const d = document.createElement("div");
-        d.className = "definition";
-        d.textContent = def;
-        d.dataset.match = word;
-        defsCol.appendChild(d);
-      });
-    }
+  shuffledDefs.forEach(({ word, def }) => {
+    const dropZone = document.createElement("div");
+    dropZone.className = "drop-zone";
+    dropZone.textContent = def;
+    dropZone.setAttribute("data-def", def);
+    dropZone.addEventListener("dragover", e => e.preventDefault());
+    dropZone.addEventListener("drop", e => {
+      e.preventDefault();
+      const draggedWord = e.dataTransfer.getData("text/plain");
+      const correctPair = wordPairs.find(p => p.word === draggedWord);
+      if (correctPair && correctPair.def === def) {
+        score++;
+        scoreboard.textContent = `Score: ${score} / 10`;
+        const wordCard = [...document.querySelectorAll(".card")].find(c => c.textContent === draggedWord);
+        wordCard.classList.add("matched");
+        dropZone.classList.add("matched");
+        wordCard.setAttribute("draggable", "false");
+        dropZone.textContent = draggedWord;
+      }
+    });
+    defsContainer.appendChild(dropZone);
+  });
+}
 
-    function handleDragDrop() {
-      let dragged = null;
+renderGame();
+</script>
 
-      document.querySelectorAll(".word").forEach(wordEl => {
-        wordEl.addEventListener("dragstart", () => {
-          dragged = wordEl;
-        });
-      });
-
-      document.querySelectorAll(".definition").forEach(defEl => {
-        defEl.addEventListener("dragover", e => e.preventDefault());
-
-        defEl.addEventListener("drop", () => {
-          if (!dragged) return;
-          if (dragged.dataset.word === defEl.dataset.match) {
-            correctSound.play();
-            dragged.classList.add("matched");
-            defEl.classList.add("matched");
-            score++;
-            document.getElementById("score").textContent = score;
-            defsCol.appendChild(defEl); // sink matched definition
-
-            if (score === 10) {
-              setTimeout(() => {
-                window.location.href = "matching-group4.html";
-              }, 1000);
-            }
-          } else {
-            wrongSound.play();
-          }
-        });
-      });
-    }
-
-    renderGame();
-    setTimeout(handleDragDrop, 100);
-  </script>
 </body>
 </html>
