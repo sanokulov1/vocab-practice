@@ -3,137 +3,165 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matching Group 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matching – Group 1</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f8fb;
+      background-color: #f0f6fd;
       margin: 0;
       padding: 20px;
-      box-sizing: border-box;
     }
     h1 {
       text-align: center;
-      color: #003366;
+      white-space: normal;
+      color: #023e8a;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .draggable, .droppable {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
+    .score-board {
       text-align: center;
-      min-height: 40px;
-    }
-    .draggable {
-      background-color: #e6f2ff;
-      border: 2px solid #007acc;
-      cursor: grab;
-    }
-    .droppable {
-      background-color: #ffffff;
-      border: 2px dashed #ccc;
-    }
-    .matched {
-      background-color: #d4edda;
-      font-weight: bold;
+      white-space: normal;
+      margin-bottom: 20px;
+      font-size: 18px;
     }
     .container {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
+      flex-direction: column;
+      align-items: center;
       gap: 20px;
-      margin-top: 30px;
     }
-    .column {
-      width: 45%;
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
-    .button-bar {
+    .word, .definition {
+      width: 130px;
+      padding: 10px;
+      background-color: #dbeafe;
+      border: 2px solid #3b82f6;
+      border-radius: 10px;
       text-align: center;
+      white-space: normal;
+      font-weight: bold;
+      cursor: grab;
+    }
+    .definition {
+      background-color: #f0f9ff;
+      border-style: dashed;
+    }
+    .matched {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .buttons {
+      text-align: center;
+      white-space: normal;
       margin-top: 30px;
     }
-    button {
-      padding: 10px 18px;
+    .buttons a {
+      margin: 0 10px;
+      text-decoration: none;
       font-size: 16px;
-      border-radius: 6px;
     }
   </style>
 </head>
 <body>
   <h1>🧩 Matching – Group 1</h1>
+  <div class="score-board">Score: <span id="score">0</span> / 10</div>
   <div class="container">
-    <div class="column" id="words" style="min-width: 300px;"></div>
-    <div class="column" id="definitions" style="min-width: 300px;"></div>
+    <div class="row" id="words-row1"></div>
+    <div class="row" id="words-row2"></div>
+    <div class="row" id="defs-row1"></div>
+    <div class="row" id="defs-row2"></div>
+    <div class="row" id="defs-row3"></div>
   </div>
-  <div class="button-bar">
-    <button onclick="location.href='index.html'">🏠 Home</button>
+  <div class="buttons">
+    <a href="../index.html">🏠 Home</a>
+    <a href="matching-group2.html">➡️ Next Group</a>
   </div>
 
-  <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-cash-register-bleep-259.wav"></audio>
+  <audio id="correct-sound" src="../assets/sounds/cash-register.mp3"></audio>
+  <audio id="wrong-sound" src="../assets/sounds/wrong.mp3"></audio>
 
   <script>
-    const data = [
-      { word: "Spring to", definition: "Suddenly move or jump forward." },
-      { word: "Misfits", definition: "People who don't fit into a group or society." },
-      { word: "Daredevils", definition: "People who enjoy doing dangerous things." },
-      { word: "In command of", definition: "In control or in charge of." },
-      { word: "Millennium", definition: "A period of 1000 years." },
-      { word: "Prowl", definition: "Move around quietly and secretly, like a predator." },
-      { word: "To raid", definition: "To attack suddenly and steal from." },
-      { word: "Trade routes", definition: "Paths used by traders to move goods." },
-      { word: "Might", definition: "Great power or strength." },
-      { word: "Fleet", definition: "A group of ships." }
+    const words = [
+      { word: "spring to", def: "To suddenly begin doing something actively." },
+      { word: "misfits", def: "People who don't fit in with others." },
+      { word: "daredevils", def: "People who enjoy doing dangerous things." },
+      { word: "in command of", def: "Having control or authority over." },
+      { word: "millennium", def: "A period of one thousand years." },
+      { word: "prowl", def: "To move around quietly, like a predator." },
+      { word: "to raid", def: "To attack suddenly, often to steal or destroy." },
+      { word: "trade routes", def: "Paths used by traders to transport goods." },
+      { word: "might", def: "Power or strength." },
+      { word: "fleet", def: "A group of ships operating together." },
     ];
 
-    const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+    let shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    let shuffledDefs = [...words].sort(() => Math.random() - 0.5);
 
-    const wordsDiv = document.getElementById("words");
-    const defsDiv = document.getElementById("definitions");
-    const correctSound = document.getElementById("correct-sound");
+    let wordContainers = [document.getElementById("words-row1"), document.getElementById("words-row2")];
+    let defContainers = [document.getElementById("defs-row1"), document.getElementById("defs-row2"), document.getElementById("defs-row3")];
 
-    shuffle([...data]).forEach(({ word }) => {
-      const div = document.createElement("div");
-      div.className = "draggable";
-      div.draggable = true;
-      div.textContent = word;
-      div.dataset.word = word;
-      div.addEventListener("dragstart", e => {
-        e.dataTransfer.setData("text/plain", word);
+    function render() {
+      shuffledWords.forEach((item, i) => {
+        let div = document.createElement("div");
+        div.className = "word";
+        div.textContent = item.word;
+        div.draggable = true;
+        div.dataset.word = item.word;
+        wordContainers[i < 5 ? 0 : 1].appendChild(div);
       });
-      wordsDiv.appendChild(div);
-    });
 
-    shuffle([...data]).forEach(({ word, definition }) => {
-      const div = document.createElement("div");
-      div.className = "droppable";
-      div.textContent = definition;
-      div.dataset.word = word;
-      div.addEventListener("dragover", e => e.preventDefault());
-      div.addEventListener("drop", e => {
-        const dragged = e.dataTransfer.getData("text/plain");
-        if (dragged === div.dataset.word) {
-          div.textContent = `${dragged} ✓`;
-          div.classList.add("matched");
-          const draggedEl = [...wordsDiv.children].find(w => w.dataset.word === dragged);
-          if (draggedEl) draggedEl.remove();
-          correctSound.play();
-      defsDiv.appendChild(div);
-        } else {
-          div.style.backgroundColor = "#f8d7da";
-          setTimeout(() => div.style.backgroundColor = "#fff", 600);
-        }
+      shuffledDefs.forEach((item, i) => {
+        let div = document.createElement("div");
+        div.className = "definition";
+        div.textContent = item.def;
+        div.dataset.match = item.word;
+        defContainers[i % 3].appendChild(div);
       });
-      defsDiv.appendChild(div);
-    });
+    }
+
+    function enableDragDrop() {
+      let dragged = null;
+      let score = 0;
+      const correctSound = document.getElementById("correct-sound");
+      const wrongSound = document.getElementById("wrong-sound");
+      const scoreSpan = document.getElementById("score");
+
+      document.querySelectorAll(".word").forEach(el => {
+        el.addEventListener("dragstart", () => {
+          dragged = el;
+        });
+      });
+
+      document.querySelectorAll(".definition").forEach(def => {
+        def.addEventListener("dragover", e => e.preventDefault());
+        def.addEventListener("drop", () => {
+          if (!dragged) return;
+          if (dragged.dataset.word === def.dataset.match) {
+            dragged.classList.add("matched");
+            def.classList.add("matched");
+            correctSound.play();
+            score++;
+            scoreSpan.textContent = score;
+            def.parentElement.appendChild(def); // move to bottom
+
+            if (score === 10) {
+              setTimeout(() => {
+                window.location.href = "matching-group2.html";
+              }, 800);
+            }
+          } else {
+            wrongSound.play();
+          }
+        });
+      });
+    }
+
+    render();
+    setTimeout(enableDragDrop, 200);
   </script>
 </body>
 </html>
