@@ -2,112 +2,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IELTS Vocabulary Practice</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f0f4f8;
-      color: #333;
-    }
-    header {
-      background: linear-gradient(to right, #0a5b8c, #0d8ecf);
-      color: white;
-      padding: 1.5rem 2rem;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-    .card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 1.5rem;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-    }
-    .card h2 {
-      margin-top: 0;
-      color: #0a5b8c;
-    }
-    .card ul {
-      padding-left: 1.2rem;
-    }
-    .card li {
-      margin: 0.5rem 0;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #777;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Vocab Practice Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>IELTS Vocabulary Practice</h1>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Header -->
+  <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-10">
+    <h1 class="text-2xl font-bold">📘 IELTS Vocab Hub</h1>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Progress</a>
-      <a href="#">About</a>
+      <a href="#" class="mx-2 text-blue-600 hover:underline">Login</a>
+      <a href="#" class="mx-2 text-blue-600 hover:underline">About</a>
     </nav>
   </header>
 
-  <div class="container">
-    <div class="card">
-      <h2>Cambridge IELTS 19 – Test 1</h2>
-      <ul>
-        <li>✅ <a href="passage1.html">Passage 1</a></li>
-        <li>🕒 Passage 2 (Coming Soon)</li>
-        <li>🕒 Passage 3 (Coming Soon)</li>
-      </ul>
-      <h2>Cambridge IELTS 19 – Test 2</h2>
-      <ul>
-        <li>🕒 Passage 1 (Coming Soon)</li>
-        <li>🕒 Passage 2 (Coming Soon)</li>
-        <li>🕒 Passage 3 (Coming Soon)</li>
-      </ul>
-    </div>
+  <!-- Hero Section -->
+  <section class="text-center py-10 px-4 bg-blue-100">
+    <h2 class="text-3xl font-semibold mb-2">Master IELTS Vocabulary with Engaging Tools</h2>
+    <p class="text-gray-700 mb-6">Cambridge-based tasks, quizzes, writing, and more</p>
+    <img src="https://undraw.co/api/illustrations/9cf1071d-8d91-4c10-b5b7-f34eb2c7bc6b" alt="IELTS Learning" class="mx-auto max-w-sm rounded-xl shadow">
+  </section>
 
-    <div class="card">
-      <h2>Your Progress</h2>
-      <p>⏱️ Time spent: tracking coming soon...</p>
-    </div>
+  <!-- Practice Passages Section -->
+  <section class="px-4 py-10 max-w-6xl mx-auto">
+    <h3 class="text-2xl font-bold mb-6">📚 Practice by Passage</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Passage Card -->
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
+        <h4 class="text-lg font-semibold">Cambridge 19 – Test 1 – Passage 1</h4>
+        <p class="text-sm text-gray-600">Topic: Tennis, Coaching, Success</p>
+        <button class="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Start</button>
+      </div>
 
-    <div class="card">
-      <h2>About This Website</h2>
-      <p>This website was created specifically for Diyorbek's IELTS students to make their IELTS journey easier and more fun!</p>
-    </div>
-  </div>
+      <!-- Coming Soon Card -->
+      <div class="bg-gray-200 p-4 rounded-xl shadow text-gray-500">
+        <h4 class="text-lg font-semibold">Cambridge 19 – Test 1 – Passage 2</h4>
+        <p class="text-sm">🚧 Coming Soon</p>
+      </div>
 
-  <footer>
-    📩 Found a mistake? <a href="mailto:support@example.com">Let us know</a> | 🚀 More features coming soon!
+      <!-- Passage Card -->
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
+        <h4 class="text-lg font-semibold">Cambridge 19 – Test 1 – Passage 3</h4>
+        <p class="text-sm text-gray-600">Topic: Biodiversity, Environment</p>
+        <button class="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Start</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="bg-white py-10 px-4">
+    <h3 class="text-2xl font-bold text-center mb-6">🎓 Why Use This Site?</h3>
+    <div class="max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="p-4 bg-blue-50 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-2">💡 Smart Learning Tools</h4>
+        <p class="text-sm text-gray-700">Flashcards, Daily Challenges, Typing Tasks</p>
+      </div>
+      <div class="p-4 bg-blue-50 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-2">📈 Track Progress</h4>
+        <p class="text-sm text-gray-700">Unlock levels, review words, see your growth</p>
+      </div>
+      <div class="p-4 bg-blue-50 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-2">🧠 Real IELTS Vocab</h4>
+        <p class="text-sm text-gray-700">Built from authentic Cambridge reading tests</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center py-4 mt-10 text-sm text-gray-600">
+    © 2025 IELTS Vocab Hub | <a href="#" class="text-blue-600 hover:underline">Privacy</a>
   </footer>
 </body>
 </html>
