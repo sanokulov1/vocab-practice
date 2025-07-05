@@ -7,92 +7,145 @@
   <title>Flashcards – Passage 2</title>
   <style>
     body {
-      background-color: #f0f4f8;
       font-family: Arial, sans-serif;
+      background-color: #f2f7fc;
       text-align: center;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       padding: 40px;
-      margin: 30px auto;
-      width: 60%;
-      font-size: 24px;
     }
-    .button {
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      display: inline-block;
+    }
+
+    .card {
+      width: 400px;
+      height: 150px;
+      border-radius: 20px;
+      background-color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+      margin: 0 auto 30px;
+    }
+
+    .card.flip {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .card-front {
+      background: white;
+    }
+
+    .card-back {
+      background: #ecf0f1;
+      transform: rotateY(180deg);
+    }
+
+    .button-group {
+      margin-top: 20px;
+    }
+
+    .btn {
       background-color: #3498db;
       color: white;
       border: none;
-      padding: 12px 20px;
       border-radius: 10px;
-      margin: 10px;
-      cursor: pointer;
+      padding: 12px 20px;
+      margin: 0 8px;
       font-size: 16px;
+      cursor: pointer;
     }
-    .button:hover {
+
+    .btn:hover {
       background-color: #2980b9;
-    }
-    .home-btn {
-      background-color: #27ae60;
-      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <button onclick="goHome()" class="button home-btn">🏠 Go to Home Page</button>
-  <h1><strong>Flashcards – Passage 2</strong></h1>
-  <div class="card" id="flashcard">Loading...</div>
-  <div>
-    <button class="button" onclick="prevCard()">⏪ Previous</button>
-    <button class="button" onclick="flipCard()">🔄 Flip</button>
-    <button class="button" onclick="nextCard()">⏩ Next</button>
-    <button class="button" onclick="shuffleCards()">🔀 Shuffle</button>
+  <h1>Flashcards – Passage 2</h1>
+
+  <div class="card-container">
+    <div class="card" id="flashcard">
+      <div class="card-face card-front" id="card-front">A strike back or revenge</div>
+      <div class="card-face card-back" id="card-back">Retaliation</div>
+    </div>
   </div>
 
-  <script>
-    const flashcards = [{"front": "Word/Phrase", "back": "Simple Definition"}, {"front": "Spring to", "back": "To suddenly come to mind"}, {"front": "Misfits", "back": "People who don\u2019t fit in"}, {"front": "Daredevils", "back": "People who enjoy taking risks"}, {"front": "In command of", "back": "In control of something"}, {"front": "Millennium", "back": "A period of 1000 years"}, {"front": "Prowl", "back": "To move around secretly"}, {"front": "To raid", "back": "To attack and steal from a place"}, {"front": "Trade routes", "back": "Paths used for trading goods"}, {"front": "Might", "back": "Great strength or power"}, {"front": "Fleet", "back": "A group of ships"}, {"front": "Eliminate", "back": "To completely remove"}, {"front": "Eradicate", "back": "To destroy completely"}, {"front": "Reign", "back": "The time someone rules"}, {"front": "Predate", "back": "To exist earlier than"}, {"front": "Fertile", "back": "Good for growing crops"}, {"front": "Rugged", "back": "Rough or uneven"}, {"front": "Marine resources", "back": "Things from the sea like fish"}, {"front": "Seafaring skills", "back": "Abilities related to sailing"}, {"front": "Unsurpassed knowledge", "back": "The best possible understanding"}, {"front": "Laden with", "back": "Heavily loaded with"}, {"front": "Surrender", "back": "To give up"}, {"front": "Retaliation", "back": "A strike back or revenge"}, {"front": "Resort to", "back": "To turn to something bad as a last option"}, {"front": "Correspondence", "back": "Letters or communication"}, {"front": "To be troubled by", "back": "To be worried about"}, {"front": "Pressing issues", "back": "Urgent problems"}, {"front": "Commerce", "back": "Trade or business"}, {"front": "To assure", "back": "To promise confidently"}, {"front": "Subjects", "back": "People ruled by a monarch"}, {"front": "Condone", "back": "To accept something wrong"}, {"front": "Praise", "back": "To speak highly of"}, {"front": "Glorify", "back": "To describe something as better than it is"}, {"front": "To make a detour", "back": "To take a longer or different route"}, {"front": "To tolerate", "back": "To allow something bad"}, {"front": "To curtail", "back": "To reduce or stop something"}, {"front": "Hamper", "back": "To make something difficult"}, {"front": "Culprit", "back": "The one responsible for something wrong"}, {"front": "Emboldened", "back": "Made more confident to do something bad"}, {"front": "Kidnapped", "back": "Taken away by force"}, {"front": "Prominent", "back": "Well-known or important"}, {"front": "Ransom", "back": "Money asked for a person\u2019s release"}, {"front": "Hostage", "back": "A person held prisoner"}, {"front": "Outlive", "back": "To last longer than"}, {"front": "Concerted action", "back": "Planned effort by a group"}, {"front": "To grant", "back": "To give officially"}, {"front": "Combat", "back": "To fight against"}, {"front": "Menace", "back": "A danger or threat"}, {"front": "Cleansing", "back": "Removing something bad"}, {"front": "Maritime", "back": "Related to the sea"}, {"front": "Denial", "back": "Refusal to accept"}];
-    let index = 0;
-    let isFront = true;
+  <div class="button-group">
+    <button class="btn" onclick="prevCard()">⏮️ Previous</button>
+    <button class="btn" onclick="flipCard()">🔄 Flip</button>
+    <button class="btn" onclick="nextCard()">⏭️ Next</button>
+    <button class="btn" onclick="shuffleCards()">🔀 Shuffle</button>
+  </div>
 
-    function showCard() {
-      const card = document.getElementById("flashcard");
-      card.textContent = isFront ? flashcards[index].front : flashcards[index].back;
+<script>
+  const flashcard = document.getElementById("flashcard");
+  const front = document.getElementById("card-front");
+  const back = document.getElementById("card-back");
+
+  const cards = [
+    { front: "A strike back or revenge", back: "Retaliation" },
+    { front: "To violently rob a ship at sea", back: "Piracy" },
+    { front: "A ship used in battles", back: "Warship" },
+    { front: "A written record of a ship's journey", back: "Logbook" },
+    { front: "To stop and search a vehicle or ship", back: "Intercept" }
+  ];
+
+  let current = 0;
+  let isFlipped = false;
+
+  function updateCard() {
+    front.textContent = cards[current].front;
+    back.textContent = cards[current].back;
+    flashcard.classList.remove("flip");
+    isFlipped = false;
+  }
+
+  function flipCard() {
+    flashcard.classList.toggle("flip");
+    isFlipped = !isFlipped;
+  }
+
+  function nextCard() {
+    current = (current + 1) % cards.length;
+    updateCard();
+  }
+
+  function prevCard() {
+    current = (current - 1 + cards.length) % cards.length;
+    updateCard();
+  }
+
+  function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
     }
+    current = 0;
+    updateCard();
+  }
 
-    function flipCard() {
-      isFront = !isFront;
-      showCard();
-    }
-
-    function nextCard() {
-      index = (index + 1) % flashcards.length;
-      isFront = true;
-      showCard();
-    }
-
-    function prevCard() {
-      index = (index - 1 + flashcards.length) % flashcards.length;
-      isFront = true;
-      showCard();
-    }
-
-    function shuffleCards() {
-      for (let i = flashcards.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
-      }
-      index = 0;
-      isFront = true;
-      showCard();
-    }
-
-    function goHome() {
-      window.location.href = "index.html";
-    }
-
-    window.onload = showCard;
-  </script>
+  updateCard();
+</script>
 </body>
 </html>
