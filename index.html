@@ -27,23 +27,14 @@
     }
   </script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-10">
-    <h1 class="text-2xl font-bold">📘 IELTS Vocab Hub</h1>
-    <nav>
-      <a href="#" class="mx-2 text-blue-600 hover:underline">Login</a>
-      <a href="#" class="mx-2 text-blue-600 hover:underline">About</a>
-    </nav>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">📘 IELTS Vocab Hub</h1>
+    <a href="index.html" class="text-blue-600 hover:underline">← Back to Homepage</a>
   </header>
 
-  <section class="text-center py-10 px-4 bg-blue-100">
-    <h2 class="text-3xl font-semibold mb-2">Master IELTS Vocabulary with Engaging Tools</h2>
-    <p class="text-gray-700 mb-6">Cambridge-based tasks, quizzes, writing, and more</p>
-    <img src="https://undraw.co/api/illustrations/9cf1071d-8d91-4c10-b5b7-f34eb2c7bc6b" alt="IELTS Learning" class="mx-auto max-w-sm rounded-xl shadow">
-  </section>
-
-  <section class="px-4 py-10 max-w-6xl mx-auto">
-    <h3 class="text-2xl font-bold mb-6">📚 Practice by Cambridge Collection</h3>
+  <main class="max-w-6xl mx-auto px-4 py-10">
+    <h2 class="text-2xl font-bold mb-6">📚 Practice by Cambridge Collection</h2>
 
     <!-- Cambridge 19 -->
     <div class="mb-6 border rounded-xl overflow-hidden shadow">
@@ -57,8 +48,8 @@
           <button onclick="toggleCollapse('test1')" class="w-full text-left px-4 py-2 bg-blue-200 text-blue-900 font-semibold">Test 1</button>
           <div id="test1" class="collapsible-content px-4 py-2 space-y-2">
             <a href="test1_passage1.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 1 – ✅ Start</a>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 2 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 3 – 🚧 Coming Soon</div>
+            <a href="test1_passage2.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 2 – ✅ Start</a>
+            <a href="test1_passage3.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 3 – ✅ Start</a>
           </div>
         </div>
 
@@ -91,59 +82,12 @@
             <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 3 – 🚧 Coming Soon</div>
           </div>
         </div>
-
       </div>
     </div>
+  </main>
 
-    <!-- Other Cambridge Labels -->
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge18')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 18
-      </button>
-      <div id="cambridge18" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
-    </div>
-
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge17')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 17
-      </button>
-      <div id="cambridge17" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
-    </div>
-
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge16')" class="w-full text-left px-4 py-3 bg-gray-400 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 16
-      </button>
-      <div id="cambridge16" class="p-4 bg-white hidden">
-        <div class="bg-gray-100 p-6 text-gray-600 text-center rounded-xl shadow">🚧 This section is coming soon.</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-white py-10 px-4">
-    <h3 class="text-2xl font-bold text-center mb-6">🎓 Why Use This Site?</h3>
-    <div class="max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">💡 Smart Learning Tools</h4>
-        <p class="text-sm text-gray-700">Flashcards, Daily Challenges, Typing Tasks</p>
-      </div>
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">📈 Track Progress</h4>
-        <p class="text-sm text-gray-700">Unlock levels, review words, see your growth</p>
-      </div>
-      <div class="p-4 bg-blue-50 rounded-xl shadow">
-        <h4 class="font-semibold text-lg mb-2">🧠 Real IELTS Vocab</h4>
-        <p class="text-sm text-gray-700">Built from authentic Cambridge reading tests</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="bg-gray-100 text-center py-4 mt-10 text-sm text-gray-600">
-    © 2025 IELTS Vocab Hub | <a href="#" class="text-blue-600 hover:underline">Privacy</a>
+  <footer class="text-center py-4 text-sm text-gray-500">
+    © 2025 IELTS Vocab Hub
   </footer>
 </body>
 </html>
