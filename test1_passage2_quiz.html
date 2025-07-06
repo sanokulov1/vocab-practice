@@ -1,30 +1,308 @@
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Quiz – Passage 2</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f0f5fb;
-                text-align: center;
-                padding: 40px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Passage 2 – Vocabulary Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background: #f0f4f8;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .question {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    .options {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      text-align: left;
+    }
+    .options label {
+      display: block;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background-color: #fff;
+    }
+    .options label:hover {
+      background-color: #eaf2f8;
+    }
+    .correct {
+      background-color: #d4edda !important;
+      border-color: #28a745;
+    }
+    .incorrect {
+      background-color: #f8d7da !important;
+      border-color: #dc3545;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #navigation {
+      text-align: center;
+    }
+    #navigation button {
+      background-color: #3498db;
+      color: white;
+    }
+    #navigation button:hover {
+      background-color: #2980b9;
+    }
+    #result {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    h2 { text-align: center; }
+    .question { margin-bottom: 20px; }
+    .options label { display: block; margin: 5px 0; }
+    .correct { background-color: #d4edda; }
+    .incorrect { background-color: #f8d7da; }
+    button { margin-top: 10px; padding: 10px 15px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Vocabulary Quiz – Passage 2</h2>
+  
+  <div id="quiz-container"></div>
+  <div id="navigation" style="text-align:center; margin-top: 20px;">
+    <button onclick="prevQuestion()">Previous</button>
+    <button onclick="nextQuestion()">Next</button>
+    <button onclick="submitQuiz()">Submit</button>
+  </div>
+  <div id="result" style="margin-top: 30px;"></div>
+  <div style="text-align:center; margin-top: 20px;">
+    <button onclick="generateQuiz()">New Set</button>
+  </div>
+
+
+  <script>
+    const allGroups = JSON.parse(`[["Ransom", "Trade routes", "Misfits", "Seafaring skills", "Rugged", "Fertile", "Might", "To raid", "To curtail", "Prowl"], ["Emboldened", "To assure", "Daredevils", "Misfits", "Prowl", "Predate", "Fertile", "To make a detour", "Kidnapped", "Menace"], ["Hamper", "Reign", "Combat", "Hostage", "To grant", "To curtail", "Commerce", "Fertile", "Subjects", "Emboldened"], ["Seafaring skills", "Spring to", "Eliminate", "To grant", "To assure", "Retaliation", "Denial", "Fleet", "Predate", "Menace"], ["To raid", "Prowl", "To be troubled by", "Denial", "Resort to", "Combat", "Kidnapped", "Marine resources", "Daredevils", "Condone"], ["To curtail", "Trade routes", "To be troubled by", "Prowl", "Hamper", "Unsurpassed knowledge", "Ransom", "Prominent", "Correspondence", "Culprit"], ["Reign", "Combat", "Millennium", "Daredevils", "Outlive", "Fertile", "Unsurpassed knowledge", "Prowl", "To grant", "To raid"], ["To be troubled by", "Seafaring skills", "Condone", "Ransom", "Correspondence", "Eliminate", "Combat", "Resort to", "Predate", "Maritime"], ["To grant", "Concerted action", "Hostage", "Millennium", "Kidnapped", "Ransom", "Eliminate", "To curtail", "Rugged", "Maritime"], ["Condone", "To be troubled by", "Seafaring skills", "Ransom", "To grant", "Hamper", "Fertile", "Surrender", "In command of", "Concerted action"], ["Daredevils", "Surrender", "Pressing issues", "Seafaring skills", "Millennium", "Predate", "Culprit", "Maritime", "To grant", "Glorify"], ["Pressing issues", "Hostage", "Condone", "Fleet", "Marine resources", "Might", "Rugged", "Hamper", "To curtail", "Combat"], ["Cleansing", "Emboldened", "To assure", "Maritime", "Pressing issues", "Correspondence", "Fertile", "Might", "To make a detour", "Glorify"], ["Prowl", "Maritime", "In command of", "Trade routes", "Fleet", "Ransom", "Eliminate", "To assure", "Kidnapped", "Millennium"], ["To be troubled by", "Denial", "Kidnapped", "Condone", "To tolerate", "Marine resources", "Hamper", "Spring to", "Trade routes", "To curtail"], ["Maritime", "Seafaring skills", "Hostage", "Retaliation", "Trade routes", "Unsurpassed knowledge", "To assure", "Eliminate", "Condone", "Spring to"], ["Menace", "Denial", "Marine resources", "To make a detour", "Eradicate", "Maritime", "To raid", "Ransom", "Laden with", "Outlive"], ["To make a detour", "Kidnapped", "Reign", "Fleet", "Correspondence", "Eliminate", "To curtail", "To tolerate", "Spring to", "Maritime"], ["Surrender", "Glorify", "Misfits", "Trade routes", "Correspondence", "Laden with", "Rugged", "In command of", "Concerted action", "Culprit"], ["Prowl", "Denial", "Menace", "Glorify", "Millennium", "To curtail", "Might", "Concerted action", "Praise", "Hamper"]]`);
+
+    const definitions = {
+      "Spring to": "To suddenly start doing something",
+      "Misfits": "People who do not fit into a group or society",
+      "Daredevils": "People who enjoy doing dangerous things",
+      "In command of": "Leading or controlling something",
+      "Millennium": "A period of a thousand years",
+      "Prowl": "Move around quietly, like a hunter",
+      "To raid": "To attack suddenly and steal or damage things",
+      "Trade routes": "Paths used for trading goods",
+      "Might": "Great power or strength",
+      "Fleet": "A group of ships",
+      "Eliminate": "To remove completely",
+      "Eradicate": "To destroy or get rid of something completely",
+      "Reign": "The period when someone rules",
+      "Predate": "To exist or happen earlier than something else",
+      "Fertile": "Able to produce a lot of crops or offspring",
+      "Rugged": "Rough and uneven",
+      "Marine resources": "Natural resources found in the sea",
+      "Seafaring skills": "Skills related to traveling or working at sea",
+      "Unsurpassed knowledge": "Knowledge that is better than anyone else's",
+      "Laden with": "Heavily loaded with something",
+      "Surrender": "To stop fighting and accept defeat",
+      "Retaliation": "Action taken in response to an attack",
+      "Resort to": "To use something because there is no other option",
+      "Correspondence": "Letters or communication by writing",
+      "To be troubled by": "To be worried or affected by something",
+      "Pressing issues": "Important and urgent problems",
+      "Commerce": "The activity of buying and selling goods",
+      "To assure": "To promise or say something with confidence",
+      "Subjects": "People ruled by a monarch or government",
+      "Condone": "To accept or allow something bad",
+      "Praise": "To express approval or admiration",
+      "Glorify": "To make something seem more important or better than it really is",
+      "To make a detour": "To take a longer route to avoid something",
+      "To tolerate": "To accept something unpleasant",
+      "To curtail": "To reduce or limit something",
+      "Hamper": "To slow down or make difficult",
+      "Culprit": "A person who is responsible for a crime",
+      "Emboldened": "Made more confident or brave",
+      "Kidnapped": "Taken away illegally by force",
+      "Prominent": "Well-known and important",
+      "Ransom": "Money paid to release someone",
+      "Hostage": "Someone captured and held to force demands",
+      "Outlive": "To live longer than someone else",
+      "Concerted action": "Planned effort by many people",
+      "To grant": "To give something officially",
+      "Combat": "Fighting, especially during a war",
+      "Menace": "A threat or danger",
+      "Cleansing": "The act of cleaning or removing something unwanted",
+      "Maritime": "Connected with the sea",
+      "Denial": "Refusal to accept or believe something"
+    };
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function generateQuiz() {
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = "";
+      const group = allGroups[Math.floor(Math.random() * allGroups.length)];
+      shuffle(group);
+      group.forEach((word, index) => {
+        const correct = word;
+        const options = [correct];
+        while (options.length < 4) {
+          const option = group[Math.floor(Math.random() * group.length)];
+          if (!options.includes(option)) options.push(option);
+        }
+        shuffle(options);
+
+        const qDiv = document.createElement("div");
+        qDiv.className = "question";
+        const qTitle = document.createElement("h4");
+        qTitle.innerText = `Q${index + 1}. What does "${correct}" mean?`;
+        qDiv.appendChild(qTitle);
+
+        const form = document.createElement("div");
+        form.className = "options";
+
+        options.forEach(opt => {
+          const label = document.createElement("label");
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "q" + index;
+          input.onclick = function () {
+            const labels = form.querySelectorAll("label");
+            labels.forEach(l => l.classList.remove("correct", "incorrect"));
+            if (opt === correct) {
+              label.classList.add("correct");
+            } else {
+              label.classList.add("incorrect");
             }
-            h1 {
-                color: #222;
-            }
-            .content {
-                margin-top: 40px;
-                font-size: 20px;
-                color: #333;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Quiz – Passage 2</h1>
-        <div class="content">[Quiz content goes here]</div>
-    </body>
-    </html>
+          };
+          label.appendChild(input);
+          label.append(" " + definitions[opt]);
+          form.appendChild(label);
+        });
+
+        qDiv.appendChild(form);
+        quizDiv.appendChild(qDiv);
+      });
+    }
+
     
+    let currentQuestion = 0;
+    let currentGroup = [];
+    let userAnswers = [];
+
+    function generateQuiz() {
+      const quizDiv = document.getElementById("quiz-container");
+      quizDiv.innerHTML = "";
+      document.getElementById("result").innerHTML = "";
+      currentGroup = allGroups[Math.floor(Math.random() * allGroups.length)];
+      shuffle(currentGroup);
+      userAnswers = new Array(currentGroup.length).fill(null);
+
+      currentGroup.forEach((word, index) => {
+        const correct = word;
+        const options = [correct];
+        while (options.length < 4) {
+          const option = currentGroup[Math.floor(Math.random() * currentGroup.length)];
+          if (!options.includes(option)) options.push(option);
+        }
+        shuffle(options);
+
+        const qDiv = document.createElement("div");
+        qDiv.className = "question";
+        qDiv.id = "question-" + index;
+        qDiv.style.display = index === 0 ? "block" : "none";
+
+        const qTitle = document.createElement("h4");
+        qTitle.innerText = `Q${index + 1}. What does "${correct}" mean?`;
+        qDiv.appendChild(qTitle);
+
+        const form = document.createElement("div");
+        form.className = "options";
+
+        options.forEach(opt => {
+          const label = document.createElement("label");
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "q" + index;
+          input.value = opt;
+          input.onclick = () => userAnswers[index] = input.value;
+          label.appendChild(input);
+          label.append(" " + definitions[opt]);
+          form.appendChild(label);
+        });
+
+        qDiv.appendChild(form);
+        quizDiv.appendChild(qDiv);
+      });
+    }
+
+    function showQuestion(index) {
+      document.querySelectorAll(".question").forEach((q, i) => {
+        q.style.display = i === index ? "block" : "none";
+      });
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < currentGroup.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    }
+
+    function submitQuiz() {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<h3>Quiz Results</h3>";
+      const wrongAnswers = [];
+      userAnswers.forEach((ans, i) => {
+        if (ans !== currentGroup[i]) {
+          wrongAnswers.push(currentGroup[i]);
+        }
+      });
+
+      if (wrongAnswers.length === 0) {
+        resultDiv.innerHTML += "<p>Excellent! You got all answers correct 🎉</p>";
+      } else {
+        resultDiv.innerHTML += "<p>You may need to revise the following words:</p><ul>" +
+          wrongAnswers.map(w => `<li><b>${w}</b>: ${definitions[w]}</li>`).join('') + "</ul>";
+      }
+    }
+
+    window.onload = generateQuiz;
+
+  </script>
+</body>
+</html>
