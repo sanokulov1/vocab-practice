@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Task – Passage 2</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .question {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    .definition {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .correct {
+      background-color: #d4edda;
+    }
+    .incorrect {
+      background-color: #f8d7da;
+    }
+    .result {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    #navigation {
+      text-align: center;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: white;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h2>Typing Task – Passage 2</h2>
+  <div id="quiz-container"></div>
+  <div id="navigation">
+    <button onclick="prevQuestion()">Previous</button>
+    <button onclick="nextQuestion()">Next</button>
+    <button onclick="submitQuiz()">Submit</button>
+  </div>
+  <div id="result" class="result"></div>
+  <div style="text-align:center;">
+    <button onclick="generateQuiz()">New Set</button>
+  </div>
+
+  <script>
+    const allGroups = [["Pressing issues", "Outlive", "Hostage", "Correspondence", "Subjects", "To tolerate", "Combat", "Trade routes", "Rugged", "Fertile"], ["Millennium", "Retaliation", "Misfits", "Emboldened", "Hamper", "Fertile", "Menace", "To grant", "Spring to", "Denial"], ["Combat", "Ransom", "In command of", "Fertile", "Millennium", "Daredevils", "Retaliation", "Denial", "To make a detour", "Rugged"], ["Seafaring skills", "Outlive", "Glorify", "Predate", "To curtail", "Might", "Culprit", "Concerted action", "Praise", "Rugged"], ["Praise", "Commerce", "Reign", "To raid", "Menace", "Outlive", "To assure", "Resort to", "Concerted action", "Maritime"], ["Condone", "Menace", "In command of", "Concerted action", "Hostage", "Combat", "To raid", "Cleansing", "Pressing issues", "Retaliation"], ["To raid", "Rugged", "Reign", "Cleansing", "To curtail", "Subjects", "Might", "To assure", "Eradicate", "Seafaring skills"], ["Condone", "Rugged", "Millennium", "Subjects", "Hamper", "To raid", "In command of", "Hostage", "To curtail", "Spring to"], ["Prowl", "Maritime", "Rugged", "Eliminate", "Commerce", "Glorify", "Praise", "Predate", "Pressing issues", "In command of"], ["Eliminate", "To be troubled by", "Spring to", "Maritime", "Marine resources", "Condone", "Unsurpassed knowledge", "To assure", "Hamper", "Glorify"], ["Fleet", "Reign", "Unsurpassed knowledge", "Predate", "In command of", "Emboldened", "To curtail", "Combat", "Surrender", "Outlive"], ["In command of", "Emboldened", "Praise", "To make a detour", "To tolerate", "Eliminate", "Denial", "Menace", "Prowl", "Eradicate"], ["Millennium", "Kidnapped", "Denial", "Concerted action", "Rugged", "Pressing issues", "Trade routes", "Culprit", "Combat", "Emboldened"], ["Kidnapped", "Daredevils", "Prominent", "Prowl", "Commerce", "Outlive", "Emboldened", "Culprit", "To tolerate", "Surrender"], ["Marine resources", "Predate", "Outlive", "Combat", "Surrender", "Rugged", "Denial", "Pressing issues", "Might", "Laden with"], ["Condone", "Surrender", "Millennium", "Spring to", "Denial", "Prominent", "Culprit", "To raid", "Cleansing", "To curtail"], ["Predate", "To make a detour", "Marine resources", "Might", "Resort to", "Millennium", "Rugged", "Correspondence", "Unsurpassed knowledge", "Eliminate"], ["Subjects", "To curtail", "Combat", "Laden with", "Prominent", "Hostage", "To tolerate", "Spring to", "Hamper", "Menace"], ["Outlive", "To raid", "Might", "Marine resources", "Trade routes", "Maritime", "Hamper", "Fleet", "Seafaring skills", "Unsurpassed knowledge"], ["Kidnapped", "Predate", "Combat", "Retaliation", "Maritime", "Concerted action", "Ransom", "Marine resources", "To make a detour", "Glorify"]];
+    const definitions = {"Spring to": "To suddenly start doing something", "Misfits": "People who do not fit into a group or society", "Daredevils": "People who enjoy doing dangerous things", "In command of": "Leading or controlling something", "Millennium": "A period of a thousand years", "Prowl": "Move around quietly, like a hunter", "To raid": "To attack suddenly and steal or damage things", "Trade routes": "Paths used for trading goods", "Might": "Great power or strength", "Fleet": "A group of ships", "Eliminate": "To remove completely", "Eradicate": "To destroy or get rid of something completely", "Reign": "The period when someone rules", "Predate": "To exist or happen earlier than something else", "Fertile": "Able to produce a lot of crops or offspring", "Rugged": "Rough and uneven", "Marine resources": "Natural resources found in the sea", "Seafaring skills": "Skills related to traveling or working at sea", "Unsurpassed knowledge": "Knowledge that is better than anyone else's", "Laden with": "Heavily loaded with something", "Surrender": "To stop fighting and accept defeat", "Retaliation": "Action taken in response to an attack", "Resort to": "To use something because there is no other option", "Correspondence": "Letters or communication by writing", "To be troubled by": "To be worried or affected by something", "Pressing issues": "Important and urgent problems", "Commerce": "The activity of buying and selling goods", "To assure": "To promise or say something with confidence", "Subjects": "People ruled by a monarch or government", "Condone": "To accept or allow something bad", "Praise": "To express approval or admiration", "Glorify": "To make something seem more important or better than it really is", "To make a detour": "To take a longer route to avoid something", "To tolerate": "To accept something unpleasant", "To curtail": "To reduce or limit something", "Hamper": "To slow down or make difficult", "Culprit": "A person who is responsible for a crime", "Emboldened": "Made more confident or brave", "Kidnapped": "Taken away illegally by force", "Prominent": "Well-known and important", "Ransom": "Money paid to release someone", "Hostage": "Someone captured and held to force demands", "Outlive": "To live longer than someone else", "Concerted action": "Planned effort by many people", "To grant": "To give something officially", "Combat": "Fighting, especially during a war", "Menace": "A threat or danger", "Cleansing": "The act of cleaning or removing something unwanted", "Maritime": "Connected with the sea", "Denial": "Refusal to accept or believe something"};
+
+    let currentQuestion = 0;
+    let currentGroup = [];
+    let userAnswers = [];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function normalize(str) {
+      return str.toLowerCase().replace(/[\s\-]/g, '');
+    }
+
+    function generateQuiz() {
+      const quizDiv = document.getElementById("quiz-container");
+      const resultDiv = document.getElementById("result");
+      quizDiv.innerHTML = "";
+      resultDiv.innerHTML = "";
+      currentGroup = allGroups[Math.floor(Math.random() * allGroups.length)];
+      shuffle(currentGroup);
+      userAnswers = new Array(currentGroup.length).fill("");
+
+      currentGroup.forEach((word, index) => {
+        const qDiv = document.createElement("div");
+        qDiv.className = "question";
+        qDiv.id = "question-" + index;
+        qDiv.style.display = index === 0 ? "block" : "none";
+
+        const defText = definitions[word];
+        const defDiv = document.createElement("div");
+        defDiv.className = "definition";
+        defDiv.innerText = `Q${index + 1}. ` + defText;
+        qDiv.appendChild(defDiv);
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Type your answer here...";
+        input.oninput = () => userAnswers[index] = input.value;
+        qDiv.appendChild(input);
+
+        quizDiv.appendChild(qDiv);
+      });
+    }
+
+    function showQuestion(index) {
+      document.querySelectorAll(".question").forEach((q, i) => {
+        q.style.display = i === index ? "block" : "none";
+      });
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < currentGroup.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    }
+
+    function submitQuiz() {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<h3>Typing Task Results</h3>";
+      const wrongAnswers = [];
+
+      userAnswers.forEach((ans, i) => {
+        const input = document.querySelector(`#question-${i} input`);
+        const correct = currentGroup[i];
+        if (normalize(ans) === normalize(correct)) {
+          input.classList.remove("incorrect");
+          input.classList.add("correct");
+        } else {
+          input.classList.remove("correct");
+          input.classList.add("incorrect");
+          wrongAnswers.push(`<li><b>${correct}</b> – ${definitions[correct]}</li>`);
+        }
+      });
+
+      if (wrongAnswers.length === 0) {
+        resultDiv.innerHTML += "<p>🎉 Great job! All answers are correct.</p>";
+      } else {
+        resultDiv.innerHTML += "<p>You should revise the following:</p><ul>" + wrongAnswers.join("") + "</ul>";
+      }
+    }
+
+    window.onload = generateQuiz;
+  </script>
+</body>
+</html>
