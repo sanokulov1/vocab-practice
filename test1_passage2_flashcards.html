@@ -1,361 +1,209 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Flashcards – Passage 2</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f7fc;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 28px;
-      margin-bottom: 30px;
-    }
-    .card {
-      width: 300px;
-      height: 180px;
-      margin: 0 auto 20px;
-      perspective: 1000px;
-    }
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-      position: relative;
-    }
-    .card.flipped .card-inner {
-      transform: rotateY(180deg);
-    }
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      background-color: #3498db;
-      color: white;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-    .card-back {
-      transform: rotateY(180deg);
-      background-color: #2ecc71;
-    }
-    .buttons {
-      margin-top: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 0 5px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background-color: #2c3e50;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .flashcard-front {
+            background-color: #a8e6cf; /* Light green */
+            color: #333;
+        }
+        .flashcard-back {
+            background-color: #dcedc1; /* Light blue */
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .counter {
+            margin-top: 15px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-  <h1>📘 Flashcards – Passage 2</h1>
-  <div class="card" id="flashcard">
-    <div class="card-inner" id="card-inner">
-      <div class="card-front" id="card-front">Loading...</div>
-      <div class="card-back" id="card-back"></div>
+    <div class="flashcard-app">
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-front" id="front"></div>
+                <div class="flashcard-back" id="back"></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="prevBtn" onclick="prevCard()">Previous</button>
+            <button id="turnBtn" onclick="flipCard()">Turn</button>
+            <button id="shuffleBtn" onclick="shuffleCards()">Shuffle</button>
+            <button id="nextBtn" onclick="nextCard()">Next</button>
+        </div>
+        <div class="counter" id="counter"></div>
     </div>
-  </div>
-  <div class="buttons">
-    <button onclick="prevCard()">⬅ Prev</button>
-    <button onclick="flipCard()">🔄 Flip</button>
-    <button onclick="nextCard()">Next ➡</button>
-    <button onclick="window.location.href='index.html'">🏠 Home</button>
-  </div>
 
-  <script>
-    const cards = [{
-        word: "Spring to",
-        definition: "To suddenly begin to do something"
-    },
-    
-    {
-        word: "Misfits",
-        definition: "People who do not fit in"
-    },
-    
-    {
-        word: "Daredevils",
-        definition: "People who take bold risks"
-    },
-    
-    {
-        word: "In command of",
-        definition: "Having control over"
-    },
-    
-    {
-        word: "Millennium",
-        definition: "A period of a thousand years"
-    },
-    
-    {
-        word: "Prowl",
-        definition: "To move around stealthily"
-    },
-    
-    {
-        word: "To raid",
-        definition: "To attack and steal"
-    },
-    
-    {
-        word: "trade routes",
-        definition: "Routes used for exchanging goods"
-    },
-    
-    {
-        word: "might",
-        definition: "Great power or strength"
-    },
-    
-    {
-        word: "fleet",
-        definition: "A group of ships"
-    },
-    
-    {
-        word: "eliminate",
-        definition: "To remove completely"
-    },
-    
-    {
-        word: "eradicate",
-        definition: "To destroy completely"
-    },
-    
-    {
-        word: "reign",
-        definition: "The period someone rules"
-    },
-    
-    {
-        word: "predate",
-        definition: "To exist before something"
-    },
-    
-    {
-        word: "fertile",
-        definition: "Able to produce crops"
-    },
-    
-    {
-        word: "rugged",
-        definition: "Rough and uneven"
-    },
-    
-    {
-        word: "marine resources",
-        definition: "Natural resources from the sea"
-    },
-    
-    {
-        word: "seafaring skills",
-        definition: "Abilities to travel and work on the sea"
-    },
-    
-    {
-        word: "unsurpassed knowledge",
-        definition: "Better knowledge than anyone else"
-    },
-    
-    {
-        word: "laden with",
-        definition: "Loaded or filled with"
-    },
-    
-    {
-        word: "surrender",
-        definition: "To give up or yield"
-    },
-    
-    {
-        word: "retaliation",
-        definition: "An act of revenge"
-    },
-    
-    {
-        word: "resort to",
-        definition: "To turn to (something bad) as a solution"
-    },
-    
-    {
-        word: "correspondence",
-        definition: "Written communication"
-    },
-    
-    {
-        word: "to be troubled by",
-        definition: "To be worried about something"
-    },
-    
-    {
-        word: "pressing issues",
-        definition: "Urgent problems"
-    },
-    
-    {
-        word: "commerce",
-        definition: "The activity of buying and selling"
-    },
-    
-    {
-        word: "to assure",
-        definition: "To promise or make certain"
-    },
-    
-    {
-        word: "subjects",
-        definition: "People ruled by a leader"
-    },
-    
-    {
-        word: "condone",
-        definition: "To accept or allow"
-    },
-    
-    {
-        word: "praise",
-        definition: "To say good things about"
-    },
-    
-    {
-        word: "glorify",
-        definition: "To admire or worship"
-    },
-    
-    {
-        word: "to make a detour",
-        definition: "To take a longer route"
-    },
-    
-    {
-        word: "to tolerate",
-        definition: "To allow or accept"
-    },
-    
-    {
-        word: "to curtail",
-        definition: "To reduce or cut down"
-    },
-    
-    {
-        word: "hamper",
-        definition: "To slow or block progress"
-    },
-    
-    {
-        word: "culprit",
-        definition: "A person responsible for a crime"
-    },
-    
-    {
-        word: "emboldened",
-        definition: "Given courage or confidence"
-    },
-    
-    {
-        word: "kidnapped",
-        definition: "Taken by force"
-    },
-    
-    {
-        word: "prominent",
-        definition: "Well-known or important"
-    },
-    
-    {
-        word: "ransom",
-        definition: "Money paid to release a captive"
-    },
-    
-    {
-        word: "hostage",
-        definition: "A person held as a prisoner"
-    },
-    
-    {
-        word: "outlive",
-        definition: "To live longer than"
-    },
-    
-    {
-        word: "concerted action",
-        definition: "Planned group effort"
-    },
-    
-    {
-        word: "to grant",
-        definition: "To give or allow officially"
-    },
-    
-    {
-        word: "combat",
-        definition: "To fight against"
-    },
-    
-    {
-        word: "menace",
-        definition: "A threat or danger"
-    },
-    
-    {
-        word: "cleansing",
-        definition: "The act of making something clean"
-    },
-    
-    {
-        word: "maritime",
-        definition: "Related to the sea"
-    },
-    
-    {
-        word: "denial",
-        definition: "Refusal to accept or allow"
-    }];
-    let current = 0;
-    const card = document.getElementById('flashcard');
-    const front = document.getElementById('card-front');
-    const back = document.getElementById('card-back');
-    const inner = document.getElementById('card-inner');
+    <script>
+        const words = [
+            { word: "Spring to", definition: "To move suddenly toward something (Synonym: leap to)" },
+            { word: "Misfits", definition: "People who don’t fit in with a group (Synonym: outsiders)" },
+            { word: "Daredevils", definition: "People who take dangerous risks (Synonym: risk-takers)" },
+            { word: "In command of", definition: "In control of (Synonym: leading)" },
+            { word: "Millennium", definition: "A period of 1,000 years" },
+            { word: "Prowl", definition: "To move quietly while hunting/searching (Synonym: sneak)" },
+            { word: "To raid", definition: "To attack suddenly to steal or damage (Synonym: assault)" },
+            { word: "Trade routes", definition: "Paths used for buying/selling goods between places" },
+            { word: "Might", definition: "Great strength or power (Synonym: power)" },
+            { word: "Fleet", definition: "A group of ships or vehicles" },
+            { word: "Eliminate", definition: "To completely remove (Synonym: erase)" },
+            { word: "Eradicate", definition: "To destroy completely (Synonym: wipe out)" },
+            { word: "Reign", definition: "The period when a king/queen rules" },
+            { word: "Predate", definition: "To exist or happen before something else (Synonym: precede)" },
+            { word: "Fertile", definition: "Able to produce abundant growth (Synonym: productive)" },
+            { word: "Rugged", definition: "Rough and uneven (Synonym: jagged)" },
+            { word: "Marine resources", definition: "Useful materials from the ocean (e.g., fish, minerals)" },
+            { word: "Seafaring skills", definition: "Abilities related to sailing/navigating" },
+            { word: "Unsurpassed knowledge", definition: "The best understanding of something (Synonym: unmatched expertise)" },
+            { word: "Laden with", definition: "Heavily loaded with (e.g., a ship laden with treasure)" },
+            { word: "Surrender", definition: "To give up control or stop fighting (Synonym: yield)" },
+            { word: "Retaliation", definition: "An act of revenge (Synonym: payback)" },
+            { word: "Resort to", definition: "To turn to an option (often negative) when desperate (Synonym: fall back on)" },
+            { word: "Correspondence", definition: "Written communication (e.g., letters, emails)" },
+            { word: "To be troubled by", definition: "To be worried about something (Synonym: bothered by)" },
+            { word: "Pressing issues", definition: "Urgent problems needing attention" },
+            { word: "Commerce", definition: "The activity of buying/selling goods (Synonym: trade)" },
+            { word: "To assure", definition: "To promise or guarantee (Synonym: reassure)" },
+            { word: "Subjects", definition: "People under a ruler’s control (Synonym: citizens)" },
+            { word: "Condone", definition: "To accept or allow (usually something bad) (Synonym: overlook)" },
+            { word: "Praise", definition: "To express strong approval (Synonym: commend)" },
+            { word: "Glorify", definition: "To make something seem more impressive than it is (Synonym: celebrate)" },
+            { word: "To make a detour", definition: "To take a longer, alternative route" },
+            { word: "To tolerate", definition: "To accept something unpleasant (Synonym: endure)" },
+            { word: "To curtail", definition: "To reduce or limit (Synonym: restrict)" },
+            { word: "Hamper", definition: "To hinder progress (Synonym: obstruct)" },
+            { word: "Culprit", definition: "The person responsible for a problem (Synonym: offender)" },
+            { word: "Emboldened", definition: "Made more confident (often to act boldly)" },
+            { word: "Kidnapped", definition: "Taken by force (usually for ransom)" },
+            { word: "Prominent", definition: "Important or well-known (Synonym: famous)" },
+            { word: "Ransom", definition: "Money demanded for a kidnapped person’s release" },
+            { word: "Hostage", definition: "A person held captive to force demands" },
+            { word: "Outlive", definition: "To live longer than someone/something" },
+            { word: "Concerted action", definition: "A coordinated effort by a group" },
+            { word: "To grant", definition: "To give or allow (Synonym: permit)" },
+            { word: "Combat", definition: "Fighting, especially in war (Synonym: battle)" },
+            { word: "Menace", definition: "A dangerous threat (Synonym: danger)" },
+            { word: "Cleansing", definition: "The act of making something clean/pure" },
+            { word: "Maritime", definition: "Related to the sea or sailing" },
+            { word: "Denial", definition: "Refusal to accept the truth (Synonym: rejection)" }
+        ];
 
-    function updateCard() {
-      front.textContent = cards[current].word;
-      back.textContent = cards[current].definition;
-      card.classList.remove('flipped');
-    }
+        let currentCard = 0;
+        const flashcard = document.getElementById('flashcard');
+        const front = document.getElementById('front');
+        const back = document.getElementById('back');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const counter = document.getElementById('counter');
 
-    function flipCard() {
-      card.classList.toggle('flipped');
-    }
+        function updateCard() {
+            front.textContent = words[currentCard].word;
+            back.textContent = words[currentCard].definition;
+            flashcard.classList.remove('flipped');
+            prevBtn.disabled = currentCard === 0;
+            nextBtn.disabled = currentCard === words.length - 1;
+            counter.textContent = `${currentCard + 1}/${words.length}`;
+        }
 
-    function nextCard() {
-      current = (current + 1) % cards.length;
-      updateCard();
-    }
+        function flipCard() {
+            flashcard.classList.toggle('flipped');
+        }
 
-    function prevCard() {
-      current = (current - 1 + cards.length) % cards.length;
-      updateCard();
-    }
+        function nextCard() {
+            if (currentCard < words.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+        }
 
-    updateCard();
-  </script>
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+        }
+
+        function shuffleCards() {
+            for (let i = words.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [words[i], words[j]] = [words[j], words[i]];
+            }
+            currentCard = 0;
+            updateCard();
+        }
+
+        // Initialize first card
+        updateCard();
+    </script>
 </body>
 </html>
