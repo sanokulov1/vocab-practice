@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f5f9ff; }
+        .quiz-container { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .question { margin-bottom: 20px; padding: 15px; border-radius: 5px; background-color: #e6f2ff; }
+        .option { margin: 8px 0; padding: 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .option:hover { background-color: #d4e6ff; }
+        .option.selected { background-color: #b3d7ff; }
+        .controls { display: flex; justify-content: space-between; margin-top: 20px; }
+        button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        #prev-btn { background-color: #ffc107; }
+        #next-btn, #submit-btn { background-color: #28a745; color: white; }
+        .results { display: none; margin-top: 20px; padding: 20px; border-radius: 5px; background-color: #f8f9fa; }
+        .revise-item { padding: 10px; margin-bottom: 5px; border-radius: 5px; background-color: #fff3cd; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Vocabulary Quiz</h1>
+        <div id="question-container"></div>
+        <div class="controls">
+            <button id="prev-btn" disabled>Previous</button>
+            <button id="next-btn">Next</button>
+            <button id="submit-btn" style="display:none;">Submit</button>
+        </div>
+    </div>
+    <div id="results" class="results">
+        <h2>Results</h2>
+        <div id="score-display"></div>
+        <div id="words-to-revise">
+            <h3>Words to Review:</h3>
+            <div id="revise-items"></div>
+        </div>
+    </div>
+
+    <script>
+        // Your 48 original words with definitions
+        const words = [
+            { word: "Deliberately", definition: "Intentionally; done consciously and on purpose" },
+            { word: "Inevitable", definition: "Certain to happen; unavoidable" },
+            { word: "To Deceive", definition: "To make someone believe something that is not true" },
+            { word: "Interpersonal bonds", definition: "Connections or relationships between people" },
+            { word: "Inadvertently", definition: "Without intention; accidentally" },
+            { word: "X looms larger than in the past", definition: "X appears more important or threatening than before" },
+            { word: "Means", definition: "A method or way of doing something" },
+            { word: "Facilitated", definition: "Made easier or helped to bring about" },
+            { word: "Unduly", definition: "Excessively; more than is reasonable" },
+            { word: "Misperceptions", definition: "Incorrect understandings or interpretations" },
+            { word: "Detrimental", definition: "Harmful or damaging" },
+            { word: "Downstream", definition: "Occurring later in a process; subsequent effects" },
+            { word: "Social harmony", definition: "Peaceful and cooperative relations in society" },
+            { word: "Contemporary", definition: "Belonging to the present time; modern" },
+            { word: "Warrant the attention", definition: "Deserve or justify the focus or consideration" },
+            { word: "Encounter", definition: "To meet or come across, especially unexpectedly" },
+            { word: "Counter", definition: "To oppose or respond to something" },
+            { word: "Exposure", definition: "The state of being subjected to something (e.g., information, conditions)" },
+            { word: "Resource-intensive effort", definition: "An activity that requires a lot of resources (time, money, etc.)" },
+            { word: "Routine", definition: "A regular, fixed way of doing things" },
+            { word: "Garner", definition: "To gather or collect something, especially information or support" },
+            { word: "Dilemma", definition: "A difficult situation requiring a choice between equally undesirable options" },
+            { word: "Empirically tested", definition: "Examined through observation or experiment rather than theory" },
+            { word: "Robust", definition: "Strong and effective; able to withstand challenges" },
+            { word: "By default", definition: "Automatically, due to lack of an alternative" },
+            { word: "Verify", definition: "To confirm or establish the truth or accuracy of something" },
+            { word: "Encode", definition: "To convert information into a particular form for processing or transmission" },
+            { word: "Momentarily", definition: "For a very short time; briefly" },
+            { word: "Consistent with", definition: "In agreement or harmony with" },
+            { word: "Skepticism", definition: "An attitude of doubt or questioning" },
+            { word: "Reside in", definition: "To exist or be present within something" },
+            { word: "Preemptively", definition: "Done as a precaution before an anticipated event" },
+            { word: "Censoring", definition: "Suppressing or removing parts considered objectionable" },
+            { word: "Laudable", definition: "Deserving praise; commendable" },
+            { word: "Keep something off", definition: "To prevent something from approaching or affecting" },
+            { word: "Compelling", definition: "Evoking interest or attention in a powerful way" },
+            { word: "Persuasive", definition: "Good at convincing someone to do or believe something" },
+            { word: "Sensitize", definition: "To make someone aware of or responsive to something" },
+            { word: "Distinguish", definition: "To recognize or treat as different" },
+            { word: "Remedies", definition: "Solutions or treatments for problems or diseases" },
+            { word: "Arduous", definition: "Involving strenuous effort; difficult and tiring" },
+            { word: "Maintenance", definition: "The process of preserving or keeping something in good condition" },
+            { word: "Prominence", definition: "The state of being important, famous, or noticeable" },
+            { word: "Consensus", definition: "General agreement among a group" },
+            { word: "Human fallibility", definition: "The tendency of humans to make mistakes" },
+            { word: "Overcome", definition: "To successfully deal with or gain control of something" },
+            { word: "Coordinated efforts", definition: "Organized actions working together toward a common goal" },
+            { word: "Panacea", definition: "A solution or remedy for all difficulties or diseases" }
+        ];
+
+        // Quiz variables
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let quizQuestions = [];
+        
+        // Initialize quiz with full randomization
+        function initQuiz() {
+            // 1. Shuffle ALL 48 words
+            const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+            
+            // 2. Pick first 10 for questions
+            quizQuestions = shuffledWords.slice(0, 10).map(word => {
+                // 3. Shuffle 3 incorrect options from remaining words
+                const incorrectOptions = shuffledWords
+                    .filter(w => w.word !== word.word)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3)
+                    .map(w => w.definition);
+                
+                // 4. Shuffle all options (correct + incorrect)
+                const options = [word.definition, ...incorrectOptions]
+                               .sort(() => Math.random() - 0.5);
+                
+                return {
+                    word: word.word,
+                    correctDefinition: word.definition,
+                    options: options
+                };
+            });
+            
+            userAnswers = Array(quizQuestions.length).fill(null);
+            displayQuestion();
+        }
+
+        // [Rest of the code remains identical...]
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestion];
+            const questionContainer = document.getElementById('question-container');
+            
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <h3>What is the correct definition of "${question.word}"?</h3>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" 
+                                 data-index="${index}"
+                                 onclick="selectOption(this, ${index})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            if (userAnswers[currentQuestion] !== null) {
+                const options = questionContainer.querySelectorAll('.option');
+                options[userAnswers[currentQuestion]].classList.add('selected');
+            }
+            
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+            document.getElementById('next-btn').style.display = 
+                currentQuestion === quizQuestions.length - 1 ? 'none' : 'block';
+            document.getElementById('submit-btn').style.display = 
+                currentQuestion === quizQuestions.length - 1 ? 'block' : 'none';
+        }
+
+        function selectOption(element, index) {
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            userAnswers[currentQuestion] = index;
+        }
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            }
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            const wordsToReview = [];
+            
+            quizQuestions.forEach((question, index) => {
+                const userAnswerIndex = userAnswers[index];
+                if (userAnswerIndex !== null && 
+                    question.options[userAnswerIndex] === question.correctDefinition) {
+                    score++;
+                } else {
+                    wordsToReview.push(question.word);
+                }
+            });
+            
+            document.getElementById('score-display').textContent = 
+                `You scored ${score} out of ${quizQuestions.length}`;
+            
+            const reviseContainer = document.getElementById('revise-items');
+            reviseContainer.innerHTML = wordsToReview.map(word => {
+                const wordData = words.find(w => w.word === word);
+                return `
+                    <div class="revise-item">
+                        <strong>${wordData.word}:</strong> ${wordData.definition}
+                    </div>
+                `;
+            }).join('');
+            
+            document.querySelector('.quiz-container').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        });
+
+        // Start the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
