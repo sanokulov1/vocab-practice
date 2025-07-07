@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Typing Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f9ff;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #e6f2ff;
+        }
+        .definition {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #prev-btn {
+            background-color: #ffc107;
+        }
+        #next-btn, #submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        #submit-btn {
+            display: none;
+        }
+        .results {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .score {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #28a745;
+        }
+        .revise-list {
+            margin-top: 20px;
+        }
+        .revise-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: #fff3cd;
+        }
+        .progress {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        .answer-feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .correct-answer {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect-answer {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vocabulary Typing Quiz</h1>
+    <div class="quiz-container">
+        <div class="progress">Question 1 of 10</div>
+        <div id="question-container">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+        <div class="controls">
+            <button id="prev-btn" disabled>Previous</button>
+            <button id="next-btn">Next</button>
+            <button id="submit-btn">Submit Quiz</button>
+        </div>
+    </div>
+    <div id="results" class="results">
+        <h2>Quiz Results</h2>
+        <div class="score">Your score: <span id="score-display">0</span>/10</div>
+        <div id="general-feedback"></div>
+        <div class="revise-list">
+            <h3>Question Review:</h3>
+            <div id="answer-review"></div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary words with definitions and alternate forms
+        const vocabulary = [
+            { 
+                word: "deliberately", 
+                definition: "Intentionally; done consciously and on purpose",
+                forms: ["deliberate", "deliberating", "deliberated"]
+            },
+            { 
+                word: "inevitable", 
+                definition: "Certain to happen; unavoidable",
+                forms: ["inevitability"]
+            },
+            { 
+                word: "deceive", 
+                definition: "To make someone believe something that is not true",
+                forms: ["deceives", "deceived", "deceiving", "deception"]
+            },
+            { 
+                word: "interpersonal bonds", 
+                definition: "Connections or relationships between people",
+                forms: ["interpersonal bond"]
+            },
+            { 
+                word: "inadvertently", 
+                definition: "Without intention; accidentally",
+                forms: ["inadvertent"]
+            },
+            { 
+                word: "loom larger", 
+                definition: "Appears more important or threatening than before",
+                forms: ["looms larger", "loomed larger", "looming larger", "loom larger than before", "looms larger than before", "looming larger than before"]
+            },
+            { 
+                word: "means", 
+                definition: "A method or way of doing something",
+                forms: ["mean"]
+            },
+            { 
+                word: "facilitate", 
+                definition: "Make easier or help to bring about",
+                forms: ["facilitates", "facilitated", "facilitating", "facilitation"]
+            },
+            { 
+                word: "unduly", 
+                definition: "Excessively; more than is reasonable",
+                forms: ["undue"]
+            },
+            { 
+                word: "misperception", 
+                definition: "Incorrect understandings or interpretations",
+                forms: ["misperceptions"]
+            },
+            { 
+                word: "detrimental", 
+                definition: "Harmful or damaging",
+                forms: ["detriment"]
+            },
+            { 
+                word: "downstream", 
+                definition: "Occurring later in a process; subsequent effects",
+                forms: []
+            },
+            { 
+                word: "social harmony", 
+                definition: "Peaceful and cooperative relations in society",
+                forms: []
+            },
+            { 
+                word: "contemporary", 
+                definition: "Belonging to the present time; modern",
+                forms: ["contemporaries"]
+            },
+            { 
+                word: "warrant", 
+                definition: "Deserve or justify the focus or consideration",
+                forms: ["warrants", "warranted", "warranting"]
+            },
+            { 
+                word: "encounter", 
+                definition: "To meet or come across, especially unexpectedly",
+                forms: ["encounters", "encountered", "encountering"]
+            },
+            { 
+                word: "counter", 
+                definition: "To oppose or respond to something",
+                forms: ["counters", "countered", "countering"]
+            },
+            { 
+                word: "exposure", 
+                definition: "The state of being subjected to something",
+                forms: ["expose", "exposes", "exposed", "exposing"]
+            },
+            { 
+                word: "resource-intensive", 
+                definition: "An activity that requires a lot of resources",
+                forms: []
+            },
+            { 
+                word: "routine", 
+                definition: "A regular, fixed way of doing things",
+                forms: ["routines"]
+            },
+            { 
+                word: "garner", 
+                definition: "To gather or collect something",
+                forms: ["garners", "garnered", "garnering"]
+            },
+            { 
+                word: "dilemma", 
+                definition: "A difficult situation requiring a choice between equally undesirable options",
+                forms: ["dilemmas"]
+            },
+            { 
+                word: "empirically tested", 
+                definition: "Examined through observation or experiment rather than theory",
+                forms: ["empirical test", "empirical testing"]
+            },
+            { 
+                word: "robust", 
+                definition: "Strong and effective; able to withstand challenges",
+                forms: ["robustness"]
+            },
+            { 
+                word: "by default", 
+                definition: "Automatically, due to lack of an alternative",
+                forms: []
+            },
+            { 
+                word: "verify", 
+                definition: "To confirm or establish the truth or accuracy of something",
+                forms: ["verifies", "verified", "verifying", "verification"]
+            },
+            { 
+                word: "encode", 
+                definition: "To convert information into a particular form",
+                forms: ["encodes", "encoded", "encoding"]
+            },
+            { 
+                word: "momentarily", 
+                definition: "For a very short time; briefly",
+                forms: ["momentary"]
+            },
+            { 
+                word: "consistent with", 
+                definition: "In agreement or harmony with",
+                forms: ["consistency", "consistently"]
+            },
+            { 
+                word: "skepticism", 
+                definition: "An attitude of doubt or questioning",
+                forms: ["skeptic", "skeptical"]
+            },
+            { 
+                word: "reside in", 
+                definition: "To exist or be present within something",
+                forms: ["resides", "resided", "residing", "residence"]
+            },
+            { 
+                word: "preemptively", 
+                definition: "Done as a precaution before an anticipated event",
+                forms: ["preemptive", "preempt"]
+            },
+            { 
+                word: "censoring", 
+                definition: "Suppressing or removing parts considered objectionable",
+                forms: ["censor", "censored", "censorship"]
+            },
+            { 
+                word: "laudable", 
+                definition: "Deserving praise; commendable",
+                forms: ["laud", "lauded", "lauding"]
+            },
+            { 
+                word: "keep off", 
+                definition: "To prevent something from approaching or affecting",
+                forms: ["keep something off", "to keep off", "to keep something off", "keeps off", "kept off", "keeping off"]
+            },
+            { 
+                word: "compelling", 
+                definition: "Evoking interest or attention in a powerful way",
+                forms: ["compel", "compels", "compelled"]
+            },
+            { 
+                word: "persuasive", 
+                definition: "Good at convincing someone to do or believe something",
+                forms: ["persuade", "persuades", "persuaded", "persuading"]
+            },
+            { 
+                word: "sensitize", 
+                definition: "To make someone aware of or responsive to something",
+                forms: ["sensitizes", "sensitized", "sensitizing"]
+            },
+            { 
+                word: "distinguish", 
+                definition: "To recognize or treat as different",
+                forms: ["distinguishes", "distinguished", "distinguishing"]
+            },
+            { 
+                word: "remedy", 
+                definition: "Solutions or treatments for problems or diseases",
+                forms: ["remedies", "remedied", "remedying"]
+            },
+            { 
+                word: "arduous", 
+                definition: "Involving strenuous effort; difficult and tiring",
+                forms: ["arduously"]
+            },
+            { 
+                word: "maintenance", 
+                definition: "The process of preserving or keeping something in good condition",
+                forms: ["maintain", "maintains", "maintained", "maintaining"]
+            },
+            { 
+                word: "prominence", 
+                definition: "The state of being important, famous, or noticeable",
+                forms: ["prominent"]
+            },
+            { 
+                word: "consensus", 
+                definition: "General agreement among a group",
+                forms: []
+            },
+            { 
+                word: "human fallibility", 
+                definition: "The tendency of humans to make mistakes",
+                forms: ["fallible", "fallibly"]
+            },
+            { 
+                word: "overcome", 
+                definition: "To successfully deal with or gain control of something",
+                forms: ["overcomes", "overcame", "overcoming"]
+            },
+            { 
+                word: "coordinated efforts", 
+                definition: "Organized actions working together toward a common goal",
+                forms: ["coordinate effort", "coordinating efforts"]
+            },
+            { 
+                word: "panacea", 
+                definition: "A solution or remedy for all difficulties or diseases",
+                forms: ["panaceas"]
+            }
+        ];
+
+        // Quiz state variables
+        let currentQuestion = 0;
+        let score = 0;
+        let quizQuestions = [];
+        let userAnswers = Array(10).fill('');
+        let wordsToRevise = new Set();
+
+        // Initialize the quiz
+        function initQuiz() {
+            // Shuffle the vocabulary array
+            const shuffledVocabulary = [...vocabulary].sort(() => Math.random() - 0.5);
+            
+            // Select first 10 words for the quiz
+            quizQuestions = shuffledVocabulary.slice(0, 10);
+            
+            // Reset user answers
+            userAnswers = Array(10).fill('');
+            
+            displayQuestion();
+        }
+
+        // Display the current question
+        function displayQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const progressDisplay = document.querySelector('.progress');
+            
+            progressDisplay.textContent = `Question ${currentQuestion + 1} of 10`;
+            
+            if (currentQuestion < quizQuestions.length) {
+                const question = quizQuestions[currentQuestion];
+                
+                questionContainer.innerHTML = `
+                    <div class="question">
+                        <div class="definition">${question.definition}</div>
+                        <input type="text" id="answer-input" value="${userAnswers[currentQuestion]}" 
+                               placeholder="Type the word here..." spellcheck="false">
+                    </div>
+                `;
+                
+                // Add event listener to input
+                const input = document.getElementById('answer-input');
+                input.addEventListener('input', function() {
+                    userAnswers[currentQuestion] = this.value.trim();
+                });
+                input.focus();
+            }
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+            document.getElementById('next-btn').style.display = currentQuestion === 9 ? 'none' : 'block';
+            document.getElementById('submit-btn').style.display = currentQuestion === 9 ? 'block' : 'none';
+        }
+
+        // Navigation functions
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            }
+        });
+
+        // Submit the quiz
+        document.getElementById('submit-btn').addEventListener('click', submitQuiz);
+
+        function submitQuiz() {
+            score = 0;
+            wordsToRevise = new Set();
+            const answerReview = document.getElementById('answer-review');
+            answerReview.innerHTML = '';
+            
+            // Calculate score and build review
+            quizQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index].toLowerCase();
+                const correctForms = [question.word.toLowerCase(), ...question.forms.map(f => f.toLowerCase())];
+                const isCorrect = correctForms.some(form => userAnswer === form);
+                
+                if (isCorrect) {
+                    score++;
+                } else {
+                    wordsToRevise.add(question.word);
+                }
+                
+                // Add to answer review
+                const answerDiv = document.createElement('div');
+                answerDiv.className = isCorrect ? 'answer-feedback correct-answer' : 'answer-feedback incorrect-answer';
+                answerDiv.innerHTML = `
+                    <p><strong>Definition:</strong> ${question.definition}</p>
+                    <p><strong>Your answer:</strong> ${userAnswer || "(blank)"}</p>
+                    ${!isCorrect ? `<p><strong>Correct answer(s):</strong> ${[question.word, ...question.forms].join(', ')}</p>` : ''}
+                `;
+                answerReview.appendChild(answerDiv);
+            });
+            
+            // Display results
+            displayResults();
+        }
+
+        function displayResults() {
+            document.querySelector('.quiz-container').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            document.getElementById('score-display').textContent = score;
+            
+            const feedback = document.getElementById('general-feedback');
+            if (score === 10) {
+                feedback.innerHTML = '<p style="color: #28a745;">Perfect score! Excellent work!</p>';
+            } else if (score >= 7) {
+                feedback.innerHTML = '<p style="color: #17a2b8;">Good job! You know most of these words well.</p>';
+            } else if (score >= 4) {
+                feedback.innerHTML = '<p style="color: #ffc107;">Keep practicing! You\'re getting there.</p>';
+            } else {
+                feedback.innerHTML = '<p style="color: #dc3545;">Review the answers below and try again!</p>';
+            }
+        }
+
+        // Start the quiz when the page loads
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
