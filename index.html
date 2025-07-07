@@ -1,82 +1,134 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What We Do</title>
-  <link rel="icon" href="favicon.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>sanokulov.uz – Home</title>
+  <link rel="icon" type="image/png" href="Diyorbek's.png">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
     }
     body {
-      background: #fff7e6;
-      color: #222;
-      overflow-x: hidden;
+      font-family: 'Quicksand', sans-serif;
+      background-color: #ffffff;
+      background-image: url('https://cdn.pixabay.com/photo/2016/11/29/04/17/abstract-1867905_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #333;
     }
-    .header {
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 40px;
+      color: #6C63FF;
+      cursor: pointer;
+    }
+    .logo:hover {
+      text-decoration: underline;
+    }
+    .hero {
       text-align: center;
-      padding: 4rem 1rem 2rem;
+      padding: 80px 20px 40px;
+      background-color: rgba(255, 255, 255, 0.85);
     }
-    .header h1 {
-      font-size: 2.5rem;
-      color: #d14d00;
-      margin-bottom: 1rem;
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 700;
     }
-    .header p {
-      color: #444;
-      font-size: 1rem;
+    .hero h1 .learn {
+      color: #6C63FF;
+    }
+    .hero h1 .play {
+      color: #fbb03b;
+    }
+    .hero p {
+      margin: 20px auto;
       max-width: 600px;
-      margin: 0 auto;
+      font-size: 18px;
+      color: #555;
     }
-    .diamond-grid {
+    .features {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 60px;
-      padding: 2rem;
+      padding: 60px 20px;
+      gap: 20px;
     }
-    .diamond {
-      width: 200px;
-      height: 200px;
-      transform: rotate(45deg);
-      overflow: hidden;
-      position: relative;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    .feature-box {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      width: 280px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
     }
-    .diamond img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: rotate(-45deg) scale(1.15);
-      transition: transform 0.4s ease;
+    .feature-box:hover {
+      transform: scale(1.03);
+      background: #f0f8ff;
     }
-    .diamond:hover img {
-      transform: rotate(-45deg) scale(1.25);
+    .feature-box h3 {
+      font-size: 20px;
+      color: #6C63FF;
+      margin-bottom: 10px;
+    }
+    .feature-box p {
+      font-size: 14px;
+      color: #444;
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    @media (max-width: 600px) {
+      header nav {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>What We Do</h1>
-    <p>Empowering students and creativity through collaboration, learning, and community.</p>
-  </div>
+  <header>
+    <div class="logo" onclick="location.reload()">sanokulov.uz</div>
+  </header>
 
-  <div class="diamond-grid">
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/men/51.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/men/14.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/men/44.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/women/34.jpg" alt="Student"></div>
-    <div class="diamond"><img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Student"></div>
-  </div>
+  <section class="hero">
+    <h1>The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
+    <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey.</p>
+  </section>
+
+  <section class="features">
+    <div class="feature-box" onclick="window.location.href='vocab-practice.html'">
+      <h3>🧠 Vocabulary Practice</h3>
+      <p>Boost your language skills with curated vocabulary sets and review tasks.</p>
+    </div>
+    <div class="feature-box">
+      <h3>👨‍🏫 Join My Lessons</h3>
+      <p>Enroll in private or group classes to accelerate your English learning journey.</p>
+    </div>
+    <div class="feature-box">
+      <h3>📘 About Me</h3>
+      <p>Learn about the educator behind this platform and the courses I offer.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 sanokulov.uz – All rights reserved
+  </footer>
 </body>
 </html>
