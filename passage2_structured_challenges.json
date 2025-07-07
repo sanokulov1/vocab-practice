@@ -1,0 +1,514 @@
+{
+  "dailyChallengeSets": [
+    [
+      {
+        "Word": "laden with",
+        "Definition": "carrying a lot of things",
+        "type": "Typing"
+      },
+      {
+        "Word": "fertile",
+        "Definition": "good for growing things",
+        "type": "Typing"
+      },
+      {
+        "Word": "to tolerate",
+        "Definition": "accept something unpleasant",
+        "type": "Quiz"
+      },
+      {
+        "Word": "surrender",
+        "Definition": "stop fighting and give up",
+        "type": "Quiz"
+      },
+      {
+        "Word": "to curtail",
+        "Definition": "limit or reduce something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "unsurpassed knowledge",
+        "Definition": "the best knowledge",
+        "type": "Typing"
+      },
+      {
+        "Word": "hostage",
+        "Definition": "a person kept as a prisoner",
+        "type": "Matching"
+      },
+      {
+        "Word": "Misfits",
+        "Definition": "people who don’t fit in",
+        "type": "Matching"
+      },
+      {
+        "Word": "commerce",
+        "Definition": "buying and selling of goods",
+        "type": "Typing"
+      },
+      {
+        "Word": "rugged",
+        "Definition": "rough and uneven",
+        "type": "Quiz"
+      },
+      {
+        "Word": "denial",
+        "Definition": "refusing to accept",
+        "type": "Matching"
+      },
+      {
+        "Word": "condone",
+        "Definition": "accept something bad",
+        "type": "Typing"
+      },
+      {
+        "Word": "reign",
+        "Definition": "period of rule",
+        "type": "Typing"
+      },
+      {
+        "Word": "culprit",
+        "Definition": "a person who did something wrong",
+        "type": "Matching"
+      },
+      {
+        "Word": "Spring to",
+        "Definition": "suddenly start doing something",
+        "type": "Typing"
+      },
+      {
+        "Word": "maritime",
+        "Definition": "related to the sea",
+        "type": "Typing"
+      },
+      {
+        "Word": "subjects",
+        "Definition": "people ruled by a leader",
+        "type": "Quiz"
+      },
+      {
+        "Word": "praise",
+        "Definition": "say good things about someone",
+        "type": "Quiz"
+      },
+      {
+        "Word": "outlive",
+        "Definition": "live longer than someone else",
+        "type": "Matching"
+      },
+      {
+        "Word": "marine resources",
+        "Definition": "food and materials from the sea",
+        "type": "Matching"
+      }
+    ],
+    [
+      {
+        "Word": "kidnapped",
+        "Definition": "taken by force",
+        "type": "Typing"
+      },
+      {
+        "Word": "Misfits",
+        "Definition": "people who don’t fit in",
+        "type": "Typing"
+      },
+      {
+        "Word": "maritime",
+        "Definition": "related to the sea",
+        "type": "Quiz"
+      },
+      {
+        "Word": "outlive",
+        "Definition": "live longer than someone else",
+        "type": "Quiz"
+      },
+      {
+        "Word": "unsurpassed knowledge",
+        "Definition": "the best knowledge",
+        "type": "Matching"
+      },
+      {
+        "Word": "Spring to",
+        "Definition": "suddenly start doing something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "commerce",
+        "Definition": "buying and selling of goods",
+        "type": "Typing"
+      },
+      {
+        "Word": "surrender",
+        "Definition": "stop fighting and give up",
+        "type": "Typing"
+      },
+      {
+        "Word": "praise",
+        "Definition": "say good things about someone",
+        "type": "Matching"
+      },
+      {
+        "Word": "fleet",
+        "Definition": "group of ships",
+        "type": "Matching"
+      },
+      {
+        "Word": "to grant",
+        "Definition": "officially give",
+        "type": "Matching"
+      },
+      {
+        "Word": "Millennium",
+        "Definition": "1000 years",
+        "type": "Quiz"
+      },
+      {
+        "Word": "combat",
+        "Definition": "fight against",
+        "type": "Typing"
+      },
+      {
+        "Word": "emboldened",
+        "Definition": "made brave or confident",
+        "type": "Quiz"
+      },
+      {
+        "Word": "Daredevils",
+        "Definition": "people who take big risks",
+        "type": "Matching"
+      },
+      {
+        "Word": "reign",
+        "Definition": "period of rule",
+        "type": "Typing"
+      },
+      {
+        "Word": "to make a detour",
+        "Definition": "go a longer way to avoid something",
+        "type": "Matching"
+      },
+      {
+        "Word": "to tolerate",
+        "Definition": "accept something unpleasant",
+        "type": "Typing"
+      },
+      {
+        "Word": "fertile",
+        "Definition": "good for growing things",
+        "type": "Quiz"
+      },
+      {
+        "Word": "denial",
+        "Definition": "refusing to accept",
+        "type": "Typing"
+      }
+    ],
+    [
+      {
+        "Word": "to grant",
+        "Definition": "officially give",
+        "type": "Typing"
+      },
+      {
+        "Word": "fleet",
+        "Definition": "group of ships",
+        "type": "Matching"
+      },
+      {
+        "Word": "to make a detour",
+        "Definition": "go a longer way to avoid something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "subjects",
+        "Definition": "people ruled by a leader",
+        "type": "Quiz"
+      },
+      {
+        "Word": "concerted action",
+        "Definition": "planned group effort",
+        "type": "Matching"
+      },
+      {
+        "Word": "trade routes",
+        "Definition": "paths used for trading",
+        "type": "Quiz"
+      },
+      {
+        "Word": "Spring to",
+        "Definition": "suddenly start doing something",
+        "type": "Matching"
+      },
+      {
+        "Word": "to curtail",
+        "Definition": "limit or reduce something",
+        "type": "Typing"
+      },
+      {
+        "Word": "unsurpassed knowledge",
+        "Definition": "the best knowledge",
+        "type": "Typing"
+      },
+      {
+        "Word": "to assure",
+        "Definition": "to make someone feel safe",
+        "type": "Typing"
+      },
+      {
+        "Word": "condone",
+        "Definition": "accept something bad",
+        "type": "Matching"
+      },
+      {
+        "Word": "To raid",
+        "Definition": "attack and steal from a place",
+        "type": "Matching"
+      },
+      {
+        "Word": "laden with",
+        "Definition": "carrying a lot of things",
+        "type": "Quiz"
+      },
+      {
+        "Word": "resort to",
+        "Definition": "turn to something as a solution",
+        "type": "Quiz"
+      },
+      {
+        "Word": "to tolerate",
+        "Definition": "accept something unpleasant",
+        "type": "Matching"
+      },
+      {
+        "Word": "cleansing",
+        "Definition": "removal of unwanted people",
+        "type": "Quiz"
+      },
+      {
+        "Word": "maritime",
+        "Definition": "related to the sea",
+        "type": "Typing"
+      },
+      {
+        "Word": "culprit",
+        "Definition": "a person who did something wrong",
+        "type": "Typing"
+      },
+      {
+        "Word": "Daredevils",
+        "Definition": "people who take big risks",
+        "type": "Typing"
+      },
+      {
+        "Word": "rugged",
+        "Definition": "rough and uneven",
+        "type": "Typing"
+      }
+    ],
+    [
+      {
+        "Word": "ransom",
+        "Definition": "money paid for release",
+        "type": "Quiz"
+      },
+      {
+        "Word": "to curtail",
+        "Definition": "limit or reduce something",
+        "type": "Typing"
+      },
+      {
+        "Word": "prominent",
+        "Definition": "famous and important",
+        "type": "Matching"
+      },
+      {
+        "Word": "eliminate",
+        "Definition": "remove completely",
+        "type": "Matching"
+      },
+      {
+        "Word": "fleet",
+        "Definition": "group of ships",
+        "type": "Typing"
+      },
+      {
+        "Word": "seafaring skills",
+        "Definition": "skills for traveling by sea",
+        "type": "Matching"
+      },
+      {
+        "Word": "Misfits",
+        "Definition": "people who don’t fit in",
+        "type": "Quiz"
+      },
+      {
+        "Word": "condone",
+        "Definition": "accept something bad",
+        "type": "Quiz"
+      },
+      {
+        "Word": "praise",
+        "Definition": "say good things about someone",
+        "type": "Matching"
+      },
+      {
+        "Word": "marine resources",
+        "Definition": "food and materials from the sea",
+        "type": "Quiz"
+      },
+      {
+        "Word": "eradicate",
+        "Definition": "destroy totally",
+        "type": "Matching"
+      },
+      {
+        "Word": "maritime",
+        "Definition": "related to the sea",
+        "type": "Typing"
+      },
+      {
+        "Word": "commerce",
+        "Definition": "buying and selling of goods",
+        "type": "Typing"
+      },
+      {
+        "Word": "laden with",
+        "Definition": "carrying a lot of things",
+        "type": "Typing"
+      },
+      {
+        "Word": "fertile",
+        "Definition": "good for growing things",
+        "type": "Typing"
+      },
+      {
+        "Word": "unsurpassed knowledge",
+        "Definition": "the best knowledge",
+        "type": "Matching"
+      },
+      {
+        "Word": "to make a detour",
+        "Definition": "go a longer way to avoid something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "Millennium",
+        "Definition": "1000 years",
+        "type": "Quiz"
+      },
+      {
+        "Word": "to grant",
+        "Definition": "officially give",
+        "type": "Typing"
+      },
+      {
+        "Word": "emboldened",
+        "Definition": "made brave or confident",
+        "type": "Typing"
+      }
+    ],
+    [
+      {
+        "Word": "to curtail",
+        "Definition": "limit or reduce something",
+        "type": "Matching"
+      },
+      {
+        "Word": "to be troubled by",
+        "Definition": "worried or upset by something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "glorify",
+        "Definition": "make someone seem great",
+        "type": "Typing"
+      },
+      {
+        "Word": "Millennium",
+        "Definition": "1000 years",
+        "type": "Matching"
+      },
+      {
+        "Word": "eliminate",
+        "Definition": "remove completely",
+        "type": "Matching"
+      },
+      {
+        "Word": "pressing issues",
+        "Definition": "important problems",
+        "type": "Typing"
+      },
+      {
+        "Word": "Daredevils",
+        "Definition": "people who take big risks",
+        "type": "Typing"
+      },
+      {
+        "Word": "to make a detour",
+        "Definition": "go a longer way to avoid something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "Misfits",
+        "Definition": "people who don’t fit in",
+        "type": "Typing"
+      },
+      {
+        "Word": "predate",
+        "Definition": "come before in time",
+        "type": "Matching"
+      },
+      {
+        "Word": "retaliation",
+        "Definition": "payback for an attack",
+        "type": "Typing"
+      },
+      {
+        "Word": "cleansing",
+        "Definition": "removal of unwanted people",
+        "type": "Typing"
+      },
+      {
+        "Word": "Spring to",
+        "Definition": "suddenly start doing something",
+        "type": "Quiz"
+      },
+      {
+        "Word": "kidnapped",
+        "Definition": "taken by force",
+        "type": "Quiz"
+      },
+      {
+        "Word": "praise",
+        "Definition": "say good things about someone",
+        "type": "Matching"
+      },
+      {
+        "Word": "resort to",
+        "Definition": "turn to something as a solution",
+        "type": "Quiz"
+      },
+      {
+        "Word": "maritime",
+        "Definition": "related to the sea",
+        "type": "Typing"
+      },
+      {
+        "Word": "trade routes",
+        "Definition": "paths used for trading",
+        "type": "Quiz"
+      },
+      {
+        "Word": "fertile",
+        "Definition": "good for growing things",
+        "type": "Typing"
+      },
+      {
+        "Word": "laden with",
+        "Definition": "carrying a lot of things",
+        "type": "Matching"
+      }
+    ]
+  ]
+}
