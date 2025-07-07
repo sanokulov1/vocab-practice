@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Matching Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            padding: 10px;
+            touch-action: manipulation;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .group-container {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .group-header {
+            background-color: #4a89dc;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-size: 1.1rem;
+        }
+        
+        .group-content {
+            display: none;
+            padding: 10px 0;
+        }
+        
+        .group-content.active {
+            display: block;
+        }
+        
+        .matching-area {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 150px);
+        }
+        
+        .words-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 8px;
+            overflow-y: auto;
+        }
+        
+        .definitions-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 8px;
+            overflow-y: auto;
+        }
+        
+        .word, .definition {
+            border-radius: 6px;
+            cursor: grab;
+            user-select: none;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 6px 8px;
+        }
+        
+        .word {
+            background-color: #a0d9ff;
+            color: #2c3e50;
+            border: 1px solid #7fc4fd;
+            white-space: nowrap;
+        }
+        
+        .definition {
+            background-color: #a8e6cf;
+            color: #2c3e50;
+            border: 1px solid #8dd7b9;
+            margin: 0 auto;
+            width: 95%;
+        }
+        
+        .word.dragging {
+            opacity: 0.7;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .definition.highlight {
+            background-color: #66bb6a;
+            color: white;
+            animation: glow 1s;
+        }
+        
+        .matched {
+            opacity: 0.5;
+            cursor: default;
+            text-decoration: line-through;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #66bb6a; }
+            50% { box-shadow: 0 0 20px #66bb6a; }
+            100% { box-shadow: 0 0 5px #66bb6a; }
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #4a89dc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        @media (orientation: landscape) {
+            .matching-area {
+                flex-direction: row;
+                height: calc(100vh - 120px);
+            }
+            
+            .words-container {
+                width: 30%;
+                height: 100%;
+            }
+            
+            .definitions-container {
+                width: 70%;
+                height: 100%;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Vocabulary Matching Game</h1>
+    
+    <!-- Group 1 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(1)">
+            Group 1 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group1"></div>
+    </div>
+    
+    <!-- Group 2 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(2)">
+            Group 2 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group2"></div>
+    </div>
+    
+    <!-- Group 3 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(3)">
+            Group 3 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group3"></div>
+    </div>
+    
+    <!-- Group 4 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(4)">
+            Group 4 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group4"></div>
+    </div>
+    
+    <!-- Group 5 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(5)">
+            Group 5 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group5"></div>
+    </div>
+    
+    <!-- Group 6 -->
+    <div class="group-container">
+        <div class="group-header" onclick="toggleGroup(6)">
+            Group 6 <span class="arrow">▼</span>
+        </div>
+        <div class="group-content" id="group6"></div>
+    </div>
+    
+    <button class="reset-btn" onclick="resetAll()">Reset All</button>
+    
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+
+    <script>
+        // Vocabulary data for all groups
+        const vocabularyGroups = [
+            // Group 1
+            [
+                { word: "Deliberately", definition: "Done consciously and intentionally; on purpose" },
+                { word: "Inevitable", definition: "Certain to happen; unavoidable" },
+                { word: "To Deceive", definition: "To make someone believe something that is not true" },
+                { word: "Interpersonal bonds", definition: "Emotional connections between people" },
+                { word: "Inadvertently", definition: "Without intention; accidentally" },
+                { word: "X looms larger than in the past", definition: "Something appears more important or threatening now than before" },
+                { word: "Means", definition: "A method or way of doing something" },
+                { word: "Facilitated", definition: "Made easier or helped bring about" }
+            ],
+            // Group 2
+            [
+                { word: "Unduly", definition: "Excessively or inappropriately" },
+                { word: "Misperceptions", definition: "Incorrect understandings or interpretations" },
+                { word: "Detrimental", definition: "Harmful or damaging" },
+                { word: "Downstream", definition: "Occurring later in a process or as a consequence" },
+                { word: "Social harmony", definition: "Peaceful coexistence and positive relations in society" },
+                { word: "Contemporary", definition: "Belonging to the present time; modern" },
+                { word: "Warrant the attention", definition: "Deserve or justify focus or consideration" },
+                { word: "Encounter", definition: "An unexpected meeting or experience" }
+            ],
+            // Group 3
+            [
+                { word: "Counter", definition: "To act in opposition to; to contradict" },
+                { word: "Exposure", definition: "The state of being subjected to something (e.g., information, elements)" },
+                { word: "Resource-intensive effort", definition: "An activity requiring significant time, money, or energy" },
+                { word: "Routine", definition: "A regular, unvarying procedure" },
+                { word: "Garner", definition: "To gather or collect (something, especially information or approval)" },
+                { word: "Dilemma", definition: "A situation requiring a difficult choice between undesirable options" },
+                { word: "Empirically tested", definition: "Examined through observation or experiment rather than theory" },
+                { word: "Robust", definition: "Strong and effective; able to withstand challenges" }
+            ],
+            // Group 4
+            [
+                { word: "By default", definition: "Automatically, due to lack of alternatives or active choice" },
+                { word: "Verify", definition: "To confirm the truth or accuracy of something" },
+                { word: "Encode", definition: "To convert information into a particular form for processing or storage" },
+                { word: "Momentarily", definition: "For a very short time; briefly" },
+                { word: "Consistent with", definition: "In agreement or harmony with" },
+                { word: "Skepticism", definition: "A doubting or questioning attitude" },
+                { word: "Reside in", definition: "To exist or be present within something" },
+                { word: "Preemptively", definition: "Done as a preventative measure before an expected event" }
+            ],
+            // Group 5
+            [
+                { word: "Censoring", definition: "Suppressing or removing objectionable content" },
+                { word: "Laudable", definition: "Deserving praise and commendation" },
+                { word: "Keep something off", definition: "To prevent something from being included or considered" },
+                { word: "Compelling", definition: "Evoking interest or attention in a powerful way" },
+                { word: "Persuasive", definition: "Good at convincing someone to do or believe something" },
+                { word: "Sensitize", definition: "To make someone aware of or responsive to something" },
+                { word: "Distinguish", definition: "To recognize or point out differences" },
+                { word: "Remedies", definition: "Solutions or treatments for problems or illnesses" }
+            ],
+            // Group 6
+            [
+                { word: "Arduous", definition: "Involving strenuous effort; difficult and tiring" },
+                { word: "Maintenance", definition: "The process of preserving or keeping something in good condition" },
+                { word: "Prominence", definition: "The state of being important, famous, or noticeable" },
+                { word: "Consensus", definition: "General agreement among a group" },
+                { word: "Human fallibility", definition: "The tendency of humans to make mistakes" },
+                { word: "Overcome", definition: "To successfully deal with or gain control of something difficult" },
+                { word: "Coordinated efforts", definition: "Planned activities where people work together effectively" },
+                { word: "Panacea", definition: "A solution or remedy for all difficulties or diseases" }
+            ]
+        ];
+
+        // Audio elements
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+        
+        // Current active group
+        let currentGroup = null;
+        let draggedWord = null;
+        
+        // Initialize all groups
+        function initGroups() {
+            for (let i = 0; i < vocabularyGroups.length; i++) {
+                const group = vocabularyGroups[i];
+                const groupElement = document.getElementById(`group${i+1}`);
+                
+                groupElement.innerHTML = `
+                    <div class="matching-area">
+                        <div class="words-container" id="words-group${i+1}"></div>
+                        <div class="definitions-container" id="definitions-group${i+1}"></div>
+                    </div>
+                `;
+                
+                const wordsContainer = document.getElementById(`words-group${i+1}`);
+                const definitionsContainer = document.getElementById(`definitions-group${i+1}`);
+                
+                // Add words (vertical list)
+                group.forEach(item => {
+                    const wordElement = document.createElement('div');
+                    wordElement.className = 'word';
+                    wordElement.textContent = item.word;
+                    wordElement.dataset.word = item.word;
+                    wordElement.draggable = true;
+                    
+                    wordElement.addEventListener('dragstart', dragStart);
+                    wordElement.addEventListener('touchstart', touchStart, { passive: false });
+                    
+                    wordsContainer.appendChild(wordElement);
+                });
+                
+                // Shuffle and add definitions in 2 columns
+                const shuffledDefinitions = [...group].sort(() => Math.random() - 0.5);
+                shuffledDefinitions.forEach(item => {
+                    const definitionElement = document.createElement('div');
+                    definitionElement.className = 'definition';
+                    definitionElement.textContent = item.definition;
+                    definitionElement.dataset.word = item.word;
+                    
+                    definitionElement.addEventListener('dragover', dragOver);
+                    definitionElement.addEventListener('dragenter', dragEnter);
+                    definitionElement.addEventListener('dragleave', dragLeave);
+                    definitionElement.addEventListener('drop', drop);
+                    definitionElement.addEventListener('touchmove', touchMove, { passive: false });
+                    definitionElement.addEventListener('touchend', touchEnd);
+                    
+                    definitionsContainer.appendChild(definitionElement);
+                });
+            }
+        }
+        
+        // Toggle group visibility
+        function toggleGroup(groupNum) {
+            // Close current group if clicking the same one
+            if (currentGroup === groupNum) {
+                document.getElementById(`group${groupNum}`).classList.remove('active');
+                document.querySelector(`.group-container:nth-child(${groupNum + 1}) .arrow`).textContent = '▼';
+                currentGroup = null;
+                return;
+            }
+            
+            // Close previously opened group
+            if (currentGroup) {
+                document.getElementById(`group${currentGroup}`).classList.remove('active');
+                document.querySelector(`.group-container:nth-child(${currentGroup + 1}) .arrow`).textContent = '▼';
+            }
+            
+            // Open new group
+            document.getElementById(`group${groupNum}`).classList.add('active');
+            document.querySelector(`.group-container:nth-child(${groupNum + 1}) .arrow`).textContent = '▲';
+            currentGroup = groupNum;
+        }
+        
+        // Drag and drop functions
+        function dragStart(e) {
+            draggedWord = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.dataset.word);
+        }
+        
+        function touchStart(e) {
+            draggedWord = this;
+            this.classList.add('dragging');
+            e.preventDefault();
+        }
+        
+        function dragOver(e) {
+            e.preventDefault();
+        }
+        
+        function touchMove(e) {
+            e.preventDefault();
+        }
+        
+        function dragEnter(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1.05)';
+        }
+        
+        function dragLeave() {
+            this.style.transform = '';
+        }
+        
+        function drop(e) {
+            e.preventDefault();
+            handleDrop(this);
+        }
+        
+        function touchEnd(e) {
+            const touch = e.changedTouches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (element && element.classList.contains('definition')) {
+                handleDrop(element);
+            }
+            if (draggedWord) {
+                draggedWord.classList.remove('dragging');
+                draggedWord = null;
+            }
+        }
+        
+        function handleDrop(target) {
+            target.style.transform = '';
+            
+            if (!draggedWord) return;
+            
+            const word = draggedWord.dataset.word;
+            
+            if (target.dataset.word === word) {
+                // Correct match
+                target.classList.add('highlight');
+                correctSound.play();
+                
+                // Mark both word and definition as matched
+                draggedWord.classList.add('matched');
+                draggedWord.draggable = false;
+                target.classList.add('matched');
+                
+                // Remove event listeners
+                target.removeEventListener('dragover', dragOver);
+                target.removeEventListener('dragenter', dragEnter);
+                target.removeEventListener('dragleave', dragLeave);
+                target.removeEventListener('drop', drop);
+                target.removeEventListener('touchmove', touchMove);
+                target.removeEventListener('touchend', touchEnd);
+            } else {
+                // Incorrect match
+                wrongSound.play();
+                target.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    target.style.animation = '';
+                }, 500);
+            }
+            
+            draggedWord.classList.remove('dragging');
+            draggedWord = null;
+        }
+        
+        // Reset all matches in current group
+        function resetAll() {
+            if (!currentGroup) return;
+            
+            const groupElement = document.getElementById(`group${currentGroup}`);
+            const words = groupElement.querySelectorAll('.word');
+            const definitions = groupElement.querySelectorAll('.definition');
+            
+            words.forEach(word => {
+                word.classList.remove('matched', 'dragging');
+                word.draggable = true;
+            });
+            
+            definitions.forEach(def => {
+                def.classList.remove('matched', 'highlight');
+                def.addEventListener('dragover', dragOver);
+                def.addEventListener('dragenter', dragEnter);
+                def.addEventListener('dragleave', dragLeave);
+                def.addEventListener('drop', drop);
+                def.addEventListener('touchmove', touchMove);
+                def.addEventListener('touchend', touchEnd);
+            });
+            
+            // Reshuffle definitions
+            const definitionsContainer = document.getElementById(`definitions-group${currentGroup}`);
+            const definitionsArray = Array.from(definitionsContainer.children);
+            definitionsArray.sort(() => Math.random() - 0.5);
+            definitionsArray.forEach(def => definitionsContainer.appendChild(def));
+        }
+        
+        // Initialize the game
+        window.onload = function() {
+            initGroups();
+        };
+    </script>
+</body>
+</html>
