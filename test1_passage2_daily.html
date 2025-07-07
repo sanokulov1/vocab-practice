@@ -1,30 +1,100 @@
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Daily Challenge – Passage 2</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f0f5fb;
-                text-align: center;
-                padding: 40px;
-            }
-            h1 {
-                color: #222;
-            }
-            .content {
-                margin-top: 40px;
-                font-size: 20px;
-                color: #333;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Daily Challenge – Passage 2</h1>
-        <div class="content">[Daily challenge goes here]</div>
-    </body>
-    </html>
-    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passage 2 - Daily Challenge</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .challenge-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .challenge-item {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .activity-type {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .word {
+      font-weight: bold;
+    }
+    .home-button {
+      display: block;
+      margin: 30px auto 0;
+      width: fit-content;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .home-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daily Challenge - Passage 2</h1>
+  <div class="challenge-container" id="challengeContainer">
+    <!-- Questions will be loaded here -->
+  </div>
+  <a href="index.html" class="home-button">Home Page</a>
+
+  <script>
+    fetch("passage2_daily_challenges.json")
+      .then((res) => res.json())
+      .then((data) => {
+        const container = document.getElementById("challengeContainer");
+        const sets = data.dailyChallengeSets;
+        const randomSet = sets[Math.floor(Math.random() * sets.length)];
+
+        const getActivityType = (index) => {
+          if (index < 7) return "Matching";
+          if (index < 13) return "Typing";
+          return "Quiz";
+        };
+
+        randomSet.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "challenge-item";
+
+          const activity = document.createElement("div");
+          activity.className = "activity-type";
+          activity.textContent = getActivityType(index);
+
+          const content = document.createElement("div");
+          content.innerHTML = `<span class="word">${item.Word}</span>: ${item.Definition}`;
+
+          div.appendChild(activity);
+          div.appendChild(content);
+          container.appendChild(div);
+        });
+      })
+      .catch((err) => {
+        document.getElementById("challengeContainer").textContent =
+          "Failed to load questions. Please check the JSON file.";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
