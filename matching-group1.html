@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>passage2_group3_touch.html</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fbfd;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+    }
+    #scoreboard {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .game-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 900px;
+    }
+    .card, .drop-zone {
+      padding: 6px 10px;
+      font-size: 14px;
+      width: 170px;
+      min-height: 35px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      word-wrap: break-word;
+    }
+    .card {
+      background: white;
+      border: 2px solid #3498db;
+      cursor: pointer;
+    }
+    .drop-zone {
+      background: #ecf4fa;
+      border: 2px dashed #ccc;
+    }
+    .selected {
+      background-color: #fff3cd !important;
+    }
+    .matched {
+      background: #d4edda !important;
+      border-color: #28a745 !important;
+      cursor: default !important;
+    }
+    .incorrect {
+      background: #f8d7da !important;
+      border-color: #dc3545 !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧩 passage2 group3 touch</h1>
+  <div id="scoreboard">Score: 0 / 10</div>
+  <div class="game-area" id="words"></div>
+  <div class="game-area" id="defs"></div>
+  <script>
+    const wordPairs = [
+  {
+    "word": "Spring to",
+    "def": "To suddenly move or jump."
+  },
+  {
+    "word": "Misfits",
+    "def": "People who don\u2019t fit in with others."
+  },
+  {
+    "word": "Daredevils",
+    "def": "People who enjoy dangerous activities."
+  },
+  {
+    "word": "In command of",
+    "def": "In control of something."
+  },
+  {
+    "word": "Millennium",
+    "def": "A period of 1000 years."
+  },
+  {
+    "word": "Prowl",
+    "def": "To move quietly while hunting."
+  },
+  {
+    "word": "To raid",
+    "def": "To attack suddenly to steal or damage."
+  },
+  {
+    "word": "Trade routes",
+    "def": "Paths used for trading goods."
+  },
+  {
+    "word": "Might",
+    "def": "Great power or strength."
+  },
+  {
+    "word": "Fleet",
+    "def": "A group of ships."
+  }
+];
+    let selectedWord = null;
+    let score = 0;
+
+    const wordsContainer = document.getElementById("words");
+    const defsContainer = document.getElementById("defs");
+    const scoreboard = document.getElementById("scoreboard");
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function render() {
+      wordsContainer.innerHTML = "";
+      defsContainer.innerHTML = "";
+      const shuffledWords = shuffle(wordPairs);
+      const shuffledDefs = shuffle(wordPairs);
+
+      shuffledWords.forEach(obj => {
+        const word = obj.word;
+        const el = document.createElement("div");
+        el.className = "card";
+        el.textContent = word;
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          if (selectedWord === word) {
+            selectedWord = null;
+          } else {
+            selectedWord = word;
+            el.classList.add("selected");
+          }
+        });
+        wordsContainer.appendChild(el);
+      });
+
+      shuffledDefs.forEach(obj => {
+        const def = obj.def;
+        const word = obj.word;
+        const el = document.createElement("div");
+        el.className = "drop-zone";
+        el.textContent = def;
+        el.addEventListener("click", () => {
+          if (!selectedWord) return;
+          const correctPair = wordPairs.find(p => p.word === selectedWord);
+          if (correctPair && correctPair.def === def) {
+            el.classList.add("matched");
+            el.textContent = selectedWord;
+            const wordEl = [...document.querySelectorAll(".card")].find(w => w.textContent === selectedWord);
+            wordEl.classList.add("matched");
+            wordEl.classList.remove("selected");
+            wordEl.style.pointerEvents = "none";
+            selectedWord = null;
+            score++;
+            scoreboard.textContent = `Score: ${score} / 10`;
+          } else {
+            el.classList.add("incorrect");
+            setTimeout(() => {
+              el.classList.remove("incorrect");
+            }, 700);
+          }
+        });
+        defsContainer.appendChild(el);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
