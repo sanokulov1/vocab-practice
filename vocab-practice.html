@@ -4,90 +4,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IELTS Vocab Practice Hub</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Vocabulary Practice</title>
   <style>
-    .collapsible-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-in-out;
+    body {
+      background-color: #eaf6ff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
-    .collapsible-content.show {
-      max-height: 1000px;
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      color: #003366;
+    }
+    .section {
+      background-color: #cce5ff;
+      margin: 10px 0;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .test, .passage {
+      background-color: #f1f8ff;
+      margin: 5px 20px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .passage a {
+      text-decoration: none;
+      color: #0066cc;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
     }
   </style>
   <script>
-    function toggleSection(id) {
-      const content = document.getElementById(id);
-      content.classList.toggle('hidden');
-    }
-    function toggleCollapse(id) {
-      const content = document.getElementById(id);
-      content.classList.toggle('show');
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle("hidden");
     }
   </script>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">📘 IELTS Vocab Hub</h1>
-    <a href="index.html" class="text-blue-600 hover:underline">← Back to Homepage</a>
-  </header>
+<body>
+  <h1>📘 Vocabulary Practice</h1>
+<div class="section" onclick="toggle('collection-0')">IELTS Trainer 2</div>
+<div id="collection-0" class="hidden">
+  <div class="test" onclick="toggle('collection-0-test1')">Test 1</div>
+  <div id="collection-0-test1" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test1_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test1_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test1_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-0-test2')">Test 2</div>
+  <div id="collection-0-test2" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test2_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test2_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test2_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-0-test3')">Test 3</div>
+  <div id="collection-0-test3" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test3_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test3_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test3_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-0-test4')">Test 4</div>
+  <div id="collection-0-test4" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test4_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test4_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test4_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-0-test5')">Test 5</div>
+  <div id="collection-0-test5" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test5_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test5_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test5_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-0-test6')">Test 6</div>
+  <div id="collection-0-test6" class="hidden">
+    <div class="passage">Passage 1 – <a href="ieltstrainer2_test6_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="ieltstrainer2_test6_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="ieltstrainer2_test6_passage3.html">START</a></div>
+  </div>
+</div>
+<div class="section" onclick="toggle('collection-1')">Cambridge 17</div>
+<div id="collection-1" class="hidden">
+  <div class="test" onclick="toggle('collection-1-test1')">Test 1</div>
+  <div id="collection-1-test1" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge17_test1_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge17_test1_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge17_test1_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-1-test2')">Test 2</div>
+  <div id="collection-1-test2" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge17_test2_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge17_test2_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge17_test2_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-1-test3')">Test 3</div>
+  <div id="collection-1-test3" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge17_test3_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge17_test3_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge17_test3_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-1-test4')">Test 4</div>
+  <div id="collection-1-test4" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge17_test4_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge17_test4_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge17_test4_passage3.html">START</a></div>
+  </div>
+</div>
+<div class="section" onclick="toggle('collection-2')">Cambridge 18</div>
+<div id="collection-2" class="hidden">
+  <div class="test" onclick="toggle('collection-2-test1')">Test 1</div>
+  <div id="collection-2-test1" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge18_test1_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge18_test1_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge18_test1_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-2-test2')">Test 2</div>
+  <div id="collection-2-test2" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge18_test2_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge18_test2_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge18_test2_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-2-test3')">Test 3</div>
+  <div id="collection-2-test3" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge18_test3_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge18_test3_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge18_test3_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-2-test4')">Test 4</div>
+  <div id="collection-2-test4" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge18_test4_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge18_test4_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge18_test4_passage3.html">START</a></div>
+  </div>
+</div>
+<div class="section" onclick="toggle('collection-3')">Cambridge 19</div>
+<div id="collection-3" class="hidden">
+  <div class="test" onclick="toggle('collection-3-test1')">Test 1</div>
+  <div id="collection-3-test1" class="hidden">
+    <div class="passage">Passage 1 – <a href="test1_passage1_activities.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge19_test1_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge19_test1_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-3-test2')">Test 2</div>
+  <div id="collection-3-test2" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge19_test2_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge19_test2_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge19_test2_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-3-test3')">Test 3</div>
+  <div id="collection-3-test3" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge19_test3_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge19_test3_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge19_test3_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-3-test4')">Test 4</div>
+  <div id="collection-3-test4" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge19_test4_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge19_test4_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge19_test4_passage3.html">START</a></div>
+  </div>
+</div>
+<div class="section" onclick="toggle('collection-4')">Cambridge 20</div>
+<div id="collection-4" class="hidden">
+  <div class="test" onclick="toggle('collection-4-test1')">Test 1</div>
+  <div id="collection-4-test1" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge20_test1_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge20_test1_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge20_test1_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-4-test2')">Test 2</div>
+  <div id="collection-4-test2" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge20_test2_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge20_test2_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge20_test2_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-4-test3')">Test 3</div>
+  <div id="collection-4-test3" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge20_test3_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge20_test3_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge20_test3_passage3.html">START</a></div>
+  </div>
+  <div class="test" onclick="toggle('collection-4-test4')">Test 4</div>
+  <div id="collection-4-test4" class="hidden">
+    <div class="passage">Passage 1 – <a href="cambridge20_test4_passage1.html">START</a></div>
+    <div class="passage">Passage 2 – <a href="cambridge20_test4_passage2.html">START</a></div>
+    <div class="passage">Passage 3 – <a href="cambridge20_test4_passage3.html">START</a></div>
+  </div>
+</div>
 
-  <main class="max-w-6xl mx-auto px-4 py-10">
-    <h2 class="text-2xl font-bold mb-6">📚 Practice by Cambridge Collection</h2>
-
-    <!-- Cambridge 19 -->
-    <div class="mb-6 border rounded-xl overflow-hidden shadow">
-      <button onclick="toggleSection('cambridge19')" class="w-full text-left px-4 py-3 bg-blue-600 text-white text-lg font-semibold focus:outline-none">
-        📘 Cambridge 19
-      </button>
-      <div id="cambridge19" class="p-4 bg-white hidden space-y-4">
-
-        <!-- Test 1 -->
-        <div class="border rounded">
-          <button onclick="toggleCollapse('test1')" class="w-full text-left px-4 py-2 bg-blue-200 text-blue-900 font-semibold">Test 1</button>
-          <div id="test1" class="collapsible-content px-4 py-2 space-y-2">
-            <a href="test1_passage1.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 1 – ✅ Start</a>
-            <a href="test1_passage2.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 2 – ✅ Start</a>
-            <a href="test1_passage3.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 3 – ✅ Start</a>
-          </div>
-        </div>
-
-        <!-- Test 2 -->
-        <div class="border rounded">
-          <button onclick="toggleCollapse('test2')" class="w-full text-left px-4 py-2 bg-blue-200 text-blue-900 font-semibold">Test 2</button>
-          <div id="test2" class="collapsible-content px-4 py-2 space-y-2">
-            <a href="test2-passage1.html" class="block bg-white p-3 shadow rounded hover:bg-blue-50">Passage 1 – ✅ Start</a>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 2 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 3 – 🚧 Coming Soon</div>
-          </div>
-        </div>
-
-        <!-- Test 3 -->
-        <div class="border rounded">
-          <button onclick="toggleCollapse('test3')" class="w-full text-left px-4 py-2 bg-blue-200 text-blue-900 font-semibold">Test 3</button>
-          <div id="test3" class="collapsible-content px-4 py-2 space-y-2">
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 1 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 2 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 3 – 🚧 Coming Soon</div>
-          </div>
-        </div>
-
-        <!-- Test 4 -->
-        <div class="border rounded">
-          <button onclick="toggleCollapse('test4')" class="w-full text-left px-4 py-2 bg-blue-200 text-blue-900 font-semibold">Test 4</button>
-          <div id="test4" class="collapsible-content px-4 py-2 space-y-2">
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 1 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 2 – 🚧 Coming Soon</div>
-            <div class="bg-gray-100 p-3 rounded shadow text-gray-500">Passage 3 – 🚧 Coming Soon</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="text-center py-4 text-sm text-gray-500">
-    © 2025 IELTS Vocab Hub
-  </footer>
 </body>
 </html>
