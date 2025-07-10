@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Typing Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #e6f7ff;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 150, 136, 0.2);
+            border: 2px solid #b2ebf2;
+        }
+        h1 {
+            color: #00796b;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .question {
+            margin-bottom: 25px;
+            display: none;
+            background-color: #f5fdfe;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4db6ac;
+        }
+        .question.active {
+            display: block;
+        }
+        .definition {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #00695c;
+            font-weight: bold;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #b2dfdb;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            background-color: #e8f5e9;
+        }
+        .answer-input:focus {
+            outline: none;
+            border-color: #0288d1;
+            box-shadow: 0 0 5px rgba(2, 136, 209, 0.3);
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        #prev {
+            background-color: #4db6ac;
+            color: white;
+        }
+        #prev:hover:not(:disabled) {
+            background-color: #26a69a;
+        }
+        #next {
+            background-color: #0288d1;
+            color: white;
+        }
+        #next:hover:not(:disabled) {
+            background-color: #0277bd;
+        }
+        #submit {
+            background-color: #388e3c;
+            color: white;
+            display: none;
+        }
+        #submit:hover {
+            background-color: #2e7d32;
+        }
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            background-color: #e8f5e9;
+            border: 2px solid #a5d6a7;
+        }
+        .wrong-answers {
+            margin-top: 20px;
+        }
+        .wrong-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+        }
+        .correct-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #388e3c;
+        }
+        .progress {
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #00796b;
+            font-size: 18px;
+        }
+        #restart {
+            background-color: #4db6ac;
+            color: white;
+            margin: 25px auto 0;
+            display: block;
+            padding: 12px 30px;
+        }
+        #restart:hover {
+            background-color: #26a69a;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Vocabulary Typing Task</h1>
+        
+        <div id="quiz">
+            <div class="progress">Question 1 of 10</div>
+            
+            <div id="questions-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="navigation">
+                <button id="prev" disabled>Previous</button>
+                <button id="next">Next</button>
+                <button id="submit">Submit Quiz</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results" style="display: none;">
+            <h2>Quiz Results</h2>
+            <p>Your score: <span id="score">0</span>/10</p>
+            
+            <div class="wrong-answers" id="wrong-answers">
+                <h3>Answers:</h3>
+                <!-- Answers will be inserted here -->
+            </div>
+            
+            <button id="restart">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary words with definitions
+        const vocabularyWords = [
+            { word: "gifted", definition: "Having a natural ability to do something well", forms: ["gifted", "gift"] },
+            { word: "extraordinary", definition: "Very unusual or remarkable", forms: ["extraordinary"] },
+            { word: "emerge", definition: "To become known or apparent", forms: ["emerge", "emerged", "emerges", "emerging"] },
+            { word: "selective", definition: "Carefully choosing only the best people or things", forms: ["selective", "select"] },
+            { word: "hook", definition: "To become very interested in or excited about something", forms: ["hook", "hooked", "hooking", "hooks"] },
+            { word: "resolute", definition: "Determined and unwavering", forms: ["resolute", "resolve"] },
+            { word: "setback", definition: "Problems that delay or prevent success", forms: ["setback", "setbacks"] },
+            { word: "rewarding", definition: "Giving satisfaction or pleasure", forms: ["rewarding", "reward"] },
+            { word: "unexceptional", definition: "Not special or unusual; ordinary", forms: ["unexceptional"] },
+            { word: "plug away", definition: "To keep working hard at something difficult", forms: ["plug away", "plugged away", "plugging away"] },
+            { word: "contemporaries", definition: "People of the same age or status", forms: ["contemporaries", "contemporary"] },
+            { word: "innate", definition: "Existing from birth; natural", forms: ["innate"] },
+            { word: "replicable", definition: "Able to be copied or repeated", forms: ["replicable", "replicate"] },
+            { word: "attribute", definition: "Qualities or characteristics", forms: ["attribute", "attributes"] },
+            { word: "eminent", definition: "Famous and respected in a particular field", forms: ["eminent"] },
+            { word: "deliberate", definition: "Done consciously and intentionally", forms: ["deliberate", "deliberately"] },
+            { word: "outperform", definition: "To do better than others", forms: ["outperform", "outperformed", "outperforming"] },
+            { word: "distinguished", definition: "Very successful and respected", forms: ["distinguished", "distinguish"] },
+            { word: "discipline", definition: "Areas of study or activity", forms: ["discipline", "disciplines"] },
+            { word: "spin-off", definition: "An unexpected but useful result of something", forms: ["spin-off", "spinoff"] },
+            { word: "disadvantaged", definition: "In unfavorable circumstances", forms: ["disadvantaged", "disadvantage"] },
+            { word: "undeterred", definition: "Not discouraged by difficulty", forms: ["undeterred", "deter"] }
+        ];
+
+        let currentQuiz = [];
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // DOM elements
+        const quizDiv = document.getElementById('quiz');
+        const questionsContainer = document.getElementById('questions-container');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const submitBtn = document.getElementById('submit');
+        const resultsDiv = document.getElementById('results');
+        const scoreSpan = document.getElementById('score');
+        const wrongAnswersDiv = document.getElementById('wrong-answers');
+        const restartBtn = document.getElementById('restart');
+        const progressDiv = document.querySelector('.progress');
+
+        // Start the quiz automatically
+        document.addEventListener('DOMContentLoaded', startQuiz);
+        restartBtn.addEventListener('click', startQuiz);
+
+        // Navigation
+        prevBtn.addEventListener('click', () => navigate(-1));
+        nextBtn.addEventListener('click', () => navigate(1));
+        submitBtn.addEventListener('click', showResults);
+
+        function startQuiz() {
+            // Reset quiz state
+            currentQuestion = 0;
+            userAnswers = Array(10).fill(null);
+            score = 0;
+            
+            // Select 10 random words
+            currentQuiz = [...vocabularyWords]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 10);
+            
+            // Create question elements
+            questionsContainer.innerHTML = '';
+            currentQuiz.forEach((item, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.id = `question-${index}`;
+                
+                const definitionDiv = document.createElement('div');
+                definitionDiv.className = 'definition';
+                definitionDiv.textContent = item.definition;
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'answer-input';
+                input.placeholder = 'Type the word here...';
+                input.dataset.questionIndex = index;
+                
+                input.addEventListener('input', function() {
+                    const userAnswer = this.value.trim().toLowerCase();
+                    
+                    // Store user's answer (validation happens on submit)
+                    if (userAnswer) {
+                        userAnswers[index] = {
+                            word: item.word,
+                            userAnswer: userAnswer,
+                            correct: null // Will be determined on submit
+                        };
+                    } else {
+                        userAnswers[index] = null;
+                    }
+                    
+                    // Enable submit button if all questions are answered
+                    if (userAnswers.every(answer => answer !== null)) {
+                        submitBtn.style.display = 'block';
+                        nextBtn.style.display = 'none';
+                    } else {
+                        submitBtn.style.display = 'none';
+                        nextBtn.style.display = 'block';
+                    }
+                    
+                    updateNavigation();
+                });
+                
+                questionDiv.appendChild(definitionDiv);
+                questionDiv.appendChild(input);
+                questionsContainer.appendChild(questionDiv);
+            });
+            
+            // Show first question
+            document.querySelector('.question').classList.add('active');
+            updateNavigation();
+            
+            // Show quiz, hide results
+            quizDiv.style.display = 'block';
+            resultsDiv.style.display = 'none';
+        }
+
+        function navigate(direction) {
+            // Hide current question
+            document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+            
+            // Update current question
+            currentQuestion += direction;
+            
+            // Show new question
+            document.getElementById(`question-${currentQuestion}`).classList.add('active');
+            
+            // Update progress text
+            progressDiv.textContent = `Question ${currentQuestion + 1} of 10`;
+            
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            // Update previous button
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Update next button (only disable if on last question)
+            nextBtn.disabled = currentQuestion === 9;
+            
+            // Hide next button and show submit on last question if all answered
+            if (currentQuestion === 9) {
+                if (userAnswers[9] !== null) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function showResults() {
+            // Calculate score and validate answers
+            userAnswers.forEach((answer, index) => {
+                if (answer) {
+                    const correctForms = currentQuiz[index].forms.map(form => form.toLowerCase());
+                    answer.correct = correctForms.includes(answer.userAnswer);
+                }
+            });
+            
+            score = userAnswers.filter(answer => answer?.correct).length;
+            scoreSpan.textContent = score;
+            
+            // Show all answers
+            wrongAnswersDiv.innerHTML = '<h3>Answers:</h3>';
+            userAnswers.forEach((item, index) => {
+                const correctWord = currentQuiz[index].word;
+                const correctForms = currentQuiz[index].forms.join(', ');
+                
+                const answerItem = document.createElement('div');
+                answerItem.className = item.correct ? 'correct-item' : 'wrong-item';
+                answerItem.innerHTML = `
+                    <p><strong>Definition:</strong> ${currentQuiz[index].definition}</p>
+                    <p>Your answer: ${item.userAnswer}</p>
+                    <p>Correct word: ${correctWord}</p>
+                    ${!item.correct ? `<p>Acceptable forms: ${correctForms}</p>` : ''}
+                `;
+                wrongAnswersDiv.appendChild(answerItem);
+            });
+            
+            // Show results, hide quiz
+            quizDiv.style.display = 'none';
+            resultsDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
