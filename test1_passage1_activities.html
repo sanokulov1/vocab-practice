@@ -1,56 +1,102 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cambridge 19, Test 1, Passage 1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
-    body {
-  font-family: Arial, sans-serif;
-  background: #f0f4f8;
-  padding: 20px;
-  margin: 0;
-  text-align: center;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      padding: 40px;
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      width: 90vw;
+      max-width: 800px;
+      height: 90vh;
+      max-height: 600px;
+      padding: 20px;
+    }
+
+    .card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 600;
+      border-radius: 16px;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      transition: transform 0.3s ease;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
       text-align: center;
     }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 30px;
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 16px;
+      z-index: 0;
     }
-    .link-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 400px;
-      margin: 0 auto;
+
+    .card:hover {
+      transform: scale(1.03);
     }
-    .link-grid a {
-      text-decoration: none;
-      background: #3498db;
-      color: white;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 18px; text-align: center;
-      transition: background 0.3s ease;
+
+    .card span {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
     }
-    .link-grid a:hover {
-      background: #2980b9;
+
+    .card1 { background-image: url('card1.jpg'); }
+    .card2 { background-image: url('card2.jpg'); }
+    .card3 { background-image: url('card3.jpg'); }
+    .card4 { background-image: url('card4.jpg'); }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        height: auto;
+      }
+
+      .card {
+        font-size: 18px;
+        padding: 16px 24px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Cambridge 19, Test 1, Passage 1</h1>
-  <div class="link-grid">
-    <a href="flashcards.html">📇 Flashcards</a>
-    <a href="matching.html">🔗 Matching</a>
-    <a href="quiz.html">📝 Quiz</a>
-    <a href="definitions.html">📘 Definitions</a>
-    <a href="daily.html">🔥 Daily Challenge</a>
+  <div class="grid">
+    <a href="flashcards.html" class="card card1"><span>📇 Flashcards</span></a>
+    <a href="matching.html" class="card card2"><span>🔗 Matching</span></a>
+    <a href="quiz.html" class="card card3"><span>📝 Quiz</span></a>
+    <a href="typing.html" class="card card4"><span>⌨️ Typing</span></a>
   </div>
 </body>
 </html>
