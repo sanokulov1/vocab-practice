@@ -1,46 +1,90 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cambridge 19, Test 1, Passage 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #f2f7fc;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    h1 {
-      color: #111;
-      font-size: 28px;
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
-    .button {
-      display: block;
-      background-color: #3498db;
-      color: white;
+
+    .row {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .card {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-decoration: none;
-      padding: 16px;
-      margin: 12px auto;
-      width: 260px;
-      border-radius: 12px;
-      font-size: 20px;
-      transition: background-color 0.2s ease;
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.3s ease;
+      position: relative;
     }
-    .button:hover {
-      background-color: #2980b9;
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .card span {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+      text-align: center;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      z-index: 2;
+    }
+
+    .card1 { background-image: url('card1.jpg'); }
+    .card2 { background-image: url('card2.jpg'); }
+    .card3 { background-image: url('card3.jpg'); }
+    .card4 { background-image: url('card4.jpg'); }
+
+    @media (max-width: 768px) {
+      .row {
+        flex-direction: column;
+      }
+
+      .card {
+        height: 25vh;
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Cambridge 19, Test 1, Passage 2</h1>
-
-  <a class="button" href="test1_passage2_flashcards.html">📇 Flashcards</a>
-  <a class="button" href="test1_passage2_matching.html">🔗 Matching</a>
-  <a class="button" href="test1_passage2_quiz.html">📝 Quiz</a>
-  <a class="button" href="test1_passage2_typing.html">⌨️ Definitions</a>
-  <a class="button" href="test1_passage2_daily.html">🔥 Daily Challenge</a>
-
+  <div class="row">
+    <a href="test1_passage2_flashcards.html" class="card card1"><span>📇 Flashcards</span></a>
+    <a href="test1_passage2_matching.html" class="card card2"><span>🔗 Matching</span></a>
+    <a href="test1_passage2_quiz.html" class="card card3"><span>📝 Quiz</span></a>
+    <a href="test1_passage2_typing.html" class="card card4"><span>⌨️ Typing</span></a>
+  </div>
 </body>
 </html>
