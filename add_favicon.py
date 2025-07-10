@@ -1,31 +1,43 @@
 import os
 
-favicon_tag = '<link rel="icon" type="image/png" href="sanokulov_favicon.png" sizes="32x32">\n'
+FAVICON_LINE = '<link rel="icon" type="image/png" href="sanokulov_favicon.png" sizes="32x32">'
+INSERT_AFTER_TAG = '<head>'
 
-def update_html_file(filepath):
+def update_favicon_in_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+        content = f.read()
 
-    if any(favicon_tag.strip() in line for line in lines):
-        print(f"✔ Already updated: {filepath}")
+    # Skip files without a <head> tag
+    if INSERT_AFTER_TAG not in content:
         return
 
-    for i, line in enumerate(lines):
-        if '<head>' in line.lower():
-            lines.insert(i + 1, '  ' + favicon_tag)
-            break
+    # Remove existing favicon lines
+    lines = content.splitlines()
+    new_lines = []
+    favicon_inserted = False
+
+    for line in lines:
+        if 'rel="icon"' in line or 'rel=\'icon\'' in line:
+            continue  # Skip existing favicon lines
+        new_lines.append(line)
+        if INSERT_AFTER_TAG in line and not favicon_inserted:
+            new_lines.append('  ' + FAVICON_LINE)
+            favicon_inserted = True
+
+    new_content = '\n'.join(new_lines)
 
     with open(filepath, 'w', encoding='utf-8') as f:
-        f.writelines(lines)
+        f.write(new_content)
 
-    print(f"✅ Updated: {filepath}")
+    print(f'✅ Updated: {filepath}')
 
-def process_folder(folder_path):
-    for root, _, files in os.walk(folder_path):
+
+def fix_all_html_files(root_dir='.'):
+    for root, _, files in os.walk(root_dir):
         for file in files:
             if file.endswith('.html'):
-                update_html_file(os.path.join(root, file))
+                full_path = os.path.join(root, file)
+                update_favicon_in_file(full_path)
 
-if __name__ == "__main__":
-    website_folder = '.'  # current directory
-    process_folder(website_folder)
+if __name__ == '__main__':
+    fix_all_html_files()
