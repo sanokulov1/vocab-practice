@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matching Group 3 – Compact</title>
+  <title>passage2_group3_touch.html</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,138 +16,123 @@
     }
     h1 {
       text-align: center;
-      font-size: 22px;
-    }
-    .game-area {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      max-width: 850px;
-    }
-    .card, .drop-zone {
-      padding: 6px 8px;
-      background: white;
-      border: 2px solid #3498db;
-      border-radius: 6px;
-      text-align: center;
-      font-size: 14px;
-      min-width: 140px;
-      max-width: 140px;
-      line-height: 1.2;
-      word-wrap: break-word;
-    }
-    .drop-zone {
-      border-style: dashed;
-      background: #ecf4fa;
-    }
-    .matched {
-      background: #d4edda !important;
-      border-color: #28a745 !important;
-      pointer-events: none;
     }
     #scoreboard {
       margin: 10px 0;
       font-weight: bold;
     }
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
+    .game-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 900px;
     }
-    #next-btn, #home-btn {
-      margin-top: 20px;
-      padding: 8px 16px;
+    .card, .drop-zone {
+      padding: 6px 10px;
       font-size: 14px;
-      background: #3498db;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-right: 10px;
+      width: 170px;
+      min-height: 35px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      word-wrap: break-word;
     }
-    #next-btn:hover, #home-btn:hover {
-      background: #2980b9;
+    .card {
+      background: white;
+      border: 2px solid #3498db;
+      cursor: pointer;
+    }
+    .drop-zone {
+      background: #ecf4fa;
+      border: 2px dashed #ccc;
+    }
+    .selected {
+      background-color: #fff3cd !important;
+    }
+    .matched {
+      background: #d4edda !important;
+      border-color: #28a745 !important;
+      cursor: default !important;
+    }
+    .incorrect {
+      background: #f8d7da !important;
+      border-color: #dc3545 !important;
     }
   </style>
 </head>
 <body>
+  <h1>🧩 passage2 group3 touch</h1>
+  <div id="scoreboard">Score: 0 / 10</div>
+  <div class="game-area" id="words"></div>
+  <div class="game-area" id="defs"></div>
+  <script>
+    const wordPairs = [{"word": "surrender", "def": "To stop resisting and give up control."}, {"word": "retaliation", "def": "The act of fighting back after being attacked."}, {"word": "resort to", "def": "To use something bad as a solution."}, {"word": "correspondence", "def": "Letters or communication by writing."}, {"word": "to be troubled by", "def": "To feel worried or bothered by something."}, {"word": "pressing issues", "def": "Important problems needing quick attention."}, {"word": "commerce", "def": "The activity of buying and selling goods."}, {"word": "to assure", "def": "To promise or say something with confidence."}, {"word": "subjects", "def": "People under the rule of a leader or king."}, {"word": "condone", "def": "To accept or allow bad behavior."}];
+    let selectedWord = null;
+    let score = 0;
 
-<h1>🧩 Matching Group 3</h1>
-<div id="scoreboard">Score: 0 / 10</div>
-<div class="game-area" id="words"></div>
-<div class="game-area" id="defs"></div>
-<div>
-  <button id="home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
-  <button id="next-btn" onclick="window.location.href='matching_group4_compact.html'">➡️ Next Group</button>
-</div>
-<div id="result"></div>
+    const wordsContainer = document.getElementById("words");
+    const defsContainer = document.getElementById("defs");
+    const scoreboard = document.getElementById("scoreboard");
 
-<script>
-const wordPairs = [
-  { word: "surrender", def: "To stop resisting and give up control." },
-  { word: "retaliation", def: "The act of fighting back after being attacked." },
-  { word: "resort to", def: "To use something bad as a solution." },
-  { word: "correspondence", def: "Letters or communication by writing." },
-  { word: "to be troubled by", def: "To feel worried or bothered by something." },
-  { word: "pressing issues", def: "Important problems needing quick attention." },
-  { word: "commerce", def: "The activity of buying and selling goods." },
-  { word: "to assure", def: "To promise or say something with confidence." },
-  { word: "subjects", def: "People under the rule of a leader or king." },
-  { word: "condone", def: "To accept or allow bad behavior." }
-];
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
 
-let score = 0;
+    function render() {
+      wordsContainer.innerHTML = "";
+      defsContainer.innerHTML = "";
+      const shuffledWords = shuffle(wordPairs);
+      const shuffledDefs = shuffle(wordPairs);
 
-const wordsContainer = document.getElementById("words");
-const defsContainer = document.getElementById("defs");
-const scoreboard = document.getElementById("scoreboard");
+      shuffledWords.forEach(obj => {
+        const word = obj.word;
+        const el = document.createElement("div");
+        el.className = "card";
+        el.textContent = word;
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          if (selectedWord === word) {
+            selectedWord = null;
+          } else {
+            selectedWord = word;
+            el.classList.add("selected");
+          }
+        });
+        wordsContainer.appendChild(el);
+      });
 
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
+      shuffledDefs.forEach(obj => {
+        const def = obj.def;
+        const word = obj.word;
+        const el = document.createElement("div");
+        el.className = "drop-zone";
+        el.textContent = def;
+        el.addEventListener("click", () => {
+          if (!selectedWord) return;
+          const correctPair = wordPairs.find(p => p.word === selectedWord);
+          if (correctPair && correctPair.def === def) {
+            el.classList.add("matched");
+            el.textContent = selectedWord;
+            const wordEl = [...document.querySelectorAll(".card")].find(w => w.textContent === selectedWord);
+            wordEl.classList.add("matched");
+            wordEl.classList.remove("selected");
+            wordEl.style.pointerEvents = "none";
+            selectedWord = null;
+            score++;
+            scoreboard.textContent = `Score: ${score} / 10`;
+          } else {
+            el.classList.add("incorrect");
+            setTimeout(() => {
+              el.classList.remove("incorrect");
+            }, 700);
+          }
+        });
+        defsContainer.appendChild(el);
+      });
+    }
 
-function renderGame() {
-  const shuffledWords = shuffle(wordPairs);
-  const shuffledDefs = shuffle(wordPairs);
-
-  shuffledWords.forEach(({ word }) => {
-    const el = document.createElement("div");
-    el.className = "card";
-    el.textContent = word;
-    el.setAttribute("data-word", word);
-    el.setAttribute("draggable", "true");
-    el.addEventListener("dragstart", e => {
-      e.dataTransfer.setData("text/plain", word);
-    });
-    wordsContainer.appendChild(el);
-  });
-
-  shuffledDefs.forEach(({ word, def }) => {
-    const dropZone = document.createElement("div");
-    dropZone.className = "drop-zone";
-    dropZone.textContent = def;
-    dropZone.setAttribute("data-def", def);
-    dropZone.addEventListener("dragover", e => e.preventDefault());
-    dropZone.addEventListener("drop", e => {
-      e.preventDefault();
-      const draggedWord = e.dataTransfer.getData("text/plain");
-      const correctPair = wordPairs.find(p => p.word === draggedWord);
-      if (correctPair && correctPair.def === def) {
-        score++;
-        scoreboard.textContent = `Score: ${score} / 10`;
-        const wordCard = [...document.querySelectorAll(".card")].find(c => c.textContent === draggedWord);
-        wordCard.classList.add("matched");
-        dropZone.classList.add("matched");
-        wordCard.setAttribute("draggable", "false");
-        dropZone.textContent = draggedWord;
-      }
-    });
-    defsContainer.appendChild(dropZone);
-  });
-}
-
-renderGame();
-</script>
-
+    render();
+  </script>
 </body>
 </html>
