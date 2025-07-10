@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matching Game – Test 2, Passage 1</title>
+  <title>Tap-to-Match – Test 2, Passage 1</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,32 +32,19 @@
       max-width: 900px;
       margin-top: 10px;
     }
-    .card {
+    .card, .drop-zone {
       background: white;
       border: 2px solid #3498db;
       border-radius: 6px;
       padding: 4px 8px;
       width: fit-content;
-      max-width: 120px;
-      min-height: 30px;
+      max-width: 230px;
+      min-height: 35px;
       text-align: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      cursor: move;
+      cursor: pointer;
       font-size: 12px;
-    }
-    .drop-zone {
-      background: #ecf4fa;
-      border: 2px dashed #ccc;
-      border-radius: 6px;
-      padding: 6px;
-      width: 230px;
-      min-height: 45px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      transition: background 0.3s, border-color 0.3s;
+      user-select: none;
     }
     .matched {
       background: #d4edda !important;
@@ -68,6 +55,10 @@
       background: #f8d7da !important;
       border-color: #dc3545 !important;
     }
+    .selected {
+      background: #cce5ff !important;
+      border-color: #339af0 !important;
+    }
     .score {
       text-align: center;
       font-weight: bold;
@@ -76,7 +67,7 @@
   </style>
 </head>
 <body>
-  <h1>🧩 Matching Game – Test 2, Passage 1</h1>
+  <h1>👆 Tap-to-Match – Test 2, Passage 1</h1>
   <div id="container"></div>
   <script>
     const wordGroups = [['To craft', 'Motion', 'Prior to', 'Labour', 'Meet someone’s demand', 'To adopt'], ['In response to', 'Expand', 'To patent', 'Collision', 'Immense', 'To accelerate'], ['Inadequate sanitation', 'Economic output', 'To fuel', 'To object', 'To rob someone of their livelihood', 'Desperate'], ['To wreck', 'Uprising', 'Unrest', 'All but', 'Vanish']];
@@ -109,14 +100,18 @@
       const shuffledWords = [...group].sort(() => Math.random() - 0.5);
       const shuffledDefs = [...group].sort(() => Math.random() - 0.5);
 
+      let selectedWord = null;
+
       shuffledWords.forEach(word => {
         const el = document.createElement("div");
         el.className = "card";
         el.textContent = word;
         el.setAttribute("data-word", word);
-        el.setAttribute("draggable", "true");
-        el.addEventListener("dragstart", e => {
-          e.dataTransfer.setData("text/plain", word);
+        el.addEventListener("click", () => {
+          if (el.classList.contains("matched")) return;
+          document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          selectedWord = word;
+          el.classList.add("selected");
         });
         wordsArea.appendChild(el);
       });
@@ -127,18 +122,17 @@
         drop.className = "drop-zone";
         drop.textContent = def;
         drop.setAttribute("data-def", def);
-        drop.addEventListener("dragover", e => e.preventDefault());
-        drop.addEventListener("drop", e => {
-          e.preventDefault();
-          const draggedWord = e.dataTransfer.getData("text/plain");
-          if (defsMap[draggedWord] === def) {
-            const card = [...document.querySelectorAll(".card")].find(c => c.textContent === draggedWord);
-            card.classList.add("matched");
+        drop.addEventListener("click", () => {
+          if (!selectedWord || drop.classList.contains("matched")) return;
+          const correctDef = defsMap[selectedWord];
+          if (correctDef === def) {
             drop.classList.add("matched");
-            drop.classList.remove("wrong");
-            drop.textContent = draggedWord;
-            card.setAttribute("draggable", "false");
-            score.textContent = `Score: ${document.querySelectorAll(`#group-${index} .matched`).length / 2} / ${group.length}`;
+            drop.textContent = selectedWord;
+            document.querySelector(`[data-word='${selectedWord}']`).classList.add("matched");
+            document.querySelector(`[data-word='${selectedWord}']`).classList.remove("selected");
+            selectedWord = null;
+            const matchedCount = wrapper.querySelectorAll(".matched").length / 2;
+            score.textContent = `Score: ${matchedCount} / ${group.length}`;
           } else {
             drop.classList.add("wrong");
             setTimeout(() => drop.classList.remove("wrong"), 1000);
