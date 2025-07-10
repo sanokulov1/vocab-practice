@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Vocabulary Matching Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        h1 {
+            color: #006666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .group {
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .group-header {
+            background-color: #66cccc;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .group-content {
+            display: none;
+            padding: 15px 0;
+        }
+        
+        .group.active .group-content {
+            display: block;
+        }
+        
+        .words-container, .definitions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .word-card, .definition-card {
+            background-color: #f0f9ff;
+            border: 2px solid #66cccc;
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .word-card:hover, .definition-card:hover {
+            background-color: #d6f0f0;
+        }
+        
+        .word-card.selected, .definition-card.selected {
+            background-color: #66cccc;
+            color: white;
+            border-color: #008080;
+        }
+        
+        .word-card.matched, .definition-card.matched {
+            background-color: #99e6b3;
+            border-color: #008055;
+            color: #006633;
+            cursor: default;
+        }
+        
+        .word-card.mismatch, .definition-card.mismatch {
+            background-color: #ffb3b3;
+            border-color: #cc0000;
+            color: #800000;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background-color: #008080;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn:hover {
+            background-color: #006666;
+            transform: translateY(-2px);
+        }
+        
+        .completion-message {
+            text-align: center;
+            color: #008055;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Genius Vocabulary Matching Game</h1>
+    
+    <div class="game-container">
+        <!-- Group 1 -->
+        <div class="group active">
+            <div class="group-header">
+                <span>Group 1 (7 words)</span>
+                <span>+</span>
+            </div>
+            <div class="group-content">
+                <div class="words-container" id="group1-words"></div>
+                <div class="definitions-container" id="group1-definitions"></div>
+                <div class="completion-message" id="group1-complete">✓ All matches found!</div>
+            </div>
+        </div>
+        
+        <!-- Group 2 -->
+        <div class="group">
+            <div class="group-header">
+                <span>Group 2 (7 words)</span>
+                <span>+</span>
+            </div>
+            <div class="group-content">
+                <div class="words-container" id="group2-words"></div>
+                <div class="definitions-container" id="group2-definitions"></div>
+                <div class="completion-message" id="group2-complete">✓ All matches found!</div>
+            </div>
+        </div>
+        
+        <!-- Group 3 -->
+        <div class="group">
+            <div class="group-header">
+                <span>Group 3 (7 words)</span>
+                <span>+</span>
+            </div>
+            <div class="group-content">
+                <div class="words-container" id="group3-words"></div>
+                <div class="definitions-container" id="group3-definitions"></div>
+                <div class="completion-message" id="group3-complete">✓ All matches found!</div>
+            </div>
+        </div>
+        
+        <!-- Group 4 -->
+        <div class="group">
+            <div class="group-header">
+                <span>Group 4 (7 words)</span>
+                <span>+</span>
+            </div>
+            <div class="group-content">
+                <div class="words-container" id="group4-words"></div>
+                <div class="definitions-container" id="group4-definitions"></div>
+                <div class="completion-message" id="group4-complete">✓ All matches found!</div>
+            </div>
+        </div>
+        
+        <button class="reset-btn" id="resetAllBtn">Reset All Groups</button>
+    </div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            { word: "gifted", definition: "Having exceptional natural ability" },
+            { word: "extraordinary", definition: "Very unusual or remarkable" },
+            { word: "to emerge", definition: "To become known or apparent" },
+            { word: "selective", definition: "Carefully choosing only the best" },
+            { word: "to be hooked", definition: "To be completely interested in something" },
+            { word: "resolute", definition: "Determined and unwavering" },
+            { word: "in the face of", definition: "When dealing with a difficult situation" },
+            { word: "setbacks", definition: "Problems that delay progress" },
+            { word: "rewarding", definition: "Giving satisfaction or benefit" },
+            { word: "in sight", definition: "Able to be seen or achieved" },
+            { word: "unexceptional", definition: "Not special or unusual" },
+            { word: "to plug away", definition: "To keep working hard at something" },
+            { word: "contemporaries", definition: "People of the same age/time period" },
+            { word: "the jury is out on something", definition: "No decision has been made yet" },
+            { word: "innate", definition: "Existing from birth" },
+            { word: "to make difference", definition: "To have an important effect" },
+            { word: "replicable", definition: "Able to be copied or repeated" },
+            { word: "attributes", definition: "Qualities or characteristics" },
+            { word: "eminent", definition: "Famous and respected" },
+            { word: "at the heart of", definition: "The most important part" },
+            { word: "deliberate", definition: "Done intentionally and carefully" },
+            { word: "outperform", definition: "To do better than others" },
+            { word: "distinguished", definition: "Very successful and respected" },
+            { word: "disciplines", definition: "Areas of study or activity" },
+            { word: "to become hooked on something", definition: "To become very interested in" },
+            { word: "spin-off", definition: "An unexpected additional result" },
+            { word: "disadvantaged", definition: "Having fewer opportunities" },
+            { word: "undeterred", definition: "Not discouraged by difficulty" }
+        ];
+
+        // Split into 4 groups of 7 words each
+        const group1 = vocabulary.slice(0, 7);
+        const group2 = vocabulary.slice(7, 14);
+        const group3 = vocabulary.slice(14, 21);
+        const group4 = vocabulary.slice(21, 28);
+        
+        // Game state
+        let selectedCard = null;
+        let matchedPairs = {
+            group1: [],
+            group2: [],
+            group3: [],
+            group4: []
+        };
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        // Initialize the game
+        function initGame() {
+            setupGroup('group1', group1);
+            setupGroup('group2', group2);
+            setupGroup('group3', group3);
+            setupGroup('group4', group4);
+            
+            // Add event listeners to group headers
+            document.querySelectorAll('.group-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('active');
+                    const icon = this.querySelector('span:last-child');
+                    icon.textContent = this.parentElement.classList.contains('active') ? '-' : '+';
+                });
+            });
+            
+            // Reset button
+            document.getElementById('resetAllBtn').addEventListener('click', resetAllGroups);
+        }
+        
+        // Set up a group
+        function setupGroup(groupId, words) {
+            const wordsContainer = document.getElementById(`${groupId}-words`);
+            const definitionsContainer = document.getElementById(`${groupId}-definitions`);
+            const completeMessage = document.getElementById(`${groupId}-complete`);
+            
+            // Clear containers and hide completion message
+            wordsContainer.innerHTML = '';
+            definitionsContainer.innerHTML = '';
+            completeMessage.style.display = 'none';
+            
+            // Reset matched pairs for this group
+            matchedPairs[groupId] = [];
+            
+            // Shuffle words and definitions independently
+            const shuffledWords = shuffleArray([...words]);
+            const shuffledDefinitions = shuffleArray([...words]);
+            
+            // Create word cards
+            shuffledWords.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'word-card';
+                card.textContent = item.word;
+                card.dataset.word = item.word;
+                card.dataset.definition = item.definition;
+                card.dataset.group = groupId;
+                card.addEventListener('click', handleCardClick);
+                wordsContainer.appendChild(card);
+            });
+            
+            // Create definition cards
+            shuffledDefinitions.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'definition-card';
+                card.textContent = item.definition;
+                card.dataset.word = item.word;
+                card.dataset.definition = item.definition;
+                card.dataset.group = groupId;
+                card.addEventListener('click', handleCardClick);
+                definitionsContainer.appendChild(card);
+            });
+        }
+        
+        // Handle card clicks
+        function handleCardClick() {
+            const group = this.dataset.group;
+            
+            // If card is already matched, do nothing
+            if (this.classList.contains('matched')) return;
+            
+            // If no card is selected, select this one
+            if (!selectedCard) {
+                selectedCard = this;
+                this.classList.add('selected');
+                return;
+            }
+            
+            // If same card is clicked twice, deselect it
+            if (selectedCard === this) {
+                selectedCard.classList.remove('selected');
+                selectedCard = null;
+                return;
+            }
+            
+            // If cards are from different groups, do nothing
+            if (selectedCard.dataset.group !== group) {
+                return;
+            }
+            
+            // Check if it's a match (same word)
+            if (selectedCard.dataset.word === this.dataset.word) {
+                // Match found - turn both cards green permanently
+                selectedCard.classList.remove('selected');
+                selectedCard.classList.add('matched');
+                this.classList.add('matched');
+                
+                // Add to matched pairs
+                matchedPairs[group].push(selectedCard.dataset.word);
+                
+                // Check if group is complete
+                checkGroupCompletion(group);
+            } else {
+                // Not a match - briefly turn both cards red for 2 seconds
+                const tempSelected = selectedCard;
+                tempSelected.classList.add('mismatch');
+                this.classList.add('mismatch');
+                
+                setTimeout(() => {
+                    tempSelected.classList.remove('selected');
+                    tempSelected.classList.remove('mismatch');
+                    this.classList.remove('selected');
+                    this.classList.remove('mismatch');
+                }, 2000);
+            }
+            
+            selectedCard = null;
+        }
+        
+        // Check if a group is complete
+        function checkGroupCompletion(groupId) {
+            const group = groupId === 'group1' ? group1 : 
+                         groupId === 'group2' ? group2 :
+                         groupId === 'group3' ? group3 : group4;
+            
+            if (matchedPairs[groupId].length === group.length) {
+                const completeMessage = document.getElementById(`${groupId}-complete`);
+                completeMessage.style.display = 'block';
+            }
+        }
+        
+        // Reset all groups
+        function resetAllGroups() {
+            matchedPairs = {
+                group1: [],
+                group2: [],
+                group3: [],
+                group4: []
+            };
+            
+            setupGroup('group1', group1);
+            setupGroup('group2', group2);
+            setupGroup('group3', group3);
+            setupGroup('group4', group4);
+        }
+        
+        // Initialize the game when page loads
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
