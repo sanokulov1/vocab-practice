@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matching Game – All Groups</title>
+  <title>Tap-to-Match – Test 1, Passage 1</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,37 +32,35 @@
       max-width: 900px;
       margin-top: 10px;
     }
+    .card, .drop-zone {
+      border-radius: 4px;
+      padding: 6px 8px;
+      min-height: 28px;
+      font-size: 11px;
+      text-align: center;
+      user-select: none;
+      cursor: pointer;
+    }
     .card {
       background: white;
       border: 2px solid #3498db;
-      border-radius: 4px;
-      padding: 3px 6px;
-      width: fit-content;
-      max-width: 100px;
-      min-height: 24px;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      cursor: move;
-      font-size: 11px;
+      font-weight: bold;
     }
     .drop-zone {
-      background: #ecf4fa;
-      border: 2px dashed #ccc;
-      border-radius: 4px;
-      padding: 4px;
-      width: 210px;
-      min-height: 40px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      transition: background 0.3s, border-color 0.3s;
+      background: #fffbe6;
+      border: 2px dashed #f0ad4e;
+      font-style: italic;
     }
-    .matched {
+    .matched.drop-zone {
       background: #d4edda !important;
-      border-color: #28a745 !important;
-      cursor: default !important;
+      border: 2px solid #28a745 !important;
+      color: #155724;
+      font-weight: bold;
+    }
+    .matched.card {
+      background: #d4edda !important;
+      border: 2px solid #28a745 !important;
+      color: #155724;
     }
     .wrong {
       background: #f8d7da !important;
@@ -73,71 +71,18 @@
       font-weight: bold;
       margin-bottom: 10px;
     }
+    .selected {
+      background: #cce5ff !important;
+      border-color: #339af0 !important;
+    }
   </style>
 </head>
 <body>
-  <h1>🧩 Matching Game – All Groups</h1>
+  <h1>👆 Tap-to-Match – Test 1, Passage 1</h1>
   <div id="container"></div>
   <script>
-    const wordGroups = [
-      ["Deliberately","Inevitable","To Deceive","interpersonal bonds","inadvertently","X looms larger than in the past","Means","Facilitated","Unduly","Misperceptions"],
-      ["Detrimental","Downstream","social harmony","contemporary","warrant the attention","encounter","counter","exposure","resource-intensive effort.","Routine"],
-      ["Garner","Dilemma","empirically tested","robust","by default","verify","encode","momentarily","consistent with","skepticism"],
-      ["reside in","preemptively","censoring","laudable","keep something off","compelling","persuasive","sensitize","distinguish","remedies"],
-      ["arduous","maintenance","prominence","consensus","human fallibility","overcome","coordinated efforts","panacea","—","—"]
-    ];
-
-    const defsMap = {
-      "Deliberately": "Done on purpose.",
-      "Inevitable": "Certain to happen.",
-      "To Deceive": "To make someone believe something that is not true.",
-      "interpersonal bonds": "Connections between people.",
-      "inadvertently": "Without intention.",
-      "X looms larger than in the past": "X has become more significant than before.",
-      "Means": "A method or way of doing something.",
-      "Facilitated": "Made easier.",
-      "Unduly": "More than is necessary or reasonable.",
-      "Misperceptions": "Incorrect understanding or ideas.",
-      "Detrimental": "Causing harm.",
-      "Downstream": "Happening later or as a result.",
-      "social harmony": "Peaceful relationships in society.",
-      "contemporary": "Modern or current.",
-      "warrant the attention": "Deserve to be noticed.",
-      "encounter": "To face or experience.",
-      "counter": "To act against.",
-      "exposure": "Experience of something.",
-      "resource-intensive effort.": "Requires a lot of effort or materials.",
-      "Routine": "A usual or fixed way of doing things.",
-      "Garner": "To gather or collect.",
-      "Dilemma": "A difficult choice.",
-      "empirically tested": "Proven by observation or experience.",
-      "robust": "Strong and effective.",
-      "by default": "Automatically.",
-      "verify": "To confirm something is true.",
-      "encode": "To change information into a code.",
-      "momentarily": "For a very short time.",
-      "consistent with": "In agreement with.",
-      "skepticism": "Doubt or disbelief.",
-      "reside in": "To live in.",
-      "preemptively": "Done before something happens.",
-      "censoring": "Removing unwanted content.",
-      "laudable": "Deserving praise.",
-      "keep something off": "To stop something from happening.",
-      "compelling": "Very convincing or powerful.",
-      "persuasive": "Able to change someone’s mind.",
-      "sensitize": "Make aware or responsive.",
-      "distinguish": "To tell the difference.",
-      "remedies": "Solutions to a problem.",
-      "arduous": "Very difficult or tiring.",
-      "maintenance": "Keeping something working well.",
-      "prominence": "Being important or well-known.",
-      "consensus": "General agreement.",
-      "human fallibility": "Tendency of people to make mistakes.",
-      "overcome": "To successfully deal with.",
-      "coordinated efforts": "Planned actions done together.",
-      "panacea": "A cure-all solution."
-    };
-
+    const wordGroups = [["Deliberately", "Inevitable", "To Deceive", "interpersonal bonds", "inadvertently", "X looms larger than in the past", "Means", "Facilitated", "Unduly", "Misperceptions"], ["Detrimental", "Downstream", "social harmony", "contemporary", "warrant the attention", "encounter", "counter", "exposure", "resource-intensive effort.", "Routine"], ["Garner", "Dilemma", "empirically tested", "robust", "by default", "verify", "encode", "momentarily", "consistent with", "skepticism"], ["reside in", "preemptively", "censoring", "laudable", "keep something off", "compelling", "persuasive", "sensitize", "distinguish", "remedies"], ["arduous", "maintenance", "prominence", "consensus", "human fallibility", "overcome", "coordinated efforts", "panacea", "\u2014", "\u2014"]];
+    const defsMap = {"Deliberately": "Done on purpose.", "Inevitable": "Certain to happen.", "To Deceive": "To make someone believe something that is not true.", "interpersonal bonds": "Connections between people.", "inadvertently": "Without intention.", "X looms larger than in the past": "X has become more significant than before.", "Means": "A method or way of doing something.", "Facilitated": "Made easier.", "Unduly": "More than is necessary or reasonable.", "Misperceptions": "Incorrect understanding or ideas.", "Detrimental": "Causing harm.", "Downstream": "Happening later or as a result.", "social harmony": "Peaceful relationships in society.", "contemporary": "Modern or current.", "warrant the attention": "Deserve to be noticed.", "encounter": "To face or experience.", "counter": "To act against.", "exposure": "Experience of something.", "resource-intensive effort.": "Requires a lot of effort or materials.", "Routine": "A usual or fixed way of doing things.", "Garner": "To gather or collect.", "Dilemma": "A difficult choice.", "empirically tested": "Proven by observation or experience.", "robust": "Strong and effective.", "by default": "Automatically.", "verify": "To confirm something is true.", "encode": "To change information into a code.", "momentarily": "For a very short time.", "consistent with": "In agreement with.", "skepticism": "Doubt or disbelief.", "reside in": "To live in.", "preemptively": "Done before something happens.", "censoring": "Removing unwanted content.", "laudable": "Deserving praise.", "keep something off": "To stop something from happening.", "compelling": "Very convincing or powerful.", "persuasive": "Able to change someone\u2019s mind.", "sensitize": "Make aware or responsive.", "distinguish": "To tell the difference.", "remedies": "Solutions to a problem.", "arduous": "Very difficult or tiring.", "maintenance": "Keeping something working well.", "prominence": "Being important or well-known.", "consensus": "General agreement.", "human fallibility": "Tendency of people to make mistakes.", "overcome": "To successfully deal with.", "coordinated efforts": "Planned actions done together.", "panacea": "A cure-all solution.", "\u2014": "\u2014"};
     const container = document.getElementById("container");
 
     wordGroups.forEach((group, index) => {
@@ -165,14 +110,18 @@
       const shuffledWords = [...group].sort(() => Math.random() - 0.5);
       const shuffledDefs = [...group].sort(() => Math.random() - 0.5);
 
+      let selectedWord = null;
+
       shuffledWords.forEach(word => {
         const el = document.createElement("div");
         el.className = "card";
         el.textContent = word;
         el.setAttribute("data-word", word);
-        el.setAttribute("draggable", "true");
-        el.addEventListener("dragstart", e => {
-          e.dataTransfer.setData("text/plain", word);
+        el.addEventListener("click", () => {
+          if (el.classList.contains("matched")) return;
+          document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          selectedWord = word;
+          el.classList.add("selected");
         });
         wordsArea.appendChild(el);
       });
@@ -183,18 +132,18 @@
         drop.className = "drop-zone";
         drop.textContent = def;
         drop.setAttribute("data-def", def);
-        drop.addEventListener("dragover", e => e.preventDefault());
-        drop.addEventListener("drop", e => {
-          e.preventDefault();
-          const draggedWord = e.dataTransfer.getData("text/plain");
-          if (defsMap[draggedWord] === def) {
-            const card = [...document.querySelectorAll(".card")].find(c => c.textContent === draggedWord);
+        drop.addEventListener("click", () => {
+          if (!selectedWord || drop.classList.contains("matched")) return;
+          const correctDef = defsMap[selectedWord];
+          if (correctDef === def) {
+            drop.classList.add("matched", "drop-zone");
+            drop.textContent = selectedWord;
+            const card = document.querySelector(`[data-word='${selectedWord}']`);
             card.classList.add("matched");
-            drop.classList.add("matched");
-            drop.classList.remove("wrong");
-            drop.textContent = draggedWord;
-            card.setAttribute("draggable", "false");
-            score.textContent = `Score: ${document.querySelectorAll(`#group-${index} .matched`).length / 2} / ${group.length}`;
+            card.classList.remove("selected");
+            selectedWord = null;
+            const matchedCount = wrapper.querySelectorAll(".matched.drop-zone").length;
+            score.textContent = `Score: ${matchedCount} / ${group.length}`;
           } else {
             drop.classList.add("wrong");
             setTimeout(() => drop.classList.remove("wrong"), 1000);
