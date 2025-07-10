@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Revolution Vocabulary Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        h1 {
+            color: #006666;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.5s;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s;
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #006666;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background-color: #f0f9ff;
+            border: 2px solid #66cccc;
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            background-color: #d6f0f0;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: #66cccc;
+            color: white;
+            border-color: #008080;
+        }
+        
+        .option.correct {
+            background-color: #99e6b3;
+            border-color: #008055;
+            color: #006633;
+        }
+        
+        .option.incorrect {
+            background-color: #ffb3b3;
+            border-color: #cc0000;
+            color: #800000;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #008080;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background-color: #006666;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .progress {
+            margin-top: 20px;
+            color: #006666;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .results {
+            display: none;
+            animation: fadeIn 0.8s;
+        }
+        
+        .results h2 {
+            color: #006666;
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: #008080;
+        }
+        
+        .missed-words {
+            margin-top: 30px;
+        }
+        
+        .missed-word {
+            background-color: #f0f9ff;
+            border-left: 4px solid #66cccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .missed-word .word {
+            font-weight: bold;
+            color: #006666;
+            margin-bottom: 5px;
+        }
+        
+        .missed-word .definition {
+            color: #333;
+        }
+        
+        .submit-container {
+            display: none;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .submit-container.active {
+            display: flex;
+        }
+        
+        .submit-btn {
+            background-color: #4CAF50;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Industrial Revolution Vocabulary Quiz</h1>
+    
+    <div class="quiz-container" id="quizContainer">
+        <div id="questionsArea">
+            <!-- Questions will be inserted here -->
+        </div>
+        
+        <div class="progress" id="progress">Question 1 of 10</div>
+        
+        <div class="controls">
+            <div class="navigation">
+                <button id="prevBtn" disabled>Previous</button>
+                <button id="nextBtn">Next</button>
+            </div>
+        </div>
+        
+        <div class="submit-container" id="submitContainer">
+            <button id="submitBtn" class="submit-btn">Submit Quiz</button>
+        </div>
+    </div>
+    
+    <div class="quiz-container results" id="resultsContainer">
+        <h2>Quiz Results</h2>
+        <div class="score" id="score"></div>
+        
+        <div class="missed-words" id="missedWords">
+            <h3>Words to Review:</h3>
+            <!-- Missed words will be inserted here -->
+        </div>
+        
+        <div class="controls">
+            <button id="tryAgainBtn">Try Again</button>
+        </div>
+    </div>
+    
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            { word: "To craft", definition: "To make something skillfully by hand", synonyms: "create, build" },
+            { word: "Motion", definition: "Movement", synonyms: "movement, action" },
+            { word: "Prior to", definition: "Before", synonyms: "earlier than, preceding" },
+            { word: "Labour", definition: "Work, especially physical work", synonyms: "effort, toil" },
+            { word: "Meet someone's demand", definition: "To provide enough of what people need or want", synonyms: "satisfy, fulfill" },
+            { word: "To adopt", definition: "To start using something new", synonyms: "accept, take up" },
+            { word: "In response to", definition: "As a reaction to something", synonyms: "because of, reacting to" },
+            { word: "Expand", definition: "To grow larger or increase", synonyms: "grow, extend" },
+            { word: "To patent", definition: "To get legal rights for an invention so others can't copy it", synonyms: "register, protect" },
+            { word: "Collision", definition: "When two things crash into each other", synonyms: "accident, impact" },
+            { word: "Immense", definition: "Very large or great", synonyms: "huge, enormous" },
+            { word: "To accelerate", definition: "To speed up or happen faster", synonyms: "hurry, increase speed" },
+            { word: "Inadequate sanitation", definition: "Poor or unhealthy cleanliness conditions", synonyms: "poor hygiene, unsanitary conditions" },
+            { word: "Economic output", definition: "The total amount of goods and services produced", synonyms: "production, GDP" },
+            { word: "To fuel", definition: "To supply energy or make something stronger", synonyms: "power, encourage" },
+            { word: "To object", definition: "To disagree or protest against something", synonyms: "oppose, complain" },
+            { word: "To rob someone of their livelihood", definition: "To take away a person's way of earning money", synonyms: "deprive, take away their job" },
+            { word: "Desperate", definition: "Feeling hopeless and ready to do anything", synonyms: "frantic, extreme" },
+            { word: "To wreck", definition: "To destroy or damage badly", synonyms: "ruin, smash" },
+            { word: "Uprising", definition: "A rebellion or protest against authority", synonyms: "revolt, rebellion" },
+            { word: "Unrest", definition: "A state of anger or protest among people", synonyms: "disturbance, turmoil" },
+            { word: "All but", definition: "Almost completely", synonyms: "nearly, practically" },
+            { word: "Vanish", definition: "To disappear completely", synonyms: "fade away, disappear" }
+        ];
+        
+        // DOM elements
+        const quizContainer = document.getElementById('quizContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const questionsArea = document.getElementById('questionsArea');
+        const progressElement = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitContainer = document.getElementById('submitContainer');
+        const submitBtn = document.getElementById('submitBtn');
+        const scoreElement = document.getElementById('score');
+        const missedWordsElement = document.getElementById('missedWords');
+        const tryAgainBtn = document.getElementById('tryAgainBtn');
+        
+        // Quiz variables
+        let currentQuestionIndex = 0;
+        let quizWords = [];
+        let userAnswers = [];
+        let questionElements = [];
+        
+        // Initialize the quiz
+        startQuiz();
+        
+        // Start a new quiz
+        function startQuiz() {
+            // Reset variables
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            questionsArea.innerHTML = '';
+            questionElements = [];
+            
+            // Select 10 random words
+            quizWords = getRandomWords(10);
+            
+            // Create question elements
+            quizWords.forEach((word, index) => {
+                const questionContainer = document.createElement('div');
+                questionContainer.className = 'question-container';
+                questionContainer.id = `question-${index}`;
+                
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.textContent = `What does "${word.word}" mean?`;
+                
+                const optionsElement = document.createElement('div');
+                optionsElement.className = 'options';
+                
+                // Generate options (correct answer + 3 random wrong answers)
+                const options = generateOptions(word);
+                
+                options.forEach((option, optionIndex) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option.definition;
+                    optionElement.dataset.questionIndex = index;
+                    optionElement.dataset.optionIndex = optionIndex;
+                    optionElement.dataset.isCorrect = option.isCorrect;
+                    
+                    optionElement.addEventListener('click', function() {
+                        handleOptionClick(this, index, optionIndex, option.isCorrect, word);
+                    });
+                    
+                    optionsElement.appendChild(optionElement);
+                });
+                
+                questionContainer.appendChild(questionElement);
+                questionContainer.appendChild(optionsElement);
+                questionsArea.appendChild(questionContainer);
+                questionElements.push(questionContainer);
+            });
+            
+            // Show first question
+            showQuestion(0);
+            
+            // Show quiz container, hide results
+            quizContainer.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Hide submit button initially
+            submitContainer.style.display = 'none';
+        }
+        
+        // Handle option selection
+        function handleOptionClick(optionElement, questionIndex, optionIndex, isCorrect, word) {
+            // Remove selected class from all options in this question
+            const questionContainer = questionElements[questionIndex];
+            const allOptions = questionContainer.querySelectorAll('.option');
+            allOptions.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            optionElement.classList.add('selected');
+            
+            // Store user's answer
+            userAnswers[questionIndex] = {
+                optionIndex: optionIndex,
+                isCorrect: isCorrect,
+                word: word.word,
+                definition: word.definition,
+                synonyms: word.synonyms
+            };
+            
+            // Enable navigation buttons
+            if (questionIndex < quizWords.length - 1) {
+                nextBtn.disabled = false;
+            }
+            
+            // If this is the last question, show and enable submit button
+            if (questionIndex === quizWords.length - 1) {
+                submitContainer.style.display = 'flex';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Get random words from vocabulary
+        function getRandomWords(count) {
+            // Shuffle the vocabulary array
+            const shuffled = [...vocabulary].sort(() => 0.5 - Math.random());
+            
+            // Return the first 'count' elements
+            return shuffled.slice(0, count);
+        }
+        
+        // Generate answer options (1 correct + 3 incorrect)
+        function generateOptions(correctWord) {
+            // Start with correct answer
+            const options = [{
+                definition: correctWord.definition,
+                isCorrect: true
+            }];
+            
+            // Get 3 random incorrect definitions
+            const otherWords = vocabulary.filter(word => word.word !== correctWord.word);
+            const shuffledOtherWords = [...otherWords].sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            // Add incorrect options
+            shuffledOtherWords.forEach(word => {
+                options.push({
+                    definition: word.definition,
+                    isCorrect: false
+                });
+            });
+            
+            // Shuffle all options
+            return options.sort(() => 0.5 - Math.random());
+        }
+        
+        // Show specific question
+        function showQuestion(index) {
+            // Hide all questions
+            questionElements.forEach(q => q.classList.remove('active'));
+            
+            // Show current question
+            questionElements[index].classList.add('active');
+            
+            // Update progress
+            progressElement.textContent = `Question ${index + 1} of ${quizWords.length}`;
+            
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            
+            // On last question, show submit button if answer is selected
+            if (index === quizWords.length - 1) {
+                nextBtn.style.display = 'none';
+                if (userAnswers[index] !== undefined) {
+                    submitContainer.style.display = 'flex';
+                    submitBtn.disabled = false;
+                }
+            } else {
+                nextBtn.style.display = 'block';
+                submitContainer.style.display = 'none';
+                
+                // Enable next button if answer was selected
+                nextBtn.disabled = userAnswers[index] === undefined;
+            }
+        }
+        
+        // Navigation buttons
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizWords.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+        
+        // Submit quiz
+        submitBtn.addEventListener('click', showResults);
+        
+        // Show quiz results
+        function showResults() {
+            // Calculate score
+            const correctAnswers = userAnswers.filter(answer => answer.isCorrect).length;
+            const percentage = Math.round((correctAnswers / quizWords.length) * 100);
+            
+            // Display score
+            scoreElement.innerHTML = `Your score: <span style="font-size:32px">${correctAnswers}/${quizWords.length}</span> (${percentage}%)`;
+            
+            // Find missed words (incorrect answers)
+            const missedWords = userAnswers.filter(answer => !answer.isCorrect);
+            
+            // Display missed words
+            missedWordsElement.innerHTML = '<h3>Words to Review:</h3>';
+            
+            if (missedWords.length === 0) {
+                missedWordsElement.innerHTML += '<p>Perfect! You got all questions correct!</p>';
+            } else {
+                missedWords.forEach(answer => {
+                    const wordElement = document.createElement('div');
+                    wordElement.classList.add('missed-word');
+                    wordElement.innerHTML = `
+                        <div class="word">${answer.word}</div>
+                        <div class="definition">${answer.definition}</div>
+                        <div class="synonyms"><small>Synonyms: ${answer.synonyms}</small></div>
+                    `;
+                    missedWordsElement.appendChild(wordElement);
+                });
+            }
+            
+            // Highlight correct/incorrect answers in the quiz
+            userAnswers.forEach((answer, index) => {
+                const questionContainer = questionElements[index];
+                const options = questionContainer.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    if (option.dataset.isCorrect === 'true') {
+                        option.classList.add('correct');
+                    } else if (option.classList.contains('selected') && !answer.isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            // Hide quiz, show results
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+        
+        // Try again button
+        tryAgainBtn.addEventListener('click', startQuiz);
+    </script>
+</body>
+</html>
