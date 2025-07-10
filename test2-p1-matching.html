@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Matching Game – Test 2, Passage 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      cursor: pointer;
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 6px;
+    }
+    .collapsible {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .game-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      max-width: 900px;
+      margin-top: 10px;
+    }
+    .card {
+      background: white;
+      border: 2px solid #3498db;
+      border-radius: 6px;
+      padding: 4px 8px;
+      width: fit-content;
+      max-width: 120px;
+      min-height: 30px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: move;
+      font-size: 12px;
+    }
+    .drop-zone {
+      background: #ecf4fa;
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      padding: 6px;
+      width: 230px;
+      min-height: 45px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .matched {
+      background: #d4edda !important;
+      border-color: #28a745 !important;
+      cursor: default !important;
+    }
+    .wrong {
+      background: #f8d7da !important;
+      border-color: #dc3545 !important;
+    }
+    .score {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧩 Matching Game – Test 2, Passage 1</h1>
+  <div id="container"></div>
+  <script>
+    const wordGroups = [['To craft', 'Motion', 'Prior to', 'Labour', 'Meet someone’s demand', 'To adopt'], ['In response to', 'Expand', 'To patent', 'Collision', 'Immense', 'To accelerate'], ['Inadequate sanitation', 'Economic output', 'To fuel', 'To object', 'To rob someone of their livelihood', 'Desperate'], ['To wreck', 'Uprising', 'Unrest', 'All but', 'Vanish']];
+    const defsMap = {'To craft': 'To make something skillfully by hand.', 'Motion': 'Movement.', 'Prior to': 'Before.', 'Labour': 'Work, especially physical work.', 'Meet someone’s demand': 'To provide enough of what people need or want.', 'To adopt': 'To start using something new.', 'In response to': 'As a reaction to something.', 'Expand': 'To grow larger or increase.', 'To patent': 'To get legal rights for an invention so others can’t copy it.', 'Collision': 'When two things crash into each other.', 'Immense': 'Very large or great.', 'To accelerate': 'To speed up or happen faster.', 'Inadequate sanitation': 'Poor or unhealthy cleanliness conditions.', 'Economic output': 'The total amount of goods and services produced.', 'To fuel': 'To supply energy or make something stronger.', 'To object': 'To disagree or protest against something.', 'To rob someone of their livelihood': 'To take away a person’s way of earning money.', 'Desperate': 'Feeling hopeless and ready to do anything.', 'To wreck': 'To destroy or damage badly.', 'Uprising': 'A rebellion or protest against authority.', 'Unrest': 'A state of anger or protest among people.', 'All but': 'Almost completely.', 'Vanish': 'To disappear completely.'};
+
+    const container = document.getElementById("container");
+
+    wordGroups.forEach((group, index) => {
+      const header = document.createElement("h2");
+      header.textContent = `Group ${index + 1}`;
+      header.addEventListener("click", () => {
+        const box = document.getElementById(`group-${index}`);
+        box.style.display = box.style.display === "none" ? "block" : "none";
+      });
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "collapsible";
+      wrapper.id = `group-${index}`;
+
+      const score = document.createElement("div");
+      score.className = "score";
+      score.textContent = `Score: 0 / ${group.length}`;
+      wrapper.appendChild(score);
+
+      const wordsArea = document.createElement("div");
+      wordsArea.className = "game-area";
+      const defsArea = document.createElement("div");
+      defsArea.className = "game-area";
+
+      const shuffledWords = [...group].sort(() => Math.random() - 0.5);
+      const shuffledDefs = [...group].sort(() => Math.random() - 0.5);
+
+      shuffledWords.forEach(word => {
+        const el = document.createElement("div");
+        el.className = "card";
+        el.textContent = word;
+        el.setAttribute("data-word", word);
+        el.setAttribute("draggable", "true");
+        el.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", word);
+        });
+        wordsArea.appendChild(el);
+      });
+
+      shuffledDefs.forEach(word => {
+        const def = defsMap[word] || "Definition missing";
+        const drop = document.createElement("div");
+        drop.className = "drop-zone";
+        drop.textContent = def;
+        drop.setAttribute("data-def", def);
+        drop.addEventListener("dragover", e => e.preventDefault());
+        drop.addEventListener("drop", e => {
+          e.preventDefault();
+          const draggedWord = e.dataTransfer.getData("text/plain");
+          if (defsMap[draggedWord] === def) {
+            const card = [...document.querySelectorAll(".card")].find(c => c.textContent === draggedWord);
+            card.classList.add("matched");
+            drop.classList.add("matched");
+            drop.classList.remove("wrong");
+            drop.textContent = draggedWord;
+            card.setAttribute("draggable", "false");
+            score.textContent = `Score: ${document.querySelectorAll(`#group-${index} .matched`).length / 2} / ${group.length}`;
+          } else {
+            drop.classList.add("wrong");
+            setTimeout(() => drop.classList.remove("wrong"), 1000);
+          }
+        });
+        defsArea.appendChild(drop);
+      });
+
+      wrapper.appendChild(wordsArea);
+      wrapper.appendChild(defsArea);
+      container.appendChild(header);
+      container.appendChild(wrapper);
+    });
+  </script>
+</body>
+</html>
