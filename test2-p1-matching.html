@@ -33,6 +33,35 @@
       margin-top: 10px;
     }
     .card, .drop-zone {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      padding: 8px 12px;
+      min-height: 40px;
+    }
+    .card {
+      background: #ffffff;
+      border: 2px solid #3498db;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      font-weight: bold;
+    }
+    .drop-zone {
+      background: #fffbe6;
+      border: 2px dashed #f0ad4e;
+      font-style: italic;
+      box-shadow: inset 0 0 3px rgba(0,0,0,0.05);
+    }
+    .matched.drop-zone {
+      background: #d4edda !important;
+      border: 2px solid #28a745 !important;
+      color: #155724;
+      font-weight: bold;
+      box-shadow: 0 0 6px #28a745;
+    }
+    .matched.card {
+      background: #d4edda !important;
+      border: 2px solid #28a745 !important;
+      color: #155724;
+    }
       background: white;
       border: 2px solid #3498db;
       border-radius: 6px;
