@@ -3,282 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Vocabulary Flashcards</title>
+    <title>Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
             padding: 20px;
-            color: #333;
         }
-        
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 30px;
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #6a5acd, #9370db);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
             text-align: center;
         }
-        
+
         .flashcard-container {
             perspective: 1000px;
-            width: 500px;
-            height: 300px;
             margin-bottom: 30px;
+            height: 320px;
         }
-        
+
         .flashcard {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             cursor: pointer;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         .flashcard.flipped {
             transform: rotateY(180deg);
         }
-        
-        .flashcard-front, .flashcard-back {
+
+        .flashcard-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            border-radius: 15px;
+            align-items: center;
             padding: 30px;
-            box-sizing: border-box;
+            border-radius: 20px;
+        }
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
+            transform: rotateY(180deg);
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
             text-align: center;
-            font-size: 22px;
+        }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
             line-height: 1.5;
         }
-        
-        .flashcard-front {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            color: white;
+
+        body.dark-mode .definition {
+            color: #1a5276;
         }
-        
-        .flashcard-back {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            color: white;
-            transform: rotateY(180deg);
-            font-size: 18px;
+
+        .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
         }
-        
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
         .controls {
             display: flex;
+            justify-content: center;
             gap: 15px;
             margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
         }
-        
+
         button {
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
-            background-color: #3498db;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
             color: white;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
         button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
         }
-        
+
         button:active {
-            transform: translateY(0);
+            transform: translateY(1px);
         }
-        
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
         .counter {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #7f8c8d;
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
         }
-        
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         @media (max-width: 600px) {
             .flashcard-container {
-                width: 90%;
-                height: 250px;
+                height: 300px;
             }
             
-            .flashcard-front, .flashcard-back {
-                font-size: 18px;
-                padding: 20px;
+            .word {
+                font-size: 1.5rem;
             }
             
-            .flashcard-back {
-                font-size: 16px;
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
             }
             
             button {
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Advanced Vocabulary Flashcards</h1>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
     
-    <div class="flashcard-container">
-        <div class="flashcard" id="flashcard">
-            <div class="flashcard-front" id="front">
-                <!-- Term will appear here -->
-            </div>
-            <div class="flashcard-back" id="back">
-                <!-- Definition will appear here -->
+    <div class="container">
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Word</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example sentence will appear here</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="controls">
-        <button id="prevBtn">Previous</button>
-        <button id="turnBtn">Turn</button>
-        <button id="nextBtn">Next</button>
-        <button id="shuffleBtn">Shuffle</button>
-    </div>
-    
-    <div class="counter" id="counter">1 / 40</div>
-    
-    <script>
-        // Custom flashcards data with your words and definitions
-        const flashcards = [
-            { term: "Deliberately", definition: "Done consciously and intentionally; on purpose" },
-            { term: "Inevitable", definition: "Certain to happen; unavoidable" },
-            { term: "To Deceive", definition: "To make someone believe something that is not true" },
-            { term: "Interpersonal bonds", definition: "Emotional connections between people" },
-            { term: "Inadvertently", definition: "Without intention; accidentally" },
-            { term: "X looms larger than in the past", definition: "Something appears more important or threatening now than before" },
-            { term: "Means", definition: "A method or way of doing something" },
-            { term: "Facilitated", definition: "Made easier or helped bring about" },
-            { term: "Unduly", definition: "Excessively or inappropriately" },
-            { term: "Misperceptions", definition: "Incorrect understandings or interpretations" },
-            { term: "Detrimental", definition: "Harmful or damaging" },
-            { term: "Downstream", definition: "Occurring later in a process or as a consequence" },
-            { term: "Social harmony", definition: "Peaceful coexistence and positive relations in society" },
-            { term: "Contemporary", definition: "Belonging to the present time; modern" },
-            { term: "Warrant the attention", definition: "Deserve or justify focus or consideration" },
-            { term: "Encounter", definition: "An unexpected meeting or experience" },
-            { term: "Counter", definition: "To act in opposition to; to contradict" },
-            { term: "Exposure", definition: "The state of being subjected to something (e.g., information, elements)" },
-            { term: "Resource-intensive effort", definition: "An activity requiring significant time, money, or energy" },
-            { term: "Routine", definition: "A regular, unvarying procedure" },
-            { term: "Garner", definition: "To gather or collect (something, especially information or approval)" },
-            { term: "Dilemma", definition: "A situation requiring a difficult choice between undesirable options" },
-            { term: "Empirically tested", definition: "Examined through observation or experiment rather than theory" },
-            { term: "Robust", definition: "Strong and effective; able to withstand challenges" },
-            { term: "By default", definition: "Automatically, due to lack of alternatives or active choice" },
-            { term: "Verify", definition: "To confirm the truth or accuracy of something" },
-            { term: "Encode", definition: "To convert information into a particular form for processing or storage" },
-            { term: "Momentarily", definition: "For a very short time; briefly" },
-            { term: "Consistent with", definition: "In agreement or harmony with" },
-            { term: "Skepticism", definition: "A doubting or questioning attitude" },
-            { term: "Reside in", definition: "To exist or be present within something" },
-            { term: "Preemptively", definition: "Done as a preventative measure before an expected event" },
-            { term: "Censoring", definition: "Suppressing or removing objectionable content" },
-            { term: "Laudable", definition: "Deserving praise and commendation" },
-            { term: "Keep something off", definition: "To prevent something from being included or considered" },
-            { term: "Compelling", definition: "Evoking interest or attention in a powerful way" },
-            { term: "Persuasive", definition: "Good at convincing someone to do or believe something" },
-            { term: "Sensitize", definition: "To make someone aware of or responsive to something" },
-            { term: "Distinguish", definition: "To recognize or point out differences" },
-            { term: "Remedies", definition: "Solutions or treatments for problems or illnesses" },
-            { term: "Arduous", definition: "Involving strenuous effort; difficult and tiring" },
-            { term: "Maintenance", definition: "The process of preserving or keeping something in good condition" },
-            { term: "Prominence", definition: "The state of being important, famous, or noticeable" },
-            { term: "Consensus", definition: "General agreement among a group" },
-            { term: "Human fallibility", definition: "The tendency of humans to make mistakes" },
-            { term: "Overcome", definition: "To successfully deal with or gain control of something difficult" },
-            { term: "Coordinated efforts", definition: "Planned activities where people work together effectively" },
-            { term: "Panacea", definition: "A solution or remedy for all difficulties or diseases" }
-        ];
         
-        // DOM elements
-        const flashcardElement = document.getElementById('flashcard');
-        const frontElement = document.getElementById('front');
-        const backElement = document.getElementById('back');
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">40</span>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { word: "Deliberately", definition: "Done consciously and intentionally; on purpose", example: "He deliberately ignored the warning signs." },
+            { word: "Inevitable", definition: "Certain to happen; unavoidable", example: "With climate change, rising sea levels are inevitable." },
+            { word: "To Deceive", definition: "To make someone believe something that is not true", example: "The magician deceived the audience with his clever tricks." },
+            { word: "Interpersonal bonds", definition: "Emotional connections between people", example: "Strong interpersonal bonds are essential for mental well-being." },
+            { word: "Inadvertently", definition: "Without intention; accidentally", example: "She inadvertently revealed the surprise party plans." },
+            { word: "X looms larger than in the past", definition: "Something appears more important or threatening now than before", example: "Climate change looms larger than in the past as a global threat." },
+            { word: "Means", definition: "A method or way of doing something", example: "Email is the most efficient means of communication for this project." },
+            { word: "Facilitated", definition: "Made easier or helped bring about", example: "The new software facilitated faster data processing." },
+            { word: "Unduly", definition: "Excessively or inappropriately", example: "He was unduly harsh in his criticism of her work." },
+            { word: "Misperceptions", definition: "Incorrect understandings or interpretations", example: "Cultural differences often lead to misperceptions." },
+            { word: "Detrimental", definition: "Harmful or damaging", example: "Smoking is detrimental to your health." },
+            { word: "Downstream", definition: "Occurring later in a process or as a consequence", example: "Poor planning has downstream effects on the entire project." },
+            { word: "Social harmony", definition: "Peaceful coexistence and positive relations in society", example: "The community festival promotes social harmony." },
+            { word: "Contemporary", definition: "Belonging to the present time; modern", example: "Contemporary art often challenges traditional forms." },
+            { word: "Warrant the attention", definition: "Deserve or justify focus or consideration", example: "The environmental crisis warrants the attention of world leaders." },
+            { word: "Encounter", definition: "An unexpected meeting or experience", example: "Her encounter with the famous author inspired her writing." },
+            { word: "Counter", definition: "To act in opposition to; to contradict", example: "She countered his argument with strong evidence." },
+            { word: "Exposure", definition: "The state of being subjected to something (e.g., information, elements)", example: "Early exposure to foreign languages helps children learn faster." },
+            { word: "Resource-intensive effort", definition: "An activity requiring significant time, money, or energy", example: "Building the new bridge was a resource-intensive effort." },
+            { word: "Routine", definition: "A regular, unvarying procedure", example: "His morning routine includes meditation and exercise." },
+            { word: "Garner", definition: "To gather or collect (something, especially information or approval)", example: "The proposal garnered support from all committee members." },
+            { word: "Dilemma", definition: "A situation requiring a difficult choice between undesirable options", example: "She faced the dilemma of choosing between career and family." },
+            { word: "Empirically tested", definition: "Examined through observation or experiment rather than theory", example: "The hypothesis was empirically tested in laboratory conditions." },
+            { word: "Robust", definition: "Strong and effective; able to withstand challenges", example: "The company has a robust cybersecurity system." },
+            { word: "By default", definition: "Automatically, due to lack of alternatives or active choice", example: "He became team leader by default when no one else volunteered." },
+            { word: "Verify", definition: "To confirm the truth or accuracy of something", example: "Please verify your identity with two-factor authentication." },
+            { word: "Encode", definition: "To convert information into a particular form for processing or storage", example: "The software encodes video files into different formats." },
+            { word: "Momentarily", definition: "For a very short time; briefly", example: "The power went out momentarily during the storm." },
+            { word: "Consistent with", definition: "In agreement or harmony with", example: "Her actions were consistent with her stated values." },
+            { word: "Skepticism", definition: "A doubting or questioning attitude", example: "He viewed the claims with healthy skepticism." },
+            { word: "Reside in", definition: "To exist or be present within something", example: "The solution resides in better communication." },
+            { word: "Preemptively", definition: "Done as a preventative measure before an expected event", example: "The army launched a preemptive strike." },
+            { word: "Censoring", definition: "Suppressing or removing objectionable content", example: "Censoring controversial topics limits free speech." },
+            { word: "Laudable", definition: "Deserving praise and commendation", example: "Her charitable work is truly laudable." },
+            { word: "Keep something off", definition: "To prevent something from being included or considered", example: "We need to keep personal bias off the discussion." },
+            { word: "Compelling", definition: "Evoking interest or attention in a powerful way", example: "The documentary presented a compelling argument." },
+            { word: "Persuasive", definition: "Good at convincing someone to do or believe something", example: "His persuasive speech changed many minds." },
+            { word: "Sensitize", definition: "To make someone aware of or responsive to something", example: "The training aims to sensitize employees to cultural differences." },
+            { word: "Distinguish", definition: "To recognize or point out differences", example: "It's important to distinguish between facts and opinions." },
+            { word: "Remedies", definition: "Solutions or treatments for problems or illnesses", example: "Natural remedies can sometimes be effective for minor ailments." },
+            { word: "Arduous", definition: "Involving strenuous effort; difficult and tiring", example: "Climbing the mountain was an arduous journey." },
+            { word: "Maintenance", definition: "The process of preserving or keeping something in good condition", example: "Regular maintenance extends the life of your car." },
+            { word: "Prominence", definition: "The state of being important, famous, or noticeable", example: "The actor rose to prominence after his award-winning performance." },
+            { word: "Consensus", definition: "General agreement among a group", example: "The committee reached a consensus after hours of discussion." },
+            { word: "Human fallibility", definition: "The tendency of humans to make mistakes", example: "The accident was a result of human fallibility." },
+            { word: "Overcome", definition: "To successfully deal with or gain control of something difficult", example: "She overcame her fear of public speaking." },
+            { word: "Coordinated efforts", definition: "Planned activities where people work together effectively", example: "The rescue required coordinated efforts from multiple agencies." },
+            { word: "Panacea", definition: "A solution or remedy for all difficulties or diseases", example: "Education is not a panacea for all social problems." }
+        ];
+
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
+        const flashcard = document.getElementById('flashcard');
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const turnBtn = document.getElementById('turnBtn');
         const shuffleBtn = document.getElementById('shuffleBtn');
-        const counterElement = document.getElementById('counter');
-        
-        // Current card index
-        let currentIndex = 0;
-        let isShuffled = false;
-        let workingDeck = [...flashcards];
-        
-        // Initialize the first card
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
+
+        // Initialize
+        totalCountElement.textContent = words.length;
         updateCard();
         
-        // Event listeners
-        flashcardElement.addEventListener('click', flipCard);
-        turnBtn.addEventListener('click', flipCard);
-        prevBtn.addEventListener('click', showPreviousCard);
-        nextBtn.addEventListener('click', showNextCard);
-        shuffleBtn.addEventListener('click', shuffleCards);
-        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            
+            // Add example if available
+            if (currentWord.example) {
+                exampleElement.textContent = currentWord.example;
+                exampleElement.style.display = 'block';
+            } else {
+                exampleElement.style.display = 'none';
+            }
+            
+            currentCountElement.textContent = currentIndex + 1;
+        }
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
-                showPreviousCard();
+                prevBtn.click();
             } else if (e.key === 'ArrowRight') {
-                showNextCard();
+                nextBtn.click();
             } else if (e.key === ' ' || e.key === 'Enter') {
-                flipCard();
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
             }
         });
-        
-        // Functions
-        function updateCard() {
-            frontElement.textContent = workingDeck[currentIndex].term;
-            backElement.textContent = workingDeck[currentIndex].definition;
-            counterElement.textContent = `${currentIndex + 1} / ${workingDeck.length}`;
-            
-            // Reset card to front if it's flipped
-            if (flashcardElement.classList.contains('flipped')) {
-                flashcardElement.classList.remove('flipped');
-            }
-        }
-        
-        function flipCard() {
-            flashcardElement.classList.toggle('flipped');
-        }
-        
-        function showNextCard() {
-            currentIndex = (currentIndex + 1) % workingDeck.length;
-            updateCard();
-        }
-        
-        function showPreviousCard() {
-            currentIndex = (currentIndex - 1 + workingDeck.length) % workingDeck.length;
-            updateCard();
-        }
-        
-        function shuffleCards() {
-            // Fisher-Yates shuffle algorithm
-            for (let i = workingDeck.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [workingDeck[i], workingDeck[j]] = [workingDeck[j], workingDeck[i]];
-            }
-            
-            currentIndex = 0;
-            isShuffled = true;
-            updateCard();
-        }
     </script>
 </body>
 </html>
