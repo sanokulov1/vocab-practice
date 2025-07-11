@@ -3,82 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test 2 – Passage 2 Activities</title>
+  <title>Test 2 – Passage 1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      width: 100%;
+    body {
       font-family: 'Quicksand', sans-serif;
       background-color: #d0ebff;
-    }
-
-    .container {
+      margin: 0;
+      padding: 0;
       display: flex;
-      flex-wrap: wrap;
-      width: 100vw;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
     }
 
-    .section {
-      width: 50%;
-      height: 50%;
-      position: relative;
-      overflow: hidden;
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 15px;
+      width: 70vw;
+      max-width: 500px;
+      height: 70vh;
+      max-height: 400px;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
-    .section a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background-color: springgreen;
-      text-decoration: none;
-      color: black;
-      font-size: 2em;
-      font-weight: bold;
+    .grid-item a {
       display: flex;
-      align-items: center;
       justify-content: center;
-      text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
-      border: 1px solid #ccc;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      text-decoration: none;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #000;
+      background-color: springgreen;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       transition: transform 0.3s ease;
+      text-align: center;
     }
 
-    .section a:hover {
-      transform: scale(1.03);
+    .grid-item a:hover {
+      transform: scale(1.05);
     }
 
     @media (max-width: 768px) {
-      .section {
-        width: 100%;
-        height: 25%;
+      body {
+        align-items: flex-start;
+        padding-top: 40px;
       }
 
-      .section a {
-        font-size: 1.5em;
+      .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        width: 90vw;
+        height: auto;
+      }
+
+      .grid-item a {
+        height: 20vh;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="section">
-      <a href="test2_passage2_flashcards.html">📘 Flashcards</a>
-    </div>
-    <div class="section">
-      <a href="test2_passage2_matching.html">🔗 Matching</a>
-    </div>
-    <div class="section">
-      <a href="test2_passage2_quiz.html">📝 Quiz</a>
-    </div>
-    <div class="section">
-      <a href="test2_passage2_typing.html">⌨️ Typing Task</a>
-    </div>
+
+  <div class="grid-container">
+    <div class="grid-item"><a href="test2-p1-flashcards.html">📘 Flashcards</a></div>
+    <div class="grid-item"><a href="test2-p1-matching.html">🔗 Matching</a></div>
+    <div class="grid-item"><a href="test2-p1-quiz.html">📝 Quiz</a></div>
+    <div class="grid-item"><a href="test2-p1-typing.html">⌨️ Typing</a></div>
   </div>
+
 </body>
 </html>
