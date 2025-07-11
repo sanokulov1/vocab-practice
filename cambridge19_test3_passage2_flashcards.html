@@ -4,98 +4,380 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wetlands Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f8ff;
-            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
+            padding: 20px;
         }
-        .flashcard-container {
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #6a5acd, #9370db);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
             text-align: center;
         }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .header h1 {
+            color: #e6e6fa;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        body.dark-mode .header p {
+            color: #d8bfd8;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 350px;
+        }
+
         .flashcard {
-            width: 320px;
-            height: 220px;
-            background-color: #b3e0ff;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px auto;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, background-color 0.3s;
+            width: 100%;
+            height: 100%;
             position: relative;
             transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
         }
-        .flashcard:hover {
-            transform: scale(1.05);
-        }
+
         .flashcard.flipped {
-            background-color: #a3d9a5;
             transform: rotateY(180deg);
         }
-        .word, .definition {
+
+        .flashcard-face {
             position: absolute;
+            width: 100%;
+            height: 100%;
             backface-visibility: hidden;
-            padding: 15px;
-            text-align: center;
-            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
         }
-        .word {
-            font-size: 22px;
-            font-weight: bold;
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        .definition {
-            font-size: 16px;
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
             transform: rotateY(180deg);
+            text-align: left;
+            overflow-y: auto;
         }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
+        .synonym {
+            font-size: 1.1rem;
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: rgba(39, 174, 96, 0.1);
+            padding: 8px 15px;
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        body.dark-mode .synonym {
+            background: rgba(46, 204, 113, 0.2);
+        }
+
         .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
             font-style: italic;
-            margin-top: 10px;
-            color: #333;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
         }
-        .buttons {
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
         }
+
         button {
-            padding: 10px 20px;
-            margin: 0 10px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
             color: white;
             cursor: pointer;
-            font-size: 16px;
         }
-        button:hover {
-            background-color: #45a049;
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
         }
-        #shuffle-btn {
-            background-color: #008CBA;
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
         }
-        #shuffle-btn:hover {
-            background-color: #0077a3;
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        .progress-bar-container {
+            width: 80%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        body.dark-mode .progress-bar {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
+        .water-icon {
+            position: absolute;
+            bottom: 10px;
+            font-size: 2rem;
+            color: rgba(52, 152, 219, 0.3);
+        }
+
+        body.dark-mode .water-icon {
+            color: rgba(154, 89, 212, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flashcard {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 350px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example, .synonym {
+                font-size: 0.95rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="flashcard-container">
-        <div class="flashcard" id="flashcard">
-            <div class="word" id="word">Word</div>
-            <div class="definition" id="definition">
-                <div id="def-text">Definition</div>
-                <div class="example" id="example">Example</div>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Wetlands Vocabulary Flashcards</h1>
+            <p>Explore essential terms for wetland conservation and ecology</p>
+        </div>
+        
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Rich in</div>
+                    <div class="water-icon"><i class="fas fa-water"></i></div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Containing a large amount of something</div>
+                    <div class="synonym" id="synonym">Synonym: abundant in</div>
+                    <div class="example" id="example">The Amazon rainforest is rich in biodiversity.</div>
+                    <div class="water-icon"><i class="fas fa-leaf"></i></div>
+                    <div class="hint">Click to flip back</div>
+                </div>
             </div>
         </div>
-        <div class="buttons">
-            <button id="prev-btn">Previous</button>
-            <button id="next-btn">Next</button>
-            <button id="shuffle-btn">Shuffle</button>
+        
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">16</span>
         </div>
     </div>
 
@@ -200,23 +482,32 @@
         ];
 
         let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
         const flashcard = document.getElementById('flashcard');
         const wordElement = document.getElementById('word');
-        const defTextElement = document.getElementById('def-text');
+        const definitionElement = document.getElementById('definition');
+        const synonymElement = document.getElementById('synonym');
         const exampleElement = document.getElementById('example');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const shuffleBtn = document.getElementById('shuffle-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const progressBar = document.getElementById('progressBar');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
 
-        function updateCard() {
-            const currentWord = words[currentIndex];
-            wordElement.textContent = currentWord.word;
-            defTextElement.innerHTML = `
-                <strong>Definition:</strong> ${currentWord.definition}<br>
-                <strong>Synonym:</strong> ${currentWord.synonym}
-            `;
-            exampleElement.innerHTML = `<strong>Example:</strong> "${currentWord.example}"`;
-            flashcard.classList.remove('flipped');
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
         }
 
         flashcard.addEventListener('click', () => {
@@ -224,25 +515,66 @@
         });
 
         prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
             currentIndex = (currentIndex - 1 + words.length) % words.length;
             updateCard();
         });
 
         nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
         });
 
         shuffleBtn.addEventListener('click', () => {
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]];
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
             }
-            currentIndex = 0;
             updateCard();
         });
 
-        updateCard();
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            synonymElement.textContent = `Synonym: ${currentWord.synonym}`;
+            exampleElement.textContent = currentWord.example;
+            currentCountElement.textContent = currentIndex + 1;
+            
+            // Update progress bar
+            const progressPercentage = ((currentIndex + 1) / words.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
+            }
+        });
     </script>
 </body>
 </html>
