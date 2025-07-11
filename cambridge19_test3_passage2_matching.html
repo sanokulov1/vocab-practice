@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetlands Vocabulary Matching Game</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --word-color: #e6f7ff;
+            --def-color: #f0fff0;
+            --border-color: #add8e6;
+            --def-border: #90ee90;
+            --selected-color: #ffcccb;
+            --matched-color: #b5e8b5;
+            --header-bg: #4CAF50;
+            --header-text: white;
+            --incorrect-color: #ff9999;
+        }
+        .night-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --word-color: #2a3f5f;
+            --def-color: #1e3d59;
+            --border-color: #3a506b;
+            --def-border: #4a6fa5;
+            --selected-color: #ff6b6b;
+            --matched-color: #4CAF50;
+            --header-bg: #0f4c75;
+            --header-text: #e6e6e6;
+            --incorrect-color: #ff3333;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .group {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .group-header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+        }
+        .group-content {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+        }
+        .words-column, .definitions-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .word, .definition {
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .word {
+            background-color: var(--word-color);
+            border: 2px solid var(--border-color);
+        }
+        .definition {
+            background-color: var(--def-color);
+            border: 2px solid var(--def-border);
+        }
+        .word.selected, .definition.selected {
+            background-color: var(--selected-color);
+        }
+        .word.matched, .definition.matched {
+            background-color: var(--matched-color);
+            cursor: default;
+        }
+        .word.incorrect, .definition.incorrect {
+            background-color: var(--incorrect-color);
+        }
+        @media (max-width: 600px) {
+            .group-content {
+                flex-direction: column;
+            }
+            .words-column, .definitions-column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Wetlands Vocabulary Matching Game</h1>
+    <div class="controls">
+        <button id="shuffleBtn">Shuffle All</button>
+        <button id="nightModeBtn">Night Mode</button>
+    </div>
+    <div class="game-container" id="gameContainer"></div>
+
+    <script>
+        // Wetlands vocabulary data
+        const vocabulary = [
+            { word: "Rich in", definition: "Containing a large amount of something" },
+            { word: "Pollutants", definition: "Harmful substances that damage the environment" },
+            { word: "Pesticides", definition: "Chemicals used to kill insects or pests" },
+            { word: "Livelihood", definition: "A means of earning money to survive" },
+            { word: "Mitigate", definition: "To reduce the severity of something" },
+            { word: "Implement", definition: "To put a plan into action" },
+            { word: "In-demand", definition: "Wanted or needed by many people" },
+            { word: "Commodity", definition: "A raw material or product that can be traded" },
+            { word: "Logging", definition: "Cutting down trees for wood" },
+            { word: "Comprise", definition: "To consist of or be made up of" },
+            { word: "Alarming", definition: "Worrying or frightening" },
+            { word: "Document", definition: "To record something in detail" },
+            { word: "Devastating", definition: "Extremely harmful or destructive" },
+            { word: "Run-off", definition: "Water that flows over the ground, often carrying pollutants" },
+            { word: "Place a high priority", definition: "To consider something very important" },
+            { word: "Degradation", definition: "The process of becoming worse in quality" }
+        ];
+
+        // Split into 3 groups (5,5,6)
+        const groups = [
+            vocabulary.slice(0, 5),
+            vocabulary.slice(5, 10),
+            vocabulary.slice(10)
+        ];
+
+        // Game state
+        let selectedCard = null;
+        let matchedPairs = 0;
+
+        // DOM elements
+        const gameContainer = document.getElementById('gameContainer');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const nightModeBtn = document.getElementById('nightModeBtn');
+
+        // Initialize game
+        function initGame() {
+            gameContainer.innerHTML = '';
+            matchedPairs = 0;
+
+            groups.forEach((group, groupIndex) => {
+                const groupElement = document.createElement('div');
+                groupElement.className = 'group';
+                
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'group-header';
+                groupHeader.textContent = `Group ${groupIndex + 1}`;
+                groupHeader.onclick = () => {
+                    const content = groupElement.querySelector('.group-content');
+                    content.style.display = content.style.display === 'none' ? 'flex' : 'none';
+                };
+                
+                const groupContent = document.createElement('div');
+                groupContent.className = 'group-content';
+                
+                const wordsColumn = document.createElement('div');
+                wordsColumn.className = 'words-column';
+                
+                const definitionsColumn = document.createElement('div');
+                definitionsColumn.className = 'definitions-column';
+
+                // Shuffle the group items
+                const shuffledGroup = [...group].sort(() => Math.random() - 0.5);
+
+                // Add words to left column
+                shuffledGroup.forEach(item => {
+                    const wordElement = document.createElement('div');
+                    wordElement.className = 'word';
+                    wordElement.textContent = item.word;
+                    wordElement.dataset.word = item.word;
+                    wordElement.onclick = () => handleCardClick(wordElement);
+                    wordsColumn.appendChild(wordElement);
+                });
+
+                // Shuffle definitions separately
+                const shuffledDefs = [...group].sort(() => Math.random() - 0.5);
+
+                // Add definitions to right column
+                shuffledDefs.forEach(item => {
+                    const defElement = document.createElement('div');
+                    defElement.className = 'definition';
+                    defElement.textContent = item.definition;
+                    defElement.dataset.word = item.word;
+                    defElement.onclick = () => handleCardClick(defElement);
+                    definitionsColumn.appendChild(defElement);
+                });
+
+                groupContent.appendChild(wordsColumn);
+                groupContent.appendChild(definitionsColumn);
+                groupElement.appendChild(groupHeader);
+                groupElement.appendChild(groupContent);
+                gameContainer.appendChild(groupElement);
+            });
+        }
+
+        // Handle card selection
+        function handleCardClick(card) {
+            // Ignore if already matched or currently incorrect
+            if (card.classList.contains('matched') || card.classList.contains('incorrect')) {
+                return;
+            }
+
+            // If no card is selected, select this one
+            if (!selectedCard) {
+                selectedCard = card;
+                card.classList.add('selected');
+                return;
+            }
+
+            // If same card is clicked twice, deselect it
+            if (selectedCard === card) {
+                selectedCard.classList.remove('selected');
+                selectedCard = null;
+                return;
+            }
+
+            // Check for match
+            const isMatch = selectedCard.dataset.word === card.dataset.word;
+
+            if (isMatch) {
+                // Correct match
+                selectedCard.classList.remove('selected');
+                selectedCard.classList.add('matched');
+                card.classList.add('matched');
+                selectedCard = null;
+                matchedPairs++;
+                
+                // Check if all pairs are matched
+                if (matchedPairs === vocabulary.length) {
+                    setTimeout(() => alert('Congratulations! You matched all pairs!'), 500);
+                }
+            } else {
+                // Incorrect match
+                selectedCard.classList.add('incorrect');
+                card.classList.add('incorrect');
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    selectedCard.classList.remove('selected', 'incorrect');
+                    card.classList.remove('incorrect');
+                    selectedCard = null;
+                }, 2000);
+            }
+        }
+
+        // Event listeners
+        shuffleBtn.addEventListener('click', initGame);
+        nightModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            nightModeBtn.textContent = document.body.classList.contains('night-mode') 
+                ? 'Day Mode' 
+                : 'Night Mode';
+        });
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
