@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vocabulary Typing Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e9f7fe;
+            border-radius: 5px;
+        }
+        .definition {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .score {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .hidden {
+            display: none;
+        }
+        .result-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .summary {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vocabulary Typing Task</h1>
+        <p>Type the word that matches each definition:</p>
+        
+        <div id="quiz-container"></div>
+        <button id="submit-all">Submit All Answers</button>
+        <div class="score hidden" id="score"></div>
+        <div id="results" class="hidden"></div>
+    </div>
+
+    <script>
+        const words = [
+            { 
+                word: "to be ranked as", 
+                definition: "to be considered at the same level as",
+                variants: ["be ranked as", "ranked as", "being ranked as"]
+            },
+            { 
+                word: "the likes of", 
+                definition: "similar people or things to",
+                variants: ["like of"]
+            },
+            { 
+                word: "to name just a few", 
+                definition: "to mention only some examples",
+                variants: ["name just a few", "naming just a few"]
+            },
+            { 
+                word: "to be regarded as", 
+                definition: "to be thought of as",
+                variants: ["be regarded as", "regarded as", "being regarded as"]
+            },
+            { 
+                word: "outsider", 
+                definition: "someone who doesn't belong to a particular group",
+                variants: ["outsiders"]
+            },
+            { 
+                word: "to account for", 
+                definition: "to explain or be the reason for something",
+                variants: ["account for", "accounting for", "accounts for", "accounted for"]
+            },
+            { 
+                word: "widely publicized", 
+                definition: "given a lot of attention in news/media",
+                variants: ["widely publicised", "widely published"]
+            },
+            { 
+                word: "former", 
+                definition: "the first of two things mentioned",
+                variants: []
+            },
+            { 
+                word: "subtle", 
+                definition: "not obvious, small but important",
+                variants: ["subtly"]
+            },
+            { 
+                word: "pass unnoticed", 
+                definition: "not be seen or recognized",
+                variants: ["passed unnoticed", "passes unnoticed", "passing unnoticed"]
+            },
+            { 
+                word: "synthetic", 
+                definition: "artificially made, not natural",
+                variants: ["synthetically"]
+            },
+            { 
+                word: "underestimated", 
+                definition: "thought to be less important than really is",
+                variants: ["underestimate", "underestimating", "underestimates"]
+            },
+            { 
+                word: "modification", 
+                definition: "a small change to something",
+                variants: ["modifications", "modify", "modified"]
+            },
+            { 
+                word: "tweak", 
+                definition: "to make small adjustments",
+                variants: ["tweaked", "tweaking", "tweaks"]
+            },
+            { 
+                word: "customized", 
+                definition: "changed to suit particular needs",
+                variants: ["customize", "customizing", "customizes"]
+            },
+            { 
+                word: "elite", 
+                definition: "the best or most skilled group",
+                variants: ["elites"]
+            },
+            { 
+                word: "readily available", 
+                definition: "easy to get or find",
+                variants: ["ready available"]
+            },
+            { 
+                word: "specifications", 
+                definition: "detailed requirements",
+                variants: ["specification", "specs"]
+            },
+            { 
+                word: "customization", 
+                definition: "the process of making changes to suit needs",
+                variants: ["customisations", "customisation"]
+            },
+            { 
+                word: "to adjust", 
+                definition: "to change something slightly",
+                variants: ["adjust", "adjusting", "adjusted", "adjusts"]
+            },
+            { 
+                word: "to weigh", 
+                definition: "to consider carefully",
+                variants: ["weigh", "weighing", "weighed", "weighs"]
+            },
+            { 
+                word: "the line between X and Y becomes thinner and thinner", 
+                definition: "the difference becomes less clear",
+                variants: ["line between X and Y becomes thinner", "lines between X and Y become thinner"]
+            },
+            { 
+                word: "to date back to", 
+                definition: "to have existed since a particular time",
+                variants: ["date back to", "dates back to", "dating back to", "dated back to"]
+            },
+            { 
+                word: "equal in significance", 
+                definition: "just as important",
+                variants: ["equal significance", "equally significant"]
+            },
+            { 
+                word: "the former/the latter", 
+                definition: "the first/the second of two things mentioned",
+                variants: ["former/latter"]
+            },
+            { 
+                word: "climatic conditions", 
+                definition: "weather patterns of an area",
+                variants: ["climate conditions", "climatic condition"]
+            },
+            { 
+                word: "gut/intestines", 
+                definition: "the digestive system tubes in the body",
+                variants: ["guts", "intestine"]
+            },
+            { 
+                word: "durable", 
+                definition: "able to last a long time",
+                variants: ["durability"]
+            },
+            { 
+                word: "stiff", 
+                definition: "not easily bent",
+                variants: ["stiffness", "stiffer", "stiffest"]
+            },
+            { 
+                word: "by far", 
+                definition: "by a very large amount",
+                variants: []
+            },
+            { 
+                word: "revolutionise", 
+                definition: "to completely change something",
+                variants: ["revolutionize", "revolutionised", "revolutionising", "revolutionizes"]
+            },
+            { 
+                word: "go beyond X", 
+                definition: "to do more than expected",
+                variants: ["goes beyond X", "going beyond X", "gone beyond X", "went beyond X"]
+            },
+            { 
+                word: "X was attributed to Y", 
+                definition: "Y was said to be the cause of X",
+                variants: ["X is attributed to Y", "X are attributed to Y"]
+            },
+            { 
+                word: "lead (noun)", 
+                definition: "a heavy metal (Pb)",
+                variants: ["leads"]
+            },
+            { 
+                word: "grips", 
+                definition: "holds tightly",
+                variants: ["grip", "gripping", "gripped"]
+            },
+            { 
+                word: "to anticipate", 
+                definition: "to expect something will happen",
+                variants: ["anticipate", "anticipated", "anticipates", "anticipating"]
+            },
+            { 
+                word: "light (adjective)", 
+                definition: "not heavy",
+                variants: ["lighter", "lightest"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let shuffledWords = [];
+        const quizContainer = document.getElementById('quiz-container');
+        const submitAllBtn = document.getElementById('submit-all');
+        const scoreDisplay = document.getElementById('score');
+        const resultsContainer = document.getElementById('results');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            shuffledWords = shuffleArray([...words]).slice(0, 10);
+            userAnswers = new Array(shuffledWords.length).fill('');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestion < shuffledWords.length) {
+                const word = shuffledWords[currentQuestion];
+                
+                quizContainer.innerHTML = `
+                    <div class="question">
+                        <div class="definition">${word.definition}</div>
+                        <input type="text" id="answer" placeholder="Type the word here" value="${userAnswers[currentQuestion]}">
+                        <div class="navigation-buttons">
+                            ${currentQuestion > 0 ? '<button id="prev">Previous</button>' : ''}
+                            ${currentQuestion < shuffledWords.length - 1 ? '<button id="next">Next</button>' : ''}
+                        </div>
+                    </div>
+                `;
+                
+                if (currentQuestion > 0) {
+                    document.getElementById('prev').addEventListener('click', prevQuestion);
+                }
+                if (currentQuestion < shuffledWords.length - 1) {
+                    document.getElementById('next').addEventListener('click', nextQuestion);
+                }
+                
+                document.getElementById('answer').addEventListener('input', (e) => {
+                    userAnswers[currentQuestion] = e.target.value;
+                });
+            }
+        }
+
+        function nextQuestion() {
+            userAnswers[currentQuestion] = document.getElementById('answer').value;
+            currentQuestion++;
+            displayQuestion();
+        }
+
+        function prevQuestion() {
+            userAnswers[currentQuestion] = document.getElementById('answer').value;
+            currentQuestion--;
+            displayQuestion();
+        }
+
+        function showResults() {
+            let correctCount = 0;
+            resultsContainer.innerHTML = '<h2>Results</h2><div class="summary"></div>';
+            
+            shuffledWords.forEach((word, index) => {
+                const userAnswer = userAnswers[index].trim().toLowerCase();
+                const allAnswers = [word.word.toLowerCase(), ...word.variants.map(v => v.toLowerCase())];
+                const isCorrect = allAnswers.includes(userAnswer);
+                
+                if (isCorrect) correctCount++;
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <p><strong>Definition:</strong> ${word.definition}</p>
+                    <p><strong>Your answer:</strong> ${userAnswers[index] || '(blank)'}</p>
+                    <p><strong>Correct answer(s):</strong> ${[word.word, ...word.variants].join(', ')}</p>
+                `;
+                resultsContainer.appendChild(resultItem);
+            });
+            
+            scoreDisplay.textContent = `Your score: ${correctCount} out of ${shuffledWords.length}`;
+            scoreDisplay.classList.remove('hidden');
+            resultsContainer.classList.remove('hidden');
+            quizContainer.classList.add('hidden');
+            submitAllBtn.classList.add('hidden');
+        }
+
+        submitAllBtn.addEventListener('click', showResults);
+
+        startQuiz();
+    </script>
+</body>
+</html>
