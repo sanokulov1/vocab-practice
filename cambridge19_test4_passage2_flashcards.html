@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Sea Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            padding: 20px;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .header h1 {
+            color: #e6e6fa;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 350px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
+            transform: rotateY(180deg);
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
+        .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
+            color: white;
+            cursor: pointer;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #e3f2fd;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        .progress-bar-container {
+            width: 80%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        body.dark-mode .progress-bar {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
+        .water-icon {
+            position: absolute;
+            bottom: 10px;
+            font-size: 2rem;
+            color: rgba(52, 152, 219, 0.3);
+        }
+
+        body.dark-mode .water-icon {
+            color: rgba(154, 89, 212, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flashcard {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 350px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Deep Sea Vocabulary Flashcards</h1>
+        </div>
+        
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">breakthrough</div>
+                    <div class="water-icon"><i class="fas fa-water"></i></div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">An important discovery that helps solve a problem</div>
+                    <div class="example" id="example">The discovery of a new antibiotic was a major breakthrough in medicine.</div>
+                    <div class="water-icon"><i class="fas fa-microscope"></i></div>
+                    <div class="hint">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">23</span>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { 
+                word: "breakthrough", 
+                definition: "An important discovery that helps solve a problem", 
+                example: "The discovery of a new antibiotic was a major breakthrough in medicine." 
+            },
+            { 
+                word: "antibiotic-resistant", 
+                definition: "Not affected by drugs that kill bacteria", 
+                example: "Antibiotic-resistant superbugs are becoming a serious health threat." 
+            },
+            { 
+                word: "responsible for", 
+                definition: "Being the cause of something", 
+                example: "Antibiotic-resistant bacteria are responsible for thousands of deaths each year." 
+            },
+            { 
+                word: "undocumented", 
+                definition: "Not recorded or officially recognized", 
+                example: "Scientists discovered many undocumented species in the deep ocean." 
+            },
+            { 
+                word: "prospecting", 
+                definition: "Searching for valuable resources", 
+                example: "Companies are prospecting for minerals in the deep sea." 
+            },
+            { 
+                word: "to exploit", 
+                definition: "To use resources for profit", 
+                example: "Mining companies want to exploit the deep sea's mineral resources." 
+            },
+            { 
+                word: "to weigh up the pros and cons", 
+                definition: "To consider advantages and disadvantages", 
+                example: "We must weigh up the pros and cons of deep-sea mining." 
+            },
+            { 
+                word: "abyss", 
+                definition: "The deep ocean, especially below 2000 meters", 
+                example: "Strange creatures live in the abyss of the ocean." 
+            },
+            { 
+                word: "to yield", 
+                definition: "To produce or provide", 
+                example: "The deep sea could yield valuable medical discoveries." 
+            },
+            { 
+                word: "terrestrial", 
+                definition: "Relating to land (as opposed to sea)", 
+                example: "Terrestrial mining causes significant environmental damage." 
+            },
+            { 
+                word: "caution", 
+                definition: "Care taken to avoid danger", 
+                example: "Scientists urge caution before starting deep-sea mining." 
+            },
+            { 
+                word: "ramifications", 
+                definition: "Complex consequences of an action", 
+                example: "Deep-sea mining could have serious environmental ramifications." 
+            },
+            { 
+                word: "regulatory framework", 
+                definition: "System of rules that control something", 
+                example: "A strong regulatory framework is needed for deep-sea mining." 
+            },
+            { 
+                word: "to draft", 
+                definition: "To write a preliminary version", 
+                example: "Officials are drafting regulations for ocean mining." 
+            },
+            { 
+                word: "marginalisation", 
+                definition: "Treatment as unimportant or powerless", 
+                example: "Indigenous peoples often face marginalisation in resource decisions." 
+            },
+            { 
+                word: "indigenous peoples", 
+                definition: "Original inhabitants of a region", 
+                example: "Indigenous peoples have valuable knowledge about local ecosystems." 
+            },
+            { 
+                word: "poses a grave threat to", 
+                definition: "Presents a serious danger to", 
+                example: "Deep-sea mining poses a grave threat to marine ecosystems." 
+            },
+            { 
+                word: "untapped potential", 
+                definition: "Unused possibilities or resources", 
+                example: "The deep ocean has untapped potential for medical discoveries." 
+            },
+            { 
+                word: "to deplete", 
+                definition: "To reduce the quantity of resources", 
+                example: "Overfishing is depleting fish stocks worldwide." 
+            },
+            { 
+                word: "assault", 
+                definition: "A violent attack or harmful action", 
+                example: "Mining would be the greatest assault on deep-sea ecosystems." 
+            },
+            { 
+                word: "to inflict", 
+                definition: "To cause harm or damage", 
+                example: "Human activities inflict damage on marine environments." 
+            },
+            { 
+                word: "to be off-limits", 
+                definition: "To be forbidden or restricted", 
+                example: "Active hydrothermal vents should be off-limits to mining." 
+            },
+            { 
+                word: "spin-offs", 
+                definition: "Additional benefits from research", 
+                example: "Deep-sea research could have valuable medical spin-offs." 
+            }
+        ];
+
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
+        const flashcard = document.getElementById('flashcard');
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const progressBar = document.getElementById('progressBar');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
+
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            exampleElement.textContent = currentWord.example;
+            currentCountElement.textContent = currentIndex + 1;
+            
+            // Update progress bar
+            const progressPercentage = ((currentIndex + 1) / words.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
+            }
+        });
+    </script>
+</body>
+</html>
