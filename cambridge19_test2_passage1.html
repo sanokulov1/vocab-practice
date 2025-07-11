@@ -6,62 +6,76 @@
   <title>Test 2 – Passage 1</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body, html {
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #d0ebff;
       margin: 0;
       padding: 0;
-      font-family: 'Quicksand', sans-serif;
-      height: 100%;
-      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     .grid-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    .grid-item {
-      position: relative;
-      background-size: cover;
-      background-position: center;
+      gap: 20px;
+      width: 90vw;
+      max-width: 800px;
+      height: 90vh;
+      max-height: 600px;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .grid-item a {
       display: flex;
-      width: 100%;
-      height: 100%;
       justify-content: center;
       align-items: center;
-      text-align: center;
-      color: white;
-      font-size: 2em;
-      font-weight: bold;
+      height: 100%;
+      width: 100%;
       text-decoration: none;
-      background-color: rgba(0, 0, 0, 0.3);
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-      transition: background 0.3s;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #000;
+      background-color: springgreen;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+      text-align: center;
     }
 
     .grid-item a:hover {
-      background-color: rgba(0, 0, 0, 0.5);
+      transform: scale(1.05);
     }
 
-    .item1 { background-image: url('test2p1_card_flash.jpg'); }
-    .item2 { background-image: url('test2p1_card_match.jpg'); }
-    .item3 { background-image: url('test2p1_card_quiz.jpg'); }
-    .item4 { background-image: url('test2p1_card_type.jpg'); }
+    @media (max-width: 768px) {
+      body {
+        align-items: flex-start;
+        padding-top: 40px;
+      }
 
+      .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        height: auto;
+      }
+
+      .grid-item a {
+        height: 25vh;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="grid-container">
-    <div class="grid-item item1"><a href="test2-p1-flashcards.html">Flashcards</a></div>
-    <div class="grid-item item2"><a href="test2-p1-matching.html">Matching</a></div>
-    <div class="grid-item item3"><a href="test2-p1-quiz.html">Quiz</a></div>
-    <div class="grid-item item4"><a href="test2-p1-typing.html">Typing</a></div>
+    <div class="grid-item"><a href="test2-p1-flashcards.html">📘 Flashcards</a></div>
+    <div class="grid-item"><a href="test2-p1-matching.html">🔗 Matching</a></div>
+    <div class="grid-item"><a href="test2-p1-quiz.html">📝 Quiz</a></div>
+    <div class="grid-item"><a href="test2-p1-typing.html">⌨️ Typing</a></div>
   </div>
 
 </body>
