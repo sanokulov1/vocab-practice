@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetlands Vocabulary Typing Task</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --word-color: #e6f7ff;
+            --def-color: #f0fff0;
+            --border-color: #add8e6;
+            --def-border: #90ee90;
+            --selected-color: #b5e8b5;
+            --matched-color: #b5e8b5;
+            --header-bg: #4CAF50;
+            --header-text: white;
+            --incorrect-color: #ff9999;
+            --correct-color: #a3d9a5;
+            --button-color: #4CAF50;
+            --button-hover: #45a049;
+            --shuffle-color: #008CBA;
+            --shuffle-hover: #0077a3;
+            --input-border: #add8e6;
+            --feedback-correct: #2d7d46; /* Darker green for better contrast */
+            --feedback-incorrect: #ffffff; /* White text on red background */
+            --feedback-bg-incorrect: #d32f2f; /* Darker red for better contrast */
+        }
+        .night-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --word-color: #2a3f5f;
+            --def-color: #1e3d59;
+            --border-color: #3a506b;
+            --def-border: #4a6fa5;
+            --selected-color: #4CAF50;
+            --matched-color: #4CAF50;
+            --header-bg: #0f4c75;
+            --header-text: #e6e6e6;
+            --incorrect-color: #ff3333;
+            --correct-color: #2d7d46;
+            --input-border: #3a506b;
+            --feedback-correct: #81c784; /* Lighter green for dark mode */
+            --feedback-incorrect: #ffcdd2; /* Light red text for dark mode */
+            --feedback-bg-incorrect: #c62828; /* Darker red for dark mode */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1 {
+            text-align: center;
+            color: var(--header-bg);
+            margin-bottom: 30px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        #submit-btn {
+            background-color: var(--button-color);
+            color: white;
+        }
+        #submit-btn:hover {
+            background-color: var(--button-hover);
+        }
+        #night-mode-btn {
+            background-color: #555;
+            color: white;
+        }
+        #night-mode-btn:hover {
+            background-color: #444;
+        }
+        .typing-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .task-container {
+            margin-bottom: 20px;
+        }
+        .definition {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--header-bg);
+        }
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid var(--input-border);
+            border-radius: 5px;
+            background-color: var(--word-color);
+            transition: all 0.3s;
+        }
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--header-bg);
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        .answer-input.correct {
+            background-color: var(--correct-color);
+            border-color: var(--matched-color);
+        }
+        .answer-input.incorrect {
+            background-color: var(--incorrect-color);
+        }
+        .feedback {
+            margin-top: 10px;
+            font-style: italic;
+            min-height: 20px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .feedback.correct {
+            color: var(--feedback-correct);
+            background-color: rgba(163, 217, 165, 0.2);
+            border-left: 4px solid var(--feedback-correct);
+        }
+        .feedback.incorrect {
+            color: var(--feedback-incorrect);
+            background-color: var(--feedback-bg-incorrect);
+            border-left: 4px solid var(--incorrect-color);
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            background-color: var(--shuffle-color);
+            color: white;
+        }
+        .nav-btn:hover {
+            background-color: var(--shuffle-hover);
+        }
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .results {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .wrong-answers {
+            margin-top: 20px;
+        }
+        .wrong-answer {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--incorrect-color);
+            border-radius: 5px;
+            color: var(--feedback-incorrect);
+        }
+        .correct-answer {
+            color: var(--feedback-correct);
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            .typing-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Wetlands Vocabulary Typing Task</h1>
+    <div class="controls">
+        <button id="night-mode-btn">Night Mode</button>
+    </div>
+    
+    <div class="typing-container" id="typing-container">
+        <div class="progress" id="progress">Question 1 of 10</div>
+        <div class="task-container">
+            <div class="definition" id="definition"></div>
+            <input type="text" class="answer-input" id="answer-input" placeholder="Type the word here...">
+            <div class="feedback" id="feedback"></div>
+        </div>
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" disabled>Previous</button>
+            <button class="nav-btn" id="next-btn">Next</button>
+            <button id="submit-btn" style="display: none;">Submit Task</button>
+        </div>
+    </div>
+    
+    <div class="results" id="results">
+        <h2>Task Results</h2>
+        <div id="score"></div>
+        <div class="wrong-answers" id="wrong-answers">
+            <h3>Words to Review:</h3>
+        </div>
+        <button id="restart-btn" style="margin-top: 20px;">Try Again</button>
+    </div>
+
+    <script>
+        // Wetlands vocabulary data with all possible forms
+        const vocabulary = [
+            { 
+                word: "Rich in", 
+                definition: "Containing a large amount of something",
+                forms: ["rich in", "rich", "richer", "richest"]
+            },
+            { 
+                word: "Pollutants", 
+                definition: "Harmful substances that damage the environment",
+                forms: ["pollutants", "pollutant", "pollution"]
+            },
+            { 
+                word: "Pesticides", 
+                definition: "Chemicals used to kill insects or pests",
+                forms: ["pesticides", "pesticide"]
+            },
+            { 
+                word: "Livelihood", 
+                definition: "A means of earning money to survive",
+                forms: ["livelihood", "livelihoods"]
+            },
+            { 
+                word: "Mitigate", 
+                definition: "To reduce the severity of something",
+                forms: ["mitigate", "mitigates", "mitigated", "mitigating", "mitigation"]
+            },
+            { 
+                word: "Implement", 
+                definition: "To put a plan into action",
+                forms: ["implement", "implements", "implemented", "implementing", "implementation"]
+            },
+            { 
+                word: "In-demand", 
+                definition: "Wanted or needed by many people",
+                forms: ["in-demand", "demand", "demanded", "demanding"]
+            },
+            { 
+                word: "Commodity", 
+                definition: "A raw material or product that can be traded",
+                forms: ["commodity", "commodities"]
+            },
+            { 
+                word: "Logging", 
+                definition: "Cutting down trees for wood",
+                forms: ["logging", "log", "logged", "logs"]
+            },
+            { 
+                word: "Comprise", 
+                definition: "To consist of or be made up of",
+                forms: ["comprise", "comprises", "comprised", "comprising"]
+            },
+            { 
+                word: "Alarming", 
+                definition: "Worrying or frightening",
+                forms: ["alarming", "alarm", "alarmed", "alarms"]
+            },
+            { 
+                word: "Document", 
+                definition: "To record something in detail",
+                forms: ["document", "documents", "documented", "documenting", "documentation"]
+            },
+            { 
+                word: "Devastating", 
+                definition: "Extremely harmful or destructive",
+                forms: ["devastating", "devastate", "devastated", "devastates", "devastation"]
+            },
+            { 
+                word: "Run-off", 
+                definition: "Water that flows over the ground, often carrying pollutants",
+                forms: ["run-off", "run off", "ran off", "running off"]
+            },
+            { 
+                word: "Place a high priority", 
+                definition: "To consider something very important",
+                forms: ["place a high priority", "placed a high priority", "placing a high priority", "high priority"]
+            },
+            { 
+                word: "Degradation", 
+                definition: "The process of becoming worse in quality",
+                forms: ["degradation", "degrade", "degrades", "degraded", "degrading"]
+            }
+        ];
+
+        // Quiz variables
+        let currentQuestion = 0;
+        let selectedQuestions = [];
+        let userAnswers = [];
+        let score = 0;
+
+        // DOM elements
+        const nightModeBtn = document.getElementById('night-mode-btn');
+        const typingContainer = document.getElementById('typing-container');
+        const definitionElement = document.getElementById('definition');
+        const answerInput = document.getElementById('answer-input');
+        const feedbackElement = document.getElementById('feedback');
+        const progressElement = document.getElementById('progress');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultsContainer = document.getElementById('results');
+        const scoreElement = document.getElementById('score');
+        const wrongAnswersElement = document.getElementById('wrong-answers');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Initialize task automatically
+        window.addEventListener('DOMContentLoaded', initTypingTask);
+
+        // Initialize typing task
+        function initTypingTask() {
+            // Select 10 random questions
+            selectedQuestions = [...vocabulary]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 10);
+            
+            // Initialize user answers array
+            userAnswers = new Array(selectedQuestions.length).fill(null);
+            score = 0;
+            
+            // Show typing container
+            typingContainer.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Load first question
+            loadQuestion();
+        }
+
+        // Load question
+        function loadQuestion() {
+            progressElement.textContent = `Question ${currentQuestion + 1} of ${selectedQuestions.length}`;
+            const question = selectedQuestions[currentQuestion];
+            definitionElement.textContent = question.definition;
+            
+            // Reset input and feedback
+            answerInput.value = userAnswers[currentQuestion] || '';
+            answerInput.className = 'answer-input';
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            
+            // Focus on input
+            answerInput.focus();
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.style.display = currentQuestion === selectedQuestions.length - 1 ? 'none' : 'block';
+            submitBtn.style.display = currentQuestion === selectedQuestions.length - 1 ? 'block' : 'none';
+        }
+
+        // Check answer with smart matching
+        function checkAnswer(input, question) {
+            const userAnswer = input.trim().toLowerCase();
+            
+            // Check against all possible forms
+            for (const form of question.forms) {
+                if (userAnswer === form.toLowerCase()) {
+                    return true;
+                }
+            }
+            
+            // Additional smart checks for plurals, verb forms, etc.
+            const baseWord = question.word.toLowerCase();
+            
+            // Check for simple plural/singular
+            if (userAnswer === baseWord + 's' || userAnswer === baseWord.slice(0, -1)) {
+                return true;
+            }
+            
+            // Check for common verb forms
+            if (baseWord.endsWith('e') && userAnswer === baseWord + 'd') {
+                return true; // for words like "comprise" -> "comprised"
+            }
+            if (!baseWord.endsWith('e') && userAnswer === baseWord + 'ed') {
+                return true; // for words like "document" -> "documented"
+            }
+            if (userAnswer === baseWord + 'ing') {
+                return true; // for present participle
+            }
+            
+            return false;
+        }
+
+        // Show results
+        function showResults() {
+            score = 0;
+            const wrongAnswers = [];
+            
+            selectedQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer && checkAnswer(userAnswer, question);
+                
+                if (isCorrect) {
+                    score++;
+                } else {
+                    wrongAnswers.push({
+                        definition: question.definition,
+                        userAnswer: userAnswer || "No answer provided",
+                        correctAnswers: question.forms.join(" or ")
+                    });
+                }
+            });
+            
+            typingContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            scoreElement.innerHTML = `You scored <strong>${score} out of ${selectedQuestions.length}</strong>`;
+            
+            if (wrongAnswers.length > 0) {
+                wrongAnswersElement.innerHTML = '<h3>Words to Review:</h3>';
+                wrongAnswers.forEach(item => {
+                    const wrongAnswerElement = document.createElement('div');
+                    wrongAnswerElement.className = 'wrong-answer';
+                    wrongAnswerElement.innerHTML = `
+                        <p><strong>${item.definition}</strong></p>
+                        <p>Your answer: ${item.userAnswer}</p>
+                        <p class="correct-answer">Correct answers: ${item.correctAnswers}</p>
+                    `;
+                    wrongAnswersElement.appendChild(wrongAnswerElement);
+                });
+            } else {
+                wrongAnswersElement.innerHTML = '<p>Perfect! You got all answers correct!</p>';
+            }
+        }
+
+        // Event listeners
+        nightModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            nightModeBtn.textContent = document.body.classList.contains('night-mode') 
+                ? 'Day Mode' 
+                : 'Night Mode';
+        });
+        
+        answerInput.addEventListener('input', () => {
+            userAnswers[currentQuestion] = answerInput.value;
+        });
+        
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (currentQuestion < selectedQuestions.length - 1) {
+                    currentQuestion++;
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < selectedQuestions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        });
+        
+        submitBtn.addEventListener('click', showResults);
+        
+        restartBtn.addEventListener('click', initTypingTask);
+    </script>
+</body>
+</html>
