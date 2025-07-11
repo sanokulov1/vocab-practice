@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Matching Game</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --word-color: #e6f7ff;
+            --def-color: #f0fff0;
+            --border-color: #add8e6;
+            --def-border: #90ee90;
+            --selected-color: #ffcccb;
+            --matched-color: #b5e8b5;
+            --header-bg: #4CAF50;
+            --header-text: white;
+        }
+        .night-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --word-color: #2a3f5f;
+            --def-color: #1e3d59;
+            --border-color: #3a506b;
+            --def-border: #4a6fa5;
+            --selected-color: #ff6b6b;
+            --matched-color: #4CAF50;
+            --header-bg: #0f4c75;
+            --header-text: #e6e6e6;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .group {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .group-header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+        }
+        .group-content {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+        }
+        .words-column, .definitions-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .word, .definition {
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .word {
+            background-color: var(--word-color);
+            border: 2px solid var(--border-color);
+        }
+        .definition {
+            background-color: var(--def-color);
+            border: 2px solid var(--def-border);
+        }
+        .word.selected, .definition.selected {
+            background-color: var(--selected-color);
+        }
+        .word.matched, .definition.matched {
+            background-color: var(--matched-color);
+            cursor: default;
+        }
+        .word.disabled, .definition.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        @media (max-width: 600px) {
+            .group-content {
+                flex-direction: column;
+            }
+            .words-column, .definitions-column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Vocabulary Matching Game</h1>
+    <div class="controls">
+        <button id="shuffleBtn">Shuffle All</button>
+        <button id="nightModeBtn">Night Mode</button>
+    </div>
+    <div class="game-container" id="gameContainer"></div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            { word: "adept", definition: "Highly skilled (synonym: proficient)." },
+            { word: "forage", definition: "To search for food (synonym: scavenge)." },
+            { word: "to disperse", definition: "To spread out over a wide area (synonym: scatter)." },
+            { word: "archipelago", definition: "A group of islands." },
+            { word: "stepping stones", definition: "A means of progress or stages in a process (synonym: milestones)." },
+            { word: "remote", definition: "Far away, isolated (synonym: distant)." },
+            { word: "fragments", definition: "Small broken pieces (synonym: shards)." },
+            { word: "impenetrable", definition: "Impossible to pass through (synonym: dense)." },
+            { word: "encompass", definition: "To include or surround (synonym: contain)." },
+            { word: "coincidence", definition: "A chance occurrence of events." },
+            { word: "to grind", definition: "To crush into powder or sharpen by friction." },
+            { word: "to unearth", definition: "To dig up or discover (synonym: excavate)." },
+            { word: "routinely", definition: "Done regularly (synonym: habitually)." },
+            { word: "to abandon", definition: "To leave permanently (synonym: desert)." },
+            { word: "departure", definition: "The act of leaving (synonym: exit)." }
+        ];
+
+        // Game state
+        let selectedWord = null;
+        let selectedDefinition = null;
+        let matchedPairs = 0;
+
+        // DOM elements
+        const gameContainer = document.getElementById('gameContainer');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const nightModeBtn = document.getElementById('nightModeBtn');
+
+        // Initialize game
+        function initGame() {
+            gameContainer.innerHTML = '';
+            matchedPairs = 0;
+
+            // Split into 3 groups of 5
+            for (let i = 0; i < 3; i++) {
+                const group = document.createElement('div');
+                group.className = 'group';
+                
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'group-header';
+                groupHeader.textContent = `Group ${i + 1}`;
+                groupHeader.onclick = () => {
+                    const content = group.querySelector('.group-content');
+                    content.style.display = content.style.display === 'none' ? 'flex' : 'none';
+                };
+                
+                const groupContent = document.createElement('div');
+                groupContent.className = 'group-content';
+                
+                const wordsColumn = document.createElement('div');
+                wordsColumn.className = 'words-column';
+                
+                const definitionsColumn = document.createElement('div');
+                definitionsColumn.className = 'definitions-column';
+
+                // Get 5 words and definitions for this group
+                const groupItems = vocabulary.slice(i * 5, (i + 1) * 5);
+                
+                // Shuffle the group items
+                shuffleArray(groupItems);
+
+                // Add words to left column
+                groupItems.forEach(item => {
+                    const wordElement = document.createElement('div');
+                    wordElement.className = 'word';
+                    wordElement.textContent = item.word;
+                    wordElement.onclick = () => selectItem(wordElement, 'word', item.word);
+                    wordsColumn.appendChild(wordElement);
+                });
+
+                // Shuffle definitions separately
+                const shuffledDefs = [...groupItems];
+                shuffleArray(shuffledDefs);
+
+                // Add definitions to right column
+                shuffledDefs.forEach(item => {
+                    const defElement = document.createElement('div');
+                    defElement.className = 'definition';
+                    defElement.textContent = item.definition;
+                    defElement.onclick = () => selectItem(defElement, 'definition', item.word);
+                    definitionsColumn.appendChild(defElement);
+                });
+
+                groupContent.appendChild(wordsColumn);
+                groupContent.appendChild(definitionsColumn);
+                group.appendChild(groupHeader);
+                group.appendChild(groupContent);
+                gameContainer.appendChild(group);
+            }
+        }
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Handle item selection
+        function selectItem(element, type, wordKey) {
+            if (element.classList.contains('matched') || element.classList.contains('disabled')) return;
+
+            // Deselect if clicking the same item again
+            if ((type === 'word' && selectedWord === element) || 
+                (type === 'definition' && selectedDefinition === element)) {
+                element.classList.remove('selected');
+                if (type === 'word') selectedWord = null;
+                else selectedDefinition = null;
+                return;
+            }
+
+            // Select the item
+            element.classList.add('selected');
+            if (type === 'word') {
+                if (selectedWord) selectedWord.classList.remove('selected');
+                selectedWord = { element, wordKey };
+            } else {
+                if (selectedDefinition) selectedDefinition.classList.remove('selected');
+                selectedDefinition = { element, wordKey };
+            }
+
+            // Check for a match if both are selected
+            if (selectedWord && selectedDefinition) {
+                checkMatch();
+            }
+        }
+
+        // Check if selected word and definition match
+        function checkMatch() {
+            const word = selectedWord.element;
+            const definition = selectedDefinition.element;
+
+            if (selectedWord.wordKey === selectedDefinition.wordKey) {
+                // Correct match
+                word.classList.remove('selected');
+                word.classList.add('matched');
+                definition.classList.remove('selected');
+                definition.classList.add('matched');
+                matchedPairs++;
+                
+                // Check if game is complete
+                if (matchedPairs === 15) {
+                    setTimeout(() => alert('Congratulations! You matched all pairs!'), 500);
+                }
+            } else {
+                // Incorrect match - flash red and reset
+                word.classList.add('disabled');
+                definition.classList.add('disabled');
+                
+                setTimeout(() => {
+                    word.classList.remove('selected', 'disabled');
+                    definition.classList.remove('selected', 'disabled');
+                }, 1000);
+            }
+
+            // Reset selections
+            selectedWord = null;
+            selectedDefinition = null;
+        }
+
+        // Event listeners
+        shuffleBtn.addEventListener('click', initGame);
+        nightModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            nightModeBtn.textContent = document.body.classList.contains('night-mode') 
+                ? 'Day Mode' 
+                : 'Night Mode';
+        });
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
