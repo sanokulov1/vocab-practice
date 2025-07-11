@@ -3,189 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Flashcards</title>
+    <title>Technology Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --card-bg: #e6f7ff;
-            --card-border: #008CBA;
-            --def-bg: #f0fff0;
-            --def-border: #4CAF50;
-            --text-color: #333;
-            --button-bg: #4CAF50;
-            --button-hover: #45a049;
-            --shuffle-bg: #008CBA;
-            --shuffle-hover: #0077a3;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            background-color: #f5f5f5;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
             padding: 20px;
         }
-        .flashcard-container {
-            width: 400px;
-            height: 300px;
-            perspective: 1000px;
-            margin-bottom: 20px;
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #6a5acd, #9370db);
         }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 350px;
+        }
+
         .flashcard {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             cursor: pointer;
         }
+
         .flashcard.flipped {
             transform: rotateY(180deg);
         }
-        .flashcard-front, .flashcard-back {
+
+        .flashcard-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
-            padding: 20px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 20px;
         }
-        .flashcard-front {
-            background-color: var(--card-bg);
-            border: 2px solid var(--card-border);
-            color: var(--text-color);
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        .flashcard-back {
-            background-color: var(--def-bg);
-            border: 2px solid var(--def-border);
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
             transform: rotateY(180deg);
-            color: var(--text-color);
+            text-align: left;
+            overflow-y: auto;
         }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
         .word {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
             margin-bottom: 10px;
             text-align: center;
         }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
         .definition {
-            font-size: 18px;
+            font-size: 1.3rem;
+            color: #3498db;
             margin-bottom: 15px;
             text-align: center;
+            padding: 15px;
+            line-height: 1.5;
         }
+
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
         .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
             font-style: italic;
-            color: #555;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
             text-align: center;
             margin-top: 15px;
         }
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
         .controls {
             display: flex;
-            gap: 10px;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
         }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .nav-btn {
-            background-color: var(--button-bg);
-            color: white;
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
         }
-        .nav-btn:hover {
-            background-color: var(--button-hover);
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
         }
-        #shuffle-btn {
-            background-color: var(--shuffle-bg);
-            color: white;
+
+        button:active {
+            transform: translateY(1px);
         }
-        #shuffle-btn:hover {
-            background-color: var(--shuffle-hover);
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
         }
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
         .progress {
-            margin-bottom: 20px;
-            font-weight: bold;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 350px;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="progress" id="progress">Card 1 of 31</div>
-    <div class="flashcard-container">
-        <div class="flashcard" id="flashcard">
-            <div class="flashcard-front" id="front">
-                <div class="word" id="word">Word</div>
-            </div>
-            <div class="flashcard-back" id="back">
-                <div class="definition" id="definition">Definition</div>
-                <div class="example" id="example">Example</div>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Technology Term</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="controls">
-        <button class="nav-btn" id="prev-btn">Previous</button>
-        <button id="shuffle-btn">Shuffle</button>
-        <button class="nav-btn" id="next-btn">Next</button>
+        
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">30</span>
+        </div>
     </div>
 
     <script>
         const words = [
-            { word: "obstacle", definition: "Something that blocks progress (synonym: barrier)", example: "Noise is an obstacle to clear communication." },
-            { word: "to feature", definition: "To include or show something prominently (synonym: highlight)", example: "The new phone features an improved camera." },
-            { word: "commonplace", definition: "Ordinary or frequently seen (synonym: usual)", example: "Smartphones are now commonplace worldwide." },
-            { word: "eye-catching", definition: "Attracting attention (synonym: striking)", example: "She wore an eye-catching red dress." },
-            { word: "novelty", definition: "Something new and unusual (synonym: innovation)", example: "The gadget was just a novelty at first." },
-            { word: "transparent", definition: "Easy to understand (synonym: clear)", example: "We need transparent rules for everyone." },
-            { word: "inclined to", definition: "Likely to do something (synonym: tend to)", example: "He's inclined to arrive late." },
-            { word: "entail", definition: "To involve something necessary (synonym: require)", example: "The job entails long hours." },
-            { word: "prevalent", definition: "Widespread (synonym: common)", example: "Flu is prevalent in winter." },
-            { word: "to take off", definition: "To become successful (synonym: flourish)", example: "Her business really took off last year." },
-            { word: "a long way to go", definition: "Much progress needed (synonym: far from complete)", example: "We've improved but have a long way to go." },
-            { word: "simultaneous", definition: "Happening at the same time (synonym: concurrent)", example: "The events were simultaneous." },
-            { word: "oblige", definition: "To require someone to do something (synonym: compel)", example: "The law obliges drivers to have insurance." },
-            { word: "apprehensions", definition: "Worries or fears (synonym: concerns)", example: "She had apprehensions about flying." },
-            { word: "accumulate", definition: "To gather over time (synonym: collect)", example: "Dust accumulates quickly." },
-            { word: "cloud", definition: "Internet-based storage (synonym: online storage)", example: "I save photos to the cloud." },
-            { word: "solemn", definition: "Serious and formal (synonym: dignified)", example: "It was a solemn ceremony." },
-            { word: "Etiquette-sensitive", definition: "Aware of social rules (synonym: manner-conscious)", example: "The app is etiquette-sensitive." },
-            { word: "first-name terms", definition: "Informal relationship (synonym: on a casual basis)", example: "We're on first-name terms now." },
-            { word: "outsource", definition: "To have work done externally (synonym: contract out)", example: "The company outsources IT support." },
-            { word: "matures into", definition: "Develops into (synonym: evolves into)", example: "The project matured into a business." },
-            { word: "seamless", definition: "Smooth without interruptions (synonym: flawless)", example: "The transition was seamless." },
-            { word: "ubiquitous", definition: "Present everywhere (synonym: omnipresent)", example: "Mobile phones are ubiquitous." },
-            { word: "a dubbed movie", definition: "Film with replaced voices (synonym: voice-over version)", example: "I watched the dubbed version." },
-            { word: "underline", definition: "To emphasize (synonym: highlight)", example: "The report underlines the problem." },
-            { word: "a sense of belonging", definition: "Feeling of acceptance (synonym: inclusion)", example: "The club gives me a sense of belonging." },
-            { word: "lingua franca", definition: "Common language (synonym: common tongue)", example: "English is the lingua franca of science." },
-            { word: "diminish", definition: "To become smaller/less (synonym: decrease)", example: "The noise diminished slowly." },
-            { word: "persist", definition: "To continue (synonym: endure)", example: "The pain persisted for days." },
-            { word: "substitute", definition: "Replacement (synonym: alternative)", example: "There's no substitute for experience." },
-            { word: "reluctance", definition: "Unwillingness (synonym: hesitation)", example: "She showed reluctance to participate." }
+            { 
+                word: "obstacle", 
+                definition: "Something that blocks progress (synonym: barrier)", 
+                example: "Technical limitations are an obstacle to app development." 
+            },
+            { 
+                word: "to feature", 
+                definition: "To include or show something prominently (synonym: highlight)", 
+                example: "The new software features enhanced security options." 
+            },
+            { 
+                word: "commonplace", 
+                definition: "Ordinary or frequently seen (synonym: usual)", 
+                example: "High-speed internet is now commonplace in urban areas." 
+            },
+            { 
+                word: "eye-catching", 
+                definition: "Attracting attention (synonym: striking)", 
+                example: "The website has an eye-catching minimalist design." 
+            },
+            { 
+                word: "novelty", 
+                definition: "Something new and unusual (synonym: innovation)", 
+                example: "The gadget's novelty wore off after a few weeks." 
+            },
+            { 
+                word: "transparent", 
+                definition: "Easy to understand (synonym: clear)", 
+                example: "The company has transparent privacy policies." 
+            },
+            { 
+                word: "inclined to", 
+                definition: "Likely to do something (synonym: tend to)", 
+                example: "Users are inclined to trust familiar interfaces." 
+            },
+            { 
+                word: "entail", 
+                definition: "To involve something necessary (synonym: require)", 
+                example: "Software updates entail system restarts." 
+            },
+            { 
+                word: "prevalent", 
+                definition: "Widespread (synonym: common)", 
+                example: "Phishing scams are prevalent in email communications." 
+            },
+            { 
+                word: "to take off", 
+                definition: "To become successful (synonym: flourish)", 
+                example: "The app really took off after the latest update." 
+            },
+            { 
+                word: "a long way to go", 
+                definition: "Much progress needed (synonym: far from complete)", 
+                example: "AI technology still has a long way to go." 
+            },
+            { 
+                word: "simultaneous", 
+                definition: "Happening at the same time (synonym: concurrent)", 
+                example: "The platform allows simultaneous editing by multiple users." 
+            },
+            { 
+                word: "oblige", 
+                definition: "To require someone to do something (synonym: compel)", 
+                example: "GDPR obliges companies to protect user data." 
+            },
+            { 
+                word: "apprehensions", 
+                definition: "Worries or fears (synonym: concerns)", 
+                example: "Many people have apprehensions about AI replacing jobs." 
+            },
+            { 
+                word: "accumulate", 
+                definition: "To gather over time (synonym: collect)", 
+                example: "The software accumulates user behavior data." 
+            },
+            { 
+                word: "cloud", 
+                definition: "Internet-based storage (synonym: online storage)", 
+                example: "Most businesses now use cloud services for data." 
+            },
+            { 
+                word: "solemn", 
+                definition: "Serious and formal (synonym: dignified)", 
+                example: "The CEO made a solemn promise about data privacy." 
+            },
+            { 
+                word: "Etiquette-sensitive", 
+                definition: "Aware of social rules (synonym: manner-conscious)", 
+                example: "The chatbot is etiquette-sensitive in conversations." 
+            },
+            { 
+                word: "first-name terms", 
+                definition: "Informal relationship (synonym: on a casual basis)", 
+                example: "The company culture is on first-name terms with everyone." 
+            },
+            { 
+                word: "outsource", 
+                definition: "To have work done externally (synonym: contract out)", 
+                example: "Many startups outsource their web development." 
+            },
+            { 
+                word: "matures into", 
+                definition: "Develops into (synonym: evolves into)", 
+                example: "The prototype matures into a market-ready product." 
+            },
+            { 
+                word: "seamless", 
+                definition: "Smooth without interruptions (synonym: flawless)", 
+                example: "The update provided a seamless user experience." 
+            },
+            { 
+                word: "ubiquitous", 
+                definition: "Present everywhere (synonym: omnipresent)", 
+                example: "Smartphones have become ubiquitous in modern life." 
+            },
+            { 
+                word: "a dubbed movie", 
+                definition: "Film with replaced voices (synonym: voice-over version)", 
+                example: "The streaming service offers dubbed movies in many languages." 
+            },
+            { 
+                word: "underline", 
+                definition: "To emphasize (synonym: highlight)", 
+                example: "The report underlines the importance of cybersecurity." 
+            },
+            { 
+                word: "a sense of belonging", 
+                definition: "Feeling of acceptance (synonym: inclusion)", 
+                example: "Online communities provide a sense of belonging." 
+            },
+            { 
+                word: "lingua franca", 
+                definition: "Common language (synonym: common tongue)", 
+                example: "English serves as the lingua franca of programming." 
+            },
+            { 
+                word: "diminish", 
+                definition: "To become smaller/less (synonym: decrease)", 
+                example: "Battery life diminishes with heavy usage." 
+            },
+            { 
+                word: "persist", 
+                definition: "To continue (synonym: endure)", 
+                example: "The software bug persisted through several updates." 
+            },
+            { 
+                word: "substitute", 
+                definition: "Replacement (synonym: alternative)", 
+                example: "There's no substitute for hands-on tech experience." 
+            },
+            { 
+                word: "reluctance", 
+                definition: "Unwillingness (synonym: hesitation)", 
+                example: "There's reluctance to adopt new technologies among older users." 
+            }
         ];
 
         let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
         const flashcard = document.getElementById('flashcard');
         const wordElement = document.getElementById('word');
         const definitionElement = document.getElementById('definition');
         const exampleElement = document.getElementById('example');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const progressElement = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
 
-        function updateCard() {
-            wordElement.textContent = words[currentIndex].word;
-            definitionElement.textContent = words[currentIndex].definition;
-            exampleElement.textContent = words[currentIndex].example;
-            progressElement.textContent = `Card ${currentIndex + 1} of ${words.length}`;
-            flashcard.classList.remove('flipped');
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
         }
 
         flashcard.addEventListener('click', () => {
@@ -193,25 +470,61 @@
         });
 
         prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
             currentIndex = (currentIndex - 1 + words.length) % words.length;
             updateCard();
         });
 
         nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
         });
 
         shuffleBtn.addEventListener('click', () => {
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]];
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
             }
-            currentIndex = 0;
             updateCard();
         });
 
-        updateCard();
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            exampleElement.textContent = currentWord.example;
+            currentCountElement.textContent = currentIndex + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
+            }
+        });
     </script>
 </body>
 </html>
