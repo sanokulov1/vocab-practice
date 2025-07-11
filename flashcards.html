@@ -4,193 +4,449 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
             padding: 20px;
         }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #6a5acd, #9370db);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        body.dark-mode header {
+            color: #fff;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header h1 i {
+            color: #e74c3c;
+            animation: float 3s ease-in-out infinite;
+        }
+
         .flashcard-container {
             perspective: 1000px;
-            width: 100%;
-            max-width: 400px;
-            height: 250px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            height: 320px;
         }
+
         .flashcard {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             cursor: pointer;
         }
+
         .flashcard.flipped {
             transform: rotateY(180deg);
         }
-        .flashcard-front, .flashcard-back {
+
+        .flashcard-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
-            padding: 20px;
-            box-sizing: border-box;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            font-size: 18px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 20px;
         }
-        .flashcard-front {
-            background-color: #a8e6cf; /* Light green */
-            color: #333;
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        .flashcard-back {
-            background-color: #dcedc1; /* Light blue */
-            color: #333;
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
             transform: rotateY(180deg);
+            text-align: left;
+            overflow-y: auto;
         }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
+        .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
         .controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
         }
+
         button {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
         button:hover {
-            background-color: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
         }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+
+        button:active {
+            transform: translateY(1px);
         }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
         .counter {
-            margin-top: 15px;
-            color: #666;
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 300px;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="flashcard-app">
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book"></i> Vocabulary Flashcards</h1>
+            <p>Master essential English expressions and phrases</p>
+        </header>
+        
         <div class="flashcard-container">
-            <div class="flashcard" id="flashcard" onclick="flipCard()">
-                <div class="flashcard-front" id="front"></div>
-                <div class="flashcard-back" id="back"></div>
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Word</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example sentence will appear here</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
             </div>
         </div>
+        
         <div class="controls">
-            <button id="prevBtn" onclick="prevCard()">Previous</button>
-            <button id="turnBtn" onclick="flipCard()">Turn</button>
-            <button id="shuffleBtn" onclick="shuffleCards()">Shuffle</button>
-            <button id="nextBtn" onclick="nextCard()">Next</button>
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
         </div>
-        <div class="counter" id="counter"></div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">36</span>
+        </div>
     </div>
 
     <script>
         const words = [
-            { word: "To be ranked as", definition: "To be considered at a certain level (Synonym: classified as)" },
-            { word: "The likes of", definition: "Similar people or things (Synonym: such as)" },
-            { word: "To name just a few", definition: "Used when listing examples (Synonym: for example)" },
-            { word: "To be regarded as", definition: "To be seen in a certain way (Synonym: considered as)" },
-            { word: "Outsider (in sports)", definition: "A competitor with little chance of winning (Synonym: underdog)" },
-            { word: "To account for", definition: "To explain or be the reason for (Synonym: justify)" },
-            { word: "Widely publicized", definition: "Known by many people (Synonym: well-known)" },
-            { word: "Former", definition: "Previous (Synonym: ex-)" },
-            { word: "Subtle", definition: "Not obvious, slight (Synonym: faint)" },
-            { word: "Pass unnoticed", definition: "Not seen or noticed" },
-            { word: "Synthetic", definition: "Man-made, not natural (Synonym: artificial)" },
-            { word: "Underestimated", definition: "Not fully recognized in value" },
-            { word: "Modification", definition: "A small change (Synonym: adjustment)" },
-            { word: "Tweak", definition: "A small improvement (Synonym: fine-tuning)" },
-            { word: "Customized", definition: "Made to personal preference (Synonym: personalized)" },
-            { word: "Elite", definition: "The best group (Synonym: top-tier)" },
-            { word: "Readily available", definition: "Easy to get (Synonym: accessible)" },
-            { word: "Specifications", definition: "Detailed requirements (Synonym: details)" },
-            { word: "Customization", definition: "Making something fit personal needs" },
-            { word: "To adjust", definition: "To change slightly (Synonym: adapt)" },
-            { word: "To weigh", definition: "To have a specific weight (Synonym: measure)" },
-            { word: "The line between X and Y becomes thinner and thinner", definition: "The difference gets smaller" },
-            { word: "To date back to", definition: "To have existed since (Synonym: originate from)" },
-            { word: "Equal in significance", definition: "Just as important" },
-            { word: "The former / the latter", definition: "The first or second thing mentioned" },
-            { word: "Climatic conditions", definition: "Weather patterns" },
-            { word: "Gut / intestines", definition: "The digestive system parts" },
-            { word: "Durable", definition: "Long-lasting (Synonym: sturdy)" },
-            { word: "Stiff", definition: "Not flexible (Synonym: rigid)" },
-            { word: "By far", definition: "By a large amount (Synonym: easily)" },
-            { word: "Revolutionise", definition: "To completely change (Synonym: transform)" },
-            { word: "Go beyond X", definition: "To exceed" },
-            { word: "X was attributed to Y", definition: "Y was the cause of X" },
-            { word: "Lead (noun)", definition: "A heavy metal" },
-            { word: "Grips", definition: "The part of equipment designed to be held (Synonym: handles)" },
-            { word: "To anticipate", definition: "To expect (Synonym: predict)" },
-            { word: "Light (adjective)", definition: "Not heavy (Synonym: lightweight)" }
+            { word: "To be ranked as", definition: "To be considered at a certain level", example: "She is ranked as one of the top scientists in her field." },
+            { word: "The likes of", definition: "Similar people or things", example: "We've seen performances by the likes of Beyoncé and Taylor Swift." },
+            { word: "To name just a few", definition: "Used when listing examples", example: "The store sells fruits like apples, bananas, and oranges, to name just a few." },
+            { word: "To be regarded as", definition: "To be seen in a certain way", example: "Einstein is regarded as one of the greatest physicists of all time." },
+            { word: "Outsider (in sports)", definition: "A competitor with little chance of winning", example: "The underdog team was considered an outsider but won the championship." },
+            { word: "To account for", definition: "To explain or be the reason for", example: "How do you account for your absence yesterday?" },
+            { word: "Widely publicized", definition: "Known by many people", example: "The celebrity wedding was a widely publicized event." },
+            { word: "Former", definition: "Previous", example: "The former president visited our school yesterday." },
+            { word: "Subtle", definition: "Not obvious, slight", example: "There was a subtle change in her attitude that few people noticed." },
+            { word: "Pass unnoticed", definition: "Not seen or noticed", example: "The small error passed unnoticed until the product was released." },
+            { word: "Synthetic", definition: "Man-made, not natural", example: "The jacket is made from synthetic materials." },
+            { word: "Underestimated", definition: "Not fully recognized in value", example: "Her talent was underestimated early in her career." },
+            { word: "Modification", definition: "A small change", example: "The car needed some modifications to pass the safety inspection." },
+            { word: "Tweak", definition: "A small improvement", example: "The designer made a tweak to the logo to make it more modern." },
+            { word: "Customized", definition: "Made to personal preference", example: "He ordered a customized computer with special features." },
+            { word: "Elite", definition: "The best group", example: "Only the elite athletes qualify for the Olympics." },
+            { word: "Readily available", definition: "Easy to get", example: "Fresh fruit is readily available in the summer months." },
+            { word: "Specifications", definition: "Detailed requirements", example: "The engineer reviewed the specifications for the new building." },
+            { word: "Customization", definition: "Making something fit personal needs", example: "The software allows for extensive customization." },
+            { word: "To adjust", definition: "To change slightly", example: "You need to adjust the temperature to make it comfortable." },
+            { word: "To weigh", definition: "To have a specific weight", example: "The package weighs about 5 kilograms." },
+            { word: "The line between X and Y becomes thinner and thinner", definition: "The difference gets smaller", example: "With modern technology, the line between science fiction and reality becomes thinner and thinner." },
+            { word: "To date back to", definition: "To have existed since", example: "This tradition dates back to the 18th century." },
+            { word: "Equal in significance", definition: "Just as important", example: "Both discoveries were equal in significance to the scientific community." },
+            { word: "The former / the latter", definition: "The first or second thing mentioned", example: "We have tea and coffee - I prefer the former, while my wife prefers the latter." },
+            { word: "Climatic conditions", definition: "Weather patterns", example: "The plants require specific climatic conditions to thrive." },
+            { word: "Gut / intestines", definition: "The digestive system parts", example: "The doctor examined his intestines for any problems." },
+            { word: "Durable", definition: "Long-lasting", example: "This material is very durable and will last for years." },
+            { word: "Stiff", definition: "Not flexible", example: "After sitting for hours, my back felt stiff." },
+            { word: "By far", definition: "By a large amount", example: "This is by far the best movie I've seen this year." },
+            { word: "Revolutionise", definition: "To completely change", example: "Smartphones have revolutionised the way we communicate." },
+            { word: "Go beyond X", definition: "To exceed", example: "His achievements go beyond what anyone expected." },
+            { word: "X was attributed to Y", definition: "Y was the cause of X", example: "The success of the project was attributed to careful planning." },
+            { word: "Lead (noun)", definition: "A heavy metal", example: "Old paint may contain dangerous levels of lead." },
+            { word: "Grips", definition: "The part of equipment designed to be held", example: "The tennis racket has comfortable rubber grips." },
+            { word: "To anticipate", definition: "To expect", example: "We anticipate that prices will rise next year." },
+            { word: "Light (adjective)", definition: "Not heavy", example: "The suitcase is light enough to carry easily." }
         ];
 
-        let currentCard = 0;
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
         const flashcard = document.getElementById('flashcard');
-        const front = document.getElementById('front');
-        const back = document.getElementById('back');
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const counter = document.getElementById('counter');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
+
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
 
         function updateCard() {
-            front.textContent = words[currentCard].word;
-            back.textContent = words[currentCard].definition;
-            flashcard.classList.remove('flipped');
-            prevBtn.disabled = currentCard === 0;
-            nextBtn.disabled = currentCard === words.length - 1;
-            counter.textContent = `${currentCard + 1}/${words.length}`;
-        }
-
-        function flipCard() {
-            flashcard.classList.toggle('flipped');
-        }
-
-        function nextCard() {
-            if (currentCard < words.length - 1) {
-                currentCard++;
-                updateCard();
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            
+            // Add example if available
+            if (currentWord.example) {
+                exampleElement.textContent = currentWord.example;
+                exampleElement.style.display = 'block';
+            } else {
+                exampleElement.style.display = 'none';
             }
+            
+            currentCountElement.textContent = currentIndex + 1;
         }
 
-        function prevCard() {
-            if (currentCard > 0) {
-                currentCard--;
-                updateCard();
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
             }
-        }
-
-        function shuffleCards() {
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]];
-            }
-            currentCard = 0;
-            updateCard();
-        }
-
-        // Initialize first card
-        updateCard();
+        });
     </script>
 </body>
 </html>
