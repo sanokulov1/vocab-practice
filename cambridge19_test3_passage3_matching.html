@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Matching Game</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --word-color: #e6f7ff;
+            --def-color: #f0fff0;
+            --border-color: #add8e6;
+            --def-border: #90ee90;
+            --selected-color: #b5e8b5;
+            --matched-color: #4CAF50;
+            --incorrect-color: #ff9999;
+            --header-bg: #4CAF50;
+            --header-text: white;
+            --button-color: #4CAF50;
+            --button-hover: #45a049;
+            --shuffle-color: #008CBA;
+            --shuffle-hover: #0077a3;
+        }
+        .night-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --card-bg: #16213e;
+            --word-color: #2a3f5f;
+            --def-color: #1e3d59;
+            --border-color: #3a506b;
+            --def-border: #4a6fa5;
+            --selected-color: #4CAF50;
+            --matched-color: #2d7d46;
+            --incorrect-color: #ff3333;
+            --header-bg: #0f4c75;
+            --header-text: #e6e6e6;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1 {
+            text-align: center;
+            color: var(--header-bg);
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .group {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .group-header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+        }
+        .group-content {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+        }
+        .words-column, .definitions-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .word, .definition {
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .word {
+            background-color: var(--word-color);
+            border: 2px solid var(--border-color);
+        }
+        .definition {
+            background-color: var(--def-color);
+            border: 2px solid var(--def-border);
+        }
+        .word.selected, .definition.selected {
+            background-color: var(--selected-color);
+        }
+        .word.matched, .definition.matched {
+            background-color: var(--matched-color);
+            cursor: default;
+        }
+        .word.incorrect, .definition.incorrect {
+            animation: flashRed 2s;
+        }
+        @keyframes flashRed {
+            0%, 100% { background-color: var(--word-color); border-color: var(--border-color); }
+            50% { background-color: var(--incorrect-color); }
+        }
+        .definition.incorrect {
+            0%, 100% { background-color: var(--def-color); border-color: var(--def-border); }
+            50% { background-color: var(--incorrect-color); }
+        }
+        @media (max-width: 600px) {
+            .group-content {
+                flex-direction: column;
+            }
+            .words-column, .definitions-column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Vocabulary Matching Game</h1>
+    <div class="controls">
+        <button id="shuffleBtn">Shuffle All</button>
+        <button id="nightModeBtn">Night Mode</button>
+    </div>
+    <div class="game-container" id="gameContainer"></div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            { word: "obstacle", definition: "Something that blocks progress (synonym: barrier)" },
+            { word: "to feature", definition: "To include or show something prominently (synonym: highlight)" },
+            { word: "commonplace", definition: "Ordinary or frequently seen (synonym: usual)" },
+            { word: "eye-catching", definition: "Attracting attention (synonym: striking)" },
+            { word: "novelty", definition: "Something new and unusual (synonym: innovation)" },
+            { word: "transparent", definition: "Easy to understand (synonym: clear)" },
+            { word: "inclined to", definition: "Likely to do something (synonym: tend to)" },
+            { word: "entail", definition: "To involve something necessary (synonym: require)" },
+            { word: "prevalent", definition: "Widespread (synonym: common)" },
+            { word: "to take off", definition: "To become successful (synonym: flourish)" },
+            { word: "a long way to go", definition: "Much progress needed (synonym: far from complete)" },
+            { word: "simultaneous", definition: "Happening at the same time (synonym: concurrent)" },
+            { word: "oblige", definition: "To require someone to do something (synonym: compel)" },
+            { word: "apprehensions", definition: "Worries or fears (synonym: concerns)" },
+            { word: "accumulate", definition: "To gather over time (synonym: collect)" },
+            { word: "cloud", definition: "Internet-based storage (synonym: online storage)" },
+            { word: "solemn", definition: "Serious and formal (synonym: dignified)" },
+            { word: "Etiquette-sensitive", definition: "Aware of social rules (synonym: manner-conscious)" },
+            { word: "first-name terms", definition: "Informal relationship (synonym: on a casual basis)" },
+            { word: "outsource", definition: "To have work done externally (synonym: contract out)" },
+            { word: "matures into", definition: "Develops into (synonym: evolves into)" },
+            { word: "seamless", definition: "Smooth without interruptions (synonym: flawless)" },
+            { word: "ubiquitous", definition: "Present everywhere (synonym: omnipresent)" },
+            { word: "a dubbed movie", definition: "Film with replaced voices (synonym: voice-over version)" },
+            { word: "underline", definition: "To emphasize (synonym: highlight)" },
+            { word: "a sense of belonging", definition: "Feeling of acceptance (synonym: inclusion)" },
+            { word: "lingua franca", definition: "Common language (synonym: common tongue)" },
+            { word: "diminish", definition: "To become smaller/less (synonym: decrease)" },
+            { word: "persist", definition: "To continue (synonym: endure)" },
+            { word: "substitute", definition: "Replacement (synonym: alternative)" },
+            { word: "reluctance", definition: "Unwillingness (synonym: hesitation)" }
+        ];
+
+        // Split into 5 groups (6,6,6,6,7)
+        const groups = [
+            vocabulary.slice(0, 6),
+            vocabulary.slice(6, 12),
+            vocabulary.slice(12, 18),
+            vocabulary.slice(18, 24),
+            vocabulary.slice(24)
+        ];
+
+        // Game state
+        let selectedCard = null;
+        let matchedPairs = 0;
+
+        // DOM elements
+        const gameContainer = document.getElementById('gameContainer');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const nightModeBtn = document.getElementById('nightModeBtn');
+
+        // Initialize game
+        function initGame() {
+            gameContainer.innerHTML = '';
+            matchedPairs = 0;
+
+            groups.forEach((group, groupIndex) => {
+                const groupElement = document.createElement('div');
+                groupElement.className = 'group';
+                
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'group-header';
+                groupHeader.textContent = `Group ${groupIndex + 1}`;
+                groupHeader.onclick = () => {
+                    const content = groupElement.querySelector('.group-content');
+                    content.style.display = content.style.display === 'none' ? 'flex' : 'none';
+                };
+                
+                const groupContent = document.createElement('div');
+                groupContent.className = 'group-content';
+                
+                const wordsColumn = document.createElement('div');
+                wordsColumn.className = 'words-column';
+                
+                const definitionsColumn = document.createElement('div');
+                definitionsColumn.className = 'definitions-column';
+
+                // Shuffle the group items
+                const shuffledGroup = [...group].sort(() => Math.random() - 0.5);
+
+                // Add words to left column
+                shuffledGroup.forEach(item => {
+                    const wordElement = document.createElement('div');
+                    wordElement.className = 'word';
+                    wordElement.textContent = item.word;
+                    wordElement.dataset.word = item.word;
+                    wordElement.onclick = () => handleCardClick(wordElement);
+                    wordsColumn.appendChild(wordElement);
+                });
+
+                // Shuffle definitions separately
+                const shuffledDefs = [...group].sort(() => Math.random() - 0.5);
+
+                // Add definitions to right column
+                shuffledDefs.forEach(item => {
+                    const defElement = document.createElement('div');
+                    defElement.className = 'definition';
+                    defElement.textContent = item.definition;
+                    defElement.dataset.word = item.word;
+                    defElement.onclick = () => handleCardClick(defElement);
+                    definitionsColumn.appendChild(defElement);
+                });
+
+                groupContent.appendChild(wordsColumn);
+                groupContent.appendChild(definitionsColumn);
+                groupElement.appendChild(groupHeader);
+                groupElement.appendChild(groupContent);
+                gameContainer.appendChild(groupElement);
+            });
+        }
+
+        // Handle card selection
+        function handleCardClick(card) {
+            // Ignore if already matched or currently incorrect
+            if (card.classList.contains('matched') || card.classList.contains('incorrect')) {
+                return;
+            }
+
+            // If no card is selected, select this one
+            if (!selectedCard) {
+                selectedCard = card;
+                card.classList.add('selected');
+                return;
+            }
+
+            // If same card is clicked twice, deselect it
+            if (selectedCard === card) {
+                selectedCard.classList.remove('selected');
+                selectedCard = null;
+                return;
+            }
+
+            // Check for match
+            const isMatch = selectedCard.dataset.word === card.dataset.word;
+
+            if (isMatch) {
+                // Correct match
+                selectedCard.classList.remove('selected');
+                selectedCard.classList.add('matched');
+                card.classList.add('matched');
+                selectedCard = null;
+                matchedPairs++;
+            } else {
+                // Incorrect match - flash red and reset
+                selectedCard.classList.add('incorrect');
+                card.classList.add('incorrect');
+                
+                // Remove selection and incorrect classes after animation
+                setTimeout(() => {
+                    selectedCard.classList.remove('selected', 'incorrect');
+                    card.classList.remove('incorrect');
+                    selectedCard = null;
+                }, 2000);
+            }
+        }
+
+        // Event listeners
+        shuffleBtn.addEventListener('click', initGame);
+        nightModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            nightModeBtn.textContent = document.body.classList.contains('night-mode') 
+                ? 'Day Mode' 
+                : 'Night Mode';
+        });
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
