@@ -384,7 +384,7 @@
         </div>
         
         <!-- Group 1 (6 words) -->
-        <div class="group-container">
+        <div class="group-container" id="group1">
             <button class="collapsible active">
                 Group 1 (6 words)
                 <i class="fas fa-chevron-down"></i>
@@ -415,7 +415,7 @@
         </div>
         
         <!-- Group 2 (7 words) -->
-        <div class="group-container">
+        <div class="group-container" id="group2">
             <button class="collapsible active">
                 Group 2 (7 words)
                 <i class="fas fa-chevron-down"></i>
@@ -493,15 +493,16 @@
                 }
             });
             
-            // Add click event listeners to words
-            const wordItems = document.querySelectorAll('.word-item');
-            const definitionItems = document.querySelectorAll('.definition-item');
-            
-            wordItems.forEach(word => {
-                word.addEventListener('click', function() {
-                    // Ignore if already matched or if it's the currently selected word
-                    if (this.classList.contains('matched') || 
-                        (selectedWord === this)) {
+            // Add click event listeners using event delegation
+            document.addEventListener('click', function(e) {
+                // Handle word item clicks
+                if (e.target.closest('.word-item') && !e.target.closest('.word-item').classList.contains('matched')) {
+                    const wordItem = e.target.closest('.word-item');
+                    
+                    // Ignore if it's the currently selected word
+                    if (selectedWord === wordItem) {
+                        wordItem.classList.remove('selected');
+                        selectedWord = null;
                         return;
                     }
                     
@@ -511,20 +512,21 @@
                     }
                     
                     // Select this word
-                    this.classList.add('selected');
-                    selectedWord = this;
+                    wordItem.classList.add('selected');
+                    selectedWord = wordItem;
                     
                     // If we have both a word and definition selected, check for match
                     checkMatch();
-                });
-            });
-            
-            // Add click event listeners to definitions
-            definitionItems.forEach(definition => {
-                definition.addEventListener('click', function() {
-                    // Ignore if already matched or if it's the currently selected definition
-                    if (this.classList.contains('matched') || 
-                        (selectedDefinition === this)) {
+                }
+                
+                // Handle definition item clicks
+                if (e.target.closest('.definition-item') && !e.target.closest('.definition-item').classList.contains('matched')) {
+                    const definitionItem = e.target.closest('.definition-item');
+                    
+                    // Ignore if it's the currently selected definition
+                    if (selectedDefinition === definitionItem) {
+                        definitionItem.classList.remove('selected');
+                        selectedDefinition = null;
                         return;
                     }
                     
@@ -534,12 +536,12 @@
                     }
                     
                     // Select this definition
-                    this.classList.add('selected');
-                    selectedDefinition = this;
+                    definitionItem.classList.add('selected');
+                    selectedDefinition = definitionItem;
                     
                     // If we have both a word and definition selected, check for match
                     checkMatch();
-                });
+                }
             });
             
             // Check if the selected word and definition match
@@ -580,7 +582,7 @@
                     }, 2000);
                 }
                 
-                // Reset selection
+                // Reset selection if it's not a match
                 if (wordDefinition !== selectedDefinitionText) {
                     setTimeout(() => {
                         selectedWord = null;
@@ -608,14 +610,32 @@
                 }
             }
             
+            // Shuffle function for items
+            function shuffleItems(container) {
+                const wordItems = Array.from(container.querySelectorAll('.word-item'));
+                const definitionItems = Array.from(container.querySelectorAll('.definition-item'));
+                
+                // Shuffle word items
+                for (let i = wordItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    wordItems[i].parentNode.insertBefore(wordItems[j], wordItems[i].nextSibling);
+                }
+                
+                // Shuffle definition items
+                for (let i = definitionItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    definitionItems[i].parentNode.insertBefore(definitionItems[j], definitionItems[i].nextSibling);
+                }
+            }
+            
             // Reset button functionality
             document.getElementById('reset-btn').addEventListener('click', function() {
                 // Reset all matched items
-                wordItems.forEach(word => {
+                document.querySelectorAll('.word-item').forEach(word => {
                     word.classList.remove('matched', 'selected', 'mismatch');
                 });
                 
-                definitionItems.forEach(definition => {
+                document.querySelectorAll('.definition-item').forEach(definition => {
                     definition.classList.remove('matched', 'selected', 'mismatch');
                 });
                 
@@ -626,43 +646,12 @@
                 // Hide completion message
                 document.getElementById('completion-message').style.display = 'none';
                 
-                // Shuffle definitions
-                shuffleDefinitions();
+                // Shuffle all groups
+                const groups = document.querySelectorAll('.group-container');
+                groups.forEach(group => {
+                    shuffleItems(group);
+                });
             });
-            
-            // Shuffle definitions in each group
-            function shuffleDefinitions() {
-                // Group 1 definitions
-                const group1DefsContainer = document.querySelector('.group-container:first-child .definitions-column');
-                const group1Defs = Array.from(group1DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group1Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group1Defs);
-                group1Defs.forEach(def => group1DefsContainer.appendChild(def));
-                
-                // Group 2 definitions
-                const group2DefsContainer = document.querySelector('.group-container:last-child .definitions-column');
-                const group2Defs = Array.from(group2DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group2Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group2Defs);
-                group2Defs.forEach(def => group2DefsContainer.appendChild(def));
-            }
-            
-            // Shuffle array function
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
             
             // Initialize the game with collapsibles open
             collapsibles.forEach(button => {
@@ -672,47 +661,9 @@
             });
             
             // Initial shuffle
-            shuffleDefinitions();
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... (existing collapsible and sound code remains the same) ...
-
-            // Add this function to shuffle words AND definitions
-            function shuffleGroup(groupContainer) {
-                // Get words column and definitions column
-                const wordsColumn = groupContainer.querySelector('.words-column');
-                const definitionsColumn = groupContainer.querySelector('.definitions-column');
-                
-                // Get word items (excluding title)
-                const wordItems = Array.from(wordsColumn.querySelectorAll('.word-item'));
-                
-                // Get definition items (excluding title)
-                const definitionItems = Array.from(definitionsColumn.querySelectorAll('.definition-item'));
-                
-                // Shuffle both arrays
-                shuffleArray(wordItems);
-                shuffleArray(definitionItems);
-                
-                // Clear existing items (keep title)
-                wordItems.forEach(item => wordsColumn.appendChild(item));
-                definitionItems.forEach(item => definitionsColumn.appendChild(item));
-            }
-
-            // Update the reset button functionality
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                // ... (existing reset code) ...
-                
-                // Shuffle words AND definitions in each group
-                document.querySelectorAll('.group-container').forEach(group => {
-                    shuffleGroup(group);
-                });
-            });
-
-            // ... (existing match checking and completion code) ...
-
-            // Initialize the game with shuffled items
-            document.querySelectorAll('.group-container').forEach(group => {
-                shuffleGroup(group);
+            const groups = document.querySelectorAll('.group-container');
+            groups.forEach(group => {
+                shuffleItems(group);
             });
         });
     </script>
