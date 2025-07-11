@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Matching Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 25px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            color: #2a4d69;
+            padding: 0 15px;
+            line-height: 1.6;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .instructions::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            margin: 15px auto;
+            border-radius: 3px;
+        }
+        
+        .group-container {
+            margin-bottom: 25px;
+            background: #f0f9ff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #d1ecff;
+        }
+        
+        .group-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .collapsible {
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .collapsible:hover {
+            background: linear-gradient(to right, #3a75a0, #1e3d54);
+        }
+        
+        .collapsible i {
+            transition: transform 0.3s ease;
+        }
+        
+        .collapsible.active i {
+            transform: rotate(180deg);
+        }
+        
+        .content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: white;
+        }
+        
+        .matching-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 0;
+            justify-content: center;
+        }
+        
+        .words-column, .definitions-column {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .column-title {
+            text-align: center;
+            padding: 12px;
+            background: #2a4d69;
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+        }
+        
+        .word-item, .definition-item {
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .word-item {
+            background: #e1f5fe;
+            border: 2px solid #4b86b4;
+            color: #1e3d54;
+        }
+        
+        .definition-item {
+            background: #fffde7;
+            border: 2px solid #ffca28;
+            color: #5d4037;
+        }
+        
+        .word-item::before, .definition-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #4b86b4;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .definition-item::before {
+            background: #ffca28;
+        }
+        
+        .word-item:hover, .definition-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .word-item:hover::before, .definition-item:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .word-item.selected, .definition-item.selected {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(75, 134, 180, 0.5);
+            z-index: 10;
+        }
+        
+        .word-item.selected::before, .definition-item.selected::before {
+            transform: scaleX(1);
+        }
+        
+        .word-item.matched {
+            background: #e8f5e9;
+            border-color: #66bb6a;
+            color: #1b5e20;
+        }
+        
+        .definition-item.matched {
+            background: #e8f5e9;
+            border-color: #66bb6a;
+            color: #1b5e20;
+        }
+        
+        .word-item.matched::before, .definition-item.matched::before {
+            background: #66bb6a;
+            transform: scaleX(1);
+        }
+        
+        .word-item.mismatch, .definition-item.mismatch {
+            background: #ffebee;
+            border-color: #ef5350;
+            color: #b71c1c;
+            animation: shake 0.5s;
+        }
+        
+        .word-item.mismatch::before, .definition-item.mismatch::before {
+            background: #ef5350;
+            transform: scaleX(1);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 25px auto;
+            padding: 14px 35px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reset-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .reset-btn:hover::before {
+            left: 100%;
+        }
+        
+        .completion-message {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: 10px;
+            display: none;
+            border: 2px dashed #4b86b4;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .sound-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .matching-area {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .collapsible {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .word-item, .definition-item {
+                padding: 14px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-language"></i> Vocabulary Matching Game</h1>
+            <p>Match words with their definitions</p>
+            <button class="sound-toggle" id="sound-toggle">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </header>
+        
+        <div class="instructions">
+            <p>Tap on a word and then its definition to make a match. Correct matches turn green, incorrect matches flash red for 2 seconds.</p>
+        </div>
+        
+        <!-- Group 1 (6 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 1 (6 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="Knock-on effects" data-definition="Indirect consequences or chain reactions">Knock-on effects</div>
+                        <div class="word-item" data-word="Prey" data-definition="An animal hunted by another for food">Prey</div>
+                        <div class="word-item" data-word="To arm" data-definition="To equip or prepare with knowledge or tools">To arm</div>
+                        <div class="word-item" data-word="To halt" data-definition="To stop or bring to a pause">To halt</div>
+                        <div class="word-item" data-word="To reverse" data-definition="To change something to the opposite direction or undo">To reverse</div>
+                        <div class="word-item" data-word="To reproduce" data-definition="To have babies or make copies">To reproduce</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="To have babies or make copies">To have babies or make copies</div>
+                        <div class="definition-item" data-definition="To change something to the opposite direction or undo">To change something to the opposite direction or undo</div>
+                        <div class="definition-item" data-definition="To stop or bring to a pause">To stop or bring to a pause</div>
+                        <div class="definition-item" data-definition="To equip or prepare with knowledge or tools">To equip or prepare with knowledge or tools</div>
+                        <div class="definition-item" data-definition="An animal hunted by another for food">An animal hunted by another for food</div>
+                        <div class="definition-item" data-definition="Indirect consequences or chain reactions">Indirect consequences or chain reactions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 2 (7 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 2 (7 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="To keep in line with" data-definition="To match or stay the same as">To keep in line with</div>
+                        <div class="word-item" data-word="To be equipped" data-definition="To have the necessary tools or skills">To be equipped</div>
+                        <div class="word-item" data-word="Abundance" data-definition="A large quantity or plenty">Abundance</div>
+                        <div class="word-item" data-word="Emergence" data-definition="When something appears or starts">Emergence</div>
+                        <div class="word-item" data-word="Restricted to" data-definition="Only allowed in a certain way">Restricted to</div>
+                        <div class="word-item" data-word="Sole" data-definition="Only; single">Sole</div>
+                        <div class="word-item" data-word="To spot" data-definition="To notice or detect">To spot</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="To match or stay the same as">To match or stay the same as</div>
+                        <div class="definition-item" data-definition="To notice or detect">To notice or detect</div>
+                        <div class="definition-item" data-definition="Only; single">Only; single</div>
+                        <div class="definition-item" data-definition="Only allowed in a certain way">Only allowed in a certain way</div>
+                        <div class="definition-item" data-definition="When something appears or starts">When something appears or starts</div>
+                        <div class="definition-item" data-definition="A large quantity or plenty">A large quantity or plenty</div>
+                        <div class="definition-item" data-definition="To have the necessary tools or skills">To have the necessary tools or skills</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="completion-message" id="completion-message">
+            <i class="fas fa-trophy"></i> Congratulations! You've matched all words!
+        </div>
+        
+        <button class="reset-btn" id="reset-btn">
+            <i class="fas fa-sync-alt"></i> Reset Game
+        </button>
+    </div>
+
+    <audio id="correct-sound" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/cash-register-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Collapsible functionality
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+            
+            // Game state
+            let selectedWord = null;
+            let selectedDefinition = null;
+            let soundEnabled = true;
+            const correctSound = document.getElementById('correct-sound');
+            
+            // Sound toggle
+            const soundToggle = document.getElementById('sound-toggle');
+            soundToggle.addEventListener('click', function() {
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    this.innerHTML = '<i class="fas fa-volume-up"></i>';
+                } else {
+                    this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                }
+            });
+            
+            // Add click event listeners to words
+            const wordItems = document.querySelectorAll('.word-item');
+            const definitionItems = document.querySelectorAll('.definition-item');
+            
+            wordItems.forEach(word => {
+                word.addEventListener('click', function() {
+                    // Ignore if already matched or if it's the currently selected word
+                    if (this.classList.contains('matched') || 
+                        (selectedWord === this)) {
+                        return;
+                    }
+                    
+                    // Deselect previous word if any
+                    if (selectedWord) {
+                        selectedWord.classList.remove('selected');
+                    }
+                    
+                    // Select this word
+                    this.classList.add('selected');
+                    selectedWord = this;
+                    
+                    // If we have both a word and definition selected, check for match
+                    checkMatch();
+                });
+            });
+            
+            // Add click event listeners to definitions
+            definitionItems.forEach(definition => {
+                definition.addEventListener('click', function() {
+                    // Ignore if already matched or if it's the currently selected definition
+                    if (this.classList.contains('matched') || 
+                        (selectedDefinition === this)) {
+                        return;
+                    }
+                    
+                    // Deselect previous definition if any
+                    if (selectedDefinition) {
+                        selectedDefinition.classList.remove('selected');
+                    }
+                    
+                    // Select this definition
+                    this.classList.add('selected');
+                    selectedDefinition = this;
+                    
+                    // If we have both a word and definition selected, check for match
+                    checkMatch();
+                });
+            });
+            
+            // Check if the selected word and definition match
+            function checkMatch() {
+                if (!selectedWord || !selectedDefinition) return;
+                
+                // Get the word and definition data
+                const wordDefinition = selectedWord.getAttribute('data-definition');
+                const selectedDefinitionText = selectedDefinition.getAttribute('data-definition');
+                
+                // Check if they match
+                if (wordDefinition === selectedDefinitionText) {
+                    // Correct match - mark them as matched
+                    selectedWord.classList.add('matched');
+                    selectedDefinition.classList.add('matched');
+                    selectedWord.classList.remove('selected');
+                    selectedDefinition.classList.remove('selected');
+                    
+                    // Play cash sound if enabled
+                    if (soundEnabled) {
+                        correctSound.currentTime = 0;
+                        correctSound.play().catch(e => console.log("Sound playback failed:", e));
+                    }
+                    
+                    // Check for game completion
+                    checkCompletion();
+                } else {
+                    // Incorrect match - show error temporarily
+                    selectedWord.classList.add('mismatch');
+                    selectedDefinition.classList.add('mismatch');
+                    
+                    // Remove the mismatch class after 2 seconds
+                    setTimeout(() => {
+                        selectedWord.classList.remove('mismatch', 'selected');
+                        selectedDefinition.classList.remove('mismatch', 'selected');
+                        selectedWord = null;
+                        selectedDefinition = null;
+                    }, 2000);
+                }
+                
+                // Reset selection
+                if (wordDefinition !== selectedDefinitionText) {
+                    setTimeout(() => {
+                        selectedWord = null;
+                        selectedDefinition = null;
+                    }, 2000);
+                } else {
+                    selectedWord = null;
+                    selectedDefinition = null;
+                }
+            }
+            
+            // Check for game completion
+            function checkCompletion() {
+                const allWords = document.querySelectorAll('.word-item');
+                let allMatched = true;
+                
+                allWords.forEach(word => {
+                    if (!word.classList.contains('matched')) {
+                        allMatched = false;
+                    }
+                });
+                
+                if (allMatched) {
+                    document.getElementById('completion-message').style.display = 'block';
+                }
+            }
+            
+            // Reset button functionality
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                // Reset all matched items
+                wordItems.forEach(word => {
+                    word.classList.remove('matched', 'selected', 'mismatch');
+                });
+                
+                definitionItems.forEach(definition => {
+                    definition.classList.remove('matched', 'selected', 'mismatch');
+                });
+                
+                // Clear selection
+                selectedWord = null;
+                selectedDefinition = null;
+                
+                // Hide completion message
+                document.getElementById('completion-message').style.display = 'none';
+                
+                // Shuffle definitions
+                shuffleDefinitions();
+            });
+            
+            // Shuffle definitions in each group
+            function shuffleDefinitions() {
+                // Group 1 definitions
+                const group1DefsContainer = document.querySelector('.group-container:first-child .definitions-column');
+                const group1Defs = Array.from(group1DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group1Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group1Defs);
+                group1Defs.forEach(def => group1DefsContainer.appendChild(def));
+                
+                // Group 2 definitions
+                const group2DefsContainer = document.querySelector('.group-container:last-child .definitions-column');
+                const group2Defs = Array.from(group2DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group2Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group2Defs);
+                group2Defs.forEach(def => group2DefsContainer.appendChild(def));
+            }
+            
+            // Shuffle array function
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Initialize the game with collapsibles open
+            collapsibles.forEach(button => {
+                button.classList.add('active');
+                const content = button.nextElementSibling;
+                content.style.maxHeight = content.scrollHeight + "px";
+            });
+            
+            // Initial shuffle
+            shuffleDefinitions();
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... (existing collapsible and sound code remains the same) ...
+
+            // Add this function to shuffle words AND definitions
+            function shuffleGroup(groupContainer) {
+                // Get words column and definitions column
+                const wordsColumn = groupContainer.querySelector('.words-column');
+                const definitionsColumn = groupContainer.querySelector('.definitions-column');
+                
+                // Get word items (excluding title)
+                const wordItems = Array.from(wordsColumn.querySelectorAll('.word-item'));
+                
+                // Get definition items (excluding title)
+                const definitionItems = Array.from(definitionsColumn.querySelectorAll('.definition-item'));
+                
+                // Shuffle both arrays
+                shuffleArray(wordItems);
+                shuffleArray(definitionItems);
+                
+                // Clear existing items (keep title)
+                wordItems.forEach(item => wordsColumn.appendChild(item));
+                definitionItems.forEach(item => definitionsColumn.appendChild(item));
+            }
+
+            // Update the reset button functionality
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                // ... (existing reset code) ...
+                
+                // Shuffle words AND definitions in each group
+                document.querySelectorAll('.group-container').forEach(group => {
+                    shuffleGroup(group);
+                });
+            });
+
+            // ... (existing match checking and completion code) ...
+
+            // Initialize the game with shuffled items
+            document.querySelectorAll('.group-container').forEach(group => {
+                shuffleGroup(group);
+            });
+        });
+    </script>
+</body>
+</html>
