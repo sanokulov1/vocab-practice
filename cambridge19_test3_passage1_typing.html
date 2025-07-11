@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Typing Challenge</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --primary-color: #add8e6;
+            --secondary-color: #e6f7ff;
+            --selected-color: #90ee90;
+            --correct-color: #b5e8b5;
+            --incorrect-color: #ffcccb;
+            --button-color: #4CAF50;
+            --button-text: white;
+            --input-border: #add8e6;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: var(--button-color);
+            color: var(--button-text);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .question {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--input-border);
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .feedback {
+            min-height: 24px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .correct {
+            color: var(--correct-color);
+        }
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+        .results {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+        }
+        .wrong-answers {
+            margin-top: 15px;
+        }
+        .wrong-answer {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: var(--incorrect-color);
+            border-radius: 5px;
+        }
+        @media (max-width: 600px) {
+            .quiz-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="controls">
+            <button id="newQuizBtn">New Challenge</button>
+        </div>
+        <div class="progress" id="progress"></div>
+        <div class="question" id="question"></div>
+        <input type="text" class="answer-input" id="answerInput" placeholder="Type the word here...">
+        <div class="feedback" id="feedback"></div>
+        <div class="controls">
+            <button id="prevBtn" disabled>← Previous</button>
+            <button id="nextBtn">Next →</button>
+            <button id="submitBtn" style="display: none;">Submit Answers</button>
+        </div>
+        <div class="results" id="results">
+            <h2>Your Results</h2>
+            <p id="score"></p>
+            <div class="wrong-answers" id="wrongAnswers"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced vocabulary data with comprehensive answer options
+        const vocabulary = [
+            { 
+                word: "adept", 
+                definition: "Highly skilled (synonym: proficient).",
+                validAnswers: ["adept", "adeptly", "adeptness", "adepts"]
+            },
+            { 
+                word: "forage", 
+                definition: "To search for food (synonym: scavenge).",
+                validAnswers: ["forage", "forages", "foraged", "foraging", "forager", "foragers"]
+            },
+            { 
+                word: "disperse", 
+                definition: "To spread out over a wide area (synonym: scatter).",
+                validAnswers: ["disperse", "disperses", "dispersed", "dispersing", "to disperse", "dispersion", "dispersal"]
+            },
+            { 
+                word: "archipelago", 
+                definition: "A group of islands.",
+                validAnswers: ["archipelago", "archipelagos"]
+            },
+            { 
+                word: "stepping stones", 
+                definition: "A means of progress or stages in a process (synonym: milestones).",
+                validAnswers: ["stepping stones", "stepping stone", "stepping-stones", "stepping-stone"]
+            },
+            { 
+                word: "remote", 
+                definition: "Far away, isolated (synonym: distant).",
+                validAnswers: ["remote", "remotely", "remoteness", "remoter", "remotest"]
+            },
+            { 
+                word: "fragments", 
+                definition: "Small broken pieces (synonym: shards).",
+                validAnswers: ["fragments", "fragment", "fragmented", "fragmenting", "fragmentation"]
+            },
+            { 
+                word: "impenetrable", 
+                definition: "Impossible to pass through (synonym: dense).",
+                validAnswers: ["impenetrable", "impenetrably", "impenetrability"]
+            },
+            { 
+                word: "encompass", 
+                definition: "To include or surround (synonym: contain).",
+                validAnswers: ["encompass", "encompasses", "encompassed", "encompassing", "encompassment"]
+            },
+            { 
+                word: "coincidence", 
+                definition: "A chance occurrence of events.",
+                validAnswers: ["coincidence", "coincidences", "coincidental", "coincidentally"]
+            },
+            { 
+                word: "grind", 
+                definition: "To crush into powder or sharpen by friction.",
+                validAnswers: ["grind", "grinds", "ground", "grinding", "to grind", "grinder", "grinders"]
+            },
+            { 
+                word: "unearth", 
+                definition: "To dig up or discover (synonym: excavate).",
+                validAnswers: ["unearth", "unearths", "unearthed", "unearthing", "to unearth"]
+            },
+            { 
+                word: "routinely", 
+                definition: "Done regularly (synonym: habitually).",
+                validAnswers: ["routinely", "routine", "routines", "routinize", "routinized"]
+            },
+            { 
+                word: "abandon", 
+                definition: "To leave permanently (synonym: desert).",
+                validAnswers: ["abandon", "abandons", "abandoned", "abandoning", "to abandon", "abandonment"]
+            },
+            { 
+                word: "departure", 
+                definition: "The act of leaving (synonym: exit).",
+                validAnswers: ["departure", "departures", "depart", "departs", "departed", "departing"]
+            }
+        ];
+
+        // Quiz state
+        let currentQuestion = 0;
+        let quizData = [];
+        let userAnswers = [];
+        let score = 0;
+        let wrongAnswers = [];
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const answerInput = document.getElementById('answerInput');
+        const feedbackElement = document.getElementById('feedback');
+        const progressElement = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultsElement = document.getElementById('results');
+        const scoreElement = document.getElementById('score');
+        const wrongAnswersElement = document.getElementById('wrongAnswers');
+        const newQuizBtn = document.getElementById('newQuizBtn');
+
+        // Initialize quiz
+        function initQuiz() {
+            currentQuestion = 0;
+            quizData = [];
+            userAnswers = Array(10).fill('');
+            score = 0;
+            wrongAnswers = [];
+            
+            // Select 10 random words
+            const selectedWords = [...vocabulary];
+            shuffleArray(selectedWords);
+            quizData = selectedWords.slice(0, 10);
+            
+            // Reset UI
+            resultsElement.style.display = 'none';
+            answerInput.value = '';
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            
+            showQuestion();
+        }
+
+        // Show current question
+        function showQuestion() {
+            progressElement.textContent = `Question ${currentQuestion + 1} of 10`;
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = currentQuestion === 9;
+            submitBtn.style.display = currentQuestion === 9 ? 'block' : 'none';
+            
+            const currentQ = quizData[currentQuestion];
+            questionElement.textContent = currentQ.definition;
+            answerInput.value = userAnswers[currentQuestion] || '';
+            answerInput.focus();
+            
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+        }
+
+        // Check answer when moving to next question
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const currentQ = quizData[currentQuestion];
+            
+            userAnswers[currentQuestion] = userAnswer;
+            
+            if (userAnswer) {
+                const isCorrect = currentQ.validAnswers.includes(userAnswer);
+                
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.className = 'feedback correct';
+                } else {
+                    feedbackElement.textContent = 'Try again!';
+                    feedbackElement.className = 'feedback incorrect';
+                }
+            }
+        }
+
+        // Show results
+        function showResults() {
+            score = 0;
+            wrongAnswers = [];
+            
+            quizData.forEach((question, qIndex) => {
+                const userAnswer = userAnswers[qIndex].trim().toLowerCase();
+                if (userAnswer) {
+                    const isCorrect = question.validAnswers.includes(userAnswer);
+                    
+                    if (isCorrect) {
+                        score++;
+                    } else {
+                        wrongAnswers.push({
+                            definition: question.definition,
+                            correct: question.word,
+                            chosen: userAnswer
+                        });
+                    }
+                }
+            });
+            
+            scoreElement.textContent = `You got ${score} out of 10 correct!`;
+            wrongAnswersElement.innerHTML = '';
+            
+            if (wrongAnswers.length > 0) {
+                wrongAnswersElement.innerHTML = '<h3>Review these words:</h3>';
+                wrongAnswers.forEach(answer => {
+                    const answerElement = document.createElement('div');
+                    answerElement.className = 'wrong-answer';
+                    answerElement.innerHTML = `
+                        <p><strong>Definition:</strong> ${answer.definition}</p>
+                        <p><em>Correct:</em> ${answer.correct}</p>
+                        <p><em>You typed:</em> ${answer.chosen}</p>
+                        <p><em>Acceptable answers:</em> ${vocabulary.find(v => v.word === answer.correct).validAnswers.join(', ')}</p>
+                    `;
+                    wrongAnswersElement.appendChild(answerElement);
+                });
+            }
+            
+            resultsElement.style.display = 'block';
+        }
+
+        // Helper function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', () => {
+            checkAnswer();
+            if (currentQuestion < 9) {
+                currentQuestion++;
+                showQuestion();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            checkAnswer();
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            checkAnswer();
+            showResults();
+        });
+
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+                if (currentQuestion < 9) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    showResults();
+                }
+            }
+        });
+
+        newQuizBtn.addEventListener('click', initQuiz);
+
+        // Start the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
