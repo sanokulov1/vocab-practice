@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e6f7ff; /* Light blue */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #0a192f; /* Dark blue */
+            color: #f0f0f0;
+        }
+
+        .flashcard-container {
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            perspective: 1000px; /* For 3D flip effect */
+        }
+
+        .flashcard {
+            background-color: #b3e0ff; /* Light blue */
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .dark-mode .flashcard {
+            background-color: #ccd6f6; /* Light blue-grey */
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .word, .definition, .example {
+            backface-visibility: hidden;
+        }
+
+        .word {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .definition {
+            font-size: 18px;
+            transform: rotateY(180deg);
+            position: absolute;
+            display: none;
+        }
+
+        .example {
+            font-style: italic;
+            color: #555;
+            margin-top: 10px;
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 60%;
+            display: none;
+        }
+
+        .dark-mode .example {
+            color: #a8b2d1;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+        }
+
+        .dark-mode button {
+            background-color: #1f7a8c;
+        }
+
+        .dark-mode button:hover {
+            background-color: #2a9d8f;
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">Dark Mode</button>
+    <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+            <div class="word" id="word">Word</div>
+            <div class="definition" id="definition">Definition</div>
+            <div class="example" id="example">Example</div>
+        </div>
+        <div class="controls">
+            <button id="prevBtn">Previous</button>
+            <button id="shuffleBtn">Shuffle</button>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { word: "Knock-on effects", definition: "Indirect consequences or chain reactions.", example: "Pollution has knock-on effects for both humans and animals." },
+            { word: "Prey", definition: "An animal hunted by another for food.", example: "The lion chased its prey across the savannah." },
+            { word: "To arm", definition: "To equip or prepare with knowledge or tools.", example: "She armed herself with facts before the debate." },
+            { word: "To halt", definition: "To stop or bring to a pause.", example: "The construction was halted due to bad weather." },
+            { word: "To reverse", definition: "To change something to the opposite direction or undo.", example: "The court reversed its earlier decision." },
+            { word: "To reproduce", definition: "To have babies or make copies.", example: "Rabbits reproduce quickly." },
+            { word: "To keep in line with", definition: "To match or stay the same as.", example: "Prices were kept in line with inflation." },
+            { word: "To be equipped", definition: "To have the necessary tools or skills.", example: "The team was well-equipped for the challenge." },
+            { word: "Abundance", definition: "A large quantity or plenty.", example: "There was an abundance of food at the party." },
+            { word: "Emergence", definition: "When something appears or starts.", example: "The emergence of smartphones changed communication." },
+            { word: "Restricted to", definition: "Only allowed in a certain way.", example: "The area was restricted to staff only." },
+            { word: "Sole", definition: "Only; single.", example: "She was the sole survivor of the accident." },
+            { word: "To spot", definition: "To notice or detect.", example: "He spotted a rare bird in the tree." }
+        ];
+
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
+        const flashcard = document.getElementById('flashcard');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            exampleElement.textContent = currentWord.example;
+            flashcard.classList.remove('flipped');
+            definitionElement.style.display = 'none';
+            exampleElement.style.display = 'none';
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+            if (flashcard.classList.contains('flipped')) {
+                definitionElement.style.display = 'block';
+                exampleElement.style.display = 'block';
+            } else {
+                setTimeout(() => {
+                    definitionElement.style.display = 'none';
+                    exampleElement.style.display = 'none';
+                }, 500); // Wait for flip animation
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>
