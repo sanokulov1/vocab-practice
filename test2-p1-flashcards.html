@@ -48,7 +48,7 @@
         .flashcard-container {
             perspective: 1000px;
             margin-bottom: 30px;
-            height: 320px;
+            height: 350px;
         }
 
         .flashcard {
@@ -240,7 +240,7 @@
 
         @media (max-width: 600px) {
             .flashcard-container {
-                height: 300px;
+                height: 350px;
             }
             
             h1 {
@@ -280,6 +280,7 @@
                 </div>
                 <div class="flashcard-face back">
                     <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example sentence will appear here</div>
                     <div class="hint">Click to flip back</div>
                 </div>
             </div>
@@ -298,29 +299,121 @@
 
     <script>
         const words = [
-            { word: "To craft", definition: "To make something skillfully by hand" },
-            { word: "Motion", definition: "Movement" },
-            { word: "Prior to", definition: "Before" },
-            { word: "Labour", definition: "Work, especially physical work" },
-            { word: "Meet someone's demand", definition: "To provide enough of what people need or want" },
-            { word: "To adopt", definition: "To start using something new" },
-            { word: "In response to", definition: "As a reaction to something" },
-            { word: "Expand", definition: "To grow larger or increase" },
-            { word: "To patent", definition: "To get legal rights for an invention so others can't copy it" },
-            { word: "Collision", definition: "When two things crash into each other" },
-            { word: "Immense", definition: "Very large or great" },
-            { word: "To accelerate", definition: "To speed up or happen faster" },
-            { word: "Inadequate sanitation", definition: "Poor or unhealthy cleanliness conditions" },
-            { word: "Economic output", definition: "The total amount of goods and services produced" },
-            { word: "To fuel", definition: "To supply energy or make something stronger" },
-            { word: "To object", definition: "To disagree or protest against something" },
-            { word: "To rob someone of their livelihood", definition: "To take away a person's way of earning money" },
-            { word: "Desperate", definition: "Feeling hopeless and ready to do anything" },
-            { word: "To wreck", definition: "To destroy or damage badly" },
-            { word: "Uprising", definition: "A rebellion or protest against authority" },
-            { word: "Unrest", definition: "A state of anger or protest among people" },
-            { word: "All but", definition: "Almost completely" },
-            { word: "Vanish", definition: "To disappear completely" }
+            { 
+                word: "To craft", 
+                definition: "To make something skillfully by hand",
+                example: "Artisans would craft intricate furniture before factories existed."
+            },
+            { 
+                word: "Motion", 
+                definition: "Movement",
+                example: "Steam engines converted heat into mechanical motion."
+            },
+            { 
+                word: "Prior to", 
+                definition: "Before",
+                example: "Prior to industrialization, most people lived in rural areas."
+            },
+            { 
+                word: "Labour", 
+                definition: "Work, especially physical work",
+                example: "Factory labour was often dangerous and exhausting."
+            },
+            { 
+                word: "Meet someone's demand", 
+                definition: "To provide enough of what people need or want",
+                example: "New factories were built to meet the growing demand for textiles."
+            },
+            { 
+                word: "To adopt", 
+                definition: "To start using something new",
+                example: "Many industries were slow to adopt steam power."
+            },
+            { 
+                word: "In response to", 
+                definition: "As a reaction to something",
+                example: "In response to poor conditions, workers formed unions."
+            },
+            { 
+                word: "Expand", 
+                definition: "To grow larger or increase",
+                example: "Railway networks expanded rapidly during the 19th century."
+            },
+            { 
+                word: "To patent", 
+                definition: "To get legal rights for an invention so others can't copy it",
+                example: "James Watt patented his improvements to the steam engine."
+            },
+            { 
+                word: "Collision", 
+                definition: "When two things crash into each other",
+                example: "Early trains had frequent collisions due to primitive signaling."
+            },
+            { 
+                word: "Immense", 
+                definition: "Very large or great",
+                example: "Coal mining created immense wealth for some industrialists."
+            },
+            { 
+                word: "To accelerate", 
+                definition: "To speed up or happen faster",
+                example: "New technologies accelerated the pace of industrialization."
+            },
+            { 
+                word: "Inadequate sanitation", 
+                definition: "Poor or unhealthy cleanliness conditions",
+                example: "Industrial cities suffered from inadequate sanitation systems."
+            },
+            { 
+                word: "Economic output", 
+                definition: "The total amount of goods and services produced",
+                example: "Britain's economic output doubled during the Industrial Revolution."
+            },
+            { 
+                word: "To fuel", 
+                definition: "To supply energy or make something stronger",
+                example: "Coal fueled the factories and steam engines of the era."
+            },
+            { 
+                word: "To object", 
+                definition: "To disagree or protest against something",
+                example: "Workers began to object to 16-hour workdays."
+            },
+            { 
+                word: "To rob someone of their livelihood", 
+                definition: "To take away a person's way of earning money",
+                example: "Power looms robbed many hand weavers of their livelihood."
+            },
+            { 
+                word: "Desperate", 
+                definition: "Feeling hopeless and ready to do anything",
+                example: "Desperate families sent children to work in factories."
+            },
+            { 
+                word: "To wreck", 
+                definition: "To destroy or damage badly",
+                example: "Luddites tried to wreck machinery that threatened their jobs."
+            },
+            { 
+                word: "Uprising", 
+                definition: "A rebellion or protest against authority",
+                example: "The Peterloo Massacre followed a workers' uprising in Manchester."
+            },
+            { 
+                word: "Unrest", 
+                definition: "A state of anger or protest among people",
+                example: "Social unrest grew as wealth inequality increased."
+            },
+            { 
+                word: "All but", 
+                definition: "Almost completely",
+                example: "Steam power all but replaced water wheels by the 1850s."
+            },
+            { 
+                word: "Vanish", 
+                definition: "To disappear completely",
+                example: "Traditional cottage industries began to vanish as factories grew."
+            }
         ];
 
         let currentIndex = 0;
@@ -330,6 +423,7 @@
         const flashcard = document.getElementById('flashcard');
         const wordElement = document.getElementById('word');
         const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const shuffleBtn = document.getElementById('shuffleBtn');
@@ -391,6 +485,7 @@
             const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
             wordElement.textContent = currentWord.word;
             definitionElement.textContent = currentWord.definition;
+            exampleElement.textContent = currentWord.example;
             currentCountElement.textContent = currentIndex + 1;
         }
 
