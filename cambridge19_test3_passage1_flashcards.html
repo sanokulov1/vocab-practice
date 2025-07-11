@@ -3,138 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Flashcards</title>
+    <title>Geography Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f8ff;
-            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
+            padding: 20px;
         }
-        .flashcard-container {
-            width: 400px;
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #6a5acd, #9370db);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
             text-align: center;
         }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 350px;
+        }
+
         .flashcard {
             width: 100%;
-            height: 200px;
-            perspective: 1000px;
-            margin-bottom: 20px;
-        }
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
             height: 100%;
-            transition: transform 0.6s;
+            position: relative;
             transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             cursor: pointer;
         }
-        .flashcard.flipped .flashcard-inner {
+
+        .flashcard.flipped {
             transform: rotateY(180deg);
         }
-        .flashcard-front, .flashcard-back {
+
+        .flashcard-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
-            padding: 20px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 30px;
+            border-radius: 20px;
         }
-        .flashcard-front {
-            background-color: #add8e6; /* Light blue */
-            color: #333;
-            font-weight: bold;
-            font-size: 1.5em;
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        .flashcard-back {
-            background-color: #90ee90; /* Light green */
-            color: #333;
+
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8);
+            color: #000;
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
             transform: rotateY(180deg);
-            font-size: 1.1em;
+            text-align: left;
+            overflow-y: auto;
         }
+
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            color: #000;
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
         .example {
-            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #7f8c8d;
             font-style: italic;
-            color: #555;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
         }
+
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
         .controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
         }
+
         button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
         button:hover {
-            background-color: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
         }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 350px;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="flashcard-container">
-        <div class="flashcard" id="flashcard">
-            <div class="flashcard-inner">
-                <div class="flashcard-front" id="word"></div>
-                <div class="flashcard-back" id="definition"></div>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Geography Term</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
             </div>
         </div>
+        
         <div class="controls">
-            <button id="prevBtn">Previous</button>
-            <button id="shuffleBtn">Shuffle</button>
-            <button id="nextBtn">Next</button>
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">15</span>
         </div>
     </div>
 
     <script>
-        const flashcards = [
-            { word: "adept", definition: "Highly skilled (synonym: proficient).", example: "She is adept at playing the piano." },
-            { word: "forage", definition: "To search for food (synonym: scavenge).", example: "Deer often forage for grass in the forest." },
-            { word: "to disperse", definition: "To spread out over a wide area (synonym: scatter).", example: "The crowd began to disperse after the concert." },
-            { word: "archipelago", definition: "A group of islands.", example: "The Philippines is a large archipelago in Southeast Asia." },
-            { word: "stepping stones", definition: "A means of progress or stages in a process (synonym: milestones).", example: "Small jobs can be stepping stones to a bigger career." },
-            { word: "remote", definition: "Far away, isolated (synonym: distant).", example: "They live in a remote village in the mountains." },
-            { word: "fragments", definition: "Small broken pieces (synonym: shards).", example: "The vase fell and shattered into fragments." },
-            { word: "impenetrable", definition: "Impossible to pass through (synonym: dense).", example: "The jungle was so thick it was almost impenetrable." },
-            { word: "encompass", definition: "To include or surround (synonym: contain).", example: "The report will encompass all major issues." },
-            { word: "coincidence", definition: "A chance occurrence of events.", example: "Running into her at the airport was a coincidence." },
-            { word: "to grind", definition: "To crush into powder or sharpen by friction.", example: "He used a stone to grind the wheat into flour." },
-            { word: "to unearth", definition: "To dig up or discover (synonym: excavate).", example: "Archaeologists unearthed ancient pottery at the site." },
-            { word: "routinely", definition: "Done regularly (synonym: habitually).", example: "She routinely checks her emails in the morning." },
-            { word: "to abandon", definition: "To leave permanently (synonym: desert).", example: "They had to abandon the sinking ship." },
-            { word: "departure", definition: "The act of leaving (synonym: exit).", example: "His sudden departure surprised everyone." }
+        const words = [
+            { 
+                word: "adept", 
+                definition: "Highly skilled (synonym: proficient).", 
+                example: "She is adept at navigating through dense forests." 
+            },
+            { 
+                word: "forage", 
+                definition: "To search for food (synonym: scavenge).", 
+                example: "Bears forage for berries in the summer months." 
+            },
+            { 
+                word: "to disperse", 
+                definition: "To spread out over a wide area (synonym: scatter).", 
+                example: "Seeds disperse in the wind to colonize new areas." 
+            },
+            { 
+                word: "archipelago", 
+                definition: "A group of islands.", 
+                example: "The Hawaiian archipelago consists of eight main islands." 
+            },
+            { 
+                word: "stepping stones", 
+                definition: "A means of progress or stages in a process (synonym: milestones).", 
+                example: "Small islands served as stepping stones for ancient explorers." 
+            },
+            { 
+                word: "remote", 
+                definition: "Far away, isolated (synonym: distant).", 
+                example: "The research station was in a remote part of Antarctica." 
+            },
+            { 
+                word: "fragments", 
+                definition: "Small broken pieces (synonym: shards).", 
+                example: "Archaeologists found pottery fragments at the ancient site." 
+            },
+            { 
+                word: "impenetrable", 
+                definition: "Impossible to pass through (synonym: dense).", 
+                example: "The Amazon rainforest has areas of impenetrable jungle." 
+            },
+            { 
+                word: "encompass", 
+                definition: "To include or surround (synonym: contain).", 
+                example: "The national park encompasses mountains, forests, and lakes." 
+            },
+            { 
+                word: "coincidence", 
+                definition: "A chance occurrence of events.", 
+                example: "It was pure coincidence that we both chose the same remote island." 
+            },
+            { 
+                word: "to grind", 
+                definition: "To crush into powder or sharpen by friction.", 
+                example: "Early humans used stones to grind grain into flour." 
+            },
+            { 
+                word: "to unearth", 
+                definition: "To dig up or discover (synonym: excavate).", 
+                example: "Explorers unearthed a lost city in the jungle." 
+            },
+            { 
+                word: "routinely", 
+                definition: "Done regularly (synonym: habitually).", 
+                example: "Geologists routinely survey earthquake-prone areas." 
+            },
+            { 
+                word: "to abandon", 
+                definition: "To leave permanently (synonym: desert).", 
+                example: "The settlers had to abandon the village during the drought." 
+            },
+            { 
+                word: "departure", 
+                definition: "The act of leaving (synonym: exit).", 
+                example: "Their departure from the expedition base was delayed by storms." 
+            }
         ];
 
         let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
+        const flashcard = document.getElementById('flashcard');
         const wordElement = document.getElementById('word');
         const definitionElement = document.getElementById('definition');
-        const flashcard = document.getElementById('flashcard');
+        const exampleElement = document.getElementById('example');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
 
-        function updateCard() {
-            wordElement.textContent = flashcards[currentIndex].word;
-            definitionElement.innerHTML = `${flashcards[currentIndex].definition}<div class="example">Example: ${flashcards[currentIndex].example}</div>`;
-            flashcard.classList.remove('flipped');
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === flashcards.length - 1;
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
         }
 
         flashcard.addEventListener('click', () => {
@@ -142,29 +390,61 @@
         });
 
         prevBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCard();
-            }
-        });
-
-        nextBtn.addEventListener('click', () => {
-            if (currentIndex < flashcards.length - 1) {
-                currentIndex++;
-                updateCard();
-            }
-        });
-
-        shuffleBtn.addEventListener('click', () => {
-            for (let i = flashcards.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
-            }
-            currentIndex = 0;
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
             updateCard();
         });
 
-        updateCard();
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            exampleElement.textContent = currentWord.example;
+            currentCountElement.textContent = currentIndex + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
+            }
+        });
     </script>
 </body>
 </html>
