@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetlands Vocabulary Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+            margin: 0;
+        }
+        .flashcard-container {
+            text-align: center;
+        }
+        .flashcard {
+            width: 320px;
+            height: 220px;
+            background-color: #b3e0ff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, background-color 0.3s;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+        .flashcard.flipped {
+            background-color: #a3d9a5;
+            transform: rotateY(180deg);
+        }
+        .word, .definition {
+            position: absolute;
+            backface-visibility: hidden;
+            padding: 15px;
+            text-align: center;
+            width: 90%;
+        }
+        .word {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .definition {
+            font-size: 16px;
+            transform: rotateY(180deg);
+        }
+        .example {
+            font-style: italic;
+            margin-top: 10px;
+            color: #333;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #shuffle-btn {
+            background-color: #008CBA;
+        }
+        #shuffle-btn:hover {
+            background-color: #0077a3;
+        }
+    </style>
+</head>
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+            <div class="word" id="word">Word</div>
+            <div class="definition" id="definition">
+                <div id="def-text">Definition</div>
+                <div class="example" id="example">Example</div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
+            <button id="shuffle-btn">Shuffle</button>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { 
+                word: "Rich in", 
+                definition: "Containing a large amount of something", 
+                synonym: "abundant in",
+                example: "The Amazon rainforest is rich in biodiversity." 
+            },
+            { 
+                word: "Pollutants", 
+                definition: "Harmful substances that damage the environment", 
+                synonym: "contaminants",
+                example: "Factories release pollutants into rivers." 
+            },
+            { 
+                word: "Pesticides", 
+                definition: "Chemicals used to kill insects or pests", 
+                synonym: "insecticides",
+                example: "Farmers use pesticides to protect crops." 
+            },
+            { 
+                word: "Livelihood", 
+                definition: "A means of earning money to survive", 
+                synonym: "income source",
+                example: "Fishing is the main livelihood in coastal villages." 
+            },
+            { 
+                word: "Mitigate", 
+                definition: "To reduce the severity of something", 
+                synonym: "lessen",
+                example: "Planting trees helps mitigate climate change." 
+            },
+            { 
+                word: "Implement", 
+                definition: "To put a plan into action", 
+                synonym: "execute",
+                example: "The school will implement a new recycling program." 
+            },
+            { 
+                word: "In-demand", 
+                definition: "Wanted or needed by many people", 
+                synonym: "popular",
+                example: "Electric cars are in-demand due to rising fuel costs." 
+            },
+            { 
+                word: "Commodity", 
+                definition: "A raw material or product that can be traded", 
+                synonym: "goods",
+                example: "Oil is a valuable global commodity." 
+            },
+            { 
+                word: "Logging", 
+                definition: "Cutting down trees for wood", 
+                synonym: "deforestation",
+                example: "Illegal logging destroys wildlife habitats." 
+            },
+            { 
+                word: "Comprise", 
+                definition: "To consist of or be made up of", 
+                synonym: "include",
+                example: "The team comprises five experts." 
+            },
+            { 
+                word: "Alarming", 
+                definition: "Worrying or frightening", 
+                synonym: "disturbing",
+                example: "The rise in pollution levels is alarming." 
+            },
+            { 
+                word: "Document", 
+                definition: "To record something in detail", 
+                synonym: "record",
+                example: "Scientists document changes in wildlife populations." 
+            },
+            { 
+                word: "Devastating", 
+                definition: "Extremely harmful or destructive", 
+                synonym: "catastrophic",
+                example: "The hurricane had a devastating impact on the town." 
+            },
+            { 
+                word: "Run-off", 
+                definition: "Water that flows over the ground, often carrying pollutants", 
+                synonym: "drainage",
+                example: "Rain causes chemical run-off into rivers." 
+            },
+            { 
+                word: "Place a high priority", 
+                definition: "To consider something very important", 
+                synonym: "prioritize",
+                example: "The government places a high priority on education." 
+            },
+            { 
+                word: "Degradation", 
+                definition: "The process of becoming worse in quality", 
+                synonym: "deterioration",
+                example: "Soil degradation reduces farm productivity." 
+            }
+        ];
+
+        let currentIndex = 0;
+        const flashcard = document.getElementById('flashcard');
+        const wordElement = document.getElementById('word');
+        const defTextElement = document.getElementById('def-text');
+        const exampleElement = document.getElementById('example');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+
+        function updateCard() {
+            const currentWord = words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            defTextElement.innerHTML = `
+                <strong>Definition:</strong> ${currentWord.definition}<br>
+                <strong>Synonym:</strong> ${currentWord.synonym}
+            `;
+            exampleElement.innerHTML = `<strong>Example:</strong> "${currentWord.example}"`;
+            flashcard.classList.remove('flipped');
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            for (let i = words.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [words[i], words[j]] = [words[j], words[i]];
+            }
+            currentIndex = 0;
+            updateCard();
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>
