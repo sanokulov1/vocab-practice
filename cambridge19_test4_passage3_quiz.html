@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f7fa, #d5e7f7);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #2c3e50;
+            transition: background 0.5s, color 0.5s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+            color: #f0f8ff;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2980b9;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .dark-mode h1 {
+            color: #3498db;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .dark-mode .subtitle {
+            color: #b0c4de;
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dark-mode .quiz-container {
+            background: #1e2a38;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question-number {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .dark-mode .question-number {
+            color: #b0c4de;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            font-size: 1.1rem;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        
+        .dark-mode .option {
+            background: #2a3a4c;
+        }
+        
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        .option.selected {
+            border-color: #3498db;
+            background: #bbdefb;
+        }
+        
+        .dark-mode .option.selected {
+            background: #1a3a5a;
+            border-color: #2980b9;
+        }
+        
+        .option.correct {
+            background: #c8e6c9;
+            border-color: #2e7d32;
+        }
+        
+        .dark-mode .option.correct {
+            background: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background: #ffcdd2;
+            border-color: #c62828;
+        }
+        
+        .dark-mode .option.incorrect {
+            background: #b71c1c;
+        }
+        
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .dark-mode .btn:disabled {
+            background: #4a5568;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            display: none;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .dark-mode .dark-mode-toggle {
+            background: #3498db;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .dark-mode .progress-container {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+        
+        .results-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dark-mode .results-container {
+            background: #1e2a38;
+        }
+        
+        .results-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2980b9;
+            text-align: center;
+        }
+        
+        .dark-mode .results-title {
+            color: #3498db;
+        }
+        
+        .score {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .wrong-answers {
+            margin-top: 30px;
+        }
+        
+        .wrong-answer {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .dark-mode .wrong-answer {
+            background: #2a3a4c;
+        }
+        
+        .wrong-question {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .wrong-correct {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .dark-mode .wrong-correct {
+            color: #81c784;
+        }
+        
+        .wrong-selected {
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .dark-mode .wrong-selected {
+            color: #e57373;
+        }
+        
+        .restart-btn {
+            background: #3498db;
+            margin: 20px auto 0;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .quiz-container, .results-container {
+                padding: 20px;
+            }
+            
+            .quiz-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <div class="container">
+        <header>
+            <h1>Vocabulary Quiz</h1>
+            <p class="subtitle">Test your vocabulary knowledge - 10 random questions each time</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="quiz-container" id="quiz-container">
+            <!-- Questions will be generated here -->
+        </div>
+        
+        <div class="results-container" id="results-container">
+            <h2 class="results-title">Quiz Results</h2>
+            <div class="score" id="score"></div>
+            <div class="wrong-answers" id="wrong-answers"></div>
+            <button class="btn restart-btn" id="restart-btn">
+                <i class="fas fa-redo"></i> Take Quiz Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            {
+                word: "ruthless",
+                definition: "Showing no pity or compassion for others",
+                synonyms: "merciless, cruel, heartless",
+                example: "The ruthless dictator showed no mercy to his enemies."
+            },
+            {
+                word: "impulse",
+                definition: "A sudden strong urge to do something",
+                synonyms: "urge, instinct, drive",
+                example: "She had a sudden impulse to buy the dress."
+            },
+            {
+                word: "possessions",
+                definition: "Things that you own or have with you",
+                synonyms: "belongings, property, assets",
+                example: "He packed all his possessions into a single suitcase."
+            },
+            {
+                word: "ulterior motive",
+                definition: "A hidden reason for doing something",
+                synonyms: "hidden agenda, secret reason",
+                example: "I think he's being nice with an ulterior motive."
+            },
+            {
+                word: "transcend",
+                definition: "To go beyond the usual limits of something",
+                synonyms: "surpass, exceed, rise above",
+                example: "Her performance transcended all expectations."
+            },
+            {
+                word: "brutality",
+                definition: "Savage physical violence; cruelty",
+                synonyms: "cruelty, savagery, violence",
+                example: "The police were accused of brutality during the protest."
+            },
+            {
+                word: "bleak",
+                definition: "Lacking in warmth, life, or kindliness",
+                synonyms: "grim, gloomy, depressing",
+                example: "The future looked bleak after the company went bankrupt."
+            },
+            {
+                word: "traits",
+                definition: "Distinguishing qualities or characteristics",
+                synonyms: "characteristics, features, qualities",
+                example: "Honesty and kindness are her best traits."
+            },
+            {
+                word: "brutal",
+                definition: "Savagely violent; harsh and unforgiving",
+                synonyms: "savage, cruel, vicious",
+                example: "The winter was particularly brutal this year."
+            },
+            {
+                word: "sparsely populated",
+                definition: "Having few inhabitants in relation to its size",
+                synonyms: "thinly populated, lightly settled",
+                example: "Northern Canada is sparsely populated."
+            },
+            {
+                word: "to back",
+                definition: "To support or endorse; to provide evidence for",
+                synonyms: "support, endorse, substantiate",
+                example: "The theory is backed by solid scientific evidence."
+            },
+            {
+                word: "obligation",
+                definition: "A duty or commitment",
+                synonyms: "duty, responsibility, commitment",
+                example: "Parents have an obligation to care for their children."
+            },
+            {
+                word: "preserve",
+                definition: "To maintain something in its original state",
+                synonyms: "conserve, protect, maintain",
+                example: "We must preserve the rainforest for future generations."
+            },
+            {
+                word: "disparity",
+                definition: "A great difference or inequality",
+                synonyms: "inequality, imbalance, gap",
+                example: "There is a growing disparity between rich and poor."
+            },
+            {
+                word: "swap",
+                definition: "To exchange one thing for another",
+                synonyms: "exchange, trade, switch",
+                example: "The children swapped sandwiches at lunchtime."
+            },
+            {
+                word: "acclaim",
+                definition: "Enthusiastic public praise and approval",
+                synonyms: "praise, recognition, applause",
+                example: "The novel received critical acclaim."
+            },
+            {
+                word: "domineering",
+                definition: "Asserting one's will over others in an arrogant way",
+                synonyms: "overbearing, authoritarian, dictatorial",
+                example: "His domineering attitude made him unpopular."
+            },
+            {
+                word: "to ostracise",
+                definition: "To exclude someone from a society or group",
+                synonyms: "exclude, shun, banish",
+                example: "The community ostracised him after the scandal."
+            },
+            {
+                word: "exile",
+                definition: "The state of being barred from one's native country",
+                synonyms: "banishment, expulsion, deportation",
+                example: "The political dissident lived in exile for 20 years."
+            },
+            {
+                word: "In view of",
+                definition: "Considering; taking into account",
+                synonyms: "considering, given, because of",
+                example: "In view of the circumstances, we decided to cancel the event."
+            },
+            {
+                word: "altruism",
+                definition: "Selfless concern for the welfare of others",
+                synonyms: "selflessness, generosity, philanthropy",
+                example: "Her altruism led her to volunteer at the homeless shelter."
+            },
+            {
+                word: "the advent of",
+                definition: "The arrival or coming of something notable",
+                synonyms: "arrival, appearance, emergence",
+                example: "The advent of the internet changed communication forever."
+            },
+            {
+                word: "feasible",
+                definition: "Possible to do easily or conveniently",
+                synonyms: "practicable, possible, workable",
+                example: "Is it feasible to finish the project by Friday?"
+            }
+        ];
+
+        // DOM elements
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreEl = document.getElementById('score');
+        const wrongAnswersEl = document.getElementById('wrong-answers');
+        const restartBtn = document.getElementById('restart-btn');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let questions = [];
+        let userAnswers = [];
+        
+        // Initialize quiz
+        function initQuiz() {
+            // Reset state
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            
+            // Select 10 random words
+            const shuffledVocabulary = [...vocabulary];
+            shuffleArray(shuffledVocabulary);
+            const selectedWords = shuffledVocabulary.slice(0, 10);
+            
+            // Create questions
+            questions = selectedWords.map(word => {
+                // Get 3 random incorrect definitions
+                const incorrectDefinitions = vocabulary
+                    .filter(item => item.word !== word.word)
+                    .map(item => item.definition);
+                shuffleArray(incorrectDefinitions);
+                const options = [word.definition, ...incorrectDefinitions.slice(0, 3)];
+                shuffleArray(options);
+                
+                return {
+                    word: word.word,
+                    definition: word.definition,
+                    options: options,
+                    example: word.example,
+                    synonyms: word.synonyms
+                };
+            });
+            
+            // Render quiz
+            renderQuiz();
+            
+            // Hide results and show quiz
+            resultsContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Render quiz questions
+        function renderQuiz() {
+            quizContainer.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const questionEl = document.createElement('div');
+                questionEl.className = `question-container ${index === 0 ? 'active' : ''}`;
+                questionEl.dataset.index = index;
+                
+                questionEl.innerHTML = `
+                    <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+                    <div class="question-text">What is the definition of <strong>"${question.word}"</strong>?</div>
+                    <div class="options-container">
+                        ${question.options.map((option, i) => `
+                            <div class="option" data-index="${i}">${option}</div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionEl);
+            });
+            
+            // Add navigation controls to the last question
+            const controlsEl = document.createElement('div');
+            controlsEl.className = 'quiz-controls';
+            controlsEl.innerHTML = `
+                <button class="btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn" id="next-btn">
+                    <i class="fas fa-arrow-right"></i> Next
+                </button>
+                <button class="btn submit-btn" id="submit-btn">
+                    <i class="fas fa-check"></i> Submit Quiz
+                </button>
+            `;
+            quizContainer.appendChild(controlsEl);
+            
+            // Add event listeners
+            addEventListeners();
+        }
+        
+        // Add event listeners
+        function addEventListeners() {
+            // Option selection
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => {
+                    if (option.classList.contains('selected')) {
+                        option.classList.remove('selected');
+                        userAnswers[currentQuestion] = null;
+                    } else {
+                        document.querySelectorAll('.question-container.active .option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+                        userAnswers[currentQuestion] = parseInt(option.dataset.index);
+                    }
+                    
+                    // Enable/disable next button based on selection
+                    const nextBtn = document.getElementById('next-btn');
+                    const submitBtn = document.getElementById('submit-btn');
+                    const hasSelection = userAnswers[currentQuestion] !== undefined && userAnswers[currentQuestion] !== null;
+                    
+                    if (currentQuestion === questions.length - 1) {
+                        submitBtn.style.display = hasSelection ? 'flex' : 'none';
+                        nextBtn.style.display = 'none';
+                    } else {
+                        nextBtn.disabled = !hasSelection;
+                    }
+                });
+            });
+            
+            // Navigation buttons
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    showQuestion(currentQuestion - 1);
+                }
+            });
+            
+            document.getElementById('next-btn').addEventListener('click', () => {
+                if (currentQuestion < questions.length - 1) {
+                    showQuestion(currentQuestion + 1);
+                }
+            });
+            
+            // Submit button
+            document.getElementById('submit-btn').addEventListener('click', showResults);
+        }
+        
+        // Show specific question
+        function showQuestion(index) {
+            // Hide current question
+            document.querySelector('.question-container.active').classList.remove('active');
+            
+            // Show new question
+            currentQuestion = index;
+            document.querySelector(`.question-container[data-index="${index}"]`).classList.add('active');
+            
+            // Update navigation buttons
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            prevBtn.disabled = index === 0;
+            
+            if (index === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = userAnswers[index] !== undefined && userAnswers[index] !== null ? 'flex' : 'none';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = userAnswers[index] === undefined || userAnswers[index] === null;
+            }
+            
+            // Update progress
+            updateProgress();
+            
+            // Restore selected option if exists
+            if (userAnswers[index] !== undefined && userAnswers[index] !== null) {
+                const options = document.querySelectorAll('.question-container.active .option');
+                options[userAnswers[index]].classList.add('selected');
+            }
+        }
+        
+        // Show results
+        function showResults() {
+            // Calculate score
+            score = 0;
+            const wrongAnswers = [];
+            
+            questions.forEach((question, index) => {
+                const userAnswerIndex = userAnswers[index];
+                if (userAnswerIndex !== undefined && userAnswerIndex !== null) {
+                    const userAnswer = question.options[userAnswerIndex];
+                    if (userAnswer === question.definition) {
+                        score++;
+                    } else {
+                        wrongAnswers.push({
+                            question: question.word,
+                            correctAnswer: question.definition,
+                            userAnswer: userAnswer,
+                            example: question.example,
+                            synonyms: question.synonyms
+                        });
+                    }
+                }
+            });
+            
+            // Display results
+            scoreEl.textContent = `You scored ${score} out of ${questions.length}`;
+            
+            if (wrongAnswers.length > 0) {
+                wrongAnswersEl.innerHTML = `
+                    <h3>Words to review:</h3>
+                    ${wrongAnswers.map(answer => `
+                        <div class="wrong-answer">
+                            <div class="wrong-question">${answer.question}</div>
+                            <div><span class="wrong-correct">Correct:</span> ${answer.correctAnswer}</div>
+                            <div><span class="wrong-selected">You chose:</span> ${answer.userAnswer}</div>
+                            ${answer.example ? `<div class="example"><em>Example:</em> ${answer.example}</div>` : ''}
+                            ${answer.synonyms ? `<div class="synonyms"><em>Synonyms:</em> ${answer.synonyms}</div>` : ''}
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                wrongAnswersEl.innerHTML = '<p>Perfect! You got all questions correct!</p>';
+            }
+            
+            // Hide quiz and show results
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        // Dark mode toggle
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Restart quiz
+        restartBtn.addEventListener('click', initQuiz);
+        
+        // Initialize quiz on page load
+        initQuiz();
+    </script>
+</body>
+</html>
