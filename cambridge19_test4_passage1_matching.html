@@ -150,7 +150,7 @@
         
         .words-column, .definitions-column {
             flex: 1;
-            min-width: 300px;
+            min-width: 250px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -344,9 +344,10 @@
             transform: scale(1.1);
         }
         
+        /* Improved responsive design for mobile orientation */
         @media (max-width: 768px) {
-            .matching-area {
-                flex-direction: column;
+            .container {
+                padding: 15px;
             }
             
             h1 {
@@ -358,13 +359,111 @@
                 padding: 15px;
             }
             
-            .container {
-                padding: 15px;
-            }
-            
             .word-item, .definition-item {
                 padding: 14px;
                 font-size: 1rem;
+            }
+            
+            /* Landscape orientation adjustments */
+            @media (orientation: landscape) {
+                body {
+                    padding: 10px;
+                }
+                
+                .container {
+                    padding: 12px;
+                    max-width: 95%;
+                }
+                
+                .group-container {
+                    margin-bottom: 15px;
+                }
+                
+                .instructions {
+                    margin-bottom: 20px;
+                    font-size: 1rem;
+                    padding: 0 10px;
+                }
+                
+                .matching-area {
+                    padding: 15px 0;
+                    gap: 10px;
+                }
+                
+                .words-column, .definitions-column {
+                    min-width: 200px;
+                }
+                
+                .word-item, .definition-item {
+                    padding: 12px;
+                    font-size: 0.95rem;
+                }
+                
+                .reset-btn {
+                    margin: 15px auto;
+                    padding: 12px 25px;
+                    font-size: 1rem;
+                }
+                
+                .completion-message {
+                    font-size: 1.3rem;
+                    padding: 15px;
+                    margin: 15px 0;
+                }
+            }
+        }
+        
+        /* Additional adjustments for very small screens */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .instructions {
+                font-size: 1rem;
+            }
+            
+            .word-item, .definition-item {
+                padding: 12px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .reset-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            /* Landscape adjustments for small screens */
+            @media (orientation: landscape) {
+                .container {
+                    padding: 10px;
+                }
+                
+                .instructions {
+                    font-size: 0.95rem;
+                    margin-bottom: 15px;
+                }
+                
+                .matching-area {
+                    padding: 12px 0;
+                }
+                
+                .word-item, .definition-item {
+                    padding: 10px;
+                    font-size: 0.85rem;
+                }
+                
+                .column-title {
+                    padding: 10px;
+                    font-size: 1rem;
+                    margin-bottom: 8px;
+                }
+                
+                .completion-message {
+                    font-size: 1.1rem;
+                    padding: 12px;
+                    margin: 12px 0;
+                }
             }
         }
     </style>
