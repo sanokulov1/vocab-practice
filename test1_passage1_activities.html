@@ -60,24 +60,26 @@
     }
 
     .container {
-      width: 90%;
+      width: 95%;
       max-width: 900px;
-      padding: 2rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1.5rem;
+      min-height: 100vh;
+      justify-content: center;
     }
 
     .header {
       text-align: center;
       width: 100%;
-      padding: 1rem;
+      padding: 0.5rem;
     }
 
     .passage-info {
       font-family: 'Poppins', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 600;
       margin-bottom: 0.25rem;
       color: var(--text-primary);
@@ -85,7 +87,7 @@
 
     .passage-title {
       font-family: 'Poppins', sans-serif;
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       font-weight: 700;
       background: var(--header-gradient);
       -webkit-background-clip: text;
@@ -94,17 +96,18 @@
       color: transparent;
       margin-bottom: 1.5rem;
       letter-spacing: -0.5px;
+      line-height: 1.3;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      gap: 1.5rem;
+      gap: 1.2rem;
       width: 100%;
       max-width: 800px;
-      height: 60vh;
-      max-height: 500px;
+      height: auto;
+      min-height: 50vh;
     }
 
     .card {
@@ -117,7 +120,7 @@
       transition: var(--transition);
       position: relative;
       overflow: hidden;
-      padding: 2rem;
+      padding: 1.5rem;
       text-align: center;
       background: var(--card-blue-bg);
       border: 1px solid var(--card-border);
@@ -131,11 +134,11 @@
     }
 
     .card-icon {
-      font-size: 3rem;
-      margin-bottom: 1.2rem;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
       transition: var(--transition);
-      width: 70px;
-      height: 70px;
+      width: 60px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -148,7 +151,7 @@
     }
 
     .card-title {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
       font-family: 'Poppins', sans-serif;
@@ -156,7 +159,7 @@
     }
 
     .card-desc {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
       max-width: 90%;
       line-height: 1.5;
@@ -184,14 +187,14 @@
     }
 
     .theme-toggle {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
+      width: 42px;
+      height: 42px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -207,72 +210,93 @@
     }
 
     .theme-toggle i {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--text-secondary);
     }
 
     .footer {
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       text-align: center;
-      padding: 1rem;
+      padding: 0.8rem;
       width: 100%;
       max-width: 600px;
     }
 
+    /* Mobile-specific adjustments */
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
-        height: auto;
-        max-height: none;
+        grid-template-rows: auto;
+        gap: 1rem;
+        min-height: auto;
       }
       
       .passage-info {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
       }
       
       .passage-title {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
       }
       
       .card {
-        min-height: 180px;
+        min-height: 140px;
+        padding: 1.2rem;
       }
       
       .container {
-        padding: 1.5rem 1rem;
+        padding: 1rem;
+        gap: 1rem;
+        justify-content: flex-start;
+        padding-top: 3rem;
       }
       
-      .theme-toggle {
-        top: 1rem;
-        right: 1rem;
+      .card-title {
+        font-size: 1.2rem;
+      }
+      
+      .card-desc {
+        font-size: 0.8rem;
+      }
+      
+      .card-icon {
+        font-size: 2.2rem;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 0.8rem;
       }
     }
 
     @media (max-width: 480px) {
       .passage-info {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
       
       .passage-title {
-        font-size: 1.5rem;
-      }
-      
-      .card-title {
         font-size: 1.3rem;
       }
       
+      .card-title {
+        font-size: 1.1rem;
+      }
+      
       .card-desc {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
       }
       
       .card-icon {
-        font-size: 2.5rem;
-        width: 60px;
-        height: 60px;
-        margin-bottom: 1rem;
+        font-size: 2rem;
+        width: 45px;
+        height: 45px;
+      }
+      
+      .footer {
+        font-size: 0.75rem;
+        padding: 0.5rem;
       }
     }
   </style>
