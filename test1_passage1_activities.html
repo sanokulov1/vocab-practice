@@ -8,32 +8,47 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-bg: #f8fafc;
-      --card-bg: #ffffff;
+      /* New Light Theme - Soft pastel cards */
+      --primary-bg: #f8f9fa;
       --card-border: rgba(0, 0, 0, 0.05);
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --accent-1: #3b82f6;
-      --accent-2: #0ea5e9;
-      --accent-3: #0284c7;
-      --accent-4: #0c4a6e;
-      --card-blue-bg: #f0f9ff;
+      --text-primary: #263238;
+      --text-secondary: #546e7a;
       --shadow: 0 6px 15px rgba(0, 0, 0, 0.04);
       --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      
+      /* Card-specific backgrounds */
+      --card1-bg: #e3f2fd;
+      --card2-bg: #f3e5f5;
+      --card3-bg: #e8f5e9;
+      --card4-bg: #fff8e1;
+      
+      /* Card-specific accents */
+      --accent-1: #1e88e5;
+      --accent-2: #7e57c2;
+      --accent-3: #43a047;
+      --accent-4: #ff8f00;
     }
 
     .dark-mode {
+      /* Dark Theme - Professional with blue accents */
       --primary-bg: #0f172a;
       --card-bg: #1e293b;
       --card-border: rgba(255, 255, 255, 0.05);
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      
+      /* Card backgrounds for dark mode */
+      --card1-bg: #0c4a6e;
+      --card2-bg: #0c4a6e;
+      --card3-bg: #0c4a6e;
+      --card4-bg: #0c4a6e;
+      
+      /* Accent colors for dark mode */
       --accent-1: #60a5fa;
       --accent-2: #38bdf8;
       --accent-3: #0ea5e9;
       --accent-4: #0284c7;
-      --card-blue-bg: #0c4a6e;
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -89,7 +104,6 @@
       overflow: hidden;
       padding: 1.3rem;
       text-align: center;
-      background: var(--card-blue-bg);
       border: 1px solid var(--card-border);
       box-shadow: var(--shadow);
       z-index: 1;
@@ -110,7 +124,6 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background: rgba(59, 130, 246, 0.1);
     }
 
     .card:hover .card-icon {
@@ -133,23 +146,39 @@
       font-weight: 400;
     }
 
+    .card1 {
+      background: var(--card1-bg);
+    }
+    
+    .card2 {
+      background: var(--card2-bg);
+    }
+    
+    .card3 {
+      background: var(--card3-bg);
+    }
+    
+    .card4 {
+      background: var(--card4-bg);
+    }
+
     .card1 .card-icon {
-      background: rgba(59, 130, 246, 0.15);
+      background: rgba(30, 136, 229, 0.15);
       color: var(--accent-1);
     }
     
     .card2 .card-icon {
-      background: rgba(14, 165, 233, 0.15);
+      background: rgba(126, 87, 194, 0.15);
       color: var(--accent-2);
     }
     
     .card3 .card-icon {
-      background: rgba(2, 132, 199, 0.15);
+      background: rgba(67, 160, 71, 0.15);
       color: var(--accent-3);
     }
     
     .card4 .card-icon {
-      background: rgba(12, 74, 110, 0.15);
+      background: rgba(255, 143, 0, 0.15);
       color: var(--accent-4);
     }
 
@@ -157,7 +186,7 @@
       position: fixed;
       top: 1rem;
       right: 1rem;
-      background: var(--card-bg);
+      background: var(--card1-bg);
       border: 1px solid var(--card-border);
       border-radius: 50%;
       width: 42px;
