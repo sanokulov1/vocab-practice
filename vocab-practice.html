@@ -1,203 +1,1298 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vocabulary Practice</title>
+  <title>Vocabulary Mastery Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #eaf6ff;
-      font-family: Arial, sans-serif;
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --warning: #f72585;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+      min-height: 100vh;
       padding: 20px;
+      position: relative;
+      overflow-x: hidden;
     }
-    h1 {
+    
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1497636577773-f1231844b336?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920') center/cover no-repeat;
+      opacity: 0.05;
+      z-index: -1;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
       text-align: center;
-      font-size: 32px;
-      color: #003366;
+      padding: 30px 0;
+      margin-bottom: 30px;
+      animation: fadeInDown 0.8s ease;
     }
-    .section {
-      background-color: #cce5ff;
-      margin: 10px 0;
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 8px;
+    
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo i {
+      font-size: 40px;
+      color: white;
+    }
+    
+    h1 {
+      font-family: 'Roboto Slab', serif;
+      font-size: 2.8rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 25px 0;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 15px 25px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      min-width: 150px;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .progress-container {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 25px auto 40px;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .progress-container:hover {
+      transform: scale(1.02);
+    }
+    
+    .progress-title {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .progress-bar {
+      height: 12px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 65%;
+      border-radius: 10px;
+      position: relative;
+    }
+    
+    .progress-fill::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: progressShine 2s infinite;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .collection-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(67, 97, 238, 0.1);
+    }
+    
+    .collection-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    
+    .collection-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
       cursor: pointer;
+      position: relative;
     }
-    .test, .passage {
-      background-color: #f1f8ff;
-      margin: 5px 20px;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
+    
+    .collection-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
     }
-    .passage a {
+    
+    .collection-icon i {
+      font-size: 24px;
+    }
+    
+    .collection-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      flex-grow: 1;
+    }
+    
+    .toggle-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .collection-content {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    
+    .collection-card.active .collection-content {
+      max-height: 1000px;
+    }
+    
+    .collection-card.active .toggle-icon {
+      transform: rotate(180deg);
+    }
+    
+    .test-item {
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+    
+    .test-item:last-child {
+      border-bottom: none;
+    }
+    
+    .test-item:hover {
+      background: rgba(67, 97, 238, 0.05);
+      padding-left: 10px;
+    }
+    
+    .test-icon {
+      width: 35px;
+      height: 35px;
+      background: rgba(67, 97, 238, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .test-icon i {
+      color: var(--primary);
+      font-size: 14px;
+    }
+    
+    .test-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    
+    .passage-list {
+      padding-left: 20px;
+      margin-top: 10px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .test-item.active .passage-list {
+      max-height: 500px;
+    }
+    
+    .passage-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      transition: var(--transition);
+    }
+    
+    .passage-item:hover {
+      background: rgba(72, 149, 239, 0.05);
+      padding-left: 5px;
+    }
+    
+    .passage-icon {
+      width: 26px;
+      height: 26px;
+      background: rgba(72, 149, 239, 0.1);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    
+    .passage-icon i {
+      color: var(--accent);
+      font-size: 12px;
+    }
+    
+    .passage-link {
       text-decoration: none;
-      color: #0066cc;
-      font-weight: bold;
+      color: var(--dark);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      transition: var(--transition);
     }
-    .hidden {
-      display: none;
+    
+    .passage-link:hover {
+      color: var(--primary);
+    }
+    
+    .passage-link i {
+      margin-left: auto;
+      color: var(--accent);
+      transition: var(--transition);
+    }
+    
+    .passage-link:hover i {
+      transform: translateX(5px);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+    
+    .motivation {
+      font-style: italic;
+      margin-top: 10px;
+      color: var(--primary);
+    }
+    
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes progressShine {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
-  <script>
-    function toggle(id) {
-      const el = document.getElementById(id);
-      el.classList.toggle("hidden");
-    }
-  </script>
 </head>
 <body>
-  <h1>📘 Vocabulary Practice</h1>
-<div class="section" onclick="toggle('collection-0')">IELTS Trainer 2</div>
-<div id="collection-0" class="hidden">
-  <div class="test" onclick="toggle('collection-0-test1')">Test 1</div>
-  <div id="collection-0-test1" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test1_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test1_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test1_passage3.html">START</a></div>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <h1>Vocabulary Mastery Hub</h1>
+      
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Collections</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">22</div>
+          <div class="stat-label">Tests</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">66</div>
+          <div class="stat-label">Passages</div>
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-title">
+          <span>Your Learning Progress</span>
+          <span>65%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </header>
+    
+    <div class="content-grid">
+      <!-- IELTS Trainer 2 -->
+      <div class="collection-card active">
+        <div class="collection-header" onclick="toggleCollection(this)">
+          <div class="collection-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div class="collection-title">IELTS Trainer 2</div>
+          <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="collection-content">
+          <div class="test-item active" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 1</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test1_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test1_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test1_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 2</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test2_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test2_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test2_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 3</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test3_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test3_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test3_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 4</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test4_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test4_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test4_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 5</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test5_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test5_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test5_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 6</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test6_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test6_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="ieltstrainer2_test6_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cambridge 17 -->
+      <div class="collection-card">
+        <div class="collection-header" onclick="toggleCollection(this)">
+          <div class="collection-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <div class="collection-title">Cambridge 17</div>
+          <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="collection-content">
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 1</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test1_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test1_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test1_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 2</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test2_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test2_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test2_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 3</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test3_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test3_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test3_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 4</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test4_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test4_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge17_test4_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cambridge 18 -->
+      <div class="collection-card">
+        <div class="collection-header" onclick="toggleCollection(this)">
+          <div class="collection-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="collection-title">Cambridge 18</div>
+          <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="collection-content">
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 1</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test1_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test1_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test1_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 2</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test2_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test2_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test2_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 3</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test3_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test3_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test3_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 4</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test4_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test4_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge18_test4_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cambridge 19 -->
+      <div class="collection-card">
+        <div class="collection-header" onclick="toggleCollection(this)">
+          <div class="collection-icon">
+            <i class="fas fa-pen-fancy"></i>
+          </div>
+          <div class="collection-title">Cambridge 19</div>
+          <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="collection-content">
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 1</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="test1_passage1_activities.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test1_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test1_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 2</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test2_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test2_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test2_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 3</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test3_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test3_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test3_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 4</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test4_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test4_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge19_test4_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cambridge 20 -->
+      <div class="collection-card">
+        <div class="collection-header" onclick="toggleCollection(this)">
+          <div class="collection-icon">
+            <i class="fas fa-medal"></i>
+          </div>
+          <div class="collection-title">Cambridge 20</div>
+          <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="collection-content">
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 1</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test1_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test1_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test1_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 2</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test2_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test2_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test2_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 3</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test3_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test3_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test3_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="test-item" onclick="toggleTest(this)">
+            <div class="test-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="test-title">Test 4</div>
+            <div class="passage-list">
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test4_passage1.html" class="passage-link">
+                  Passage 1
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test4_passage2.html" class="passage-link">
+                  Passage 2
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+              <div class="passage-item">
+                <div class="passage-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <a href="cambridge20_test4_passage3.html" class="passage-link">
+                  Passage 3
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p class="motivation">"Words are the currency of communication. Master them, and you master the world."</p>
+    </div>
   </div>
-  <div class="test" onclick="toggle('collection-0-test2')">Test 2</div>
-  <div id="collection-0-test2" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test2_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test2_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test2_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-0-test3')">Test 3</div>
-  <div id="collection-0-test3" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test3_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test3_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test3_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-0-test4')">Test 4</div>
-  <div id="collection-0-test4" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test4_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test4_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test4_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-0-test5')">Test 5</div>
-  <div id="collection-0-test5" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test5_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test5_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test5_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-0-test6')">Test 6</div>
-  <div id="collection-0-test6" class="hidden">
-    <div class="passage">Passage 1 – <a href="ieltstrainer2_test6_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="ieltstrainer2_test6_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="ieltstrainer2_test6_passage3.html">START</a></div>
-  </div>
-</div>
-<div class="section" onclick="toggle('collection-1')">Cambridge 17</div>
-<div id="collection-1" class="hidden">
-  <div class="test" onclick="toggle('collection-1-test1')">Test 1</div>
-  <div id="collection-1-test1" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge17_test1_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge17_test1_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge17_test1_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-1-test2')">Test 2</div>
-  <div id="collection-1-test2" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge17_test2_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge17_test2_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge17_test2_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-1-test3')">Test 3</div>
-  <div id="collection-1-test3" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge17_test3_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge17_test3_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge17_test3_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-1-test4')">Test 4</div>
-  <div id="collection-1-test4" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge17_test4_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge17_test4_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge17_test4_passage3.html">START</a></div>
-  </div>
-</div>
-<div class="section" onclick="toggle('collection-2')">Cambridge 18</div>
-<div id="collection-2" class="hidden">
-  <div class="test" onclick="toggle('collection-2-test1')">Test 1</div>
-  <div id="collection-2-test1" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge18_test1_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge18_test1_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge18_test1_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-2-test2')">Test 2</div>
-  <div id="collection-2-test2" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge18_test2_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge18_test2_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge18_test2_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-2-test3')">Test 3</div>
-  <div id="collection-2-test3" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge18_test3_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge18_test3_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge18_test3_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-2-test4')">Test 4</div>
-  <div id="collection-2-test4" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge18_test4_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge18_test4_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge18_test4_passage3.html">START</a></div>
-  </div>
-</div>
-<div class="section" onclick="toggle('collection-3')">Cambridge 19</div>
-<div id="collection-3" class="hidden">
-  <div class="test" onclick="toggle('collection-3-test1')">Test 1</div>
-  <div id="collection-3-test1" class="hidden">
-    <div class="passage">Passage 1 – <a href="test1_passage1_activities.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge19_test1_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge19_test1_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-3-test2')">Test 2</div>
-  <div id="collection-3-test2" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge19_test2_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge19_test2_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge19_test2_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-3-test3')">Test 3</div>
-  <div id="collection-3-test3" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge19_test3_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge19_test3_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge19_test3_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-3-test4')">Test 4</div>
-  <div id="collection-3-test4" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge19_test4_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge19_test4_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge19_test4_passage3.html">START</a></div>
-  </div>
-</div>
-<div class="section" onclick="toggle('collection-4')">Cambridge 20</div>
-<div id="collection-4" class="hidden">
-  <div class="test" onclick="toggle('collection-4-test1')">Test 1</div>
-  <div id="collection-4-test1" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge20_test1_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge20_test1_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge20_test1_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-4-test2')">Test 2</div>
-  <div id="collection-4-test2" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge20_test2_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge20_test2_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge20_test2_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-4-test3')">Test 3</div>
-  <div id="collection-4-test3" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge20_test3_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge20_test3_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge20_test3_passage3.html">START</a></div>
-  </div>
-  <div class="test" onclick="toggle('collection-4-test4')">Test 4</div>
-  <div id="collection-4-test4" class="hidden">
-    <div class="passage">Passage 1 – <a href="cambridge20_test4_passage1.html">START</a></div>
-    <div class="passage">Passage 2 – <a href="cambridge20_test4_passage2.html">START</a></div>
-    <div class="passage">Passage 3 – <a href="cambridge20_test4_passage3.html">START</a></div>
-  </div>
-</div>
-
+  
+  <script>
+    function toggleCollection(element) {
+      const card = element.closest('.collection-card');
+      card.classList.toggle('active');
+    }
+    
+    function toggleTest(element) {
+      element.classList.toggle('active');
+    }
+    
+    // Initialize the first collection as open
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstTest = document.querySelector('.test-item');
+      if (firstTest) {
+        firstTest.classList.add('active');
+      }
+    });
+  </script>
 </body>
 </html>
