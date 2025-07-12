@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Typing Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #2a4d69;
+            padding: 0 20px;
+            line-height: 1.6;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .instructions::after {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            margin: 20px auto;
+            border-radius: 3px;
+        }
+        
+        /* Typing Challenge Styles */
+        .challenge-container {
+            margin-top: 20px;
+        }
+        
+        .question-counter {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin-bottom: 25px;
+            padding: 12px;
+            background: rgba(75, 134, 180, 0.1);
+            border-radius: 10px;
+        }
+        
+        .definition-text {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 35px;
+            color: #1e3d54;
+            padding: 20px;
+            background: rgba(75, 134, 180, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .input-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+        
+        .word-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            border: 3px solid #4b86b4;
+            border-radius: 15px;
+            background: #e1f5fe;
+            color: #1e3d54;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .word-input:focus {
+            border-color: #2a4d69;
+            box-shadow: 0 0 15px rgba(75, 134, 180, 0.5);
+            transform: scale(1.02);
+        }
+        
+        .word-input.correct {
+            border-color: #66bb6a;
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+        
+        .word-input.incorrect {
+            border-color: #ef5350;
+            background: #ffebee;
+            color: #b71c1c;
+            animation: shake 0.5s;
+        }
+        
+        .input-hint {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #5d4037;
+            margin-top: 15px;
+            min-height: 30px;
+            font-style: italic;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        
+        .challenge-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            padding: 15px 35px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:disabled {
+            background: #a0c4e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Results Styles */
+        .results-container {
+            display: none;
+            padding: 25px;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(75, 134, 180, 0.15);
+            border-radius: 15px;
+        }
+        
+        .completion-message {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: 15px;
+            border: 2px dashed #4b86b4;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .incorrect-answers {
+            margin-top: 35px;
+        }
+        
+        .incorrect-answer {
+            background: #fffde7;
+            border: 2px solid #ffca28;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .definition-label {
+            font-weight: bold;
+            color: #5d4037;
+            font-size: 1.2rem;
+        }
+        
+        .correct-label {
+            color: #1b5e20;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .user-answer-label {
+            color: #b71c1c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .answer-text {
+            margin: 10px 0 15px 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .restart-btn {
+            display: block;
+            margin: 35px auto 15px;
+            padding: 16px 45px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .instructions {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+            
+            .definition-text {
+                font-size: 1.5rem;
+                padding: 15px;
+                min-height: 100px;
+            }
+            
+            .word-input {
+                padding: 16px;
+                font-size: 1.3rem;
+            }
+            
+            .nav-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            
+            .score-display {
+                font-size: 1.8rem;
+            }
+            
+            .completion-message {
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .challenge-navigation {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .definition-text {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-keyboard"></i> Vocabulary Typing Challenge</h1>
+            <p>Type the word that matches each definition</p>
+        </header>
+        
+        <div class="instructions">
+            <p>For each definition shown, type the correct vocabulary word. Our smart system recognizes different forms (plural, infinitive, etc.)!</p>
+            <p>Press Enter to move to the next question. Submit your quiz when you've answered all questions.</p>
+        </div>
+        
+        <!-- Typing Challenge Section -->
+        <div class="challenge-container" id="challenge-section">
+            <div class="question-counter">Challenge <span id="current-q">1</span> of <span id="total-q">10</span></div>
+            <div class="definition-text" id="definition-text">Definition will appear here</div>
+            
+            <div class="input-container">
+                <input type="text" class="word-input" id="word-input" placeholder="Type the word here..." autocomplete="off" autofocus>
+                <div class="input-hint" id="input-hint"></div>
+            </div>
+            
+            <div class="challenge-navigation">
+                <button class="nav-btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="nav-btn" id="next-btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn" id="submit-btn" style="display: none;">
+                    Submit Quiz <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-container" id="results-section">
+            <div class="score-display">
+                Your Score: <span id="score">0</span>/10
+            </div>
+            
+            <div class="completion-message">
+                <i class="fas fa-trophy"></i> Quiz Completed!
+            </div>
+            
+            <div class="incorrect-answers" id="incorrect-answers">
+                <!-- Incorrect answers will be shown here -->
+            </div>
+            
+            <button class="restart-btn" id="restart-btn">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vocabulary data with multiple acceptable answers
+            const vocabulary = [
+                {
+                    word: "Knock-on effects",
+                    definition: "Indirect consequences or chain reactions",
+                    answers: ["Knock-on effects", "Knock on effects", "Knock-on effect", "Chain reactions", "Indirect consequences"]
+                },
+                {
+                    word: "Prey",
+                    definition: "An animal hunted by another for food",
+                    answers: ["Prey", "Preys"]
+                },
+                {
+                    word: "To arm",
+                    definition: "To equip or prepare with knowledge or tools",
+                    answers: ["Arm", "Arms", "To arm", "Armed", "Arming"]
+                },
+                {
+                    word: "To halt",
+                    definition: "To stop or bring to a pause",
+                    answers: ["Halt", "Halts", "To halt", "Halted", "Halting"]
+                },
+                {
+                    word: "To reverse",
+                    definition: "To change something to the opposite direction or undo",
+                    answers: ["Reverse", "Reverses", "To reverse", "Reversed", "Reversing"]
+                },
+                {
+                    word: "To reproduce",
+                    definition: "To have babies or make copies",
+                    answers: ["Reproduce", "Reproduces", "To reproduce", "Reproduced", "Reproducing", "Reproduction"]
+                },
+                {
+                    word: "To keep in line with",
+                    definition: "To match or stay the same as",
+                    answers: ["Keep in line with", "Keeps in line with", "To keep in line with", "Kept in line with", "Keeping in line with"]
+                },
+                {
+                    word: "To be equipped",
+                    definition: "To have the necessary tools or skills",
+                    answers: ["Be equipped", "Is equipped", "To be equipped", "Are equipped", "Equipped"]
+                },
+                {
+                    word: "Abundance",
+                    definition: "A large quantity or plenty",
+                    answers: ["Abundance", "Abundances", "Plenty", "Large quantity"]
+                },
+                {
+                    word: "Emergence",
+                    definition: "When something appears or starts",
+                    answers: ["Emergence", "Emergences", "Appearance", "Rise", "Beginning"]
+                },
+                {
+                    word: "Restricted to",
+                    definition: "Only allowed in a certain way",
+                    answers: ["Restricted to", "Restrict to", "Restricts to", "Restricting to"]
+                },
+                {
+                    word: "Sole",
+                    definition: "Only; single",
+                    answers: ["Sole", "Soles", "Only", "Single", "Exclusive"]
+                },
+                {
+                    word: "To spot",
+                    definition: "To notice or detect",
+                    answers: ["Spot", "Spots", "To spot", "Spotted", "Spotting", "Notice", "Detect"]
+                }
+            ];
+            
+            // Challenge state
+            let challengeData = [];
+            let currentQuestion = 0;
+            let userAnswers = [];
+            let scores = [];
+            
+            // Elements
+            const currentQEl = document.getElementById('current-q');
+            const totalQEl = document.getElementById('total-q');
+            const definitionEl = document.getElementById('definition-text');
+            const wordInput = document.getElementById('word-input');
+            const inputHint = document.getElementById('input-hint');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const challengeSection = document.getElementById('challenge-section');
+            const resultsSection = document.getElementById('results-section');
+            const scoreEl = document.getElementById('score');
+            const incorrectAnswersEl = document.getElementById('incorrect-answers');
+            const restartBtn = document.getElementById('restart-btn');
+            
+            // Initialize challenge
+            startChallenge();
+            
+            // Start the challenge
+            function startChallenge() {
+                // Reset state
+                currentQuestion = 0;
+                userAnswers = [];
+                scores = [];
+                challengeData = [];
+                
+                // Select 10 random definitions
+                const shuffled = [...vocabulary].sort(() => 0.5 - Math.random());
+                challengeData = shuffled.slice(0, 10);
+                
+                // Initialize user answers array
+                userAnswers = new Array(challengeData.length).fill('');
+                scores = new Array(challengeData.length).fill(null);
+                
+                // Initialize display
+                totalQEl.textContent = challengeData.length;
+                showQuestion();
+                
+                // Show challenge section
+                challengeSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+                
+                // Focus on input
+                setTimeout(() => {
+                    wordInput.focus();
+                }, 100);
+            }
+            
+            // Show current question
+            function showQuestion() {
+                const question = challengeData[currentQuestion];
+                currentQEl.textContent = currentQuestion + 1;
+                definitionEl.textContent = question.definition;
+                
+                // Reset input
+                wordInput.value = userAnswers[currentQuestion] || '';
+                wordInput.className = 'word-input';
+                inputHint.textContent = '';
+                
+                // Update input hint based on previous scoring
+                if (scores[currentQuestion] === true) {
+                    wordInput.classList.add('correct');
+                    inputHint.textContent = '✓ Correct!';
+                } else if (scores[currentQuestion] === false) {
+                    wordInput.classList.add('incorrect');
+                    inputHint.textContent = '✗ Try again';
+                }
+                
+                // Update navigation buttons
+                prevBtn.disabled = currentQuestion === 0;
+                
+                // On last question, show submit button instead of next
+                if (currentQuestion === challengeData.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'flex';
+                } else {
+                    nextBtn.style.display = 'flex';
+                    submitBtn.style.display = 'none';
+                }
+            }
+            
+            // Check answer for a specific question
+            function checkAnswer(questionIndex) {
+                const userAnswer = userAnswers[questionIndex];
+                if (!userAnswer) return false;
+                
+                const question = challengeData[questionIndex];
+                const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+                
+                // Check if answer is correct (case-insensitive)
+                return question.answers.some(answer => 
+                    normalizedUserAnswer === answer.toLowerCase()
+                );
+            }
+            
+            // Navigation
+            nextBtn.addEventListener('click', () => {
+                // Save current answer
+                userAnswers[currentQuestion] = wordInput.value.trim();
+                
+                // Move to next question
+                if (currentQuestion < challengeData.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                }
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                // Save current answer
+                userAnswers[currentQuestion] = wordInput.value.trim();
+                
+                // Move to previous question
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion();
+                }
+            });
+            
+            // Enter key to move to next question or submit
+            wordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    // Save current answer
+                    userAnswers[currentQuestion] = wordInput.value.trim();
+                    
+                    if (currentQuestion < challengeData.length - 1) {
+                        currentQuestion++;
+                        showQuestion();
+                    } else {
+                        // On last question, submit when pressing Enter
+                        showResults();
+                    }
+                }
+            });
+            
+            // Submit challenge and check all answers
+            submitBtn.addEventListener('click', showResults);
+            
+            // Show results and check all answers
+            function showResults() {
+                // Save current answer
+                userAnswers[currentQuestion] = wordInput.value.trim();
+                
+                // Reset scores array
+                scores = [];
+                
+                // Check all answers
+                for (let i = 0; i < challengeData.length; i++) {
+                    scores[i] = checkAnswer(i);
+                }
+                
+                // Calculate total score
+                const score = scores.filter(s => s).length;
+                
+                // Update UI
+                scoreEl.textContent = score;
+                
+                // Show incorrect answers
+                incorrectAnswersEl.innerHTML = '';
+                
+                const incorrectAnswers = challengeData
+                    .map((question, index) => ({ 
+                        question, 
+                        userAnswer: userAnswers[index],
+                        isCorrect: scores[index]
+                    }))
+                    .filter(item => !item.isCorrect);
+                
+                if (incorrectAnswers.length > 0) {
+                    incorrectAnswersEl.innerHTML = '<h3 style="text-align: center; margin-bottom: 25px; color: #2a4d69;">Review Incorrect Answers:</h3>';
+                    
+                    incorrectAnswers.forEach(item => {
+                        const answerEl = document.createElement('div');
+                        answerEl.className = 'incorrect-answer';
+                        answerEl.innerHTML = `
+                            <p><span class="definition-label">Definition:</span></p>
+                            <p class="answer-text">${item.question.definition}</p>
+                            
+                            <p><span class="correct-label">Correct Answer:</span></p>
+                            <p class="answer-text">${item.question.word}</p>
+                            
+                            <p><span class="user-answer-label">Your Answer:</span></p>
+                            <p class="answer-text">${item.userAnswer || 'No answer'}</p>
+                            
+                            <p><span class="correct-label">Acceptable Forms:</span></p>
+                            <p class="answer-text">${item.question.answers.join(', ')}</p>
+                        `;
+                        incorrectAnswersEl.appendChild(answerEl);
+                    });
+                } else {
+                    incorrectAnswersEl.innerHTML = '<p style="text-align: center; font-size: 1.3rem; padding: 20px; background: #e8f5e9; border-radius: 12px; border: 2px solid #66bb6a; color: #1b5e20;">Perfect! All answers correct! Great job!</p>';
+                }
+                
+                // Switch to results view
+                challengeSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            }
+            
+            // Restart challenge
+            restartBtn.addEventListener('click', startChallenge);
+        });
+    </script>
+</body>
+</html>
