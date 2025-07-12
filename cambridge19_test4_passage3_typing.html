@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Typing Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f7fa, #d5e7f7);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #2c3e50;
+            transition: background 0.5s, color 0.5s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+            color: #f0f8ff;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2980b9;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .dark-mode h1 {
+            color: #3498db;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .dark-mode .subtitle {
+            color: #b0c4de;
+        }
+        
+        .typing-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dark-mode .typing-container {
+            background: #1e2a38;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question-number {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .dark-mode .question-number {
+            color: #b0c4de;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .dark-mode .answer-input {
+            background: #2a3a4c;
+            color: #f0f8ff;
+            border-color: #2980b9;
+        }
+        
+        .answer-input.correct {
+            border-color: #2e7d32;
+            background: #c8e6c9;
+        }
+        
+        .dark-mode .answer-input.correct {
+            background: #2e7d32;
+        }
+        
+        .answer-input.incorrect {
+            border-color: #c62828;
+            background: #ffcdd2;
+        }
+        
+        .dark-mode .answer-input.incorrect {
+            background: #b71c1c;
+        }
+        
+        .typing-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .dark-mode .btn:disabled {
+            background: #4a5568;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            display: none;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .dark-mode .dark-mode-toggle {
+            background: #3498db;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .dark-mode .progress-container {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+        
+        .results-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dark-mode .results-container {
+            background: #1e2a38;
+        }
+        
+        .results-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2980b9;
+            text-align: center;
+        }
+        
+        .dark-mode .results-title {
+            color: #3498db;
+        }
+        
+        .score {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .wrong-answers {
+            margin-top: 30px;
+        }
+        
+        .wrong-answer {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .dark-mode .wrong-answer {
+            background: #2a3a4c;
+        }
+        
+        .wrong-question {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .wrong-correct {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .dark-mode .wrong-correct {
+            color: #81c784;
+        }
+        
+        .wrong-selected {
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .dark-mode .wrong-selected {
+            color: #e57373;
+        }
+        
+        .restart-btn {
+            background: #3498db;
+            margin: 20px auto 0;
+            display: block;
+        }
+        
+        .hint {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .dark-mode .hint {
+            color: #b0c4de;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .answer-input {
+                font-size: 1rem;
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .typing-container, .results-container {
+                padding: 20px;
+            }
+            
+            .typing-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <div class="container">
+        <header>
+            <h1>Vocabulary Typing Challenge</h1>
+            <p class="subtitle">Type the word that matches each definition</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="typing-container" id="typing-container">
+            <!-- Questions will be generated here -->
+        </div>
+        
+        <div class="results-container" id="results-container">
+            <h2 class="results-title">Typing Results</h2>
+            <div class="score" id="score"></div>
+            <div class="wrong-answers" id="wrong-answers"></div>
+            <button class="btn restart-btn" id="restart-btn">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data with all possible forms
+        const vocabulary = [
+            {
+                word: "ruthless",
+                forms: ["ruthless"],
+                definition: "Showing no pity or compassion for others",
+                example: "The ruthless dictator showed no mercy to his enemies."
+            },
+            {
+                word: "impulse",
+                forms: ["impulse", "impulses"],
+                definition: "A sudden strong urge to do something",
+                example: "She had a sudden impulse to buy the dress."
+            },
+            {
+                word: "possessions",
+                forms: ["possession", "possessions"],
+                definition: "Things that you own or have with you",
+                example: "He packed all his possessions into a single suitcase."
+            },
+            {
+                word: "ulterior motive",
+                forms: ["ulterior motive", "ulterior motives"],
+                definition: "A hidden reason for doing something",
+                example: "I think he's being nice with an ulterior motive."
+            },
+            {
+                word: "transcend",
+                forms: ["transcend", "transcends", "transcended", "transcending"],
+                definition: "To go beyond the usual limits of something",
+                example: "Her performance transcended all expectations."
+            },
+            {
+                word: "brutality",
+                forms: ["brutality", "brutalities"],
+                definition: "Savage physical violence; cruelty",
+                example: "The police were accused of brutality during the protest."
+            },
+            {
+                word: "bleak",
+                forms: ["bleak", "bleaker", "bleakest"],
+                definition: "Lacking in warmth, life, or kindliness",
+                example: "The future looked bleak after the company went bankrupt."
+            },
+            {
+                word: "traits",
+                forms: ["trait", "traits"],
+                definition: "Distinguishing qualities or characteristics",
+                example: "Honesty and kindness are her best traits."
+            },
+            {
+                word: "brutal",
+                forms: ["brutal"],
+                definition: "Savagely violent; harsh and unforgiving",
+                example: "The winter was particularly brutal this year."
+            },
+            {
+                word: "sparsely populated",
+                forms: ["sparsely populated"],
+                definition: "Having few inhabitants in relation to its size",
+                example: "Northern Canada is sparsely populated."
+            },
+            {
+                word: "to back",
+                forms: ["back", "backs", "backed", "backing"],
+                definition: "To support or endorse; to provide evidence for",
+                example: "The theory is backed by solid scientific evidence."
+            },
+            {
+                word: "obligation",
+                forms: ["obligation", "obligations"],
+                definition: "A duty or commitment",
+                example: "Parents have an obligation to care for their children."
+            },
+            {
+                word: "preserve",
+                forms: ["preserve", "preserves", "preserved", "preserving"],
+                definition: "To maintain something in its original state",
+                example: "We must preserve the rainforest for future generations."
+            },
+            {
+                word: "disparity",
+                forms: ["disparity", "disparities"],
+                definition: "A great difference or inequality",
+                example: "There is a growing disparity between rich and poor."
+            },
+            {
+                word: "swap",
+                forms: ["swap", "swaps", "swapped", "swapping"],
+                definition: "To exchange one thing for another",
+                example: "The children swapped sandwiches at lunchtime."
+            },
+            {
+                word: "acclaim",
+                forms: ["acclaim", "acclaims", "acclaimed", "acclaiming"],
+                definition: "Enthusiastic public praise and approval",
+                example: "The novel received critical acclaim."
+            },
+            {
+                word: "domineering",
+                forms: ["domineering"],
+                definition: "Asserting one's will over others in an arrogant way",
+                example: "His domineering attitude made him unpopular."
+            },
+            {
+                word: "to ostracise",
+                forms: ["ostracise", "ostracises", "ostracised", "ostracising", "ostracize", "ostracizes", "ostracized", "ostracizing"],
+                definition: "To exclude someone from a society or group",
+                example: "The community ostracised him after the scandal."
+            },
+            {
+                word: "exile",
+                forms: ["exile", "exiles", "exiled", "exiling"],
+                definition: "The state of being barred from one's native country",
+                example: "The political dissident lived in exile for 20 years."
+            },
+            {
+                word: "In view of",
+                forms: ["in view of"],
+                definition: "Considering; taking into account",
+                example: "In view of the circumstances, we decided to cancel the event."
+            },
+            {
+                word: "altruism",
+                forms: ["altruism"],
+                definition: "Selfless concern for the welfare of others",
+                example: "Her altruism led her to volunteer at the homeless shelter."
+            },
+            {
+                word: "the advent of",
+                forms: ["the advent of"],
+                definition: "The arrival or coming of something notable",
+                example: "The advent of the internet changed communication forever."
+            },
+            {
+                word: "feasible",
+                forms: ["feasible"],
+                definition: "Possible to do easily or conveniently",
+                example: "Is it feasible to finish the project by Friday?"
+            }
+        ];
+
+        // Track which words have been used
+        let usedWords = [];
+        
+        // DOM elements
+        const typingContainer = document.getElementById('typing-container');
+        const resultsContainer = document.getElementById('results-container');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreEl = document.getElementById('score');
+        const wrongAnswersEl = document.getElementById('wrong-answers');
+        const restartBtn = document.getElementById('restart-btn');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let questions = [];
+        let userAnswers = [];
+        
+        // Initialize typing challenge
+        function initTypingChallenge() {
+            // Reset state
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            
+            // If all words have been used, reset the tracking
+            if (usedWords.length >= vocabulary.length) {
+                usedWords = [];
+            }
+            
+            // Select 10 random words that haven't been used recently
+            const availableWords = vocabulary.filter(word => !usedWords.includes(word.word));
+            const shuffledVocabulary = [...availableWords];
+            shuffleArray(shuffledVocabulary);
+            
+            // Select up to 10 words (or less if not enough available)
+            const selectedWords = shuffledVocabulary.slice(0, 10);
+            
+            // Add them to used words
+            selectedWords.forEach(word => usedWords.push(word.word));
+            
+            // Create questions
+            questions = selectedWords.map(word => {
+                return {
+                    word: word.word,
+                    forms: word.forms,
+                    definition: word.definition,
+                    example: word.example
+                };
+            });
+            
+            // Render typing challenge
+            renderTypingChallenge();
+            
+            // Hide results and show quiz
+            resultsContainer.style.display = 'none';
+            typingContainer.style.display = 'block';
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Render typing challenge
+        function renderTypingChallenge() {
+            typingContainer.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const questionEl = document.createElement('div');
+                questionEl.className = `question-container ${index === 0 ? 'active' : ''}`;
+                questionEl.dataset.index = index;
+                
+                questionEl.innerHTML = `
+                    <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.definition}</div>
+                    <input type="text" class="answer-input" placeholder="Type the word here..." data-index="${index}">
+                `;
+                
+                typingContainer.appendChild(questionEl);
+            });
+            
+            // Add navigation controls to the last question
+            const controlsEl = document.createElement('div');
+            controlsEl.className = 'typing-controls';
+            controlsEl.innerHTML = `
+                <button class="btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn" id="next-btn">
+                    <i class="fas fa-arrow-right"></i> Next
+                </button>
+                <button class="btn submit-btn" id="submit-btn">
+                    <i class="fas fa-check"></i> Submit
+                </button>
+            `;
+            typingContainer.appendChild(controlsEl);
+            
+            // Add event listeners
+            addEventListeners();
+        }
+        
+        // Add event listeners
+        function addEventListeners() {
+            // Input handling
+            document.querySelectorAll('.answer-input').forEach(input => {
+                input.addEventListener('input', () => {
+                    const index = parseInt(input.dataset.index);
+                    userAnswers[index] = input.value.trim().toLowerCase();
+                    
+                    // Enable/disable next button based on input
+                    const nextBtn = document.getElementById('next-btn');
+                    const submitBtn = document.getElementById('submit-btn');
+                    const hasInput = userAnswers[index] !== undefined && userAnswers[index] !== '';
+                    
+                    if (index === questions.length - 1) {
+                        submitBtn.style.display = hasInput ? 'flex' : 'none';
+                        nextBtn.style.display = 'none';
+                    } else {
+                        nextBtn.disabled = !hasInput;
+                    }
+                });
+                
+                // Allow pressing Enter to go to next question
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const index = parseInt(input.dataset.index);
+                        if (index < questions.length - 1 && userAnswers[index]) {
+                            showQuestion(index + 1);
+                            // Focus the next input
+                            document.querySelector(`.answer-input[data-index="${index + 1}"]`).focus();
+                        } else if (index === questions.length - 1 && userAnswers[index]) {
+                            showResults();
+                        }
+                    }
+                });
+            });
+            
+            // Navigation buttons
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    showQuestion(currentQuestion - 1);
+                }
+            });
+            
+            document.getElementById('next-btn').addEventListener('click', () => {
+                if (currentQuestion < questions.length - 1) {
+                    showQuestion(currentQuestion + 1);
+                }
+            });
+            
+            // Submit button
+            document.getElementById('submit-btn').addEventListener('click', showResults);
+        }
+        
+        // Show specific question
+        function showQuestion(index) {
+            // Hide current question
+            document.querySelector('.question-container.active').classList.remove('active');
+            
+            // Show new question
+            currentQuestion = index;
+            document.querySelector(`.question-container[data-index="${index}"]`).classList.add('active');
+            
+            // Update navigation buttons
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            prevBtn.disabled = index === 0;
+            
+            if (index === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = userAnswers[index] !== undefined && userAnswers[index] !== '' ? 'flex' : 'none';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = userAnswers[index] === undefined || userAnswers[index] === '';
+            }
+            
+            // Update progress
+            updateProgress();
+            
+            // Restore input if exists
+            if (userAnswers[index] !== undefined && userAnswers[index] !== '') {
+                const input = document.querySelector(`.question-container.active .answer-input`);
+                input.value = userAnswers[index];
+            }
+        }
+        
+        // Show results
+        function showResults() {
+            // Calculate score
+            score = 0;
+            const wrongAnswers = [];
+            
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index] || '';
+                const isCorrect = question.forms.some(form => 
+                    form.toLowerCase() === userAnswer.toLowerCase()
+                );
+                
+                if (isCorrect) {
+                    score++;
+                    // Mark input as correct
+                    const input = document.querySelector(`.answer-input[data-index="${index}"]`);
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                } else {
+                    wrongAnswers.push({
+                        definition: question.definition,
+                        correctAnswer: question.word,
+                        userAnswer: userAnswer || '(no answer)',
+                        forms: question.forms,
+                        example: question.example
+                    });
+                    // Mark input as incorrect
+                    const input = document.querySelector(`.answer-input[data-index="${index}"]`);
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                }
+            });
+            
+            // Display results
+            scoreEl.textContent = `You scored ${score} out of ${questions.length}`;
+            
+            if (wrongAnswers.length > 0) {
+                wrongAnswersEl.innerHTML = `
+                    <h3>Words to review:</h3>
+                    ${wrongAnswers.map(answer => `
+                        <div class="wrong-answer">
+                            <div class="wrong-question">${answer.definition}</div>
+                            <div><span class="wrong-correct">Correct word:</span> ${answer.correctAnswer}</div>
+                            <div><span class="wrong-selected">You typed:</span> ${answer.userAnswer}</div>
+                            <div><em>Accepted forms:</em> ${answer.forms.join(", ")}</div>
+                            ${answer.example ? `<div class="example"><em>Example:</em> ${answer.example}</div>` : ''}
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                wrongAnswersEl.innerHTML = '<p>Perfect! You got all questions correct!</p>';
+            }
+            
+            // Hide quiz and show results
+            typingContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        // Dark mode toggle
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Restart quiz
+        restartBtn.addEventListener('click', initTypingChallenge);
+        
+        // Initialize typing challenge on page load
+        initTypingChallenge();
+    </script>
+</body>
+</html>
