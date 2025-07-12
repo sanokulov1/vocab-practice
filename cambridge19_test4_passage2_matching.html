@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
             color: #333;
             padding: 10px;
             min-height: 100vh;
@@ -26,7 +26,7 @@
             margin: 10px auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             padding: 20px;
         }
@@ -35,10 +35,10 @@
             text-align: center;
             padding: 20px 0;
             margin-bottom: 20px;
-            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            background: linear-gradient(to right, #1a2980, #26d0ce);
             border-radius: 12px;
             color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -65,7 +65,7 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.1rem;
-            color: #2a4d69;
+            color: #1a2980;
             padding: 0 15px;
             line-height: 1.5;
             position: relative;
@@ -77,7 +77,7 @@
             display: block;
             width: 100px;
             height: 3px;
-            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            background: linear-gradient(to right, #1a2980, #26d0ce);
             margin: 15px auto;
             border-radius: 2px;
         }
@@ -88,18 +88,18 @@
             background: #f0f9ff;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
             border: 1px solid #d1ecff;
         }
         
         .group-container:hover {
             transform: translateY(-4px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         
         .collapsible {
-            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            background: linear-gradient(to right, #1a2980, #26d0ce);
             color: white;
             cursor: pointer;
             padding: 15px;
@@ -119,7 +119,7 @@
         }
         
         .collapsible:hover {
-            background: linear-gradient(to right, #3a75a0, #1e3d54);
+            background: linear-gradient(to right, #15236e, #1fbdb8);
         }
         
         .collapsible i {
@@ -157,7 +157,7 @@
         .column-title {
             text-align: center;
             padding: 12px;
-            background: #2a4d69;
+            background: #1a2980;
             color: white;
             border-radius: 8px;
             font-weight: bold;
@@ -181,13 +181,13 @@
         
         .word-item {
             background: #e1f5fe;
-            border: 2px solid #4b86b4;
-            color: #1e3d54;
+            border: 2px solid #1a2980;
+            color: #15236e;
         }
         
         .definition-item {
             background: #fffde7;
-            border: 2px solid #ffca28;
+            border: 2px solid #ff9800;
             color: #5d4037;
         }
         
@@ -198,24 +198,24 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: #4b86b4;
+            background: #1a2980;
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.3s ease;
         }
         
         .definition-item::before {
-            background: #ffca28;
+            background: #ff9800;
         }
         
         .word-item:hover, .definition-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .word-item.selected, .definition-item.selected {
             transform: scale(1.02);
-            box-shadow: 0 0 12px rgba(75, 134, 180, 0.4);
+            box-shadow: 0 0 15px rgba(26, 41, 128, 0.4);
             z-index: 10;
         }
         
@@ -225,24 +225,24 @@
         
         .word-item.matched {
             background: #e8f5e9;
-            border-color: #66bb6a;
+            border-color: #4caf50;
             color: #1b5e20;
         }
         
         .definition-item.matched {
             background: #e8f5e9;
-            border-color: #66bb6a;
+            border-color: #4caf50;
             color: #1b5e20;
         }
         
         .word-item.matched::before, .definition-item.matched::before {
-            background: #66bb6a;
+            background: #4caf50;
             transform: scaleX(1);
         }
         
         .word-item.mismatch, .definition-item.mismatch {
             background: #ffebee;
-            border-color: #ef5350;
+            border-color: #f44336;
             color: #b71c1c;
             animation: shake 0.5s;
         }
@@ -257,13 +257,13 @@
             text-align: center;
             font-size: 1.3rem;
             font-weight: bold;
-            color: #2a4d69;
+            color: #1a2980;
             margin: 15px 0;
             padding: 15px;
-            background: rgba(66, 133, 244, 0.1);
+            background: rgba(26, 41, 128, 0.1);
             border-radius: 8px;
             display: none;
-            border: 2px dashed #4b86b4;
+            border: 2px dashed #1a2980;
             animation: pulse 1.5s infinite;
         }
         
@@ -277,7 +277,7 @@
             display: block;
             margin: 20px auto;
             padding: 12px 30px;
-            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            background: linear-gradient(to right, #1a2980, #26d0ce);
             color: white;
             border: none;
             border-radius: 45px;
@@ -285,14 +285,14 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
         }
         
         .reset-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
         }
         
         .game-stats {
@@ -300,11 +300,23 @@
             justify-content: space-around;
             margin: 15px 0;
             padding: 12px;
-            background: rgba(75, 134, 180, 0.1);
+            background: rgba(26, 41, 128, 0.1);
             border-radius: 12px;
             font-weight: bold;
-            color: #2a4d69;
+            color: #1a2980;
             font-size: 1.05rem;
+        }
+        
+        .stats-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stats-value {
+            font-size: 1.4rem;
+            margin-top: 5px;
+            color: #26d0ce;
         }
         
         /* Mobile Optimizations */
@@ -352,7 +364,7 @@
                 justify-content: flex-start;
                 gap: 10px;
                 scrollbar-width: thin;
-                scrollbar-color: #4b86b4 #f0f9ff;
+                scrollbar-color: #1a2980 #f0f9ff;
             }
             
             .matching-area::-webkit-scrollbar {
@@ -365,7 +377,7 @@
             }
             
             .matching-area::-webkit-scrollbar-thumb {
-                background: #4b86b4;
+                background: #1a2980;
                 border-radius: 3px;
             }
             
@@ -447,18 +459,27 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-language"></i> Vocabulary Matching Game</h1>
-            <p>Tap on a word and then its definition to make a match</p>
+            <h1><i class="fas fa-language"></i> Vocabulary Matching Challenge</h1>
+            <p>Match words with their definitions to test your knowledge!</p>
         </header>
         
         <div class="instructions">
-            <p>Match words with their definitions. Correct matches turn green, incorrect matches flash red for 2 seconds.</p>
+            <p>Click on a word and then its corresponding definition. Correct matches turn green, incorrect matches will flash red.</p>
         </div>
         
         <div class="game-stats">
-            <div>Total Words: <span id="total-words">23</span></div>
-            <div>Matched: <span id="matched-count">0</span></div>
-            <div>Remaining: <span id="remaining-count">23</span></div>
+            <div class="stats-item">
+                <span>Total Words</span>
+                <span class="stats-value" id="total-words">23</span>
+            </div>
+            <div class="stats-item">
+                <span>Matched</span>
+                <span class="stats-value" id="matched-count">0</span>
+            </div>
+            <div class="stats-item">
+                <span>Remaining</span>
+                <span class="stats-value" id="remaining-count">23</span>
+            </div>
         </div>
         
         <!-- Group 1 (6 words) -->
@@ -588,7 +609,7 @@
         </div>
         
         <button class="reset-btn" id="reset-btn">
-            <i class="fas fa-sync-alt"></i> Reset Game
+            <i class="fas fa-random"></i> New Matching Test
         </button>
     </div>
 
@@ -718,6 +739,45 @@
                 }
             }
             
+            // Enhanced shuffle function
+            function shuffleAllItems() {
+                // Get all groups
+                const groups = document.querySelectorAll('.group-container');
+                
+                groups.forEach(group => {
+                    // Words column
+                    const wordsColumn = group.querySelector('.words-column');
+                    const words = Array.from(wordsColumn.querySelectorAll('.word-item'));
+                    words.shift(); // Remove the title
+                    
+                    // Shuffle words
+                    shuffleArray(words);
+                    
+                    // Clear words column (keeping title)
+                    words.forEach(word => wordsColumn.appendChild(word));
+                    
+                    // Definitions column
+                    const definitionsColumn = group.querySelector('.definitions-column');
+                    const definitions = Array.from(definitionsColumn.querySelectorAll('.definition-item'));
+                    definitions.shift(); // Remove the title
+                    
+                    // Shuffle definitions
+                    shuffleArray(definitions);
+                    
+                    // Clear definitions column (keeping title)
+                    definitions.forEach(def => definitionsColumn.appendChild(def));
+                });
+            }
+            
+            // Shuffle array function
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
             // Reset button functionality
             document.getElementById('reset-btn').addEventListener('click', function() {
                 // Reset all matched items
@@ -740,65 +800,9 @@
                 matchedCount = 0;
                 updateStats();
                 
-                // Shuffle definitions
-                shuffleDefinitions();
+                // Shuffle both words and definitions
+                shuffleAllItems();
             });
-            
-            // Shuffle definitions in each group
-            function shuffleDefinitions() {
-                // Group 1 definitions
-                const group1DefsContainer = document.querySelector('.group-container:nth-child(1) .definitions-column');
-                const group1Defs = Array.from(group1DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group1Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group1Defs);
-                group1Defs.forEach(def => group1DefsContainer.appendChild(def));
-                
-                // Group 2 definitions
-                const group2DefsContainer = document.querySelector('.group-container:nth-child(2) .definitions-column');
-                const group2Defs = Array.from(group2DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group2Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group2Defs);
-                group2Defs.forEach(def => group2DefsContainer.appendChild(def));
-                
-                // Group 3 definitions
-                const group3DefsContainer = document.querySelector('.group-container:nth-child(3) .definitions-column');
-                const group3Defs = Array.from(group3DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group3Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group3Defs);
-                group3Defs.forEach(def => group3DefsContainer.appendChild(def));
-                
-                // Group 4 definitions
-                const group4DefsContainer = document.querySelector('.group-container:nth-child(4) .definitions-column');
-                const group4Defs = Array.from(group4DefsContainer.querySelectorAll('.definition-item'));
-                
-                // Remove existing definitions (keeping the title)
-                group4Defs.forEach(def => def.remove());
-                
-                // Shuffle and re-add
-                shuffleArray(group4Defs);
-                group4Defs.forEach(def => group4DefsContainer.appendChild(def));
-            }
-            
-            // Shuffle array function
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
             
             // Initialize the game with collapsibles open
             collapsibles.forEach(button => {
@@ -808,7 +812,7 @@
             });
             
             // Initial shuffle
-            shuffleDefinitions();
+            shuffleAllItems();
             
             // Initialize stats
             updateStats();
