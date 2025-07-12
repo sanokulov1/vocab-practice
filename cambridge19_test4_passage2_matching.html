@@ -16,29 +16,29 @@
         body {
             background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
             color: #333;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
         }
         
         .container {
             max-width: 1200px;
             width: 100%;
-            margin: 20px auto;
+            margin: 10px auto;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
             overflow: hidden;
-            padding: 30px;
+            padding: 20px;
         }
         
         header {
             text-align: center;
-            padding: 25px 0;
-            margin-bottom: 25px;
+            padding: 20px 0;
+            margin-bottom: 20px;
             background: linear-gradient(to right, #4b86b4, #2a4d69);
-            border-radius: 15px;
+            border-radius: 12px;
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             position: relative;
             overflow: hidden;
         }
@@ -55,19 +55,19 @@
         }
         
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
             position: relative;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
         
         .instructions {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
             color: #2a4d69;
-            padding: 0 20px;
-            line-height: 1.6;
+            padding: 0 15px;
+            line-height: 1.5;
             position: relative;
             font-weight: 500;
         }
@@ -75,44 +75,44 @@
         .instructions::after {
             content: "";
             display: block;
-            width: 120px;
-            height: 4px;
+            width: 100px;
+            height: 3px;
             background: linear-gradient(to right, #4b86b4, #2a4d69);
-            margin: 20px auto;
-            border-radius: 3px;
+            margin: 15px auto;
+            border-radius: 2px;
         }
         
         /* Group Styles */
         .group-container {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: #f0f9ff;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease;
             border: 1px solid #d1ecff;
         }
         
         .group-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
         
         .collapsible {
             background: linear-gradient(to right, #4b86b4, #2a4d69);
             color: white;
             cursor: pointer;
-            padding: 18px;
+            padding: 15px;
             width: 100%;
             border: none;
             text-align: left;
             outline: none;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 15px 15px 0 0;
+            border-radius: 12px 12px 0 0;
             transition: all 0.3s ease;
             position: relative;
             z-index: 2;
@@ -131,7 +131,7 @@
         }
         
         .content {
-            padding: 0 18px;
+            padding: 0 15px;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
@@ -141,39 +141,39 @@
         .matching-area {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            padding: 25px 0;
+            gap: 15px;
+            padding: 20px 0;
             justify-content: center;
         }
         
         .words-column, .definitions-column {
             flex: 1;
-            min-width: 300px;
+            min-width: 280px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         
         .column-title {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: #2a4d69;
             color: white;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: bold;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            font-size: 1.1rem;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.05rem;
         }
         
         .word-item, .definition-item {
-            padding: 18px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             text-align: center;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
             position: relative;
             overflow: hidden;
             user-select: none;
@@ -197,7 +197,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: #4b86b4;
             transform: scaleX(0);
             transform-origin: left;
@@ -209,17 +209,13 @@
         }
         
         .word-item:hover, .definition-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .word-item:hover::before, .definition-item:hover::before {
-            transform: scaleX(1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
         
         .word-item.selected, .definition-item.selected {
             transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(75, 134, 180, 0.5);
+            box-shadow: 0 0 12px rgba(75, 134, 180, 0.4);
             z-index: 10;
         }
         
@@ -253,19 +249,19 @@
         
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
         }
         
         .completion-message {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #2a4d69;
-            margin: 20px 0;
-            padding: 20px;
+            margin: 15px 0;
+            padding: 15px;
             background: rgba(66, 133, 244, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
             display: none;
             border: 2px dashed #4b86b4;
             animation: pulse 1.5s infinite;
@@ -273,69 +269,177 @@
         
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
         
         .reset-btn {
             display: block;
-            margin: 25px auto;
-            padding: 14px 35px;
+            margin: 20px auto;
+            padding: 12px 30px;
             background: linear-gradient(to right, #4b86b4, #2a4d69);
             color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            border-radius: 45px;
+            font-size: 1.05rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
             position: relative;
             overflow: hidden;
         }
         
         .reset-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
         }
         
         .game-stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
-            padding: 15px;
+            margin: 15px 0;
+            padding: 12px;
             background: rgba(75, 134, 180, 0.1);
-            border-radius: 15px;
+            border-radius: 12px;
             font-weight: bold;
             color: #2a4d69;
+            font-size: 1.05rem;
         }
         
+        /* Mobile Optimizations */
         @media (max-width: 768px) {
-            .matching-area {
-                flex-direction: column;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .collapsible {
-                font-size: 1.1rem;
-                padding: 15px;
+            body {
+                padding: 5px;
             }
             
             .container {
+                margin: 5px auto;
                 padding: 15px;
+                border-radius: 12px;
+            }
+            
+            header {
+                padding: 15px 0;
+                margin-bottom: 15px;
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .instructions {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            .instructions::after {
+                width: 80px;
+                height: 2px;
+                margin: 12px auto;
+            }
+            
+            .collapsible {
+                padding: 12px;
+                font-size: 1.05rem;
+            }
+            
+            .matching-area {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 15px 5px;
+                justify-content: flex-start;
+                gap: 10px;
+                scrollbar-width: thin;
+                scrollbar-color: #4b86b4 #f0f9ff;
+            }
+            
+            .matching-area::-webkit-scrollbar {
+                height: 6px;
+            }
+            
+            .matching-area::-webkit-scrollbar-track {
+                background: #f0f9ff;
+                border-radius: 3px;
+            }
+            
+            .matching-area::-webkit-scrollbar-thumb {
+                background: #4b86b4;
+                border-radius: 3px;
+            }
+            
+            .words-column, .definitions-column {
+                min-width: 260px;
+                gap: 10px;
+            }
+            
+            .column-title {
+                padding: 10px;
+                font-size: 0.95rem;
+                margin-bottom: 10px;
             }
             
             .word-item, .definition-item {
-                padding: 15px;
-                font-size: 1rem;
+                padding: 14px 10px;
+                font-size: 0.95rem;
+                border-radius: 8px;
             }
             
             .game-stats {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+            
+            .completion-message {
+                font-size: 1.15rem;
+                padding: 12px;
+                margin: 12px 0;
+            }
+            
+            .reset-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+                margin: 15px auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .instructions {
+                font-size: 0.9rem;
+            }
+            
+            .collapsible {
+                font-size: 0.95rem;
+                padding: 10px;
+            }
+            
+            .matching-area {
+                gap: 8px;
+            }
+            
+            .words-column, .definitions-column {
+                min-width: 240px;
+            }
+            
+            .word-item, .definition-item {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .column-title {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+            
+            .completion-message {
+                font-size: 1.05rem;
             }
         }
     </style>
