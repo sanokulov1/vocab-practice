@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #2a4d69;
+            padding: 0 20px;
+            line-height: 1.6;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .instructions::after {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            margin: 20px auto;
+            border-radius: 3px;
+        }
+        
+        /* Quiz Styles */
+        .quiz-container {
+            margin-top: 20px;
+        }
+        
+        .question-counter {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin-bottom: 25px;
+            padding: 12px;
+            background: rgba(75, 134, 180, 0.1);
+            border-radius: 10px;
+        }
+        
+        .question-text {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 35px;
+            color: #1e3d54;
+            padding: 20px;
+            background: rgba(75, 134, 180, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin-bottom: 40px;
+        }
+        
+        .option {
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            background: #e1f5fe;
+            border: 2px solid #4b86b4;
+            color: #1e3d54;
+        }
+        
+        .option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: #d1ecff;
+        }
+        
+        .option.selected {
+            background: #4b86b4;
+            color: white;
+            border-color: #2a4d69;
+            box-shadow: 0 0 20px rgba(75, 134, 180, 0.6);
+            transform: scale(1.02);
+        }
+        
+        .option.correct {
+            background: #e8f5e9;
+            border-color: #66bb6a;
+            color: #1b5e20;
+            animation: pulse 0.5s;
+        }
+        
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #ef5350;
+            color: #b71c1c;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            padding: 15px 35px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:disabled {
+            background: #a0c4e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Results Styles */
+        .results-container {
+            display: none;
+            padding: 25px;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(75, 134, 180, 0.15);
+            border-radius: 15px;
+        }
+        
+        .completion-message {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: 15px;
+            border: 2px dashed #4b86b4;
+            animation: pulse 2s infinite;
+        }
+        
+        .incorrect-answers {
+            margin-top: 35px;
+        }
+        
+        .incorrect-answer {
+            background: #fffde7;
+            border: 2px solid #ffca28;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .answer-label {
+            font-weight: bold;
+            color: #5d4037;
+            font-size: 1.2rem;
+        }
+        
+        .correct-label {
+            color: #1b5e20;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .user-answer-label {
+            color: #b71c1c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .answer-text {
+            margin: 10px 0 15px 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .restart-btn {
+            display: block;
+            margin: 35px auto 15px;
+            padding: 16px 45px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .instructions {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+                padding: 15px;
+            }
+            
+            .option {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+            
+            .nav-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            
+            .score-display {
+                font-size: 1.8rem;
+            }
+            
+            .completion-message {
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .question-text {
+                font-size: 1.4rem;
+            }
+            
+            .option {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book-open"></i> Vocabulary Quiz</h1>
+            <p>Test your vocabulary knowledge</p>
+        </header>
+        
+        <div class="instructions">
+            <p>Each quiz contains 10 randomly selected words. Choose the correct definition for each word. After completing all questions, you'll see your score and any incorrect answers.</p>
+        </div>
+        
+        <!-- Quiz Section -->
+        <div class="quiz-container" id="quiz-section">
+            <div class="question-counter">Question <span id="current-q">1</span> of <span id="total-q">10</span></div>
+            <div class="question-text">What is the definition of: <span id="question-word" class="highlight">Word</span></div>
+            
+            <div class="options-container" id="options-container">
+                <!-- Options will be generated here -->
+            </div>
+            
+            <div class="quiz-navigation">
+                <button class="nav-btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="nav-btn" id="next-btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn" id="submit-btn" style="display: none;">
+                    Submit Quiz <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-container" id="results-section">
+            <div class="score-display">
+                Your Score: <span id="score">0</span>/10
+            </div>
+            
+            <div class="completion-message">
+                <i class="fas fa-trophy"></i> Quiz Completed!
+            </div>
+            
+            <div class="incorrect-answers" id="incorrect-answers">
+                <!-- Incorrect answers will be shown here -->
+            </div>
+            
+            <button class="restart-btn" id="restart-btn">
+                <i class="fas fa-redo"></i> Take Another Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vocabulary data
+            const vocabulary = [
+                { word: "Knock-on effects", definition: "Indirect consequences or chain reactions" },
+                { word: "Prey", definition: "An animal hunted by another for food" },
+                { word: "To arm", definition: "To equip or prepare with knowledge or tools" },
+                { word: "To halt", definition: "To stop or bring to a pause" },
+                { word: "To reverse", definition: "To change something to the opposite direction or undo" },
+                { word: "To reproduce", definition: "To have babies or make copies" },
+                { word: "To keep in line with", definition: "To match or stay the same as" },
+                { word: "To be equipped", definition: "To have the necessary tools or skills" },
+                { word: "Abundance", definition: "A large quantity or plenty" },
+                { word: "Emergence", definition: "When something appears or starts" },
+                { word: "Restricted to", definition: "Only allowed in a certain way" },
+                { word: "Sole", definition: "Only; single" },
+                { word: "To spot", definition: "To notice or detect" }
+            ];
+            
+            // Quiz state
+            let quizData = [];
+            let currentQuestion = 0;
+            let userAnswers = [];
+            
+            // Quiz elements
+            const currentQEl = document.getElementById('current-q');
+            const totalQEl = document.getElementById('total-q');
+            const questionWordEl = document.getElementById('question-word');
+            const optionsContainer = document.getElementById('options-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const quizSection = document.getElementById('quiz-section');
+            const resultsSection = document.getElementById('results-section');
+            const scoreEl = document.getElementById('score');
+            const incorrectAnswersEl = document.getElementById('incorrect-answers');
+            const restartBtn = document.getElementById('restart-btn');
+            
+            // Initialize quiz
+            startQuiz();
+            
+            // Start the quiz
+            function startQuiz() {
+                // Reset state
+                currentQuestion = 0;
+                userAnswers = [];
+                quizData = [];
+                
+                // Select 10 random words
+                const shuffled = [...vocabulary].sort(() => 0.5 - Math.random());
+                quizData = shuffled.slice(0, 10);
+                
+                // Initialize user answers array
+                userAnswers = new Array(quizData.length).fill(null);
+                
+                // Initialize quiz display
+                totalQEl.textContent = quizData.length;
+                showQuestion();
+                
+                // Show quiz section
+                quizSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+            }
+            
+            // Show current question
+            function showQuestion() {
+                const question = quizData[currentQuestion];
+                currentQEl.textContent = currentQuestion + 1;
+                questionWordEl.textContent = question.word;
+                
+                // Clear previous options
+                optionsContainer.innerHTML = '';
+                
+                // Generate options (correct + 3 random incorrect)
+                let options = [{text: question.definition, correct: true}];
+                
+                // Get 3 random incorrect definitions
+                const otherDefinitions = vocabulary
+                    .filter(item => item.definition !== question.definition)
+                    .map(item => item.definition)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 3)
+                    .map(text => ({text, correct: false}));
+                
+                options = [...options, ...otherDefinitions];
+                
+                // Shuffle options
+                shuffleArray(options);
+                
+                // Create option elements
+                options.forEach((option, index) => {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'option';
+                    optionEl.textContent = option.text;
+                    
+                    // Mark if already selected
+                    if (userAnswers[currentQuestion] === option.text) {
+                        optionEl.classList.add('selected');
+                    }
+                    
+                    optionEl.addEventListener('click', () => {
+                        // Remove selection from other options
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Select this option
+                        optionEl.classList.add('selected');
+                        
+                        // Save answer (store the definition text)
+                        userAnswers[currentQuestion] = option.text;
+                    });
+                    
+                    optionsContainer.appendChild(optionEl);
+                });
+                
+                // Update navigation buttons
+                prevBtn.disabled = currentQuestion === 0;
+                
+                // On last question, show submit button instead of next
+                if (currentQuestion === quizData.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'flex';
+                } else {
+                    nextBtn.style.display = 'flex';
+                    submitBtn.style.display = 'none';
+                }
+            }
+            
+            // Navigation
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestion < quizData.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                }
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion();
+                }
+            });
+            
+            submitBtn.addEventListener('click', showResults);
+            
+            // Show quiz results
+            function showResults() {
+                // Calculate score
+                let score = 0;
+                const incorrectAnswers = [];
+                
+                quizData.forEach((question, index) => {
+                    const userAnswer = userAnswers[index];
+                    
+                    if (userAnswer === question.definition) {
+                        score++;
+                    } else {
+                        incorrectAnswers.push({
+                            word: question.word,
+                            correct: question.definition,
+                            userAnswer: userAnswer || "No answer"
+                        });
+                    }
+                });
+                
+                // Update UI
+                scoreEl.textContent = score;
+                
+                // Show incorrect answers
+                incorrectAnswersEl.innerHTML = '';
+                
+                if (incorrectAnswers.length > 0) {
+                    incorrectAnswersEl.innerHTML = '<h3 style="text-align: center; margin-bottom: 25px; color: #2a4d69;">Review Incorrect Answers:</h3>';
+                    
+                    incorrectAnswers.forEach(item => {
+                        const answerEl = document.createElement('div');
+                        answerEl.className = 'incorrect-answer';
+                        answerEl.innerHTML = `
+                            <p><span class="answer-label">Word:</span></p>
+                            <p class="answer-text">${item.word}</p>
+                            
+                            <p><span class="correct-label">Correct Answer:</span></p>
+                            <p class="answer-text">${item.correct}</p>
+                            
+                            <p><span class="user-answer-label">Your Answer:</span></p>
+                            <p class="answer-text">${item.userAnswer}</p>
+                        `;
+                        incorrectAnswersEl.appendChild(answerEl);
+                    });
+                } else {
+                    incorrectAnswersEl.innerHTML = '<p style="text-align: center; font-size: 1.3rem; padding: 20px; background: #e8f5e9; border-radius: 12px; border: 2px solid #66bb6a; color: #1b5e20;">Perfect! All answers correct! Great job!</p>';
+                }
+                
+                // Switch to results view
+                quizSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            }
+            
+            // Restart quiz
+            restartBtn.addEventListener('click', startQuiz);
+            
+            // Shuffle array function
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+        });
+    </script>
+</body>
+</html>
