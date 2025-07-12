@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Typing Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(41, 128, 185, 0.2);
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        h1 {
+            color: #2980b9;
+            margin: 15px 0;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .progress-bar {
+            height: 14px;
+            background-color: #ecf0f1;
+            border-radius: 7px;
+            flex-grow: 1;
+            margin: 0 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 7px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .question-container {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.15);
+            border: 1px solid #e0e7ff;
+        }
+        
+        .definition {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .input-container {
+            display: flex;
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        input {
+            flex-grow: 1;
+            padding: 18px;
+            border: none;
+            font-size: 1.2rem;
+            outline: none;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        
+        input:focus {
+            background: #fff;
+            box-shadow: inset 0 0 0 2px #3498db;
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 0 35px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #2980b9, #2573a7);
+        }
+        
+        .progress-text {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            min-width: 130px;
+        }
+        
+        .score-container {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            min-width: 100px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 55px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 25px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-restart {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .result-title {
+            color: #2980b9;
+            margin-bottom: 15px;
+            font-size: 2.2rem;
+        }
+        
+        .final-score {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #3498db;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .message {
+            font-size: 1.4rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .result-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            padding: 15px;
+            border-bottom: 1px solid #e0e7ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            text-align: center;
+            margin-right: 20px;
+        }
+        
+        .correct .result-icon {
+            color: #2ecc71;
+        }
+        
+        .incorrect .result-icon {
+            color: #e74c3c;
+        }
+        
+        .result-content {
+            flex: 1;
+        }
+        
+        .result-word {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .user-answer {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .correct .user-answer {
+            color: #27ae60;
+        }
+        
+        .incorrect .user-answer {
+            color: #e74c3c;
+            text-decoration: line-through;
+        }
+        
+        .correct-answer {
+            color: #27ae60;
+            font-weight: 700;
+        }
+        
+        .floating {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+            font-size: 8rem;
+            color: #3498db;
+        }
+        
+        .floating-1 {
+            top: 30px;
+            left: 40px;
+            transform: rotate(-15deg);
+        }
+        
+        .floating-2 {
+            bottom: 30px;
+            right: 50px;
+            transform: rotate(15deg);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .definition {
+                font-size: 1.2rem;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            button {
+                padding: 15px;
+                width: 100%;
+            }
+            
+            .progress-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .progress-bar {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating floating-1">
+            <i class="fas fa-book"></i>
+        </div>
+        <div class="floating floating-2">
+            <i class="fas fa-globe"></i>
+        </div>
+        
+        <h1>Vocabulary Typing Challenge</h1>
+        <p class="subtitle">Type the correct word or phrase for each definition. Answers will be checked after completing all 10 questions.</p>
+        
+        <div id="start-screen">
+            <div class="question-container">
+                <p style="font-size: 1.2rem; margin-bottom: 20px; line-height: 1.7;">
+                    This activity will test your knowledge of advanced vocabulary. You'll see 10 definitions one by one.<br>
+                    Type the word or phrase that matches each definition.<br>
+                    <span style="color: #2980b9; font-weight: 600;">Smart matching</span> will accept different forms of words (past tense, plural, etc.).
+                </p>
+                <div style="background: #e3f2fd; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left;">
+                    <p style="font-weight: 600; color: #1565c0; margin-bottom: 10px;">How it works:</p>
+                    <ul style="padding-left: 25px; line-height: 1.8;">
+                        <li>You'll complete all 10 questions before seeing results</li>
+                        <li>Different forms of words are accepted (past tense, plural, etc.)</li>
+                        <li>Progress bar shows your advancement</li>
+                        <li>Get your detailed score at the end</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="start-btn" class="btn-primary">Start Vocabulary Challenge</button>
+        </div>
+        
+        <div id="quiz-container" class="hidden">
+            <div class="progress-container">
+                <div class="progress-text" id="progress-text">Question 1 of 10</div>
+                <div class="progress-bar">
+                    <div id="progress" class="progress"></div>
+                </div>
+                <div class="score-container" id="score">Score: -</div>
+            </div>
+            
+            <div class="question-container">
+                <div id="definition" class="definition"></div>
+                <div class="input-container">
+                    <input type="text" id="answer-input" placeholder="Type the word/phrase here..." autocomplete="off">
+                    <button id="submit-btn">Submit</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="result-container" class="hidden">
+            <h2 class="result-title">Challenge Completed!</h2>
+            <div class="final-score" id="final-score">0/10</div>
+            <p class="message" id="result-message"></p>
+            
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <button id="restart-btn" class="btn-restart">
+                <i class="fas fa-redo-alt"></i> Try Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM elements
+            const startScreen = document.getElementById('start-screen');
+            const quizContainer = document.getElementById('quiz-container');
+            const resultContainer = document.getElementById('result-container');
+            const startBtn = document.getElementById('start-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const definitionEl = document.getElementById('definition');
+            const answerInput = document.getElementById('answer-input');
+            const progressText = document.getElementById('progress-text');
+            const progressBar = document.getElementById('progress');
+            const scoreEl = document.getElementById('score');
+            const finalScoreEl = document.getElementById('final-score');
+            const resultMessage = document.getElementById('result-message');
+            const resultDetails = document.getElementById('result-details');
+            
+            // Vocabulary data with definitions and acceptable answers
+            const vocabulary = [
+                {
+                    word: "breakthrough",
+                    definition: "An important discovery or development that helps solve a problem",
+                    answers: ["breakthrough", "breakthroughs"]
+                },
+                {
+                    word: "antibiotic-resistant",
+                    definition: "Not affected by antibiotics (used to describe bacteria)",
+                    answers: ["antibiotic-resistant"]
+                },
+                {
+                    word: "responsible for",
+                    definition: "Being the cause of something or having control over it",
+                    answers: ["responsible for"]
+                },
+                {
+                    word: "undocumented",
+                    definition: "Not having the necessary documents or official papers",
+                    answers: ["undocumented"]
+                },
+                {
+                    word: "prospecting",
+                    definition: "Searching for mineral deposits or other valuable resources",
+                    answers: ["prospecting", "prospect", "prospected"]
+                },
+                {
+                    word: "to exploit",
+                    definition: "To use something in a way that helps you, often unfairly",
+                    answers: ["exploit", "exploits", "exploited", "exploiting", "to exploit"]
+                },
+                {
+                    word: "to weigh up the pros and cons",
+                    definition: "To consider the advantages and disadvantages before making a decision",
+                    answers: ["weigh up the pros and cons", "weighing up the pros and cons", "weighed up the pros and cons", "to weigh up the pros and cons"]
+                },
+                {
+                    word: "abyss",
+                    definition: "A very deep hole that seems to have no bottom",
+                    answers: ["abyss", "abysses"]
+                },
+                {
+                    word: "to yield",
+                    definition: "To produce or provide something (like results or benefits)",
+                    answers: ["yield", "yields", "yielded", "yielding", "to yield"]
+                },
+                {
+                    word: "terrestrial",
+                    definition: "Relating to the Earth or living on land (rather than in water)",
+                    answers: ["terrestrial"]
+                },
+                {
+                    word: "caution",
+                    definition: "Care taken to avoid danger or mistakes",
+                    answers: ["caution"]
+                },
+                {
+                    word: "ramifications",
+                    definition: "The complex and unexpected results of an action or decision",
+                    answers: ["ramifications", "ramification"]
+                },
+                {
+                    word: "regulatory framework",
+                    definition: "A system of rules and laws that control how something is done",
+                    answers: ["regulatory framework", "regulatory frameworks"]
+                },
+                {
+                    word: "to draft",
+                    definition: "To write a document, plan, or law that may be changed later",
+                    answers: ["draft", "drafts", "drafted", "drafting", "to draft"]
+                },
+                {
+                    word: "marginalisation",
+                    definition: "The process of making a group of people less important",
+                    answers: ["marginalisation", "marginalization", "marginalizations"]
+                },
+                {
+                    word: "indigenous peoples",
+                    definition: "The original inhabitants of a region before colonization",
+                    answers: ["indigenous peoples", "indigenous people"]
+                },
+                {
+                    word: "poses a grave threat to",
+                    definition: "Presents a serious danger to someone or something",
+                    answers: ["poses a grave threat to", "pose a grave threat to", "posed a grave threat to"]
+                },
+                {
+                    word: "untapped potential",
+                    definition: "Available but not yet used ability or possibility",
+                    answers: ["untapped potential"]
+                },
+                {
+                    word: "to deplete",
+                    definition: "To reduce the amount of something by using it up",
+                    answers: ["deplete", "depletes", "depleted", "depleting", "to deplete"]
+                },
+                {
+                    word: "assault",
+                    definition: "A violent physical or verbal attack",
+                    answers: ["assault", "assaults"]
+                },
+                {
+                    word: "to inflict",
+                    definition: "To cause something unpleasant to be suffered by someone",
+                    answers: ["inflict", "inflicts", "inflicted", "inflicting", "to inflict"]
+                },
+                {
+                    word: "to be off-limits",
+                    definition: "Not allowed to be entered, used, or visited",
+                    answers: ["be off-limits", "is off-limits", "are off-limits", "was off-limits", "were off-limits", "to be off-limits"]
+                },
+                {
+                    word: "spin-offs",
+                    definition: "Products or benefits that are produced as a result of something else",
+                    answers: ["spin-offs", "spin-off", "spinoffs", "spinoff"]
+                }
+            ];
+            
+            // Game state
+            let currentQuestionIndex = 0;
+            let userAnswers = [];
+            let questions = [];
+            
+            // Initialize the game
+            function initGame() {
+                // Reset game state
+                currentQuestionIndex = 0;
+                userAnswers = [];
+                questions = [...vocabulary];
+                
+                // Shuffle questions and select 10
+                shuffleArray(questions);
+                questions = questions.slice(0, 10);
+                
+                // Update UI
+                updateProgress();
+                showQuestion();
+                scoreEl.textContent = `Score: -`;
+                answerInput.value = "";
+                answerInput.focus();
+                
+                // Show quiz container
+                startScreen.classList.add('hidden');
+                resultContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+            }
+            
+            // Shuffle array using Fisher-Yates algorithm
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Display current question
+            function showQuestion() {
+                const question = questions[currentQuestionIndex];
+                definitionEl.textContent = question.definition;
+                answerInput.value = "";
+                answerInput.focus();
+            }
+            
+            // Update progress bar and text
+            function updateProgress() {
+                const progress = ((currentQuestionIndex) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            }
+            
+            // Check if answer is correct (smart matching)
+            function isAnswerCorrect(userAnswer, correctAnswers) {
+                // Normalize user input
+                const normalizedUserAnswer = userAnswer.trim().toLowerCase();
+                
+                // Check against all acceptable answers
+                return correctAnswers.some(correct => 
+                    normalizedUserAnswer === correct.toLowerCase()
+                );
+            }
+            
+            // Handle answer submission
+            function submitAnswer() {
+                const userAnswer = answerInput.value.trim();
+                
+                // Store the user's answer
+                userAnswers.push({
+                    question: questions[currentQuestionIndex],
+                    answer: userAnswer
+                });
+                
+                // Move to next question
+                currentQuestionIndex++;
+                
+                if (currentQuestionIndex < questions.length) {
+                    updateProgress();
+                    showQuestion();
+                } else {
+                    // All questions answered, show results
+                    showResults();
+                }
+            }
+            
+            // Show final results
+            function showResults() {
+                quizContainer.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+                
+                // Calculate score
+                let score = 0;
+                let resultsHTML = '';
+                
+                userAnswers.forEach((item, index) => {
+                    const isCorrect = isAnswerCorrect(item.answer, item.question.answers);
+                    if (isCorrect) score++;
+                    
+                    resultsHTML += `
+                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="result-icon">
+                            ${isCorrect ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                        </div>
+                        <div class="result-content">
+                            <div class="result-word">${item.question.word}</div>
+                            <div class="definition">${item.question.definition}</div>
+                            <div class="user-answer">Your answer: ${item.answer || '(no answer)'}</div>
+                            ${!isCorrect ? `<div class="correct-answer">Correct: ${item.question.answers.join(', ')}</div>` : ''}
+                        </div>
+                    </div>
+                    `;
+                });
+                
+                resultDetails.innerHTML = resultsHTML;
+                finalScoreEl.textContent = `${score}/${questions.length}`;
+                
+                // Different messages based on score
+                if (score === questions.length) {
+                    resultMessage.textContent = "Perfect score! You're a vocabulary master!";
+                } else if (score >= questions.length * 0.8) {
+                    resultMessage.textContent = "Excellent job! You have an impressive vocabulary.";
+                } else if (score >= questions.length * 0.6) {
+                    resultMessage.textContent = "Good work! You're making solid progress.";
+                } else if (score >= questions.length * 0.4) {
+                    resultMessage.textContent = "Nice effort! Keep practicing to improve.";
+                } else {
+                    resultMessage.textContent = "Keep studying! Review these words to strengthen your vocabulary.";
+                }
+            }
+            
+            // Event listeners
+            startBtn.addEventListener('click', initGame);
+            
+            submitBtn.addEventListener('click', submitAnswer);
+            
+            answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    submitAnswer();
+                }
+            });
+            
+            restartBtn.addEventListener('click', initGame);
+        });
+    </script>
+</body>
+</html>
