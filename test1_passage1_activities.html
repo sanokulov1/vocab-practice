@@ -3,9 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cambridge 19, Test 1, Passage 1</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <title>Cambridge 19 Study Hub | Tennis Racket Evolution</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      /* Light Theme - Professional with light blue accents */
+      --primary-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: rgba(0, 0, 0, 0.05);
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --accent-1: #3b82f6;
+      --accent-2: #0ea5e9;
+      --accent-3: #0284c7;
+      --accent-4: #0c4a6e;
+      --card-blue-bg: #f0f9ff;
+      --shadow: 0 6px 15px rgba(0, 0, 0, 0.04);
+      --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      --header-gradient: linear-gradient(to right, #1d4ed8, #0ea5e9);
+    }
+
+    .dark-mode {
+      /* Dark Theme - Professional with blue accents */
+      --primary-bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: rgba(255, 255, 255, 0.05);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --accent-1: #60a5fa;
+      --accent-2: #38bdf8;
+      --accent-3: #0ea5e9;
+      --accent-4: #0284c7;
+      --card-blue-bg: #0c4a6e;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      --header-gradient: linear-gradient(to right, #60a5fa, #38bdf8);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -15,76 +49,312 @@
     html, body {
       height: 100%;
       width: 100%;
-      font-family: 'Poppins', sans-serif;
-      background-color: #d0ebff;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--primary-bg);
       display: flex;
       justify-content: center;
       align-items: center;
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: var(--transition);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header {
+      text-align: center;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .passage-info {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .passage-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: var(--header-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 20px;
-      width: 90vw;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 1.5rem;
+      width: 100%;
       max-width: 800px;
-      height: 90vh;
-      max-height: 600px;
-      padding: 20px;
+      height: 60vh;
+      max-height: 500px;
     }
 
     .card {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 22px;
-      font-weight: 600;
       border-radius: 16px;
       text-decoration: none;
-      color: rgba(0, 0, 0, 0.85);
-      text-shadow: 0 1px 3px rgba(255,255,255,0.5);
-      transition: transform 0.3s ease;
+      transition: var(--transition);
       position: relative;
       overflow: hidden;
+      padding: 2rem;
       text-align: center;
-      background-color: springgreen;
+      background: var(--card-blue-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      z-index: 1;
     }
 
     .card:hover {
-      transform: scale(1.03);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
     }
 
-    .card span {
-      position: relative;
-      z-index: 1;
-      padding: 20px;
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      transition: var(--transition);
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.1);
     }
 
-    .card1, .card2, .card3, .card4 {
-      background-color: springgreen;
+    .card:hover .card-icon {
+      transform: translateY(-5px);
     }
 
-    @media (max-width: 600px) {
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 90%;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .card1 .card-icon {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-1);
+    }
+    
+    .card2 .card-icon {
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--accent-2);
+    }
+    
+    .card3 .card-icon {
+      background: rgba(2, 132, 199, 0.15);
+      color: var(--accent-3);
+    }
+    
+    .card4 .card-icon {
+      background: rgba(12, 74, 110, 0.15);
+      color: var(--accent-4);
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(15deg);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    .footer {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(4, 1fr);
         height: auto;
+        max-height: none;
       }
-
+      
+      .passage-info {
+        font-size: 1.4rem;
+      }
+      
+      .passage-title {
+        font-size: 1.8rem;
+      }
+      
       .card {
-        font-size: 18px;
-        padding: 16px 24px;
+        min-height: 180px;
+      }
+      
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      
+      .theme-toggle {
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .passage-info {
+        font-size: 1.2rem;
+      }
+      
+      .passage-title {
+        font-size: 1.5rem;
+      }
+      
+      .card-title {
+        font-size: 1.3rem;
+      }
+      
+      .card-desc {
+        font-size: 0.85rem;
+      }
+      
+      .card-icon {
+        font-size: 2.5rem;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="grid">
-    <a href="flashcards.html" class="card card1"><span>📇 Flashcards</span></a>
-    <a href="matching.html" class="card card2"><span>🔗 Matching</span></a>
-    <a href="quiz.html" class="card card3"><span>📝 Quiz</span></a>
-    <a href="typing.html" class="card card4"><span>⌨️ Typing</span></a>
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
   </div>
+  
+  <div class="container">
+    <div class="header">
+      <div class="passage-info">Cambridge 19, Test 1, Passage 1</div>
+      <div class="passage-title">How tennis rackets have changed</div>
+    </div>
+    
+    <div class="grid">
+      <a href="flashcards.html" class="card card1">
+        <div class="card-icon">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h3 class="card-title">Flashcards</h3>
+        <p class="card-desc">Master vocabulary with interactive flashcards</p>
+      </a>
+      
+      <a href="matching.html" class="card card2">
+        <div class="card-icon">
+          <i class="fas fa-link"></i>
+        </div>
+        <h3 class="card-title">Matching</h3>
+        <p class="card-desc">Connect terms with their definitions</p>
+      </a>
+      
+      <a href="quiz.html" class="card card3">
+        <div class="card-icon">
+          <i class="fas fa-edit"></i>
+        </div>
+        <h3 class="card-title">Quiz</h3>
+        <p class="card-desc">Test your knowledge with challenging questions</p>
+      </a>
+      
+      <a href="typing.html" class="card card4">
+        <div class="card-icon">
+          <i class="fas fa-keyboard"></i>
+        </div>
+        <h3 class="card-title">Typing</h3>
+        <p class="card-desc">Improve recall through active typing exercises</p>
+      </a>
+    </div>
+    
+    <div class="footer">
+      <p>Interactive study tools for Cambridge IELTS 19, Test 1, Passage 1</p>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    });
+    
+    // Add subtle animation to cards on page load
+    document.querySelectorAll('.card').forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 300 * index);
+    });
+  </script>
 </body>
 </html>
