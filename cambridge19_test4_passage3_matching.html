@@ -117,6 +117,26 @@
             flex-direction: column;
             gap: 12px;
         }
+
+        .words-column {
+            background-color: rgba(52, 152, 219, 0.05);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .definitions-column {
+            background-color: rgba(46, 204, 113, 0.05);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .dark-mode .words-column {
+            background-color: rgba(52, 152, 219, 0.15);
+        }
+
+        .dark-mode .definitions-column {
+            background-color: rgba(46, 204, 113, 0.15);
+        }
         
         .card {
             background: #f8f9fa;
@@ -281,7 +301,9 @@
         
         @media (max-width: 768px) {
             .matching-area {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                min-width: 600px;
             }
             
             .group-header {
@@ -289,8 +311,9 @@
             }
             
             .card {
-                font-size: 1.1rem;
+                font-size: 1rem;
                 min-height: 60px;
+                padding: 10px;
             }
             
             .btn {
@@ -303,6 +326,10 @@
                 gap: 15px;
                 align-items: center;
             }
+
+            .game-container {
+                overflow-x: auto;
+            }
         }
         
         @media (max-width: 480px) {
@@ -311,8 +338,12 @@
             }
             
             .card {
-                font-size: 1rem;
+                font-size: 0.9rem;
                 min-height: 55px;
+            }
+
+            .matching-area {
+                min-width: 550px;
             }
         }
     </style>
