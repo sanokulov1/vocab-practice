@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cambridge 19 Study Hub | Tennis Racket Evolution</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      /* Light Theme - Professional with light blue accents */
       --primary-bg: #f8fafc;
       --card-bg: #ffffff;
       --card-border: rgba(0, 0, 0, 0.05);
@@ -21,11 +20,9 @@
       --card-blue-bg: #f0f9ff;
       --shadow: 0 6px 15px rgba(0, 0, 0, 0.04);
       --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-      --header-gradient: linear-gradient(to right, #1d4ed8, #0ea5e9);
     }
 
     .dark-mode {
-      /* Dark Theme - Professional with blue accents */
       --primary-bg: #0f172a;
       --card-bg: #1e293b;
       --card-border: rgba(255, 255, 255, 0.05);
@@ -37,7 +34,6 @@
       --accent-4: #0284c7;
       --card-blue-bg: #0c4a6e;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      --header-gradient: linear-gradient(to right, #60a5fa, #38bdf8);
     }
 
     * {
@@ -61,7 +57,7 @@
 
     .container {
       width: 95%;
-      max-width: 900px;
+      max-width: 700px;
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
@@ -77,7 +73,7 @@
       grid-template-rows: repeat(2, 1fr);
       gap: 1.2rem;
       width: 100%;
-      max-width: 800px;
+      max-width: 600px;
       height: auto;
     }
 
@@ -86,12 +82,12 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border-radius: 16px;
+      border-radius: 14px;
       text-decoration: none;
       transition: var(--transition);
       position: relative;
       overflow: hidden;
-      padding: 1.5rem;
+      padding: 1.3rem;
       text-align: center;
       background: var(--card-blue-bg);
       border: 1px solid var(--card-border);
@@ -105,11 +101,11 @@
     }
 
     .card-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
       transition: var(--transition);
-      width: 60px;
-      height: 60px;
+      width: 54px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -122,15 +118,15 @@
     }
 
     .card-title {
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       font-family: 'Poppins', sans-serif;
       color: var(--text-primary);
     }
 
     .card-desc {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-secondary);
       max-width: 90%;
       line-height: 1.5;
@@ -204,8 +200,8 @@
       }
       
       .card {
-        min-height: 140px;
-        padding: 1.2rem;
+        min-height: 110px;
+        padding: 1rem;
       }
       
       .container {
@@ -216,23 +212,6 @@
       }
       
       .card-title {
-        font-size: 1.2rem;
-      }
-      
-      .card-desc {
-        font-size: 0.8rem;
-      }
-      
-      .card-icon {
-        font-size: 2.2rem;
-        width: 50px;
-        height: 50px;
-        margin-bottom: 0.8rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .card-title {
         font-size: 1.1rem;
       }
       
@@ -241,9 +220,26 @@
       }
       
       .card-icon {
-        font-size: 2rem;
-        width: 45px;
-        height: 45px;
+        font-size: 1.8rem;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 0.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-title {
+        font-size: 1rem;
+      }
+      
+      .card-desc {
+        font-size: 0.7rem;
+      }
+      
+      .card-icon {
+        font-size: 1.6rem;
+        width: 42px;
+        height: 42px;
       }
       
       .footer {
