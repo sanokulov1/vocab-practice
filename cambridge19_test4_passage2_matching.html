@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Matching Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff, #ccefff, #b3e6ff);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #2a4d69;
+            padding: 0 20px;
+            line-height: 1.6;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .instructions::after {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            margin: 20px auto;
+            border-radius: 3px;
+        }
+        
+        /* Group Styles */
+        .group-container {
+            margin-bottom: 30px;
+            background: #f0f9ff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #d1ecff;
+        }
+        
+        .group-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .collapsible {
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .collapsible:hover {
+            background: linear-gradient(to right, #3a75a0, #1e3d54);
+        }
+        
+        .collapsible i {
+            transition: transform 0.3s ease;
+        }
+        
+        .collapsible.active i {
+            transform: rotate(180deg);
+        }
+        
+        .content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: white;
+        }
+        
+        .matching-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 25px 0;
+            justify-content: center;
+        }
+        
+        .words-column, .definitions-column {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .column-title {
+            text-align: center;
+            padding: 15px;
+            background: #2a4d69;
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+        }
+        
+        .word-item, .definition-item {
+            padding: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .word-item {
+            background: #e1f5fe;
+            border: 2px solid #4b86b4;
+            color: #1e3d54;
+        }
+        
+        .definition-item {
+            background: #fffde7;
+            border: 2px solid #ffca28;
+            color: #5d4037;
+        }
+        
+        .word-item::before, .definition-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #4b86b4;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .definition-item::before {
+            background: #ffca28;
+        }
+        
+        .word-item:hover, .definition-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .word-item:hover::before, .definition-item:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .word-item.selected, .definition-item.selected {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(75, 134, 180, 0.5);
+            z-index: 10;
+        }
+        
+        .word-item.selected::before, .definition-item.selected::before {
+            transform: scaleX(1);
+        }
+        
+        .word-item.matched {
+            background: #e8f5e9;
+            border-color: #66bb6a;
+            color: #1b5e20;
+        }
+        
+        .definition-item.matched {
+            background: #e8f5e9;
+            border-color: #66bb6a;
+            color: #1b5e20;
+        }
+        
+        .word-item.matched::before, .definition-item.matched::before {
+            background: #66bb6a;
+            transform: scaleX(1);
+        }
+        
+        .word-item.mismatch, .definition-item.mismatch {
+            background: #ffebee;
+            border-color: #ef5350;
+            color: #b71c1c;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .completion-message {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2a4d69;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: 10px;
+            display: none;
+            border: 2px dashed #4b86b4;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 25px auto;
+            padding: 14px 35px;
+            background: linear-gradient(to right, #4b86b4, #2a4d69);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(75, 134, 180, 0.1);
+            border-radius: 15px;
+            font-weight: bold;
+            color: #2a4d69;
+        }
+        
+        @media (max-width: 768px) {
+            .matching-area {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .collapsible {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .word-item, .definition-item {
+                padding: 15px;
+                font-size: 1rem;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-language"></i> Vocabulary Matching Game</h1>
+            <p>Tap on a word and then its definition to make a match</p>
+        </header>
+        
+        <div class="instructions">
+            <p>Match words with their definitions. Correct matches turn green, incorrect matches flash red for 2 seconds.</p>
+        </div>
+        
+        <div class="game-stats">
+            <div>Total Words: <span id="total-words">23</span></div>
+            <div>Matched: <span id="matched-count">0</span></div>
+            <div>Remaining: <span id="remaining-count">23</span></div>
+        </div>
+        
+        <!-- Group 1 (6 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 1 (6 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="breakthrough" data-definition="A significant or sudden advance or discovery">breakthrough</div>
+                        <div class="word-item" data-word="antibiotic-resistant" data-definition="Not affected by drugs used to kill bacteria">antibiotic-resistant</div>
+                        <div class="word-item" data-word="responsible for" data-definition="Being the cause of something; having the duty of dealing with something">responsible for</div>
+                        <div class="word-item" data-word="undocumented" data-definition="Not recorded or proved by written evidence">undocumented</div>
+                        <div class="word-item" data-word="prospecting" data-definition="Searching for mineral deposits, especially as a job">prospecting</div>
+                        <div class="word-item" data-word="to exploit" data-definition="To use someone or something unfairly for your own advantage">to exploit</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="To use someone or something unfairly for your own advantage">To use someone or something unfairly for your own advantage</div>
+                        <div class="definition-item" data-definition="Searching for mineral deposits, especially as a job">Searching for mineral deposits, especially as a job</div>
+                        <div class="definition-item" data-definition="Not recorded or proved by written evidence">Not recorded or proved by written evidence</div>
+                        <div class="definition-item" data-definition="Being the cause of something; having the duty of dealing with something">Being the cause of something; having the duty of dealing with something</div>
+                        <div class="definition-item" data-definition="Not affected by drugs used to kill bacteria">Not affected by drugs used to kill bacteria</div>
+                        <div class="definition-item" data-definition="A significant or sudden advance or discovery">A significant or sudden advance or discovery</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 2 (6 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 2 (6 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="to weigh up the pros and cons" data-definition="To consider the advantages and disadvantages before making a decision">to weigh up the pros and cons</div>
+                        <div class="word-item" data-word="abyss" data-definition="A very deep hole that seems to have no bottom">abyss</div>
+                        <div class="word-item" data-word="to yield" data-definition="To produce or provide something, such as a natural product or profit">to yield</div>
+                        <div class="word-item" data-word="terrestrial" data-definition="Relating to the earth or land">terrestrial</div>
+                        <div class="word-item" data-word="caution" data-definition="Care taken to avoid danger or mistakes">caution</div>
+                        <div class="word-item" data-word="ramifications" data-definition="Complex consequences of an action or event">ramifications</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="Complex consequences of an action or event">Complex consequences of an action or event</div>
+                        <div class="definition-item" data-definition="Care taken to avoid danger or mistakes">Care taken to avoid danger or mistakes</div>
+                        <div class="definition-item" data-definition="Relating to the earth or land">Relating to the earth or land</div>
+                        <div class="definition-item" data-definition="To produce or provide something, such as a natural product or profit">To produce or provide something, such as a natural product or profit</div>
+                        <div class="definition-item" data-definition="A very deep hole that seems to have no bottom">A very deep hole that seems to have no bottom</div>
+                        <div class="definition-item" data-definition="To consider the advantages and disadvantages before making a decision">To consider the advantages and disadvantages before making a decision</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 3 (6 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 3 (6 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="regulatory framework" data-definition="A system of rules and laws used to control an activity">regulatory framework</div>
+                        <div class="word-item" data-word="to draft" data-definition="To write a document, plan, or law that may be changed before it is final">to draft</div>
+                        <div class="word-item" data-word="marginalisation" data-definition="Treatment of a person or group as insignificant or peripheral">marginalisation</div>
+                        <div class="word-item" data-word="indigenous peoples" data-definition="Ethnic groups who are the original inhabitants of a given region">indigenous peoples</div>
+                        <div class="word-item" data-word="poses a grave threat to" data-definition="To be a serious danger to something or someone">poses a grave threat to</div>
+                        <div class="word-item" data-word="untapped potential" data-definition="Not yet used or exploited; available but not utilized">untapped potential</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="Not yet used or exploited; available but not utilized">Not yet used or exploited; available but not utilized</div>
+                        <div class="definition-item" data-definition="To be a serious danger to something or someone">To be a serious danger to something or someone</div>
+                        <div class="definition-item" data-definition="Ethnic groups who are the original inhabitants of a given region">Ethnic groups who are the original inhabitants of a given region</div>
+                        <div class="definition-item" data-definition="Treatment of a person or group as insignificant or peripheral">Treatment of a person or group as insignificant or peripheral</div>
+                        <div class="definition-item" data-definition="To write a document, plan, or law that may be changed before it is final">To write a document, plan, or law that may be changed before it is final</div>
+                        <div class="definition-item" data-definition="A system of rules and laws used to control an activity">A system of rules and laws used to control an activity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 4 (5 words) -->
+        <div class="group-container">
+            <button class="collapsible active">
+                Group 4 (5 words)
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="content" style="max-height: 1000px;">
+                <div class="matching-area">
+                    <div class="words-column">
+                        <div class="column-title">Words</div>
+                        <div class="word-item" data-word="to deplete" data-definition="To reduce the amount of something that is present or available">to deplete</div>
+                        <div class="word-item" data-word="assault" data-definition="A violent physical or verbal attack">assault</div>
+                        <div class="word-item" data-word="to inflict" data-definition="To cause something unpleasant to be suffered by someone">to inflict</div>
+                        <div class="word-item" data-word="to be off-limits" data-definition="Not to be entered or used; forbidden">to be off-limits</div>
+                        <div class="word-item" data-word="spin-offs" data-definition="Products or benefits that are produced in addition to the main product">spin-offs</div>
+                    </div>
+                    
+                    <div class="definitions-column">
+                        <div class="column-title">Definitions</div>
+                        <div class="definition-item" data-definition="Products or benefits that are produced in addition to the main product">Products or benefits that are produced in addition to the main product</div>
+                        <div class="definition-item" data-definition="Not to be entered or used; forbidden">Not to be entered or used; forbidden</div>
+                        <div class="definition-item" data-definition="To cause something unpleasant to be suffered by someone">To cause something unpleasant to be suffered by someone</div>
+                        <div class="definition-item" data-definition="A violent physical or verbal attack">A violent physical or verbal attack</div>
+                        <div class="definition-item" data-definition="To reduce the amount of something that is present or available">To reduce the amount of something that is present or available</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="completion-message" id="completion-message">
+            <i class="fas fa-trophy"></i> Congratulations! You've matched all words!
+        </div>
+        
+        <button class="reset-btn" id="reset-btn">
+            <i class="fas fa-sync-alt"></i> Reset Game
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Collapsible functionality
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+            
+            // Game state
+            let selectedWord = null;
+            let selectedDefinition = null;
+            let matchedCount = 0;
+            const totalWords = 23;
+            
+            // Update stats
+            function updateStats() {
+                document.getElementById('matched-count').textContent = matchedCount;
+                document.getElementById('remaining-count').textContent = totalWords - matchedCount;
+            }
+            
+            // Add click event listeners to words
+            const wordItems = document.querySelectorAll('.word-item');
+            const definitionItems = document.querySelectorAll('.definition-item');
+            
+            wordItems.forEach(word => {
+                word.addEventListener('click', function() {
+                    // Ignore if already matched
+                    if (this.classList.contains('matched')) return;
+                    
+                    // Deselect previous word if any
+                    if (selectedWord) {
+                        selectedWord.classList.remove('selected');
+                    }
+                    
+                    // Select this word
+                    this.classList.add('selected');
+                    selectedWord = this;
+                    
+                    // If we have both a word and definition selected, check for match
+                    checkMatch();
+                });
+            });
+            
+            // Add click event listeners to definitions
+            definitionItems.forEach(definition => {
+                definition.addEventListener('click', function() {
+                    // Ignore if already matched
+                    if (this.classList.contains('matched')) return;
+                    
+                    // Deselect previous definition if any
+                    if (selectedDefinition) {
+                        selectedDefinition.classList.remove('selected');
+                    }
+                    
+                    // Select this definition
+                    this.classList.add('selected');
+                    selectedDefinition = this;
+                    
+                    // If we have both a word and definition selected, check for match
+                    checkMatch();
+                });
+            });
+            
+            // Check if the selected word and definition match
+            function checkMatch() {
+                if (!selectedWord || !selectedDefinition) return;
+                
+                // Get the word and definition data
+                const wordDefinition = selectedWord.getAttribute('data-definition');
+                const selectedDefinitionText = selectedDefinition.getAttribute('data-definition');
+                
+                // Check if they match
+                if (wordDefinition === selectedDefinitionText) {
+                    // Correct match - mark them as matched
+                    selectedWord.classList.add('matched');
+                    selectedDefinition.classList.add('matched');
+                    selectedWord.classList.remove('selected');
+                    selectedDefinition.classList.remove('selected');
+                    
+                    // Increase matched count
+                    matchedCount++;
+                    updateStats();
+                    
+                    // Check for game completion
+                    checkCompletion();
+                } else {
+                    // Incorrect match - show error temporarily
+                    selectedWord.classList.add('mismatch');
+                    selectedDefinition.classList.add('mismatch');
+                    
+                    // Remove the mismatch class after 2 seconds
+                    setTimeout(() => {
+                        selectedWord.classList.remove('mismatch', 'selected');
+                        selectedDefinition.classList.remove('mismatch', 'selected');
+                        selectedWord = null;
+                        selectedDefinition = null;
+                    }, 2000);
+                }
+                
+                // Reset selection
+                if (wordDefinition !== selectedDefinitionText) {
+                    setTimeout(() => {
+                        selectedWord = null;
+                        selectedDefinition = null;
+                    }, 2000);
+                } else {
+                    selectedWord = null;
+                    selectedDefinition = null;
+                }
+            }
+            
+            // Check for game completion
+            function checkCompletion() {
+                if (matchedCount === totalWords) {
+                    document.getElementById('completion-message').style.display = 'block';
+                }
+            }
+            
+            // Reset button functionality
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                // Reset all matched items
+                wordItems.forEach(word => {
+                    word.classList.remove('matched', 'selected', 'mismatch');
+                });
+                
+                definitionItems.forEach(definition => {
+                    definition.classList.remove('matched', 'selected', 'mismatch');
+                });
+                
+                // Clear selection
+                selectedWord = null;
+                selectedDefinition = null;
+                
+                // Hide completion message
+                document.getElementById('completion-message').style.display = 'none';
+                
+                // Reset matched count
+                matchedCount = 0;
+                updateStats();
+                
+                // Shuffle definitions
+                shuffleDefinitions();
+            });
+            
+            // Shuffle definitions in each group
+            function shuffleDefinitions() {
+                // Group 1 definitions
+                const group1DefsContainer = document.querySelector('.group-container:nth-child(1) .definitions-column');
+                const group1Defs = Array.from(group1DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group1Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group1Defs);
+                group1Defs.forEach(def => group1DefsContainer.appendChild(def));
+                
+                // Group 2 definitions
+                const group2DefsContainer = document.querySelector('.group-container:nth-child(2) .definitions-column');
+                const group2Defs = Array.from(group2DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group2Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group2Defs);
+                group2Defs.forEach(def => group2DefsContainer.appendChild(def));
+                
+                // Group 3 definitions
+                const group3DefsContainer = document.querySelector('.group-container:nth-child(3) .definitions-column');
+                const group3Defs = Array.from(group3DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group3Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group3Defs);
+                group3Defs.forEach(def => group3DefsContainer.appendChild(def));
+                
+                // Group 4 definitions
+                const group4DefsContainer = document.querySelector('.group-container:nth-child(4) .definitions-column');
+                const group4Defs = Array.from(group4DefsContainer.querySelectorAll('.definition-item'));
+                
+                // Remove existing definitions (keeping the title)
+                group4Defs.forEach(def => def.remove());
+                
+                // Shuffle and re-add
+                shuffleArray(group4Defs);
+                group4Defs.forEach(def => group4DefsContainer.appendChild(def));
+            }
+            
+            // Shuffle array function
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Initialize the game with collapsibles open
+            collapsibles.forEach(button => {
+                button.classList.add('active');
+                const content = button.nextElementSibling;
+                content.style.maxHeight = content.scrollHeight + "px";
+            });
+            
+            // Initial shuffle
+            shuffleDefinitions();
+            
+            // Initialize stats
+            updateStats();
+        });
+    </script>
+</body>
+</html>
