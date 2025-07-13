@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Matching Game – Test 1 Passage 1</title>
+<title>Matching Game – Test 1 Passage 3</title>
 <style>
+    /* Global reset and box-sizing */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* CSS Variables for Theming (Light Mode Defaults) */
     :root {
       --bg-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 50%, #6c3483 100%);
       --container-bg: rgba(255, 255, 255, 0.95);
@@ -27,6 +29,7 @@
       --wrong-bg: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
     }
 
+    /* Dark Mode Variables */
     [data-theme="dark"] {
       --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       --container-bg: rgba(30, 30, 45, 0.95);
@@ -43,6 +46,7 @@
       --wrong-bg: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
     }
 
+    /* Body styling */
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: var(--bg-gradient);
@@ -53,38 +57,38 @@
     }
 
     /* Orientation reminder overlay */
-    .orientation-reminder {
+   .orientation-reminder {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      display: none;
+      background: rgba(0, 0, 0, 0.9); /* Shadowy background */
+      display: none; /* Hidden by default, shown only on mobile portrait via media query */
       align-items: center;
       justify-content: center;
       z-index: 9999;
       animation: fadeIn 0.5s ease;
     }
 
-    .orientation-content {
+   .orientation-content {
       text-align: center;
       color: white;
       padding: 40px;
       max-width: 400px;
     }
 
-    .phone-icon {
+   .phone-icon {
       width: 80px;
       height: 120px;
       border: 3px solid white;
       border-radius: 15px;
       margin: 0 auto 30px;
       position: relative;
-      animation: rotatePhone 2s ease-in-out infinite;
+      animation: rotatePhone 2s ease-in-out infinite; /* Animated phone icon */
     }
 
-    .phone-icon::before {
+   .phone-icon::before {
       content: '';
       position: absolute;
       top: 10px;
@@ -96,7 +100,7 @@
       border-radius: 3px;
     }
 
-    .phone-icon::after {
+   .phone-icon::after {
       content: '';
       position: absolute;
       bottom: 10px;
@@ -108,6 +112,7 @@
       border-radius: 50%;
     }
 
+    /* Phone rotation animation */
     @keyframes rotatePhone {
       0%, 100% {
         transform: rotate(0deg);
@@ -117,12 +122,13 @@
       }
     }
 
-    .orientation-content h2 {
+   .orientation-content h2 {
       font-size: 24px;
       margin-bottom: 15px;
-      animation: pulse 1.5s ease infinite;
+      animation: pulse 1.5s ease infinite; /* Pulse animation for text */
     }
 
+    /* Pulse animation for text */
     @keyframes pulse {
       0%, 100% {
         opacity: 1;
@@ -132,35 +138,21 @@
       }
     }
 
-    .orientation-content p {
+   .orientation-content p {
       font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
     }
 
-    .orientation-content button {
-      background: var(--accordion-bg);
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .orientation-content button:hover {
-      transform: scale(1.05);
-    }
-
-    /* Show reminder on mobile portrait */
+    /* Show reminder only on mobile portrait */
     @media (max-width: 768px) and (orientation: portrait) {
-      .orientation-reminder {
+     .orientation-reminder {
         display: flex;
       }
     }
 
-    .theme-toggle {
+    /* Theme toggle button */
+   .theme-toggle {
       position: fixed;
       top: 20px;
       right: 20px;
@@ -178,17 +170,18 @@
       z-index: 1000;
     }
 
-    .theme-toggle:hover {
+   .theme-toggle:hover {
       transform: scale(1.1);
     }
 
-    .theme-toggle svg {
+   .theme-toggle svg {
       width: 24px;
       height: 24px;
       fill: white;
     }
 
-    .container {
+    /* Main container styling */
+   .container {
       max-width: 1200px;
       margin: 0 auto;
       background: var(--container-bg);
@@ -198,13 +191,12 @@
       backdrop-filter: blur(10px);
     }
 
+    /* Main title styling */
     h1 {
       text-align: center;
       font-size: 2.5rem;
       font-weight: 700;
-      background: var(--accordion-bg);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-primary); /* Solid color based on theme */
       margin-bottom: 40px;
       display: flex;
       align-items: center;
@@ -212,7 +204,8 @@
       gap: 15px;
     }
 
-    .accordion {
+    /* Accordion button styling */
+   .accordion {
       background: var(--accordion-bg);
       color: white;
       cursor: pointer;
@@ -231,7 +224,7 @@
       box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
 
-    .accordion::before {
+   .accordion::before {
       content: '';
       position: absolute;
       top: 0;
@@ -243,15 +236,15 @@
       transition: transform 0.5s ease;
     }
 
-    .accordion:hover::before {
+   .accordion:hover::before {
       transform: translateX(0);
     }
 
-    .accordion:hover {
+   .accordion:hover {
       background: var(--accordion-hover);
     }
 
-    .accordion::after {
+   .accordion::after {
       content: '▼';
       position: absolute;
       right: 30px;
@@ -261,16 +254,17 @@
       font-size: 14px;
     }
 
-    .accordion.active::after {
+   .accordion.active::after {
       transform: translateY(-50%) rotate(180deg);
     }
 
-    .active, .accordion:hover {
+   .active,.accordion:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
     }
 
-    .panel {
+    /* Panel (accordion content) styling */
+   .panel {
       padding: 0;
       max-height: 0;
       overflow: hidden;
@@ -280,76 +274,26 @@
       margin-top: 10px;
     }
 
-    .panel.show {
-      max-height: 2000px;
+   .panel.show {
+      max-height: 2000px; /* Sufficiently large to show content */
       padding: 30px 0;
     }
 
-    .game-area {
+    /* Game area grid layout - Default for larger screens (3 columns) */
+   .game-area {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); /* Default 3 columns for desktop/tablet */
       gap: 15px;
       padding: 15px 0;
       animation: fadeIn 0.5s ease;
     }
 
-    /* Mobile landscape - 2 columns per row */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .game-area {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      
-      .card, .drop-zone {
-        padding: 10px 15px;
-        min-height: 50px;
-        font-size: 14px;
-      }
-      
-      .container {
-        padding: 20px 15px;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-      }
-      
-      .accordion {
-        padding: 15px 20px;
-        font-size: 16px;
-        margin-top: 10px;
-      }
-    }
-
-    @media (max-width: 1024px) and (orientation: portrait) {
-      .game-area {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) and (orientation: portrait) {
-      .game-area {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .card, .drop-zone {
-      padding: 15px 20px;
-      font-size: 15px;
+    /* Card and drop zone base styling - Default for larger screens */
+   .card,.drop-zone {
+      padding: 10px 15px; /* Ample padding */
+      font-size: 14px;
       border-radius: 12px;
-      min-height: 60px;
+      min-height: 70px; /* Designed for 2 lines of 14px text in 3 columns */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -357,67 +301,73 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      white-space: normal;
+      word-break: break-word;
     }
 
-    .card {
+   .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-    .card::before {
+   .card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--accordion-bg);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
     }
 
-    .card:hover {
+   .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       border-color: #14b8a6;
     }
 
-    .drop-zone {
+   .drop-zone {
       background: var(--drop-zone-bg);
       border: 2px dashed var(--drop-zone-border);
       position: relative;
     }
 
-    .drop-zone:hover {
+   .drop-zone:hover {
       border-color: #14b8a6;
     }
 
-    .matched {
-      background: var(--match-bg) !important;
-      border: 2px solid #38a169 !important;
-      color: white !important;
+    /* Matched state styling */
+   .matched {
+      background: var(--match-bg)!important;
+      border: 2px solid #38a169!important;
+      color: white!important;
       cursor: default;
       animation: matchPulse 0.6s ease;
       box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
     }
 
-    .matched-pair {
+   .matched-pair {
       display: flex;
-      gap: 10px;
+      flex-direction: column; /* Stack word and definition vertically */
+      gap: 5px; /* Reduced gap for vertical stacking */
       align-items: center;
       justify-content: center;
-      flex-wrap: wrap;
+      text-align: center;
+      flex-wrap: nowrap; /* Prevent wrapping of the pair itself */
     }
 
-    .matched-pair::before {
+   .matched-pair::before {
       content: '✓';
       font-size: 20px;
-      margin-right: 5px;
+      margin-right: 0; /* No right margin for vertical stacking */
+      margin-bottom: 5px; /* Add bottom margin for separator */
     }
 
+    /* Match pulse animation */
     @keyframes matchPulse {
       0% {
         transform: scale(1);
@@ -430,13 +380,15 @@
       }
     }
 
-    .wrong {
+    /* Wrong match state styling */
+   .wrong {
       animation: shake 0.5s ease;
-      background: var(--wrong-bg) !important;
-      border-color: #f56565 !important;
-      color: white !important;
+      background: var(--wrong-bg)!important;
+      border-color: #f56565!important;
+      color: white!important;
     }
 
+    /* Shake animation for wrong matches */
     @keyframes shake {
       0%, 100% {
         transform: translateX(0);
@@ -449,7 +401,8 @@
       }
     }
 
-    .selected {
+    /* Selected card styling */
+   .selected {
       background: var(--selected-bg);
       border-color: #ed8936;
       color: #744210;
@@ -457,15 +410,17 @@
       box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
     }
 
-    [data-theme="dark"] .selected {
+    /* Selected card styling in dark mode */
+    [data-theme="dark"].selected {
       color: white;
     }
 
-    .selected::before {
+   .selected::before {
       opacity: 0.1;
     }
 
-    .result-message {
+    /* Result message styling */
+   .result-message {
       text-align: center;
       font-size: 18px;
       color: #38a169;
@@ -474,57 +429,66 @@
       animation: fadeIn 0.5s ease;
     }
 
-    [data-theme="dark"] .result-message {
+    /* Result message styling in dark mode */
+    [data-theme="dark"].result-message {
       color: #68d391;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-      
-      h1 {
-        font-size: 2rem;
+    /* Responsive adjustments for mobile (3 columns, tighter) */
+    @media (max-width: 768px) { /* This media query applies to most tablets and phones */
+      .game-area {
+        grid-template-columns: repeat(3, 1fr); /* Always 3 columns on mobile */
+        gap: 8px; /* Slightly smaller gap */
       }
       
       .card, .drop-zone {
+        padding: 6px 10px; /* Reduced padding for mobile */
+        min-height: 65px; /* Adjusted to fit 2 lines with smaller font */
+        font-size: 11px; /* Smaller font for mobile */
+      }
+      
+      .container {
+        padding: 15px; /* Reduce container padding too */
+      }
+      
+      h1 {
+        font-size: 1.6rem; /* Smaller title on mobile */
+        margin-bottom: 20px;
+      }
+      
+      .accordion {
+        padding: 12px 15px; /* Smaller accordion buttons */
         font-size: 14px;
-        padding: 12px 16px;
-      }
-
-      .theme-toggle {
-        width: 40px;
-        height: 40px;
+        margin-top: 10px;
       }
     }
 
-    /* Loading animation for panels */
-    .panel.show .game-area {
-      animation: slideIn 0.5s ease;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* For very small phone screens (still 3 columns, even tighter) */
+    @media (max-width: 480px) {
+        .game-area {
+            gap: 6px; /* Even smaller gap */
+        }
+        .card, .drop-zone {
+            font-size: 10px; /* Even smaller font */
+            min-height: 60px; /* Adjust min-height accordingly */
+            padding: 5px 8px; /* Even smaller padding */
+        }
+        .orientation-content h2 {
+            font-size: 20px;
+        }
+        .orientation-content p {
+            font-size: 16px;
+        }
     }
   </style>
 </head>
 <body>
-<!-- Orientation Reminder -->
 <div class="orientation-reminder" id="orientationReminder">
   <div class="orientation-content">
     <div class="phone-icon"></div>
     <h2>📱 Rotate Your Phone!</h2>
     <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
-    <button onclick="dismissReminder()">Got it!</button>
-  </div>
+    </div>
 </div>
 
 <button class="theme-toggle" onclick="toggleTheme()">
@@ -534,7 +498,7 @@
 </button>
 
 <div class="container">
-  <h1>🎯 Matching Game – Test 1 Passage 1</h1>
+  <h1>Matching Tasks</h1>
   
   <button class="accordion">Group 1</button>
   <div class="panel">
@@ -579,7 +543,6 @@
   </div>
 </div>
 
-<!-- Audio elements -->
 <audio id="correctSound" preload="auto">
   <source src="correct.mp3" type="audio/mpeg">
 </audio>
@@ -588,34 +551,20 @@
 </audio>
 
 <script>
-// Sound functions
+// Sound functions: plays a sound for correct and wrong matches.
 function playCorrectSound() {
   const sound = document.getElementById('correctSound');
-  sound.currentTime = 0;
+  sound.currentTime = 0; // Rewind to start
   sound.play().catch(e => console.log('Audio play failed:', e));
 }
 
 function playWrongSound() {
   const sound = document.getElementById('wrongSound');
-  sound.currentTime = 0;
+  sound.currentTime = 0; // Rewind to start
   sound.play().catch(e => console.log('Audio play failed:', e));
 }
 
-// Dismiss orientation reminder
-function dismissReminder() {
-  document.getElementById('orientationReminder').style.display = 'none';
-  localStorage.setItem('orientationReminderDismissed', 'true');
-}
-
-// Check if reminder should be shown
-window.addEventListener('load', () => {
-  const reminderDismissed = localStorage.getItem('orientationReminderDismissed');
-  if (reminderDismissed === 'true') {
-    document.getElementById('orientationReminder').style.display = 'none';
-  }
-});
-
-// Theme toggle functionality
+// Theme toggle functionality: Toggles between light and dark themes and updates the theme icon.
 function toggleTheme() {
   const body = document.body;
   const currentTheme = body.getAttribute('data-theme');
@@ -623,183 +572,121 @@ function toggleTheme() {
   body.setAttribute('data-theme', newTheme);
   
   const icon = document.getElementById('theme-icon');
+  // Update SVG path for sun/moon icon based on new theme
   if (newTheme === 'dark') {
     icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
   } else {
     icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
   }
   
+  // Save theme preference to local storage
   localStorage.setItem('theme', newTheme);
 }
 
-// Load saved theme
+// Loads the saved theme preference on page load.
 window.addEventListener('load', () => {
   const savedTheme = localStorage.getItem('theme') || 'light';
   if (savedTheme === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
     document.getElementById('theme-icon').innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
   }
+
+  // Accordion functionality: Toggles the visibility of content panels.
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
+    });
+  }
+
+  // Hide orientation reminder after 2 seconds
+  setTimeout(() => {
+      const reminder = document.getElementById('orientationReminder');
+      // Only hide if it's currently displayed (i.e., on a mobile portrait device)
+      if (reminder && getComputedStyle(reminder).display !== 'none') {
+          reminder.style.display = 'none';
+      }
+  }, 2000); // Hide after 2 seconds
 });
 
-// Accordion functionality
-const acc = document.getElementsByClassName("accordion");
-for (let i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    const panel = this.nextElementSibling;
-    panel.classList.toggle("show");
-  });
-}
-
-// Group 1
-(function() {
-  const wordPairs = [
-    {"word": "To be ranked as", "def": "To be placed in a list based on how good someone is."}, 
-    {"word": "The likes of", "def": "Famous or important people of a group."}, 
-    {"word": "To name just a few", "def": "Used to show that more examples exist."}, 
-    {"word": "To be regarded as", "def": "To be thought of in a certain way."}, 
-    {"word": "Outsider", "def": "Someone who is not expected to win or succeed."}, 
-    {"word": "To account for", "def": "To explain the reason for something."}
-  ];
-  
-  setupGame(wordPairs, 'group1');
-})();
-
-// Group 2
-(function() {
-  const wordPairs = [
-    {"word": "Widely publicized", "def": "Known by many people."}, 
-    {"word": "Former", "def": "Someone who had a job or title in the past."}, 
-    {"word": "Subtle", "def": "Small and not easy to notice."}, 
-    {"word": "Pass unnoticed", "def": "Not be seen or noticed."}, 
-    {"word": "Synthetic", "def": "Made by people, not natural."}, 
-    {"word": "Underestimated", "def": "Thought to be less important than it really is."}
-  ];
-  
-  setupGame(wordPairs, 'group2');
-})();
-
-// Group 3
-(function() {
-  const wordPairs = [
-    {"word": "Modification", "def": "A small change to improve something."}, 
-    {"word": "Tweak", "def": "A small change."}, 
-    {"word": "Customized", "def": "Changed to fit someone's needs."}, 
-    {"word": "Elite", "def": "The best and most skilled."}, 
-    {"word": "Readily available", "def": "Easy to get."}, 
-    {"word": "Specifications", "def": "Detailed description of something."}
-  ];
-  
-  setupGame(wordPairs, 'group3');
-})();
-
-// Group 4
-(function() {
-  const wordPairs = [
-    {"word": "Customization", "def": "The act of changing something to fit needs."}, 
-    {"word": "To adjust", "def": "To make a small change."}, 
-    {"word": "To weigh", "def": "To have a certain weight."}, 
-    {"word": "The line between X and Y becomes thinner and thinner", "def": "The difference between two things gets smaller."}, 
-    {"word": "To date back to", "def": "To come from a certain time in the past."}, 
-    {"word": "Equal in significance", "def": "Just as important."}
-  ];
-  
-  setupGame(wordPairs, 'group4');
-})();
-
-// Group 5
-(function() {
-  const wordPairs = [
-    {"word": "The former/the latter", "def": "The first/the second thing mentioned."}, 
-    {"word": "Climatic conditions", "def": "Weather and temperature."}, 
-    {"word": "Gut/intestines", "def": "Animal parts used in strings."}, 
-    {"word": "Durable", "def": "Strong and lasting a long time."}, 
-    {"word": "Stiff", "def": "Hard to bend."}, 
-    {"word": "By far", "def": "Much more than others."}
-  ];
-  
-  setupGame(wordPairs, 'group5');
-})();
-
-// Group 6
-(function() {
-  const wordPairs = [
-    {"word": "Light (adjective)", "def": "Not heavy."},
-    {"word": "Revolutionise", "def": "To completely change something."}, 
-    {"word": "Go beyond X", "def": "To do more than X."}, 
-    {"word": "X was attributed to Y", "def": "X was believed to be caused by Y."}, 
-    {"word": "Lead (noun)", "def": "A heavy metal."}, 
-    {"word": "Grips", "def": "The handle part of a racket."}, 
-    {"word": "To anticipate", "def": "To expect something to happen."}
-  ];
-  
-  setupGame(wordPairs, 'group6');
-})();
-
-// Shared game setup function
+// Shared game setup function: Initializes a matching game for a given group of word pairs.
 function setupGame(wordPairs, groupId) {
-  let score = 0;
+  let score = 0; // Tracks the number of correct matches for this group
   const wordsContainer = document.getElementById(groupId + '-words');
   const defsContainer = document.getElementById(groupId + '-defs');
   const resultContainer = document.getElementById(groupId + '-result');
 
+  // Shuffles an array randomly.
   function shuffle(arr) {
     return [...arr].sort(() => Math.random() - 0.5);
   }
 
+  // Renders the word and definition cards for the game.
   function render() {
-    wordsContainer.innerHTML = "";
-    defsContainer.innerHTML = "";
-    let selected = null;
+    wordsContainer.innerHTML = ""; // Clear previous cards
+    defsContainer.innerHTML = ""; // Clear previous drop zones
+    let selected = null; // Stores the currently selected word card
 
     const shuffledWords = shuffle(wordPairs);
     const shuffledDefs = shuffle(wordPairs);
 
+    // Create and append word cards
     shuffledWords.forEach(obj => {
       const card = document.createElement("div");
       card.className = "card";
       card.textContent = obj.word;
-      card.dataset.word = obj.word;
+      card.dataset.word = obj.word; // Store the word for matching
       card.addEventListener("click", () => {
+        // Remove 'selected' class from all other word cards in this group
         document.querySelectorAll(`#${groupId}-words .card`).forEach(c => c.classList.remove("selected"));
-        card.classList.add("selected");
-        selected = card;
+        card.classList.add("selected"); // Add 'selected' class to the clicked card
+        selected = card; // Set the clicked card as selected
       });
       wordsContainer.appendChild(card);
     });
 
+    // Create and append definition drop zones
     shuffledDefs.forEach(obj => {
       const zone = document.createElement("div");
       zone.className = "drop-zone";
       zone.textContent = obj.def;
-      zone.dataset.word = obj.word;
-      zone.dataset.def = obj.def;
+      zone.dataset.word = obj.word; // Store the correct word for this definition
+      zone.dataset.def = obj.def; // Store the definition text
       zone.addEventListener("click", () => {
+        // Only proceed if a word card is selected and not already matched
         if (!selected || selected.classList.contains("matched")) return;
-        const dragged = selected.dataset.word;
-        if (dragged === zone.dataset.word) {
+
+        const draggedWord = selected.dataset.word; // Get the word from the selected card
+        
+        // Check for a match
+        if (draggedWord === zone.dataset.word) {
+          // Correct match
           selected.classList.add("matched");
           zone.classList.add("matched");
           selected.classList.remove("selected");
           
-          // Create matched pair display
-          zone.innerHTML = `<div class="matched-pair">${dragged} – ${zone.dataset.def}</div>`;
+          // Display the matched pair directly in the drop zone
+          zone.innerHTML = `<div class="matched-pair">${draggedWord} – ${zone.dataset.def}</div>`;
           
-          // Play correct sound
-          playCorrectSound();
+          playCorrectSound(); // Play success sound
           
-          selected = null;
-          score++;
+          selected = null; // Reset selected card
+          score++; // Increment score
+          
+          // Check if all pairs are matched in this group
           if (score === wordPairs.length) {
             resultContainer.innerHTML = "<b>🎉 Group completed! Well done!</b>";
           }
         } else {
+          // Incorrect match
           zone.classList.add("wrong");
           selected.classList.add("wrong");
           
-          // Play wrong sound
-          playWrongSound();
+          playWrongSound(); // Play error sound
           
+          // Remove 'wrong' classes and reset selected after a short delay
           setTimeout(() => {
             zone.classList.remove("wrong");
             selected.classList.remove("wrong");
@@ -812,8 +699,89 @@ function setupGame(wordPairs, groupId) {
     });
   }
 
-  render();
+  render(); // Initial render of the game
 }
+
+// --- Word Data for Each Group (37 words total, 5 groups of 6, 1 group of 7) ---
+
+// Group 1 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "to be ranked as", "def": "To be placed in a certain position or group based on quality or importance."},
+    {"word": "the likes of", "def": "People or things similar to someone or something mentioned."},
+    {"word": "to name just a few", "def": "Used to say that there are many more examples, but you are only mentioning a small number."},
+    {"word": "to be regarded as", "def": "To be thought of or considered to be something."},
+    {"word": "outsider", "def": "A person or team not expected to win a competition."},
+    {"word": "to account for", "def": "To explain why something happened, or to be the reason for something."}
+  ];
+  setupGame(wordPairs, 'group1');
+})();
+
+// Group 2 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "widely publicized", "def": "Made known to many people through media."},
+    {"word": "former", "def": "Happening or existing before, but not now."},
+    {"word": "subtle", "def": "Not obvious or easy to notice."},
+    {"word": "pass unnoticed", "def": "To happen without being seen or recognized."},
+    {"word": "synthetic", "def": "Made by humans, not natural."},
+    {"word": "underestimated", "def": "Thought to be smaller, less important, or less capable than it really is."}
+  ];
+  setupGame(wordPairs, 'group2');
+})();
+
+// Group 3 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "modification", "def": "A small change made to something."},
+    {"word": "tweak", "def": "A small adjustment or change to improve something."},
+    {"word": "customized", "def": "Made or changed to suit the needs of a particular person or group."},
+    {"word": "elite", "def": "A small group of people who are the best or most powerful."},
+    {"word": "readily available", "def": "Easy to get or find."},
+    {"word": "specifications", "def": "Detailed descriptions of how something should be made or done."}
+  ];
+  setupGame(wordPairs, 'group3');
+})();
+
+// Group 4 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "customization", "def": "The act of making something to suit individual needs."},
+    {"word": "to adjust", "def": "To change something slightly to make it more suitable or effective."},
+    {"word": "to weigh", "def": "To consider something carefully before making a decision."},
+    {"word": "the line between X and Y becomes thinner and thinner", "def": "It becomes harder to tell the difference between two things."},
+    {"word": "to date back to", "def": "To have existed since a particular time in the past."},
+    {"word": "equal in significance", "def": "Having the same importance."}
+  ];
+  setupGame(wordPairs, 'group4');
+})();
+
+// Group 5 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "the former/the latter", "def": "The first of two things mentioned / the second of two things mentioned."},
+    {"word": "climatic conditions", "def": "The usual weather conditions in a place over a long period."},
+    {"word": "gut/intestines", "def": "The long tube in the body that food passes through after the stomach."},
+    {"word": "durable", "def": "Able to last a long time without breaking or wearing out."},
+    {"word": "stiff", "def": "Difficult to bend or move."},
+    {"word": "by far", "def": "By a great amount; very much."}
+  ];
+  setupGame(wordPairs, 'group5');
+})();
+
+// Group 6 (7 words)
+(function() {
+  const wordPairs = [
+    {"word": "revolutionise", "def": "To completely change the way something is done or thought about."},
+    {"word": "go beyond X", "def": "To exceed a limit or expectation."},
+    {"word": "X was attributed to Y", "def": "X was believed to be caused by Y."},
+    {"word": "lead (noun)", "def": "A heavy, soft, grey metal."},
+    {"word": "grips", "def": "A firm hold or control over something."},
+    {"word": "to anticipate", "def": "To expect something to happen and prepare for it."},
+    {"word": "light (adjective)", "def": "Not heavy; having a lot of light; pale in color."}
+  ];
+  setupGame(wordPairs, 'group6');
+})();
 </script>
 </body>
 </html>
