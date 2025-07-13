@@ -63,7 +63,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.9); /* Shadowy background */
       display: none; /* Hidden by default, shown on mobile portrait */
       align-items: center;
       justify-content: center;
@@ -85,7 +85,7 @@
       border-radius: 15px;
       margin: 0 auto 30px;
       position: relative;
-      animation: rotatePhone 2s ease-in-out infinite;
+      animation: rotatePhone 2s ease-in-out infinite; /* Animated phone icon */
     }
 
     .phone-icon::before {
@@ -125,7 +125,7 @@
     .orientation-content h2 {
       font-size: 24px;
       margin-bottom: 15px;
-      animation: pulse 1.5s ease infinite;
+      animation: pulse 1.5s ease infinite; /* Pulse animation for text */
     }
 
     /* Pulse animation for text */
@@ -144,7 +144,8 @@
       line-height: 1.6;
     }
 
-    .orientation-content button {
+    /* Removed the button styling as the button is removed */
+    /* .orientation-content button {
       background: var(--accordion-bg);
       color: white;
       border: none;
@@ -157,7 +158,7 @@
 
     .orientation-content button:hover {
       transform: scale(1.05);
-    }
+    } */
 
     /* Show reminder on mobile portrait */
     @media (max-width: 768px) and (orientation: portrait) {
@@ -544,7 +545,7 @@
     <div class="phone-icon"></div>
     <h2>📱 Rotate Your Phone!</h2>
     <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
-    <button onclick="dismissReminder()">Got it!</button>
+    <!-- Removed the "Got it!" button as the reminder disappears on orientation change -->
   </div>
 </div>
 
@@ -645,21 +646,23 @@ function playWrongSound() {
   sound.play().catch(e => console.log('Audio play failed:', e));
 }
 
-// Dismisses the orientation reminder and saves preference to local storage.
+// The orientation reminder now relies solely on CSS media queries to show/hide.
+// The dismissReminder function and localStorage check for dismissal are no longer needed
+// because the overlay will naturally disappear when the orientation changes to landscape.
+/*
 function dismissReminder() {
   document.getElementById('orientationReminder').style.display = 'none';
   localStorage.setItem('orientationReminderDismissed', 'true');
 }
-
-// Checks if the orientation reminder should be shown on page load.
 window.addEventListener('load', () => {
   const reminderDismissed = localStorage.getItem('orientationReminderDismissed');
   if (reminderDismissed === 'true') {
     document.getElementById('orientationReminder').style.display = 'none';
   }
 });
+*/
 
-// Toggles between light and dark themes and updates the theme icon.
+// Theme toggle functionality: Toggles between light and dark themes and updates the theme icon.
 function toggleTheme() {
   const body = document.body;
   const currentTheme = body.getAttribute('data-theme');
