@@ -282,7 +282,7 @@
     /* Game area grid layout */
     .game-area {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Default 3 columns */
+      grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
       gap: 15px;
       padding: 15px 0;
       animation: fadeIn 0.5s ease;
@@ -296,9 +296,9 @@
       }
       
       .card, .drop-zone {
-        padding: 10px 15px;
-        min-height: 70px; /* Adjusted for smaller screens */
-        font-size: 14px;
+        padding: 6px 10px; /* Reduced padding for mobile landscape */
+        min-height: 60px; /* Adjusted for smaller screens landscape */
+        font-size: 11px; /* Adjusted for smaller screens landscape */
       }
       
       .container {
@@ -327,6 +327,11 @@
       .game-area {
         grid-template-columns: 1fr; /* Single column on mobile portrait */
       }
+      .card, .drop-zone {
+        padding: 6px 10px; /* Reduced padding for mobile portrait */
+        min-height: 60px; /* Adjusted for mobile portrait */
+        font-size: 11px; /* Adjusted for mobile portrait */
+      }
     }
 
     /* Fade-in animation */
@@ -343,10 +348,10 @@
 
     /* Card and drop zone base styling */
     .card, .drop-zone {
-      padding: 15px 20px;
-      font-size: 15px;
+      padding: 8px 15px; /* Reduced padding for desktop */
+      font-size: 14px; /* Adjusted for desktop */
       border-radius: 12px;
-      min-height: 80px; /* Increased min-height to accommodate two lines */
+      min-height: 65px; /* Adjusted for desktop to fit 2 lines compactly */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -499,6 +504,7 @@
       }
       
       .card, .drop-zone {
+        /* These are overridden by more specific media queries below */
         font-size: 14px;
         padding: 12px 16px;
       }
@@ -528,17 +534,14 @@
   </style>
 </head>
 <body>
-<!-- Orientation Reminder Overlay -->
 <div class="orientation-reminder" id="orientationReminder">
   <div class="orientation-content">
     <div class="phone-icon"></div>
     <h2>📱 Rotate Your Phone!</h2>
     <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
-    <!-- Removed the "Got it!" button as the reminder disappears on orientation change -->
-  </div>
+    </div>
 </div>
 
-<!-- Theme Toggle Button -->
 <button class="theme-toggle" onclick="toggleTheme()">
   <svg id="theme-icon" viewBox="0 0 24 24">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -548,7 +551,6 @@
 <div class="container">
   <h1>🧩 Matching – Passage 3</h1>
   
-  <!-- Group 1 Accordion -->
   <button class="accordion">Group 1</button>
   <div class="panel">
     <div class="game-area" id="group1-words"></div>
@@ -556,7 +558,6 @@
     <div id="group1-result" class="result-message"></div>
   </div>
 
-  <!-- Group 2 Accordion -->
   <button class="accordion">Group 2</button>
   <div class="panel">
     <div class="game-area" id="group2-words"></div>
@@ -564,7 +565,6 @@
     <div id="group2-result" class="result-message"></div>
   </div>
 
-  <!-- Group 3 Accordion -->
   <button class="accordion">Group 3</button>
   <div class="panel">
     <div class="game-area" id="group3-words"></div>
@@ -572,7 +572,6 @@
     <div id="group3-result" class="result-message"></div>
   </div>
 
-  <!-- Group 4 Accordion -->
   <button class="accordion">Group 4</button>
   <div class="panel">
     <div class="game-area" id="group4-words"></div>
@@ -580,7 +579,6 @@
     <div id="group4-result" class="result-message"></div>
   </div>
 
-  <!-- Group 5 Accordion -->
   <button class="accordion">Group 5</button>
   <div class="panel">
     <div class="game-area" id="group5-words"></div>
@@ -588,7 +586,6 @@
     <div id="group5-result" class="result-message"></div>
   </div>
 
-  <!-- Group 6 Accordion -->
   <button class="accordion">Group 6</button>
   <div class="panel">
     <div class="game-area" id="group6-words"></div>
@@ -597,7 +594,6 @@
   </div>
 </div>
 
-<!-- Audio elements (ensure correct.mp3 and wrong.mp3 are in the same directory) -->
 <audio id="correctSound" preload="auto">
   <source src="correct.mp3" type="audio/mpeg">
 </audio>
