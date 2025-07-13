@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Quiz</title>
+    <title>Vocabulary Challenge</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -16,11 +16,6 @@
             align-items: center;
         }
         
-        h1 {
-            color: #006666;
-            margin-bottom: 30px;
-        }
-        
         .quiz-container {
             background-color: white;
             border-radius: 15px;
@@ -28,6 +23,7 @@
             width: 90%;
             max-width: 600px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
         }
         
         .question-container {
@@ -52,42 +48,30 @@
             color: #006666;
         }
         
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .option {
-            background-color: #f0f9ff;
+        .answer-input {
+            width: 100%;
+            padding: 12px 15px;
             border: 2px solid #66cccc;
             border-radius: 8px;
-            padding: 12px 15px;
-            cursor: pointer;
-            transition: all 0.3s;
             font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s;
         }
         
-        .option:hover {
-            background-color: #d6f0f0;
-        }
-        
-        .option.selected {
-            background-color: #66cccc;
-            color: white;
+        .answer-input:focus {
+            outline: none;
             border-color: #008080;
+            box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
         }
         
-        .option.correct {
-            background-color: #99e6b3;
-            border-color: #008055;
-            color: #006633;
+        .answer-input.correct {
+            border-color: #99e6b3;
+            background-color: #f0fff4;
         }
         
-        .option.incorrect {
-            background-color: #ffb3b3;
-            border-color: #cc0000;
-            color: #800000;
+        .answer-input.incorrect {
+            border-color: #ffb3b3;
+            background-color: #fff0f0;
         }
         
         .controls {
@@ -153,6 +137,7 @@
         .results h2 {
             color: #006666;
             text-align: center;
+            margin-top: 0;
         }
         
         .score {
@@ -183,6 +168,18 @@
         
         .missed-word .definition {
             color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .missed-word .user-answer {
+            color: #cc0000;
+            margin-top: 5px;
+        }
+        
+        .missed-word .acceptable {
+            color: #008055;
+            margin-top: 5px;
+            font-size: 14px;
         }
         
         .navigation {
@@ -197,10 +194,29 @@
         .shuffle-btn:hover {
             background-color: #e68a00;
         }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #006666;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #008080;
+            margin-top: 0;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
-    <h1>Vocabulary Quiz</h1>
+    <div class="header">
+        <h1>Vocabulary Challenge</h1>
+        <p>Type the word that matches each definition</p>
+    </div>
     
     <div class="quiz-container" id="quizContainer">
         <div id="questionsArea">
@@ -237,25 +253,93 @@
     </div>
     
     <script>
-        // Vocabulary data
+        // Vocabulary data with multiple acceptable forms
         const vocabulary = [
-            { word: "to handle", definition: "To deal with or manage something" },
-            { word: "withdrawal", definition: "The act of removing yourself from a situation" },
-            { word: "to regulate", definition: "To control or maintain something at a certain level" },
-            { word: "to attribute", definition: "To say something is caused by something else" },
-            { word: "to dictate", definition: "To control or influence something strongly" },
-            { word: "to cope with", definition: "To deal successfully with a difficult situation" },
-            { word: "outcome", definition: "The final result of something" },
-            { word: "to tackle", definition: "To try to deal with a problem" },
-            { word: "superior", definition: "Better than average or others" },
-            { word: "inhibit", definition: "To prevent or slow down a process" },
-            { word: "perspiration", definition: "Sweat" },
-            { word: "nausea", definition: "The feeling that you might vomit" },
-            { word: "manifest", definition: "To show something clearly" },
-            { word: "coupled with", definition: "Combined with" },
-            { word: "mental picture of something", definition: "An image you see in your mind" },
-            { word: "to picture", definition: "To imagine something in your mind" },
-            { word: "compound (chemical)", definition: "A substance formed by combining elements" }
+            { 
+                word: "handle", 
+                definition: "To deal with or manage something",
+                acceptableForms: ["handle", "handles", "handled", "handling", "to handle"]
+            },
+            { 
+                word: "withdrawal", 
+                definition: "The act of removing yourself from a situation",
+                acceptableForms: ["withdrawal", "withdrawals"]
+            },
+            { 
+                word: "regulate", 
+                definition: "To control or maintain something at a certain level",
+                acceptableForms: ["regulate", "regulates", "regulated", "regulating", "to regulate"]
+            },
+            { 
+                word: "attribute", 
+                definition: "To say something is caused by something else",
+                acceptableForms: ["attribute", "attributes", "attributed", "attributing", "to attribute"]
+            },
+            { 
+                word: "dictate", 
+                definition: "To control or influence something strongly",
+                acceptableForms: ["dictate", "dictates", "dictated", "dictating", "to dictate"]
+            },
+            { 
+                word: "cope with", 
+                definition: "To deal successfully with a difficult situation",
+                acceptableForms: ["cope with", "copes with", "coped with", "coping with", "to cope with"]
+            },
+            { 
+                word: "outcome", 
+                definition: "The final result of something",
+                acceptableForms: ["outcome", "outcomes"]
+            },
+            { 
+                word: "tackle", 
+                definition: "To try to deal with a problem",
+                acceptableForms: ["tackle", "tackles", "tackled", "tackling", "to tackle"]
+            },
+            { 
+                word: "superior", 
+                definition: "Better than average or others",
+                acceptableForms: ["superior", "superiors"]
+            },
+            { 
+                word: "inhibit", 
+                definition: "To prevent or slow down a process",
+                acceptableForms: ["inhibit", "inhibits", "inhibited", "inhibiting"]
+            },
+            { 
+                word: "perspiration", 
+                definition: "Sweat",
+                acceptableForms: ["perspiration"]
+            },
+            { 
+                word: "nausea", 
+                definition: "The feeling that you might vomit",
+                acceptableForms: ["nausea"]
+            },
+            { 
+                word: "manifest", 
+                definition: "To show something clearly",
+                acceptableForms: ["manifest", "manifests", "manifested", "manifesting"]
+            },
+            { 
+                word: "coupled with", 
+                definition: "Combined with",
+                acceptableForms: ["coupled with"]
+            },
+            { 
+                word: "mental picture", 
+                definition: "An image you see in your mind",
+                acceptableForms: ["mental picture", "mental pictures"]
+            },
+            { 
+                word: "picture", 
+                definition: "To imagine something in your mind",
+                acceptableForms: ["picture", "pictures", "pictured", "picturing", "to picture"]
+            },
+            { 
+                word: "compound", 
+                definition: "A substance formed by combining elements",
+                acceptableForms: ["compound", "compounds"]
+            }
         ];
 
         // DOM elements
@@ -308,33 +392,34 @@
                 
                 const questionElement = document.createElement('div');
                 questionElement.className = 'question';
-                questionElement.textContent = `What does "${word.word}" mean?`;
+                questionElement.textContent = word.definition;
                 
-                const optionsElement = document.createElement('div');
-                optionsElement.className = 'options';
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.className = 'answer-input';
+                inputElement.placeholder = 'Type the word here...';
+                inputElement.dataset.questionIndex = index;
                 
-                // Generate options (correct answer + 3 random wrong answers)
-                const options = generateOptions(word);
+                // Add event listener for input
+                inputElement.addEventListener('input', function() {
+                    handleAnswerInput(this, index);
+                });
                 
-                // Shuffle the options
-                const shuffledOptions = shuffleArray(options);
-                
-                shuffledOptions.forEach((option, optionIndex) => {
-                    const optionElement = document.createElement('div');
-                    optionElement.className = 'option';
-                    optionElement.textContent = option.definition;
-                    optionElement.dataset.isCorrect = option.isCorrect;
-                    optionElement.dataset.questionIndex = index;
-                    
-                    optionElement.addEventListener('click', function() {
-                        handleOptionClick(this, index, option.isCorrect, word);
-                    });
-                    
-                    optionsElement.appendChild(optionElement);
+                // Add event listener for Enter key
+                inputElement.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        if (index < quizWords.length - 1) {
+                            currentQuestionIndex = index + 1;
+                            showQuestion(currentQuestionIndex);
+                        } else {
+                            submitBtn.click();
+                        }
+                    }
                 });
                 
                 questionContainer.appendChild(questionElement);
-                questionContainer.appendChild(optionsElement);
+                questionContainer.appendChild(inputElement);
+                
                 questionsArea.appendChild(questionContainer);
                 questionElements.push(questionContainer);
             });
@@ -350,46 +435,16 @@
             submitContainer.style.display = 'none';
         }
         
-        // Generate answer options (1 correct + 3 incorrect)
-        function generateOptions(correctWord) {
-            // Start with correct answer
-            const options = [{
-                definition: correctWord.definition,
-                isCorrect: true
-            }];
-            
-            // Get 3 random incorrect definitions
-            const otherWords = vocabulary.filter(word => word.word !== correctWord.word);
-            const shuffledOtherWords = shuffleArray([...otherWords]).slice(0, 3);
-            
-            // Add incorrect options
-            shuffledOtherWords.forEach(word => {
-                options.push({
-                    definition: word.definition,
-                    isCorrect: false
-                });
-            });
-            
-            return options;
-        }
-        
-        // Handle option selection
-        function handleOptionClick(optionElement, questionIndex, isCorrect, word) {
-            // Remove selected class from all options in this question
-            const questionContainer = questionElements[questionIndex];
-            const allOptions = questionContainer.querySelectorAll('.option');
-            allOptions.forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked option
-            optionElement.classList.add('selected');
+        // Handle answer input
+        function handleAnswerInput(inputElement, questionIndex) {
+            const answer = inputElement.value.trim().toLowerCase();
             
             // Store user's answer
             userAnswers[questionIndex] = {
-                isCorrect: isCorrect,
-                word: word.word,
-                definition: word.definition
+                answer: answer,
+                word: quizWords[questionIndex].word,
+                definition: quizWords[questionIndex].definition,
+                acceptableForms: quizWords[questionIndex].acceptableForms
             };
             
             // Enable navigation buttons
@@ -398,7 +453,7 @@
             }
             
             // If this is the last question, show submit button
-            if (questionIndex === quizWords.length - 1) {
+            if (questionIndex === quizWords.length - 1 && answer) {
                 submitContainer.style.display = 'flex';
                 submitBtn.disabled = false;
             }
@@ -412,16 +467,20 @@
             // Show current question
             questionElements[index].classList.add('active');
             
+            // Focus input
+            const inputElement = questionElements[index].querySelector('.answer-input');
+            inputElement.focus();
+            
             // Update progress
             progressElement.textContent = `Question ${index + 1} of ${quizWords.length}`;
             
             // Update navigation buttons
             prevBtn.disabled = index === 0;
             
-            // On last question, show submit button if answer is selected
+            // On last question, show submit button if answer is provided
             if (index === quizWords.length - 1) {
                 nextBtn.style.display = 'none';
-                if (userAnswers[index] !== undefined) {
+                if (userAnswers[index] !== undefined && userAnswers[index].answer) {
                     submitContainer.style.display = 'flex';
                     submitBtn.disabled = false;
                 }
@@ -429,8 +488,8 @@
                 nextBtn.style.display = 'block';
                 submitContainer.style.display = 'none';
                 
-                // Enable next button if answer was selected
-                nextBtn.disabled = userAnswers[index] === undefined;
+                // Enable next button if answer was provided
+                nextBtn.disabled = userAnswers[index] === undefined || !userAnswers[index].answer;
             }
         }
         
@@ -460,7 +519,23 @@
         // Show quiz results
         function showResults() {
             // Calculate score
-            const correctAnswers = userAnswers.filter(answer => answer.isCorrect).length;
+            let correctAnswers = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer && answer.acceptableForms) {
+                    const normalizedAnswer = answer.answer.toLowerCase().trim();
+                    const isCorrect = answer.acceptableForms.some(form => 
+                        form.toLowerCase().trim() === normalizedAnswer
+                    );
+                    
+                    if (isCorrect) {
+                        correctAnswers++;
+                    }
+                    
+                    // Update the answer object
+                    userAnswers[index].isCorrect = isCorrect;
+                }
+            });
+            
             const percentage = Math.round((correctAnswers / quizWords.length) * 100);
             
             // Display score
@@ -478,26 +553,33 @@
                 missedWords.forEach(answer => {
                     const wordElement = document.createElement('div');
                     wordElement.classList.add('missed-word');
+                    
+                    const acceptableForms = answer.acceptableForms.map(form => 
+                        `<span style="background-color: #e6ffe6; padding: 2px 6px; border-radius: 4px; margin: 0 2px;">${form}</span>`
+                    ).join(' ');
+                    
                     wordElement.innerHTML = `
                         <div class="word">${answer.word}</div>
                         <div class="definition">${answer.definition}</div>
+                        <div class="user-answer">You typed: ${answer.answer || '(no answer)'}</div>
+                        <div class="acceptable">Acceptable forms: ${acceptableForms}</div>
                     `;
                     missedWordsElement.appendChild(wordElement);
                 });
             }
             
-            // Highlight correct/incorrect answers in the quiz
+            // Highlight inputs in the quiz
             userAnswers.forEach((answer, index) => {
                 const questionContainer = questionElements[index];
-                const options = questionContainer.querySelectorAll('.option');
+                const inputElement = questionContainer.querySelector('.answer-input');
                 
-                options.forEach(option => {
-                    if (option.dataset.isCorrect === 'true') {
-                        option.classList.add('correct');
-                    } else if (option.classList.contains('selected') && !answer.isCorrect) {
-                        option.classList.add('incorrect');
-                    }
-                });
+                if (answer.isCorrect) {
+                    inputElement.classList.add('correct');
+                    inputElement.classList.remove('incorrect');
+                } else {
+                    inputElement.classList.add('incorrect');
+                    inputElement.classList.remove('correct');
+                }
             });
             
             // Hide quiz, show results
