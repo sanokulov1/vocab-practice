@@ -57,28 +57,28 @@
     }
 
     /* Orientation reminder overlay */
-    .orientation-reminder {
+   .orientation-reminder {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.9); /* Shadowy background */
-      display: none; /* Hidden by default, shown on mobile portrait */
+      display: none; /* Hidden by default, shown only on mobile portrait via media query */
       align-items: center;
       justify-content: center;
       z-index: 9999;
       animation: fadeIn 0.5s ease;
     }
 
-    .orientation-content {
+   .orientation-content {
       text-align: center;
       color: white;
       padding: 40px;
       max-width: 400px;
     }
 
-    .phone-icon {
+   .phone-icon {
       width: 80px;
       height: 120px;
       border: 3px solid white;
@@ -88,7 +88,7 @@
       animation: rotatePhone 2s ease-in-out infinite; /* Animated phone icon */
     }
 
-    .phone-icon::before {
+   .phone-icon::before {
       content: '';
       position: absolute;
       top: 10px;
@@ -100,7 +100,7 @@
       border-radius: 3px;
     }
 
-    .phone-icon::after {
+   .phone-icon::after {
       content: '';
       position: absolute;
       bottom: 10px;
@@ -122,7 +122,7 @@
       }
     }
 
-    .orientation-content h2 {
+   .orientation-content h2 {
       font-size: 24px;
       margin-bottom: 15px;
       animation: pulse 1.5s ease infinite; /* Pulse animation for text */
@@ -138,21 +138,21 @@
       }
     }
 
-    .orientation-content p {
+   .orientation-content p {
       font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
     }
 
-    /* Show reminder on mobile portrait */
+    /* Show reminder only on mobile portrait */
     @media (max-width: 768px) and (orientation: portrait) {
-      .orientation-reminder {
+     .orientation-reminder {
         display: flex;
       }
     }
 
     /* Theme toggle button */
-    .theme-toggle {
+   .theme-toggle {
       position: fixed;
       top: 20px;
       right: 20px;
@@ -170,18 +170,18 @@
       z-index: 1000;
     }
 
-    .theme-toggle:hover {
+   .theme-toggle:hover {
       transform: scale(1.1);
     }
 
-    .theme-toggle svg {
+   .theme-toggle svg {
       width: 24px;
       height: 24px;
       fill: white;
     }
 
     /* Main container styling */
-    .container {
+   .container {
       max-width: 1200px;
       margin: 0 auto;
       background: var(--container-bg);
@@ -205,7 +205,7 @@
     }
 
     /* Accordion button styling */
-    .accordion {
+   .accordion {
       background: var(--accordion-bg);
       color: white;
       cursor: pointer;
@@ -224,7 +224,7 @@
       box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
 
-    .accordion::before {
+   .accordion::before {
       content: '';
       position: absolute;
       top: 0;
@@ -236,15 +236,15 @@
       transition: transform 0.5s ease;
     }
 
-    .accordion:hover::before {
+   .accordion:hover::before {
       transform: translateX(0);
     }
 
-    .accordion:hover {
+   .accordion:hover {
       background: var(--accordion-hover);
     }
 
-    .accordion::after {
+   .accordion::after {
       content: '▼';
       position: absolute;
       right: 30px;
@@ -254,17 +254,17 @@
       font-size: 14px;
     }
 
-    .accordion.active::after {
+   .accordion.active::after {
       transform: translateY(-50%) rotate(180deg);
     }
 
-    .active, .accordion:hover {
+   .active,.accordion:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
     }
 
     /* Panel (accordion content) styling */
-    .panel {
+   .panel {
       padding: 0;
       max-height: 0;
       overflow: hidden;
@@ -274,22 +274,22 @@
       margin-top: 10px;
     }
 
-    .panel.show {
+   .panel.show {
       max-height: 2000px; /* Sufficiently large to show content */
       padding: 30px 0;
     }
 
     /* Game area grid layout - Default for larger screens (3 columns) */
-    .game-area {
+   .game-area {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Default 3 columns */
+      grid-template-columns: repeat(3, 1fr); /* Default 3 columns for desktop/tablet */
       gap: 15px;
       padding: 15px 0;
       animation: fadeIn 0.5s ease;
     }
 
     /* Card and drop zone base styling - Default for larger screens */
-    .card, .drop-zone {
+   .card,.drop-zone {
       padding: 10px 15px; /* Ample padding */
       font-size: 14px;
       border-radius: 12px;
@@ -305,14 +305,14 @@
       word-break: break-word;
     }
 
-    .card {
+   .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-    .card::before {
+   .card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -324,33 +324,33 @@
       transition: transform 0.5s ease;
     }
 
-    .card:hover {
+   .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       border-color: #14b8a6;
     }
 
-    .drop-zone {
+   .drop-zone {
       background: var(--drop-zone-bg);
       border: 2px dashed var(--drop-zone-border);
       position: relative;
     }
 
-    .drop-zone:hover {
+   .drop-zone:hover {
       border-color: #14b8a6;
     }
 
     /* Matched state styling */
-    .matched {
-      background: var(--match-bg) !important;
-      border: 2px solid #38a169 !important;
-      color: white !important;
+   .matched {
+      background: var(--match-bg)!important;
+      border: 2px solid #38a169!important;
+      color: white!important;
       cursor: default;
       animation: matchPulse 0.6s ease;
       box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
     }
 
-    .matched-pair {
+   .matched-pair {
       display: flex;
       flex-direction: column; /* Stack word and definition vertically */
       gap: 5px; /* Reduced gap for vertical stacking */
@@ -360,7 +360,7 @@
       flex-wrap: nowrap; /* Prevent wrapping of the pair itself */
     }
 
-    .matched-pair::before {
+   .matched-pair::before {
       content: '✓';
       font-size: 20px;
       margin-right: 0; /* No right margin for vertical stacking */
@@ -381,11 +381,11 @@
     }
 
     /* Wrong match state styling */
-    .wrong {
+   .wrong {
       animation: shake 0.5s ease;
-      background: var(--wrong-bg) !important;
-      border-color: #f56565 !important;
-      color: white !important;
+      background: var(--wrong-bg)!important;
+      border-color: #f56565!important;
+      color: white!important;
     }
 
     /* Shake animation for wrong matches */
@@ -402,7 +402,7 @@
     }
 
     /* Selected card styling */
-    .selected {
+   .selected {
       background: var(--selected-bg);
       border-color: #ed8936;
       color: #744210;
@@ -411,16 +411,16 @@
     }
 
     /* Selected card styling in dark mode */
-    [data-theme="dark"] .selected {
+    [data-theme="dark"].selected {
       color: white;
     }
 
-    .selected::before {
+   .selected::before {
       opacity: 0.1;
     }
 
     /* Result message styling */
-    .result-message {
+   .result-message {
       text-align: center;
       font-size: 18px;
       color: #38a169;
@@ -430,83 +430,47 @@
     }
 
     /* Result message styling in dark mode */
-    [data-theme="dark"] .result-message {
+    [data-theme="dark"].result-message {
       color: #68d391;
     }
 
-    /* Responsive adjustments for container and title */
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-      
-      h1 {
-        font-size: 2rem;
+    /* Responsive adjustments for mobile (3 columns, tighter) */
+    @media (max-width: 768px) { /* This media query applies to most tablets and phones */
+      .game-area {
+        grid-template-columns: repeat(3, 1fr); /* Always 3 columns on mobile */
+        gap: 8px; /* Slightly smaller gap */
       }
       
       .card, .drop-zone {
-        /* These are overridden by more specific media queries below */
-        font-size: 14px;
-        padding: 12px 16px;
+        padding: 6px 10px; /* Reduced padding for mobile */
+        min-height: 65px; /* Adjusted to fit 2 lines with smaller font */
+        font-size: 11px; /* Smaller font for mobile */
       }
-
-      .theme-toggle {
-        width: 40px;
-        height: 40px;
-      }
-    }
-
-    /* Responsive adjustments for tablets and larger phones (still 3 columns) */
-    @media (max-width: 992px) { /* Adjust breakpoint for tablets */
-      .game-area {
-        grid-template-columns: repeat(3, 1fr); /* Keep 3 columns */
-        gap: 12px; /* Slightly smaller gap */
-      }
-      .card, .drop-zone {
-        padding: 8px 12px; /* Reduced padding */
-        min-height: 68px; /* Slightly adjusted min-height */
-        font-size: 13px; /* Slightly smaller font */
-      }
+      
       .container {
-        padding: 30px;
+        padding: 15px; /* Reduce container padding too */
       }
+      
       h1 {
-        font-size: 2.2rem;
-      }
-    }
-
-    /* Responsive adjustments for phones (2 columns) */
-    @media (max-width: 768px) { /* Standard phone breakpoint */
-      .game-area {
-        grid-template-columns: repeat(2, 1fr); /* Change to 2 columns for phones */
-        gap: 10px;
-      }
-      .card, .drop-zone {
-        padding: 6px 10px; /* Further reduced padding */
-        min-height: 70px; /* Adjusted to fit 2 lines of 12px text in 2 columns */
-        font-size: 12px; /* Smaller font for phones */
-      }
-      .container {
-        padding: 15px;
-      }
-      h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem; /* Smaller title on mobile */
         margin-bottom: 20px;
       }
+      
       .accordion {
-        padding: 12px 15px;
+        padding: 12px 15px; /* Smaller accordion buttons */
         font-size: 14px;
+        margin-top: 10px;
       }
     }
 
-    /* For very small phone screens (still 2 columns, but even tighter) */
+    /* For very small phone screens (still 3 columns, even tighter) */
     @media (max-width: 480px) {
         .game-area {
-            gap: 8px;
+            gap: 6px; /* Even smaller gap */
         }
         .card, .drop-zone {
-            font-size: 11px; /* Even smaller font */
-            min-height: 65px; /* Adjusted min-height */
+            font-size: 10px; /* Even smaller font */
+            min-height: 60px; /* Adjust min-height accordingly */
             padding: 5px 8px; /* Even smaller padding */
         }
         .orientation-content h2 {
@@ -534,7 +498,7 @@
 </button>
 
 <div class="container">
-  <h1>🧩 Matching – Passage 3</h1>
+  <h1>Matching Tasks</h1>
   
   <button class="accordion">Group 1</button>
   <div class="panel">
@@ -612,17 +576,26 @@ window.addEventListener('load', () => {
     document.body.setAttribute('data-theme', 'dark');
     document.getElementById('theme-icon').innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
   }
-});
 
-// Accordion functionality: Toggles the visibility of content panels.
-const acc = document.getElementsByClassName("accordion");
-for (let i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    const panel = this.nextElementSibling;
-    panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
-  });
-}
+  // Accordion functionality: Toggles the visibility of content panels.
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
+    });
+  }
+
+  // Hide orientation reminder after 2 seconds
+  setTimeout(() => {
+      const reminder = document.getElementById('orientationReminder');
+      // Only hide if it's currently displayed (i.e., on a mobile portrait device)
+      if (reminder && getComputedStyle(reminder).display !== 'none') {
+          reminder.style.display = 'none';
+      }
+  }, 2000); // Hide after 2 seconds
+});
 
 // Shared game setup function: Initializes a matching game for a given group of word pairs.
 function setupGame(wordPairs, groupId) {
