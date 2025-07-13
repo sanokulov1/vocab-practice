@@ -64,7 +64,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.9); /* Shadowy background */
-      display: none; /* Hidden by default, shown on mobile portrait */
+      display: none; /* Hidden by default, shown only on mobile portrait via media query */
       align-items: center;
       justify-content: center;
       z-index: 9999;
@@ -144,7 +144,7 @@
       line-height: 1.6;
     }
 
-    /* Show reminder on mobile portrait */
+    /* Show reminder only on mobile portrait */
     @media (max-width: 768px) and (orientation: portrait) {
      .orientation-reminder {
         display: flex;
@@ -279,10 +279,10 @@
       padding: 30px 0;
     }
 
-    /* Game area grid layout - 4 columns for all screen sizes */
+    /* Game area grid layout - Default for larger screens (3 columns) */
    .game-area {
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop and mobile */
+      grid-template-columns: repeat(3, 1fr); /* Default 3 columns for desktop/tablet */
       gap: 15px;
       padding: 15px 0;
       animation: fadeIn 0.5s ease;
@@ -290,10 +290,10 @@
 
     /* Card and drop zone base styling - Default for larger screens */
    .card,.drop-zone {
-      padding: 8px 12px; /* Adjusted padding for 4 columns */
-      font-size: 14px; /* Default font size for desktop */
+      padding: 10px 15px; /* Ample padding */
+      font-size: 14px;
       border-radius: 12px;
-      min-height: 65px; /* Adjusted to fit 2 lines compactly */
+      min-height: 70px; /* Designed for 2 lines of 14px text in 3 columns */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -434,16 +434,16 @@
       color: #68d391;
     }
 
-    /* Responsive adjustments for mobile (4 columns, tighter) */
+    /* Responsive adjustments for mobile (3 columns, tighter) */
     @media (max-width: 768px) { /* This media query applies to most tablets and phones */
       .game-area {
-        grid-template-columns: repeat(4, 1fr); /* Keep 4 columns */
+        grid-template-columns: repeat(3, 1fr); /* Always 3 columns on mobile */
         gap: 8px; /* Slightly smaller gap */
       }
       
       .card, .drop-zone {
-        padding: 5px 8px; /* Reduced padding for mobile */
-        min-height: 60px; /* Adjusted to fit 2 lines with smaller font */
+        padding: 6px 10px; /* Reduced padding for mobile */
+        min-height: 65px; /* Adjusted to fit 2 lines with smaller font */
         font-size: 11px; /* Smaller font for mobile */
       }
       
@@ -463,15 +463,15 @@
       }
     }
 
-    /* For very small phone screens (still 4 columns, even tighter) */
+    /* For very small phone screens (still 3 columns, even tighter) */
     @media (max-width: 480px) {
         .game-area {
             gap: 6px; /* Even smaller gap */
         }
         .card, .drop-zone {
-            font-size: 9px; /* Even smaller font */
-            min-height: 55px; /* Adjust min-height accordingly */
-            padding: 4px 5px; /* Even smaller padding */
+            font-size: 10px; /* Even smaller font */
+            min-height: 60px; /* Adjust min-height accordingly */
+            padding: 5px 8px; /* Even smaller padding */
         }
         .orientation-content h2 {
             font-size: 20px;
@@ -498,7 +498,7 @@
 </button>
 
 <div class="container">
-  <h1>🧩 Matching – Passage 3</h1>
+  <h1>Matching Tasks</h1>
   
   <button class="accordion">Group 1</button>
   <div class="panel">
@@ -540,6 +540,20 @@
     <div class="game-area" id="group6-words"></div>
     <div class="game-area" id="group6-defs"></div>
     <div id="group6-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 7</button>
+  <div class="panel">
+    <div class="game-area" id="group7-words"></div>
+    <div class="game-area" id="group7-defs"></div>
+    <div id="group7-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 8</button>
+  <div class="panel">
+    <div class="game-area" id="group8-words"></div>
+    <div class="game-area" id="group8-defs"></div>
+    <div id="group8-result" class="result-message"></div>
   </div>
 </div>
 
@@ -600,6 +614,15 @@ window.addEventListener('load', () => {
       panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
     });
   }
+
+  // Hide orientation reminder after 2 seconds
+  setTimeout(() => {
+      const reminder = document.getElementById('orientationReminder');
+      // Only hide if it's currently displayed (i.e., on a mobile portrait device)
+      if (reminder && getComputedStyle(reminder).display !== 'none') {
+          reminder.style.display = 'none';
+      }
+  }, 2000); // Hide after 2 seconds
 });
 
 // Shared game setup function: Initializes a matching game for a given group of word pairs.
@@ -693,96 +716,110 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (48 words total, 6 groups of 8) ---
+// --- Word Data for Each Group (48 words total, 8 groups of 6) ---
 
-// Group 1 (8 words)
+// Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "Deliberately", "def": "Done on purpose; with intention or care."},
+    {"word": "Deliberately", "def": "On purpose; with intention or care."},
     {"word": "Inevitable", "def": "Certain to happen; unavoidable."},
     {"word": "To Deceive", "def": "To trick or lie; make someone believe an untruth."},
-    {"word": "Interpersonal bonds", "def": "Strong connections or relationships between people."},
-    {"word": "Inadvertently", "def": "Accidentally; without intending to."},
-    {"word": "X looms larger than in the past", "def": "Becomes much more important or worrying now."},
-    {"word": "Means", "def": "A method or way; money/resources."},
-    {"word": "Facilitated", "def": "Made easier or helped to happen."}
+    {"word": "interpersonal bonds", "def": "Strong connections or relationships between people."},
+    {"word": "inadvertently", "def": "Accidentally; without intending to."},
+    {"word": "X looms larger than in the past", "def": "Becomes much more important or worrying now."}
   ];
   setupGame(wordPairs, 'group1');
 })();
 
-// Group 2 (8 words)
+// Group 2 (6 words)
 (function() {
   const wordPairs = [
+    {"word": "Means", "def": "A method or way; money/resources."},
+    {"word": "Facilitated", "def": "Made easier or helped to happen."},
     {"word": "Unduly", "def": "More than necessary, reasonable, or appropriate."},
     {"word": "Misperceptions", "def": "Incorrect or false ideas/understandings."},
     {"word": "Detrimental", "def": "Causing harm, damage, or injury."},
-    {"word": "Downstream", "def": "In the direction a river flows; later in a process."},
-    {"word": "Social harmony", "def": "Peaceful coexistence and cooperation in society."},
-    {"word": "Contemporary", "def": "Belonging to the present time; at the same time."},
-    {"word": "Warrant the attention", "def": "Important enough to deserve careful thought/notice."},
-    {"word": "Encounter", "def": "To meet unexpectedly or in difficulty; a meeting."}
+    {"word": "Downstream", "def": "In the direction a river flows; later in a process."}
   ];
   setupGame(wordPairs, 'group2');
 })();
 
-// Group 3 (8 words)
+// Group 3 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "Counter", "def": "To oppose or react; a flat surface or game piece."},
-    {"word": "Exposure", "def": "Being affected by something; public attention; revealing."},
-    {"word": "Resource-intensive effort.", "def": "An activity requiring many resources (time, money, people)."},
-    {"word": "Routine", "def": "A usual fixed way of doing things; normal/ordinary."},
-    {"word": "Garner", "def": "To collect or gather; to earn praise/support."},
-    {"word": "Dilemma", "def": "A difficult situation with a hard choice."},
-    {"word": "Empirically tested", "def": "Proven/checked through observation or experiments."},
-    {"word": "Robust", "def": "Strong and healthy; strong and unlikely to fail."}
+    {"word": "social harmony", "def": "Peaceful coexistence and cooperation in society."},
+    {"word": "contemporary", "def": "Belonging to the present time; at the same time."},
+    {"word": "warrant the attention", "def": "Important enough to deserve careful thought/notice."},
+    {"word": "encounter", "def": "To meet unexpectedly or in difficulty; a meeting."},
+    {"word": "counter", "def": "To oppose or react; a flat surface or game piece."},
+    {"word": "exposure", "def": "Being affected by something; public attention; revealing."}
   ];
   setupGame(wordPairs, 'group3');
 })();
 
-// Group 4 (8 words)
+// Group 4 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "By default", "def": "Automatically; because no other choice was made."},
-    {"word": "Verify", "def": "To check or prove something is true/accurate."},
-    {"word": "Encode", "def": "To change information into a code/different format."},
-    {"word": "Momentarily", "def": "For a very short time; very soon."},
-    {"word": "Consistent with", "def": "In agreement with; matching."},
-    {"word": "Skepticism", "def": "An attitude of doubt or questioning."},
-    {"word": "Reside in", "def": "To live in a place; to exist or be found in something."},
-    {"word": "Preemptively", "def": "Doing something to prevent another action or gain advantage."}
+    {"word": "resource-intensive effort.", "def": "An activity requiring many resources (time, money, people)."},
+    {"word": "Routine", "def": "A usual fixed way of doing things; normal/ordinary."},
+    {"word": "Garner", "def": "To collect or gather; to earn praise/support."},
+    {"word": "Dilemma", "def": "A difficult situation with a hard choice."},
+    {"word": "empirically tested", "def": "Proven/checked through observation or experiments."},
+    {"word": "robust", "def": "Strong and healthy; strong and unlikely to fail."}
   ];
   setupGame(wordPairs, 'group4');
 })();
 
-// Group 5 (8 words)
+// Group 5 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "Censoring", "def": "Preventing communication from being seen/made public."},
-    {"word": "Laudable", "def": "Deserving praise or admiration."},
-    {"word": "Keep something off", "def": "Prevent from touching/entering; avoid a subject."},
-    {"word": "Compelling", "def": "Very interesting; so strong it demands action."},
-    {"word": "Persuasive", "def": "Able to make someone believe or do something."},
-    {"word": "Sensitize", "def": "To make someone more sensitive or aware."},
-    {"word": "Distinguish", "def": "To recognize differences; to perform exceptionally."},
-    {"word": "Remedies", "def": "Solutions or treatments for problems/illnesses."}
+    {"word": "by default", "def": "Automatically; because no other choice was made."},
+    {"word": "verify", "def": "To check or prove something is true/accurate."},
+    {"word": "encode", "def": "To change information into a code/different format."},
+    {"word": "momentarily", "def": "For a very short time; very soon."},
+    {"word": "consistent with", "def": "In agreement with; matching."},
+    {"word": "skepticism", "def": "An attitude of doubt or questioning."}
   ];
   setupGame(wordPairs, 'group5');
 })();
 
-// Group 6 (8 words)
+// Group 6 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "Arduous", "def": "Very difficult; requiring much effort."},
-    {"word": "Maintenance", "def": "Work to keep in good condition; continuation; financial support."},
-    {"word": "Prominence", "def": "State of being easily seen, well-known, or important."},
-    {"word": "Consensus", "def": "General agreement among a group."},
-    {"word": "Human fallibility", "def": "Natural tendency of people to make mistakes."},
-    {"word": "Overcome", "def": "To successfully deal with a problem/feeling."},
-    {"word": "Coordinated efforts", "def": "Organized actions by multiple groups for a common goal."},
-    {"word": "Panacea", "def": "A solution for all problems or difficulties."}
+    {"word": "reside in", "def": "To live in a place; to exist or be found in something."},
+    {"word": "preemptively", "def": "Doing something to prevent another action or gain advantage."},
+    {"word": "censoring", "def": "Preventing communication from being seen/made public."},
+    {"word": "laudable", "def": "Deserving praise or admiration."},
+    {"word": "keep something off", "def": "Prevent from touching/entering; avoid a subject."},
+    {"word": "compelling", "def": "Very interesting; so strong it demands action."}
   ];
   setupGame(wordPairs, 'group6');
+})();
+
+// Group 7 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "persuasive", "def": "Able to make someone believe or do something."},
+    {"word": "sensitize", "def": "To make someone more sensitive or aware."},
+    {"word": "distinguish", "def": "To recognize differences; to perform exceptionally."},
+    {"word": "remedies", "def": "Solutions or treatments for problems/illnesses."},
+    {"word": "arduous", "def": "Very difficult; requiring much effort."},
+    {"word": "maintenance", "def": "Work to keep in good condition; continuation; financial support."}
+  ];
+  setupGame(wordPairs, 'group7');
+})();
+
+// Group 8 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "prominence", "def": "State of being easily seen, well-known, or important."},
+    {"word": "consensus", "def": "General agreement among a group."},
+    {"word": "human fallibility", "def": "Natural tendency of people to make mistakes."},
+    {"word": "overcome", "def": "To successfully deal with a problem/feeling."},
+    {"word": "coordinated efforts", "def": "Organized actions by multiple groups for a common goal."},
+    {"word": "panacea", "def": "A solution for all problems or difficulties."}
+  ];
+  setupGame(wordPairs, 'group8');
 })();
 </script>
 </body>
