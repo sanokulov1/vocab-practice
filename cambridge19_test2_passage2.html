@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cambridge 19 Study Hub | Test 1, Passage 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cambridge 19 Study Hub | Test 2, Passage 1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -28,20 +28,21 @@
 
     .dark-mode {
       --primary-bg: #0f172a;
+      --card-bg: #1e293b;
       --card-border: rgba(255, 255, 255, 0.05);
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       
-      --card1-bg: #1a3a5f;
-      --card2-bg: #2d2a5f;
-      --card3-bg: #1a5f3a;
-      --card4-bg: #5f471a;
+      --card1-bg: #0c4a6e;
+      --card2-bg: #0c4a6e;
+      --card3-bg: #0c4a6e;
+      --card4-bg: #0c4a6e;
       
       --accent-1: #60a5fa;
-      --accent-2: #a78bfa;
-      --accent-3: #4ade80;
-      --accent-4: #fbbf24;
+      --accent-2: #38bdf8;
+      --accent-3: #0ea5e9;
+      --accent-4: #0284c7;
     }
 
     * {
@@ -95,42 +96,24 @@
       transition: var(--transition);
       position: relative;
       overflow: hidden;
-      padding: 1.2rem 1.3rem; /* Reduced vertical padding */
+      padding: 1.3rem;
       text-align: center;
       border: 1px solid var(--card-border);
       box-shadow: var(--shadow);
       z-index: 1;
-      min-height: 150px; /* Set minimum height */
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-      z-index: -1;
-      opacity: 0;
-      transition: var(--transition);
-    }
-    
-    .card:hover::before {
-      opacity: 1;
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
     }
 
     .card-icon {
-      font-size: 1.8rem; /* Reduced icon size */
-      margin-bottom: 0.6rem; /* Reduced margin */
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
       transition: var(--transition);
-      width: 50px; /* Reduced size */
-      height: 50px; /* Reduced size */
+      width: 54px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -138,19 +121,19 @@
     }
 
     .card:hover .card-icon {
-      transform: translateY(-5px) scale(1.1);
+      transform: translateY(-5px);
     }
 
     .card-title {
-      font-size: 1.15rem; /* Slightly smaller title */
-      font-weight: 700;
-      margin-bottom: 0.4rem; /* Reduced margin */
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
       font-family: 'Poppins', sans-serif;
       color: var(--text-primary);
     }
 
     .card-desc {
-      font-size: 0.85rem; /* Slightly smaller description */
+      font-size: 0.8rem;
       color: var(--text-secondary);
       max-width: 90%;
       line-height: 1.5;
@@ -195,58 +178,30 @@
 
     .theme-toggle {
       position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
+      top: 1rem;
+      right: 1rem;
       background: var(--card1-bg);
       border: 1px solid var(--card-border);
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
+      width: 42px;
+      height: 42px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       transition: var(--transition);
       z-index: 10;
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
 
     .theme-toggle:hover {
-      transform: rotate(15deg) scale(1.1);
+      transform: rotate(15deg);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
 
     .theme-toggle i {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--text-secondary);
-    }
-    
-    .particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-    
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--accent-1);
-      opacity: 0.1;
-      animation: float 15s infinite linear;
-    }
-    
-    @keyframes float {
-      0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0.1;
-      }
-      100% {
-        transform: translateY(-100vh) translateX(100px) rotate(360deg);
-        opacity: 0;
-      }
     }
 
     /* Mobile-specific adjustments */
@@ -258,45 +213,46 @@
       }
       
       .card {
-        min-height: 130px; /* Adjusted for mobile */
-        padding: 1rem 1rem; /* Reduced padding */
+        min-height: 110px;
+        padding: 1rem;
       }
       
       .container {
         padding: 1rem;
-        gap: 1.2rem;
+        gap: 1rem;
         justify-content: center;
         padding-top: 2rem;
       }
       
-      .card-icon {
-        font-size: 1.6rem; /* Smaller icon on mobile */
-        width: 45px;
-        height: 45px;
-        margin-bottom: 0.5rem; /* Reduced margin */
-      }
-      
       .card-title {
-        font-size: 1.1rem; /* Smaller title on mobile */
+        font-size: 1.1rem;
       }
       
       .card-desc {
-        font-size: 0.8rem; /* Smaller description on mobile */
+        font-size: 0.75rem;
       }
       
-      .theme-toggle {
-        top: 1rem;
-        right: 1rem;
-        width: 44px;
-        height: 44px;
+      .card-icon {
+        font-size: 1.8rem;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 0.6rem;
       }
     }
 
     @media (max-width: 480px) {
+      .card-title {
+        font-size: 1rem;
+      }
+      
+      .card-desc {
+        font-size: 0.7rem;
+      }
+      
       .card-icon {
-        font-size: 1.4rem;
-        width: 40px;
-        height: 40px;
+        font-size: 1.6rem;
+        width: 42px;
+        height: 42px;
       }
     }
   </style>
@@ -306,11 +262,9 @@
     <i class="fas fa-moon"></i>
   </div>
   
-  <div class="particles" id="particles"></div>
-  
   <div class="container">
     <div class="grid">
-      <a href="test1_passage3_flashcards.html" class="card card1">
+      <a href="test2_passage2_flashcards.html" class="card card1">
         <div class="card-icon">
           <i class="fas fa-layer-group"></i>
         </div>
@@ -318,7 +272,7 @@
         <p class="card-desc">Master vocabulary with interactive flashcards</p>
       </a>
       
-      <a href="test1_passage3_matching.html" class="card card2">
+      <a href="test2-p1-matching.html" class="card card2">
         <div class="card-icon">
           <i class="fas fa-link"></i>
         </div>
@@ -326,7 +280,7 @@
         <p class="card-desc">Connect terms with their definitions</p>
       </a>
       
-      <a href="test1_passage3_quiz.html" class="card card3">
+      <a href="test2-p1-quiz.html" class="card card3">
         <div class="card-icon">
           <i class="fas fa-edit"></i>
         </div>
@@ -334,11 +288,11 @@
         <p class="card-desc">Test your knowledge with challenging questions</p>
       </a>
       
-      <a href="test1_passage3_typing.html" class="card card4">
+      <a href="test2-p1-typing.html" class="card card4">
         <div class="card-icon">
           <i class="fas fa-keyboard"></i>
         </div>
-        <h3 class="card-title">Typing Task</h3>
+        <h3 class="card-title">Typing</h3>
         <p class="card-desc">Improve recall through active typing exercises</p>
       </a>
     </div>
@@ -349,29 +303,27 @@
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
     
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+    
     // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark-mode');
       themeIcon.classList.remove('fa-moon');
       themeIcon.classList.add('fa-sun');
     }
-    
-    themeToggle.addEventListener('click', () => {
-      // Toggle theme
-      document.body.classList.toggle('dark-mode');
-      
-      // Save theme preference
-      if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('theme', 'dark');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-      } else {
-        localStorage.setItem('theme', 'light');
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-      }
-    });
     
     // Add subtle animation to cards on page load
     document.querySelectorAll('.card').forEach((card, index) => {
@@ -384,33 +336,6 @@
         card.style.transform = 'translateY(0)';
       }, 300 * index);
     });
-    
-    // Create floating particles
-    const particlesContainer = document.getElementById('particles');
-    const colors = ['#1e88e5', '#7e57c2', '#43a047', '#ff8f00'];
-    
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-      
-      // Random properties
-      const size = Math.random() * 15 + 5;
-      const posX = Math.random() * 100;
-      const posY = Math.random() * 100;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const delay = Math.random() * 10;
-      const duration = Math.random() * 10 + 15;
-      
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${posX}%`;
-      particle.style.top = `${posY}%`;
-      particle.style.background = color;
-      particle.style.animationDelay = `${delay}s`;
-      particle.style.animationDuration = `${duration}s`;
-      
-      particlesContainer.appendChild(particle);
-    }
   </script>
 </body>
 </html>
