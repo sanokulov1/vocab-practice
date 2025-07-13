@@ -520,27 +520,6 @@
     <div class="game-area" id="group3-defs"></div>
     <div id="group3-result" class="result-message"></div>
   </div>
-
-  <button class="accordion">Group 4</button>
-  <div class="panel">
-    <div class="game-area" id="group4-words"></div>
-    <div class="game-area" id="group4-defs"></div>
-    <div id="group4-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 5</button>
-  <div class="panel">
-    <div class="game-area" id="group5-words"></div>
-    <div class="game-area" id="group5-defs"></div>
-    <div id="group5-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 6</button>
-  <div class="panel">
-    <div class="game-area" id="group6-words"></div>
-    <div class="game-area" id="group6-defs"></div>
-    <div id="group6-result" class="result-message"></div>
-  </div>
 </div>
 
 <audio id="correctSound" preload="auto">
@@ -702,17 +681,17 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (31 words total) ---
+// --- Word Data for Each Group (16 words total) ---
 
 // Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "adept", "def": "Very skilled or good at something."},
-    {"word": "forage", "def": "To search widely for food or supplies."},
-    {"word": "to disperse", "def": "To spread over a wide area."},
-    {"word": "archipelago", "def": "A group of many islands."},
-    {"word": "stepping stones", "def": "A series of things that help you reach a goal."},
-    {"word": "remote", "def": "Far away from other places or people."}
+    {"word": "to be rich in", "def": "To have a large amount of something valuable."},
+    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
+    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."},
+    {"word": "livelihood", "def": "The way you earn money to live."},
+    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
+    {"word": "Implement", "def": "To put a plan or decision into effect."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -720,61 +699,25 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "fragments", "def": "Small broken pieces of something."},
-    {"word": "impenetrable", "def": "Impossible to get through or into."},
-    {"word": "encompass", "def": "To include a wide range of things."},
-    {"word": "coincidence", "def": "Two or more things happening at the same time by chance."},
-    {"word": "to grind", "def": "To break something into small pieces or powder."},
-    {"word": "to unearth", "def": "To find something hidden in the ground or discover something secret."}
+    {"word": "in-demand", "def": "Wanted by many people."},
+    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
+    {"word": "logging", "def": "The activity of cutting down trees for wood."},
+    {"word": "comprise", "def": "To consist of or be made up of."},
+    {"word": "alarming", "def": "Worrying or frightening."},
+    {"word": "to document", "def": "To record information about something."}
   ];
   setupGame(wordPairs, 'group2');
 })();
 
-// Group 3 (6 words)
+// Group 3 (4 words)
 (function() {
   const wordPairs = [
-    {"word": "routinely", "def": "As a normal or regular practice."},
-    {"word": "to abandon", "def": "To leave a place, thing, or person forever."},
-    {"word": "departure", "def": "The act of leaving a place."},
-    {"word": "to be rich in", "def": "To contain a lot of something valuable or useful."},
-    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
-    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."}
-  ];
-  setupGame(wordPairs, 'group3');
-})();
-
-// Group 4 (6 words)
-(function() {
-  const wordPairs = [
-    {"word": "livelihood", "def": "The way you earn money to live."},
-    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
-    {"word": "implement", "def": "To put a plan or decision into effect."},
-    {"word": "in-demand", "def": "Wanted by many people."},
-    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
-    {"word": "logging", "def": "The activity of cutting down trees for wood."}
-  ];
-  setupGame(wordPairs, 'group4');
-})();
-
-// Group 5 (6 words)
-(function() {
-  const wordPairs = [
-    {"word": "comprise", "def": "To consist of or be made up of."},
-    {"word": "alarming", "def": "Worrying or frightening."},
-    {"word": "to document", "def": "To record information about something."},
     {"word": "devastating", "def": "Causing a lot of damage or destruction."},
-    {"word": "run-off", "def": "Water that flows over the ground rather than soaking into it."},
-    {"word": "place a high priority", "def": "To consider something very important."}
-  ];
-  setupGame(wordPairs, 'group5');
-})();
-
-// Group 6 (1 word)
-(function() {
-  const wordPairs = [
+    {"word": "run-off", "def": "Water that flows over the ground, often carrying harmful substances, instead of soaking in."},
+    {"word": "place a high priority", "def": "To consider something very important."},
     {"word": "degradation", "def": "The process of something being damaged or made worse."}
   ];
-  setupGame(wordPairs, 'group6');
+  setupGame(wordPairs, 'group3');
 })();
 </script>
 </body>
