@@ -57,7 +57,7 @@
     }
 
     /* Orientation reminder overlay */
-    .orientation-reminder {
+   .orientation-reminder {
       position: fixed;
       top: 0;
       left: 0;
@@ -71,14 +71,14 @@
       animation: fadeIn 0.5s ease;
     }
 
-    .orientation-content {
+   .orientation-content {
       text-align: center;
       color: white;
       padding: 40px;
       max-width: 400px;
     }
 
-    .phone-icon {
+   .phone-icon {
       width: 80px;
       height: 120px;
       border: 3px solid white;
@@ -88,7 +88,7 @@
       animation: rotatePhone 2s ease-in-out infinite; /* Animated phone icon */
     }
 
-    .phone-icon::before {
+   .phone-icon::before {
       content: '';
       position: absolute;
       top: 10px;
@@ -100,7 +100,7 @@
       border-radius: 3px;
     }
 
-    .phone-icon::after {
+   .phone-icon::after {
       content: '';
       position: absolute;
       bottom: 10px;
@@ -122,7 +122,7 @@
       }
     }
 
-    .orientation-content h2 {
+   .orientation-content h2 {
       font-size: 24px;
       margin-bottom: 15px;
       animation: pulse 1.5s ease infinite; /* Pulse animation for text */
@@ -138,7 +138,7 @@
       }
     }
 
-    .orientation-content p {
+   .orientation-content p {
       font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
@@ -146,13 +146,13 @@
 
     /* Show reminder on mobile portrait */
     @media (max-width: 768px) and (orientation: portrait) {
-      .orientation-reminder {
+     .orientation-reminder {
         display: flex;
       }
     }
 
     /* Theme toggle button */
-    .theme-toggle {
+   .theme-toggle {
       position: fixed;
       top: 20px;
       right: 20px;
@@ -170,18 +170,18 @@
       z-index: 1000;
     }
 
-    .theme-toggle:hover {
+   .theme-toggle:hover {
       transform: scale(1.1);
     }
 
-    .theme-toggle svg {
+   .theme-toggle svg {
       width: 24px;
       height: 24px;
       fill: white;
     }
 
     /* Main container styling */
-    .container {
+   .container {
       max-width: 1200px;
       margin: 0 auto;
       background: var(--container-bg);
@@ -205,7 +205,7 @@
     }
 
     /* Accordion button styling */
-    .accordion {
+   .accordion {
       background: var(--accordion-bg);
       color: white;
       cursor: pointer;
@@ -224,7 +224,7 @@
       box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
 
-    .accordion::before {
+   .accordion::before {
       content: '';
       position: absolute;
       top: 0;
@@ -236,15 +236,15 @@
       transition: transform 0.5s ease;
     }
 
-    .accordion:hover::before {
+   .accordion:hover::before {
       transform: translateX(0);
     }
 
-    .accordion:hover {
+   .accordion:hover {
       background: var(--accordion-hover);
     }
 
-    .accordion::after {
+   .accordion::after {
       content: '▼';
       position: absolute;
       right: 30px;
@@ -254,17 +254,17 @@
       font-size: 14px;
     }
 
-    .accordion.active::after {
+   .accordion.active::after {
       transform: translateY(-50%) rotate(180deg);
     }
 
-    .active, .accordion:hover {
+   .active,.accordion:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
     }
 
     /* Panel (accordion content) styling */
-    .panel {
+   .panel {
       padding: 0;
       max-height: 0;
       overflow: hidden;
@@ -274,84 +274,26 @@
       margin-top: 10px;
     }
 
-    .panel.show {
+   .panel.show {
       max-height: 2000px; /* Sufficiently large to show content */
       padding: 30px 0;
     }
 
-    /* Game area grid layout */
-    .game-area {
+    /* Game area grid layout - 4 columns for all screen sizes */
+   .game-area {
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+      grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop and mobile */
       gap: 15px;
       padding: 15px 0;
       animation: fadeIn 0.5s ease;
     }
 
-    /* Responsive adjustments for game area */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .game-area {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns in landscape on smaller screens */
-        gap: 10px;
-      }
-      
-      .card, .drop-zone {
-        padding: 6px 10px; /* Reduced padding for mobile landscape */
-        min-height: 60px; /* Adjusted for smaller screens landscape */
-        font-size: 11px; /* Adjusted for smaller screens landscape */
-      }
-      
-      .container {
-        padding: 20px 15px;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-      }
-      
-      .accordion {
-        padding: 15px 20px;
-        font-size: 16px;
-        margin-top: 10px;
-      }
-    }
-
-    @media (max-width: 1024px) and (orientation: portrait) {
-      .game-area {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns in portrait on tablets */
-      }
-    }
-
-    @media (max-width: 640px) and (orientation: portrait) {
-      .game-area {
-        grid-template-columns: 1fr; /* Single column on mobile portrait */
-      }
-      .card, .drop-zone {
-        padding: 6px 10px; /* Reduced padding for mobile portrait */
-        min-height: 60px; /* Adjusted for mobile portrait */
-        font-size: 11px; /* Adjusted for mobile portrait */
-      }
-    }
-
-    /* Fade-in animation */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Card and drop zone base styling */
-    .card, .drop-zone {
-      padding: 8px 15px; /* Reduced padding for desktop */
-      font-size: 14px; /* Adjusted for desktop */
+    /* Card and drop zone base styling - Default for larger screens */
+   .card,.drop-zone {
+      padding: 8px 12px; /* Adjusted padding for 4 columns */
+      font-size: 14px; /* Default font size for desktop */
       border-radius: 12px;
-      min-height: 65px; /* Adjusted for desktop to fit 2 lines compactly */
+      min-height: 65px; /* Adjusted to fit 2 lines compactly */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -359,57 +301,56 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      white-space: normal; /* Ensure text wraps naturally */
-      word-break: break-word; /* Break long words if necessary */
+      white-space: normal;
+      word-break: break-word;
     }
 
-    .card {
+   .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-    .card::before {
+   .card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--accordion-bg);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
     }
 
-    .card:hover {
+   .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       border-color: #14b8a6;
     }
 
-    .drop-zone {
+   .drop-zone {
       background: var(--drop-zone-bg);
       border: 2px dashed var(--drop-zone-border);
       position: relative;
     }
 
-    .drop-zone:hover {
+   .drop-zone:hover {
       border-color: #14b8a6;
     }
 
     /* Matched state styling */
-    .matched {
-      background: var(--match-bg) !important;
-      border: 2px solid #38a169 !important;
-      color: white !important;
+   .matched {
+      background: var(--match-bg)!important;
+      border: 2px solid #38a169!important;
+      color: white!important;
       cursor: default;
       animation: matchPulse 0.6s ease;
       box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
     }
 
-    .matched-pair {
+   .matched-pair {
       display: flex;
       flex-direction: column; /* Stack word and definition vertically */
       gap: 5px; /* Reduced gap for vertical stacking */
@@ -419,7 +360,7 @@
       flex-wrap: nowrap; /* Prevent wrapping of the pair itself */
     }
 
-    .matched-pair::before {
+   .matched-pair::before {
       content: '✓';
       font-size: 20px;
       margin-right: 0; /* No right margin for vertical stacking */
@@ -440,11 +381,11 @@
     }
 
     /* Wrong match state styling */
-    .wrong {
+   .wrong {
       animation: shake 0.5s ease;
-      background: var(--wrong-bg) !important;
-      border-color: #f56565 !important;
-      color: white !important;
+      background: var(--wrong-bg)!important;
+      border-color: #f56565!important;
+      color: white!important;
     }
 
     /* Shake animation for wrong matches */
@@ -461,7 +402,7 @@
     }
 
     /* Selected card styling */
-    .selected {
+   .selected {
       background: var(--selected-bg);
       border-color: #ed8936;
       color: #744210;
@@ -470,16 +411,16 @@
     }
 
     /* Selected card styling in dark mode */
-    [data-theme="dark"] .selected {
+    [data-theme="dark"].selected {
       color: white;
     }
 
-    .selected::before {
+   .selected::before {
       opacity: 0.1;
     }
 
     /* Result message styling */
-    .result-message {
+   .result-message {
       text-align: center;
       font-size: 18px;
       color: #38a169;
@@ -489,47 +430,55 @@
     }
 
     /* Result message styling in dark mode */
-    [data-theme="dark"] .result-message {
+    [data-theme="dark"].result-message {
       color: #68d391;
     }
 
-    /* Responsive adjustments for container and title */
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-      
-      h1 {
-        font-size: 2rem;
+    /* Responsive adjustments for mobile (4 columns, tighter) */
+    @media (max-width: 768px) { /* This media query applies to most tablets and phones */
+      .game-area {
+        grid-template-columns: repeat(4, 1fr); /* Keep 4 columns */
+        gap: 8px; /* Slightly smaller gap */
       }
       
       .card, .drop-zone {
-        /* These are overridden by more specific media queries below */
+        padding: 5px 8px; /* Reduced padding for mobile */
+        min-height: 60px; /* Adjusted to fit 2 lines with smaller font */
+        font-size: 11px; /* Smaller font for mobile */
+      }
+      
+      .container {
+        padding: 15px; /* Reduce container padding too */
+      }
+      
+      h1 {
+        font-size: 1.6rem; /* Smaller title on mobile */
+        margin-bottom: 20px;
+      }
+      
+      .accordion {
+        padding: 12px 15px; /* Smaller accordion buttons */
         font-size: 14px;
-        padding: 12px 16px;
-      }
-
-      .theme-toggle {
-        width: 40px;
-        height: 40px;
+        margin-top: 10px;
       }
     }
 
-    /* Loading animation for panels */
-    .panel.show .game-area {
-      animation: slideIn 0.5s ease;
-    }
-
-    /* Slide-in animation for panels */
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* For very small phone screens (still 4 columns, even tighter) */
+    @media (max-width: 480px) {
+        .game-area {
+            gap: 6px; /* Even smaller gap */
+        }
+        .card, .drop-zone {
+            font-size: 9px; /* Even smaller font */
+            min-height: 55px; /* Adjust min-height accordingly */
+            padding: 4px 5px; /* Even smaller padding */
+        }
+        .orientation-content h2 {
+            font-size: 20px;
+        }
+        .orientation-content p {
+            font-size: 16px;
+        }
     }
   </style>
 </head>
@@ -641,17 +590,17 @@ window.addEventListener('load', () => {
     document.body.setAttribute('data-theme', 'dark');
     document.getElementById('theme-icon').innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
   }
-});
 
-// Accordion functionality: Toggles the visibility of content panels.
-const acc = document.getElementsByClassName("accordion");
-for (let i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    const panel = this.nextElementSibling;
-    panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
-  });
-}
+  // Accordion functionality: Toggles the visibility of content panels.
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
+    });
+  }
+});
 
 // Shared game setup function: Initializes a matching game for a given group of word pairs.
 function setupGame(wordPairs, groupId) {
@@ -749,14 +698,14 @@ function setupGame(wordPairs, groupId) {
 // Group 1 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "Deliberately", "def": "Done on purpose; intentionally."},
-    {"word": "Inevitable", "def": "Certain to happen and unable to be avoided."},
-    {"word": "To Deceive", "def": "To make someone believe something that is not true, often to gain an advantage."},
+    {"word": "Deliberately", "def": "Done on purpose; with intention or care."},
+    {"word": "Inevitable", "def": "Certain to happen; unavoidable."},
+    {"word": "To Deceive", "def": "To trick or lie; make someone believe an untruth."},
     {"word": "Interpersonal bonds", "def": "Strong connections or relationships between people."},
-    {"word": "Inadvertently", "def": "By accident; unintentionally."},
-    {"word": "X looms larger than in the past", "def": "Something seems more important or threatening now than it did before."},
-    {"word": "Means", "def": "A method or way of doing something."},
-    {"word": "Facilitated", "def": "Made something easier or helped it to happen."}
+    {"word": "Inadvertently", "def": "Accidentally; without intending to."},
+    {"word": "X looms larger than in the past", "def": "Becomes much more important or worrying now."},
+    {"word": "Means", "def": "A method or way; money/resources."},
+    {"word": "Facilitated", "def": "Made easier or helped to happen."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -764,14 +713,14 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "Unduly", "def": "To an excessive or unnecessary degree."},
-    {"word": "Misperceptions", "def": "Incorrect understandings or beliefs about something."},
-    {"word": "Detrimental", "def": "Causing harm or damage."},
-    {"word": "Downstream", "def": "Later in a process or chain of events; as a result of something."},
-    {"word": "Social harmony", "def": "A state of peace and agreement among people in a society."},
-    {"word": "Contemporary", "def": "Belonging to the present time; modern."},
-    {"word": "Warrant the attention", "def": "To deserve or justify being noticed or considered."},
-    {"word": "Encounter", "def": "To meet or experience something, especially unexpectedly."}
+    {"word": "Unduly", "def": "More than necessary, reasonable, or appropriate."},
+    {"word": "Misperceptions", "def": "Incorrect or false ideas/understandings."},
+    {"word": "Detrimental", "def": "Causing harm, damage, or injury."},
+    {"word": "Downstream", "def": "In the direction a river flows; later in a process."},
+    {"word": "Social harmony", "def": "Peaceful coexistence and cooperation in society."},
+    {"word": "Contemporary", "def": "Belonging to the present time; at the same time."},
+    {"word": "Warrant the attention", "def": "Important enough to deserve careful thought/notice."},
+    {"word": "Encounter", "def": "To meet unexpectedly or in difficulty; a meeting."}
   ];
   setupGame(wordPairs, 'group2');
 })();
@@ -779,14 +728,14 @@ function setupGame(wordPairs, groupId) {
 // Group 3 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "Counter", "def": "To act in opposition to something; to respond to an attack or threat."},
-    {"word": "Exposure", "def": "The state of being in a situation where you are not protected from something harmful or unpleasant."},
-    {"word": "Resource-intensive effort", "def": "An activity that requires a lot of money, time, or other resources."},
-    {"word": "Routine", "def": "A regular way of doing things; a normal procedure."},
-    {"word": "Garner", "def": "To collect or gather something, especially information or approval."},
-    {"word": "Dilemma", "def": "A situation in which a difficult choice has to be made between two or more alternatives."},
-    {"word": "Empirically tested", "def": "Proven or verified by observation or experiment."},
-    {"word": "Robust", "def": "Strong and healthy; able to withstand difficult conditions."}
+    {"word": "Counter", "def": "To oppose or react; a flat surface or game piece."},
+    {"word": "Exposure", "def": "Being affected by something; public attention; revealing."},
+    {"word": "Resource-intensive effort.", "def": "An activity requiring many resources (time, money, people)."},
+    {"word": "Routine", "def": "A usual fixed way of doing things; normal/ordinary."},
+    {"word": "Garner", "def": "To collect or gather; to earn praise/support."},
+    {"word": "Dilemma", "def": "A difficult situation with a hard choice."},
+    {"word": "Empirically tested", "def": "Proven/checked through observation or experiments."},
+    {"word": "Robust", "def": "Strong and healthy; strong and unlikely to fail."}
   ];
   setupGame(wordPairs, 'group3');
 })();
@@ -794,14 +743,14 @@ function setupGame(wordPairs, groupId) {
 // Group 4 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "By default", "def": "If no other choice is made; automatically."},
-    {"word": "Verify", "def": "To check that something is true or accurate."},
-    {"word": "Encode", "def": "To convert information into a code or a different form."},
-    {"word": "Momentarily", "def": "For a very short time."},
-    {"word": "Consistent with", "def": "In agreement or harmony with something."},
-    {"word": "Skepticism", "def": "An attitude of doubt or a lack of belief in something."},
-    {"word": "Reside in", "def": "To exist or be found in a particular place or thing."},
-    {"word": "Preemptively", "def": "Done to prevent something from happening, rather than reacting to it."}
+    {"word": "By default", "def": "Automatically; because no other choice was made."},
+    {"word": "Verify", "def": "To check or prove something is true/accurate."},
+    {"word": "Encode", "def": "To change information into a code/different format."},
+    {"word": "Momentarily", "def": "For a very short time; very soon."},
+    {"word": "Consistent with", "def": "In agreement with; matching."},
+    {"word": "Skepticism", "def": "An attitude of doubt or questioning."},
+    {"word": "Reside in", "def": "To live in a place; to exist or be found in something."},
+    {"word": "Preemptively", "def": "Doing something to prevent another action or gain advantage."}
   ];
   setupGame(wordPairs, 'group4');
 })();
@@ -809,14 +758,14 @@ function setupGame(wordPairs, groupId) {
 // Group 5 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "Censoring", "def": "Removing parts of books, films, letters, etc., that are considered offensive or harmful."},
-    {"word": "Laudable", "def": "Deserving praise and commendation."},
-    {"word": "Keep something off", "def": "To prevent something from being included or from happening."},
-    {"word": "Compelling", "def": "Forceful and convincing; making you feel that you must do something."},
-    {"word": "Persuasive", "def": "Able to convince someone to do or believe something."},
-    {"word": "Sensitize", "def": "To make someone more aware of something, especially a problem or injustice."},
-    {"word": "Distinguish", "def": "To recognize or point out a difference between two or more things."},
-    {"word": "Remedies", "def": "Solutions or cures for problems or illnesses."}
+    {"word": "Censoring", "def": "Preventing communication from being seen/made public."},
+    {"word": "Laudable", "def": "Deserving praise or admiration."},
+    {"word": "Keep something off", "def": "Prevent from touching/entering; avoid a subject."},
+    {"word": "Compelling", "def": "Very interesting; so strong it demands action."},
+    {"word": "Persuasive", "def": "Able to make someone believe or do something."},
+    {"word": "Sensitize", "def": "To make someone more sensitive or aware."},
+    {"word": "Distinguish", "def": "To recognize differences; to perform exceptionally."},
+    {"word": "Remedies", "def": "Solutions or treatments for problems/illnesses."}
   ];
   setupGame(wordPairs, 'group5');
 })();
@@ -824,14 +773,14 @@ function setupGame(wordPairs, groupId) {
 // Group 6 (8 words)
 (function() {
   const wordPairs = [
-    {"word": "Arduous", "def": "Difficult and tiring, requiring much effort."},
-    {"word": "Maintenance", "def": "The process of keeping something in good condition."},
-    {"word": "Prominence", "def": "The state of being important or famous."},
-    {"word": "Consensus", "def": "A general agreement among a group of people."},
-    {"word": "Human fallibility", "def": "The tendency for humans to make mistakes or be wrong."},
-    {"word": "Overcome", "def": "To succeed in dealing with a problem or difficulty."},
-    {"word": "Coordinated efforts", "def": "Actions that are planned and carried out together by different people or groups."},
-    {"word": "Panacea", "def": "Something that will solve all problems or cure all illnesses."}
+    {"word": "Arduous", "def": "Very difficult; requiring much effort."},
+    {"word": "Maintenance", "def": "Work to keep in good condition; continuation; financial support."},
+    {"word": "Prominence", "def": "State of being easily seen, well-known, or important."},
+    {"word": "Consensus", "def": "General agreement among a group."},
+    {"word": "Human fallibility", "def": "Natural tendency of people to make mistakes."},
+    {"word": "Overcome", "def": "To successfully deal with a problem/feeling."},
+    {"word": "Coordinated efforts", "def": "Organized actions by multiple groups for a common goal."},
+    {"word": "Panacea", "def": "A solution for all problems or difficulties."}
   ];
   setupGame(wordPairs, 'group6');
 })();
