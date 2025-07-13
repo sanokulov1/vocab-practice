@@ -1,91 +1,819 @@
+I'll optimize the provided HTML file by integrating the matching game logic directly into it, similar to the first example you shared. This approach removes the need for iframes, which can simplify the page structure, improve performance, and make styling and script interactions smoother.
 
+Here's the optimized code:
+
+-----
+
+# Optimized Matching Game
+
+I've refactored your `matching_passage2.html` file to incorporate the full matching game functionality, eliminating the use of iframes. This makes the page more streamlined and efficient.
+
+I've applied the robust styling and interactive features from the first example, including:
+
+  * **Dark Mode Toggle:** A button to switch between light and dark themes.
+  * **Responsive Design:** Adapts to various screen sizes and orientations.
+  * **Orientation Reminder:** A prompt for mobile users to rotate their devices to landscape mode for a better experience.
+  * **Visual Feedback:** Animations and color changes for selected, matched, and incorrect attempts.
+  * **Audio Feedback:** Sounds for correct and wrong matches.
+
+## Changes Made
+
+1.  **Removed Iframes:** The content for each "Group" is now directly rendered within its respective `panel` div, rather than being loaded from separate HTML files via iframes.
+2.  **Integrated Styles:** The comprehensive CSS from the first example has been embedded, ensuring a consistent and polished look and feel.
+3.  **Consolidated JavaScript:** The core `setupGame` function and all associated logic (shuffling, selection, matching, score tracking, sound effects, theme toggle, and orientation reminder) are now part of this single HTML file.
+4.  **Defined Word Pairs:** The specific word and definition pairs for each of your five groups have been added using JavaScript arrays.
+
+Now, all your matching game content and logic are self-contained, offering a better user experience and easier maintenance.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Matching – Passage 2</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f9ff;
-      padding: 20px;
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Matching Game – Test 1 Passage 2</title>
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    :root {
+      --bg-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 50%, #6c3483 100%);
+      --container-bg: rgba(255, 255, 255, 0.95);
+      --text-primary: #2d3748;
+      --text-secondary: #4a5568;
+      --accordion-bg: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+      --accordion-hover: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      --card-bg: white;
+      --card-border: #e2e8f0;
+      --drop-zone-bg: linear-gradient(135deg, #f0f4ff 0%, #e9ecef 100%);
+      --drop-zone-border: #cbd5e0;
+      --selected-bg: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+      --match-bg: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      --wrong-bg: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --container-bg: rgba(30, 30, 45, 0.95);
+      --text-primary: #e2e8f0;
+      --text-secondary: #cbd5e0;
+      --accordion-bg: linear-gradient(135deg, #065f5b 0%, #047c70 100%);
+      --accordion-hover: linear-gradient(135deg, #047c70 0%, #059488 100%);
+      --card-bg: #2d3748;
+      --card-border: #4a5568;
+      --drop-zone-bg: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+      --drop-zone-border: #4a5568;
+      --selected-bg: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
+      --match-bg: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+      --wrong-bg: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    /* Orientation reminder overlay */
+    .orientation-reminder {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .orientation-content {
+      text-align: center;
+      color: white;
+      padding: 40px;
+      max-width: 400px;
+    }
+
+    .phone-icon {
+      width: 80px;
+      height: 120px;
+      border: 3px solid white;
+      border-radius: 15px;
+      margin: 0 auto 30px;
+      position: relative;
+      animation: rotatePhone 2s ease-in-out infinite;
+    }
+
+    .phone-icon::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 5px;
+      background: white;
+      border-radius: 3px;
+    }
+
+    .phone-icon::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+
+    @keyframes rotatePhone {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      50% {
+        transform: rotate(90deg);
+      }
+    }
+
+    .orientation-content h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    .orientation-content p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .orientation-content button {
+      background: var(--accordion-bg);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .orientation-content button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Show reminder on mobile portrait */
+    @media (max-width: 768px) and (orientation: portrait) {
+      .orientation-reminder {
+        display: flex;
+      }
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accordion-bg);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--container-bg);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      backdrop-filter: blur(10px);
+    }
+
     h1 {
       text-align: center;
-      color: #1d3557;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: var(--accordion-bg);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
     }
+
     .accordion {
-      background-color: #0077b6;
+      background: var(--accordion-bg);
       color: white;
       cursor: pointer;
-      padding: 18px;
-      margin-top: 10px;
+      padding: 20px 30px;
       width: 100%;
       border: none;
       text-align: left;
       outline: none;
       font-size: 18px;
-      border-radius: 5px;
+      font-weight: 600;
+      border-radius: 15px;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
+
+    .accordion::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+
+    .accordion:hover::before {
+      transform: translateX(0);
+    }
+
+    .accordion:hover {
+      background: var(--accordion-hover);
+    }
+
+    .accordion::after {
+      content: '▼';
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      transition: transform 0.3s ease;
+      font-size: 14px;
+    }
+
+    .accordion.active::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
     .active, .accordion:hover {
-      background-color: #023e8a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
     }
+
     .panel {
       padding: 0;
-      display: none;
+      max-height: 0;
       overflow: hidden;
-      background-color: white;
-      border-radius: 5px;
-      margin-bottom: 15px;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      background: transparent;
+      border-radius: 15px;
+      margin-top: 10px;
     }
-    iframe {
+
+    .panel.show {
+      max-height: 2000px;
+      padding: 30px 0;
+    }
+
+    .game-area {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding: 15px 0;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Mobile landscape - 2 columns per row */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .game-area {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      
+      .card, .drop-zone {
+        padding: 10px 15px;
+        min-height: 50px;
+        font-size: 14px;
+      }
+      
+      .container {
+        padding: 20px 15px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+      
+      .accordion {
+        padding: 15px 20px;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+    }
+
+    @media (max-width: 1024px) and (orientation: portrait) {
+      .game-area {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) and (orientation: portrait) {
+      .game-area {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card, .drop-zone {
+      padding: 15px 20px;
+      font-size: 15px;
+      border-radius: 12px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 680px;
-      border: none;
-      border-top: 2px solid #0077b6;
+      height: 100%;
+      background: var(--accordion-bg);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-color: #14b8a6;
+    }
+
+    .drop-zone {
+      background: var(--drop-zone-bg);
+      border: 2px dashed var(--drop-zone-border);
+      position: relative;
+    }
+
+    .drop-zone:hover {
+      border-color: #14b8a6;
+    }
+
+    .matched {
+      background: var(--match-bg) !important;
+      border: 2px solid #38a169 !important;
+      color: white !important;
+      cursor: default;
+      animation: matchPulse 0.6s ease;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    }
+
+    .matched-pair {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .matched-pair::before {
+      content: '✓';
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+    @keyframes matchPulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .wrong {
+      animation: shake 0.5s ease;
+      background: var(--wrong-bg) !important;
+      border-color: #f56565 !important;
+      color: white !important;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-5px);
+      }
+      75% {
+        transform: translateX(5px);
+      }
+    }
+
+    .selected {
+      background: var(--selected-bg);
+      border-color: #ed8936;
+      color: #744210;
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+    }
+
+    [data-theme="dark"] .selected {
+      color: white;
+    }
+
+    .selected::before {
+      opacity: 0.1;
+    }
+
+    .result-message {
+      text-align: center;
+      font-size: 18px;
+      color: #38a169;
+      font-weight: 600;
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    [data-theme="dark"] .result-message {
+      color: #68d391;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .card, .drop-zone {
+        font-size: 14px;
+        padding: 12px 16px;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* Loading animation for panels */
+    .panel.show .game-area {
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
-
-<h1>🧩 Matching – Passage 2</h1>
-
-<button class="accordion">Group 1</button>
-<div class="panel">
-  <iframe src="matching_group1.html"></iframe>
+<div class="orientation-reminder" id="orientationReminder">
+  <div class="orientation-content">
+    <div class="phone-icon"></div>
+    <h2>📱 Rotate Your Phone!</h2>
+    <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
+    <button onclick="dismissReminder()">Got it!</button>
+  </div>
 </div>
 
-<button class="accordion">Group 2</button>
-<div class="panel">
-  <iframe src="matching-group2.html"></iframe>
+<button class="theme-toggle" onclick="toggleTheme()">
+  <svg id="theme-icon" viewBox="0 0 24 24">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<div class="container">
+  <h1>🧩 Matching – Passage 2</h1>
+  
+  <button class="accordion">Group 1</button>
+  <div class="panel">
+    <div class="game-area" id="group1-words"></div>
+    <div class="game-area" id="group1-defs"></div>
+    <div id="group1-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 2</button>
+  <div class="panel">
+    <div class="game-area" id="group2-words"></div>
+    <div class="game-area" id="group2-defs"></div>
+    <div id="group2-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 3</button>
+  <div class="panel">
+    <div class="game-area" id="group3-words"></div>
+    <div class="game-area" id="group3-defs"></div>
+    <div id="group3-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 4</button>
+  <div class="panel">
+    <div class="game-area" id="group4-words"></div>
+    <div class="game-area" id="group4-defs"></div>
+    <div id="group4-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 5</button>
+  <div class="panel">
+    <div class="game-area" id="group5-words"></div>
+    <div class="game-area" id="group5-defs"></div>
+    <div id="group5-result" class="result-message"></div>
+  </div>
 </div>
 
-<button class="accordion">Group 3</button>
-<div class="panel">
-  <iframe src="matching-group3.html"></iframe>
-</div>
-
-<button class="accordion">Group 4</button>
-<div class="panel">
-  <iframe src="matching-group4.html"></iframe>
-</div>
-
-<button class="accordion">Group 5</button>
-<div class="panel">
-  <iframe src="matching-group5.html"></iframe>
-</div>
+<audio id="correctSound" preload="auto">
+  <source src="correct.mp3" type="audio/mpeg">
+</audio>
+<audio id="wrongSound" preload="auto">
+  <source src="wrong.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-  const acc = document.getElementsByClassName("accordion");
-  for (let i = 0; i < acc.length; i++) {
-    acc[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      const panel = this.nextElementSibling;
-      panel.style.display = panel.style.display === "block" ? "none" : "block";
+// Sound functions
+function playCorrectSound() {
+  const sound = document.getElementById('correctSound');
+  sound.currentTime = 0;
+  sound.play().catch(e => console.log('Audio play failed:', e));
+}
+
+function playWrongSound() {
+  const sound = document.getElementById('wrongSound');
+  sound.currentTime = 0;
+  sound.play().catch(e => console.log('Audio play failed:', e));
+}
+
+// Dismiss orientation reminder
+function dismissReminder() {
+  document.getElementById('orientationReminder').style.display = 'none';
+  localStorage.setItem('orientationReminderDismissed', 'true');
+}
+
+// Check if reminder should be shown
+window.addEventListener('load', () => {
+  const reminderDismissed = localStorage.getItem('orientationReminderDismissed');
+  if (reminderDismissed === 'true') {
+    document.getElementById('orientationReminder').style.display = 'none';
+  }
+});
+
+// Theme toggle functionality
+function toggleTheme() {
+  const body = document.body;
+  const currentTheme = body.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  body.setAttribute('data-theme', newTheme);
+  
+  const icon = document.getElementById('theme-icon');
+  if (newTheme === 'dark') {
+    icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+  } else {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+  }
+  
+  localStorage.setItem('theme', newTheme);
+}
+
+// Load saved theme
+window.addEventListener('load', () => {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-icon').innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+  }
+});
+
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.classList.toggle("show"); // Use class for smoother transition
+  });
+}
+
+// Shared game setup function
+function setupGame(wordPairs, groupId) {
+  let score = 0;
+  const wordsContainer = document.getElementById(groupId + '-words');
+  const defsContainer = document.getElementById(groupId + '-defs');
+  const resultContainer = document.getElementById(groupId + '-result');
+
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  function render() {
+    wordsContainer.innerHTML = "";
+    defsContainer.innerHTML = "";
+    let selected = null;
+
+    const shuffledWords = shuffle(wordPairs);
+    const shuffledDefs = shuffle(wordPairs);
+
+    shuffledWords.forEach(obj => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.textContent = obj.word;
+      card.dataset.word = obj.word;
+      card.addEventListener("click", () => {
+        document.querySelectorAll(`#${groupId}-words .card`).forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        selected = card;
+      });
+      wordsContainer.appendChild(card);
+    });
+
+    shuffledDefs.forEach(obj => {
+      const zone = document.createElement("div");
+      zone.className = "drop-zone";
+      zone.textContent = obj.def;
+      zone.dataset.word = obj.word;
+      zone.dataset.def = obj.def;
+      zone.addEventListener("click", () => {
+        if (!selected || selected.classList.contains("matched")) return;
+        const dragged = selected.dataset.word;
+        if (dragged === zone.dataset.word) {
+          selected.classList.add("matched");
+          zone.classList.add("matched");
+          selected.classList.remove("selected");
+          
+          // Create matched pair display
+          zone.innerHTML = `<div class="matched-pair">${dragged} – ${zone.dataset.def}</div>`;
+          
+          // Play correct sound
+          playCorrectSound();
+          
+          selected = null;
+          score++;
+          if (score === wordPairs.length) {
+            resultContainer.innerHTML = "<b>🎉 Group completed! Well done!</b>";
+          }
+        } else {
+          zone.classList.add("wrong");
+          selected.classList.add("wrong");
+          
+          // Play wrong sound
+          playWrongSound();
+          
+          setTimeout(() => {
+            zone.classList.remove("wrong");
+            selected.classList.remove("wrong");
+            selected.classList.remove("selected");
+            selected = null;
+          }, 600);
+        }
+      });
+      defsContainer.appendChild(zone);
     });
   }
-</script>
 
+  render();
+}
+
+// Group 1
+(function() {
+  const wordPairs = [
+    {"word": "To have a preference for", "def": "To like one thing more than another."},
+    {"word": "To have the edge over", "def": "To be slightly better than someone or something else."},
+    {"word": "Virtually", "def": "Almost, nearly."},
+    {"word": "To make a comeback", "def": "To return to a successful position after a period of failure or absence."},
+    {"word": "To dominate", "def": "To have control over a place or person."},
+    {"word": "To be associated with", "def": "To be connected with something in people's minds."}
+  ];
+  setupGame(wordPairs, 'group1');
+})();
+
+// Group 2
+(function() {
+  const wordPairs = [
+    {"word": "To be considered", "def": "To be thought of in a particular way."},
+    {"word": "To be credited with", "def": "To be believed to have done something, especially something good."},
+    {"word": "To be based on", "def": "To use something as the starting point for something else."},
+    {"word": "Fundamental", "def": "Basic and important."},
+    {"word": "Discipline", "def": "A particular area of study, especially a subject studied at a college or university."},
+    {"word": "Pioneering", "def": "Involving new ideas or methods."}
+  ];
+  setupGame(wordPairs, 'group2');
+})();
+
+// Group 3
+(function() {
+  const wordPairs = [
+    {"word": "To be attributed to", "def": "To be thought to be caused by someone or something."},
+    {"word": "To revolutionise", "def": "To completely change the way that something is done or made."},
+    {"word": "A series of", "def": "A number of similar or related events or things, one following another."},
+    {"word": "Impact", "def": "The powerful effect that something has on someone or something."},
+    {"word": "To alter", "def": "To change something, usually slightly."},
+    {"word": "To result in", "def": "To cause a particular situation to happen."}
+  ];
+  setupGame(wordPairs, 'group3');
+})();
+
+// Group 4
+(function() {
+  const wordPairs = [
+    {"word": "Significant", "def": "Important or noticeable."},
+    {"word": "To accelerate", "def": "To happen or make something happen faster."},
+    {"word": "Precise", "def": "Exact and accurate."},
+    {"word": "To analyse", "def": "To examine or think about something carefully in order to understand it."},
+    {"word": "To measure", "def": "To find the size, quantity, or amount of something."},
+    {"word": "In real time", "def": "At the actual time it happens, without any delay."}
+  ];
+  setupGame(wordPairs, 'group4');
+})();
+
+// Group 5
+(function() {
+  const wordPairs = [
+    {"word": "To predict", "def": "To say what will happen in the future."},
+    {"word": "To track", "def": "To follow the progress or development of someone or something."},
+    {"word": "To monitor", "def": "To watch and check a situation carefully for a period of time in order to see how it develops."},
+    {"word": "Output", "def": "The amount of something that a person, machine, or organization produces."},
+    {"word": "To enhance", "def": "To improve the quality, amount, or strength of something."},
+    {"word": "To optimise", "def": "To make something as good or effective as possible."}
+  ];
+  setupGame(wordPairs, 'group5');
+})();
+</script>
 </body>
 </html>
+```
