@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      /* New Light Theme - Soft pastel cards */
       --primary-bg: #f8f9fa;
       --card-border: rgba(0, 0, 0, 0.05);
       --text-primary: #263238;
@@ -16,13 +15,11 @@
       --shadow: 0 6px 15px rgba(0, 0, 0, 0.04);
       --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
       
-      /* Card-specific backgrounds */
       --card1-bg: #e3f2fd;
       --card2-bg: #f3e5f5;
       --card3-bg: #e8f5e9;
       --card4-bg: #fff8e1;
       
-      /* Card-specific accents */
       --accent-1: #1e88e5;
       --accent-2: #7e57c2;
       --accent-3: #43a047;
@@ -30,7 +27,6 @@
     }
 
     .dark-mode {
-      /* Dark Theme - Professional with blue accents */
       --primary-bg: #0f172a;
       --card-bg: #1e293b;
       --card-border: rgba(255, 255, 255, 0.05);
@@ -38,13 +34,11 @@
       --text-secondary: #94a3b8;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       
-      /* Card backgrounds for dark mode */
       --card1-bg: #0c4a6e;
       --card2-bg: #0c4a6e;
       --card3-bg: #0c4a6e;
       --card4-bg: #0c4a6e;
       
-      /* Accent colors for dark mode */
       --accent-1: #60a5fa;
       --accent-2: #38bdf8;
       --accent-3: #0ea5e9;
@@ -80,31 +74,6 @@
       gap: 1.5rem;
       min-height: 100vh;
       justify-content: center;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 1rem;
-      max-width: 600px;
-    }
-
-    .header h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: var(--text-primary);
-      background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .header p {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-top: 1rem;
     }
 
     .grid {
@@ -235,17 +204,6 @@
       color: var(--text-secondary);
     }
 
-    .footer {
-      margin-top: 0.5rem;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      text-align: center;
-      padding: 0.8rem;
-      width: 100%;
-      max-width: 600px;
-      border-top: 1px solid var(--card-border);
-    }
-
     /* Mobile-specific adjustments */
     @media (max-width: 900px) {
       .grid {
@@ -266,14 +224,6 @@
         padding-top: 2rem;
       }
       
-      .header h1 {
-        font-size: 1.5rem;
-      }
-      
-      .header p {
-        font-size: 0.9rem;
-      }
-      
       .card-title {
         font-size: 1.1rem;
       }
@@ -291,10 +241,6 @@
     }
 
     @media (max-width: 480px) {
-      .header h1 {
-        font-size: 1.3rem;
-      }
-      
       .card-title {
         font-size: 1rem;
       }
@@ -308,11 +254,6 @@
         width: 42px;
         height: 42px;
       }
-      
-      .footer {
-        font-size: 0.75rem;
-        padding: 0.5rem;
-      }
     }
   </style>
 </head>
@@ -322,11 +263,6 @@
   </div>
   
   <div class="container">
-    <div class="header">
-      <h1>Cambridge 19 Study Hub</h1>
-      <p>Test 1, Passage 3: Attitudes towards Artificial Intelligence</p>
-    </div>
-    
     <div class="grid">
       <a href="test1_passage2_flashcards.html" class="card card1">
         <div class="card-icon">
@@ -359,10 +295,6 @@
         <h3 class="card-title">Typing</h3>
         <p class="card-desc">Improve recall through active typing exercises</p>
       </a>
-    </div>
-    
-    <div class="footer">
-      <p>Cambridge English IELTS Academic 19 - Official Preparation Material</p>
     </div>
   </div>
 
