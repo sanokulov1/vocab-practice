@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9);
+            padding: 20px;
+        }
+
+        body.dark-mode {
+            /* Adjusted for a softer dark mode */
+            background: linear-gradient(135deg, #2c3e50, #1a242f);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        body.dark-mode header {
+            color: #ecf0f1; /* Lighter text for dark mode header */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header h1 i {
+            color: #e74c3c;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 320px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .front {
+            /* Adjusted for softer dark front card */
+            background: linear-gradient(135deg, #4a6572, #34495e);
+            color: #ecf0f1; /* Lighter text for dark front card */
+        }
+
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8);
+            transform: rotateY(180deg);
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .back {
+            /* Adjusted for softer dark back card */
+            background: linear-gradient(135deg, #5c7f8c, #4a627a);
+            color: #ecf0f1; /* Lighter text for dark back card */
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body.dark-mode .word {
+            color: #ecf0f1; /* Lighter text for dark word */
+        }
+
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .definition {
+            color: #7fd9ff; /* Brighter blue for definition in dark mode */
+        }
+
+        .example {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        body.dark-mode .example {
+            color: #bdc3c7; /* Lighter grey for example in dark mode */
+            background: rgba(0, 0, 0, 0.3); /* Slightly darker background for example */
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        body.dark-mode .hint {
+            color: #95a5a6; /* Lighter hint text */
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        body.dark-mode button {
+            /* Adjusted for softer dark mode buttons */
+            background: linear-gradient(to right, #5c8b8b, #4a6572);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e);
+            z-index: 100;
+            color: white; /* Ensure icon is visible */
+        }
+
+        body.dark-mode #darkModeToggle {
+            /* Adjusted for softer dark mode toggle */
+            background: linear-gradient(to right, #4a6572, #5c8b8b);
+            color: #ecf0f1; /* Ensure icon is visible */
+        }
+
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        body.dark-mode .progress {
+            color: #ecf0f1; /* Lighter text for dark mode progress */
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        body.dark-mode .counter {
+            /* Adjusted for softer dark mode counter */
+            background: #5c8b8b;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 300px;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book"></i> Vocabulary Flashcards</h1>
+            <p>Master essential English expressions and phrases</p>
+        </header>
+        
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Word</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example sentence will appear here</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">36</span>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { word: "Solely", definition: "Only; not involving anyone or anything else.", example: "She solely did the project by herself." },
+            { word: "Stem", definition: "The main part of a plant or tree that supports it.", example: "The flower has a long green stem." },
+            { word: "Abundant", definition: "A lot of something; more than enough.", example: "There are abundant apples on the tree this year." },
+            { word: "Regeneration", definition: "The process of growing again or renewing.", example: "After the fire, the forest slowly began its regeneration." },
+            { word: "Vulnerable", definition: "Easily hurt or damaged.", example: "The baby bird was vulnerable without its mother." },
+            { word: "Combustion", definition: "The act of burning something.", example: "Combustion of wood gives off heat and smoke." },
+            { word: "Primarily", definition: "Mainly; mostly.", example: "He eats rice primarily, not bread." },
+            { word: "Incorporate into", definition: "To add or include something as part of a whole.", example: "I will incorporate this photo into my presentation." },
+            { word: "Invasive", definition: "Spreading in a harmful or unwanted way (often about plants or animals).", example: "That invasive plant is killing all the flowers in the garden." },
+            { word: "Be tailored to", definition: "To be specially made or adapted for someone or something.", example: "This lesson was tailored to fit your level." },
+            { word: "Vigorous", definition: "Strong and healthy.", example: "He is a vigorous runner who never gets tired." },
+            { word: "Outbreak", definition: "A sudden start of something bad, like disease.", example: "There was an outbreak of flu at school." },
+            { word: "To thin", definition: "To remove some plants or trees so others can grow better.", example: "We thinned the small trees so the big ones can grow." },
+            { word: "Retention", definition: "Keeping or holding onto something.", example: "The retention of old books is important for history." },
+            { word: "Cavity", definition: "A hole or space inside something.", example: "A bird made a nest inside the tree cavity." },
+            { word: "Resilience", definition: "The ability to recover or stay strong after something bad.", example: "The plant showed great resilience after the storm." }
+        ];
+
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words];
+
+        const flashcard = document.getElementById('flashcard');
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
+
+        // Initialize
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun';
+        }
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        });
+
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped');
+            shuffled = !shuffled;
+            if (shuffled) {
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0;
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort';
+            } else {
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle';
+            }
+            updateCard();
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun';
+            } else {
+                darkModeIcon.className = 'fas fa-moon';
+            }
+        });
+
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            
+            // Add example if available
+            if (currentWord.example) {
+                exampleElement.textContent = currentWord.example;
+                exampleElement.style.display = 'block';
+            } else {
+                exampleElement.style.display = 'none';
+            }
+            
+            currentCountElement.textContent = currentIndex + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click();
+            } else if (e.key === 's') {
+                shuffleBtn.click();
+            } else if (e.key === 'd') {
+                darkModeToggle.click();
+            }
+        });
+    </script>
+</body>
+</html>
