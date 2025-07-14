@@ -4,415 +4,691 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Quiz</title>
+    <!-- Google Fonts - Inter for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Define CSS variables for colors, allowing easy switching between light and dark modes */
         :root {
-            --bg-color: #f0f8ff;
-            --text-color: #333;
-            --card-bg: #ffffff;
-            --word-color: #e6f7ff;
-            --def-color: #f0fff0;
-            --border-color: #add8e6;
-            --def-border: #90ee90;
-            --selected-color: #b5e8b5;
-            --matched-color: #4CAF50;
-            --incorrect-color: #ff9999;
-            --header-bg: #4CAF50;
-            --header-text: white;
-            --button-color: #4CAF50;
-            --button-hover: #45a049;
-            --shuffle-color: #008CBA;
-            --shuffle-hover: #0077a3;
-            --input-border: #add8e6;
-            --feedback-correct: #2d7d46;
-            --feedback-incorrect: #5c9eff;
-            --feedback-bg-incorrect: #e6f0ff;
+            /* Light Mode Colors */
+            --primary-bg: #1A5276; /* Dark Teal for page background */
+            --secondary-bg: #EAF2F8; /* Light, complementary blue-gray for quiz container */
+            --text-primary: #333333; /* Dark grey for main text */
+            --text-secondary: #666666; /* Medium grey for less important text */
+            --accent-color: #3498DB; /* Brighter blue accent for buttons */
+            --accent-light: #5DADE2; /* Lighter shade of accent for hover/active states */
+            --success-color: #28B463; /* Green for correct feedback */
+            --error-color: #E74C3C; /* Red for incorrect feedback */
+            --border-color: #CCD1D1; /* Light grey border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            --button-text-color: white; /* Text color for accent buttons */
+            --day-mode-icon-color: #1A5276; /* Icon color for light mode (moon icon) */
         }
-        .night-mode {
-            --bg-color: #1a1a2e;
-            --text-color: #e6e6e6;
-            --card-bg: #16213e;
-            --word-color: #2a3f5f;
-            --def-color: #1e3d59;
-            --border-color: #3a506b;
-            --def-border: #4a6fa5;
-            --selected-color: #4CAF50;
-            --matched-color: #2d7d46;
-            --incorrect-color: #ff3333;
-            --header-bg: #0f4c75;
-            --header-text: #e6e6e6;
-            --input-border: #3a506b;
-            --feedback-correct: #81c784;
-            --feedback-incorrect: #7aa6ff;
-            --feedback-bg-incorrect: #2a3f5f;
+
+        /* Dark Mode Colors - Applied when 'dark-mode' class is added to body */
+        body.dark-mode {
+            --primary-bg: #1F2937; /* Very dark blue-gray for page background */
+            --secondary-bg: #2D3748; /* Slightly lighter dark blue-gray for quiz container */
+            --text-primary: #E2E8F0; /* Light text for dark background */
+            --text-secondary: #A0AEC0; /* Lighter grey for secondary text */
+            --accent-color: #63B3ED; /* Softer blue accent for night mode */
+            --accent-light: #90CDF4; /* Lighter accent for hover */
+            --success-color: #48BB78; /* Softer green */
+            --error-color: #FC8181; /* Softer red */
+            --border-color: #4A5568; /* Darker border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.6); /* Stronger shadow for contrast in dark mode */
+            --night-mode-icon-color: #FFEB3B; /* Bright Yellow for Sun Icon */
         }
+
+        /* Base body styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
-        h1 {
-            text-align: center;
-            color: var(--header-bg);
-            margin-bottom: 30px;
-        }
-        .controls {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        #night-mode-btn {
-            background-color: #555;
-            color: white;
-        }
-        #night-mode-btn:hover {
-            background-color: #444;
-        }
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+            position: relative; /* Needed for absolute positioning of fireworks */
+            overflow: hidden; /* Hides fireworks outside the viewport */
+        }
+
+        /* Quiz container styling */
+        .quiz-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px; /* Max width for larger screens */
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Question text styling */
+        .question-text {
+            font-size: 1.8em; /* Larger font for the word to be defined */
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        /* Options buttons styling */
+        .options-container button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .question-container {
-            margin-bottom: 20px;
-        }
-        .question {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: var(--header-bg);
-        }
-        .options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        .option {
-            padding: 12px;
-            background-color: var(--word-color);
-            border: 2px solid var(--border-color);
-            border-radius: 5px;
+            background-color: var(--secondary-bg); /* Options background same as container */
+            color: var(--text-primary);
+            font-size: 1.15em;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for buttons */
         }
-        .option:hover {
-            transform: scale(1.02);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+        /* Hover effect for options buttons */
+        .options-container button:hover:not(.selected):not(.correct):not(.wrong) {
+            background-color: var(--border-color); /* Lighter background on hover */
+            border-color: var(--accent-light);
+            transform: translateY(-2px); /* Slight lift effect */
         }
-        .option.selected {
-            background-color: var(--selected-color);
-            border-color: var(--matched-color);
+
+        /* Styling for selected option */
+        .options-container button.selected {
+            background-color: var(--accent-light);
+            border-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
-        .option.correct {
-            background-color: var(--correct-color);
-            border-color: var(--matched-color);
+
+        /* Styling for correct answer */
+        .options-container button.correct {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+            font-weight: 600;
         }
-        .option.incorrect {
-            background-color: var(--incorrect-color);
+
+        /* Styling for wrong answer */
+        .options-container button.wrong {
+            background-color: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+            font-weight: 600;
         }
-        .navigation {
+
+        /* Navigation buttons container */
+        .navigation-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 35px;
         }
-        .nav-btn {
-            background-color: var(--shuffle-color);
-            color: white;
-        }
-        .nav-btn:hover {
-            background-color: var(--shuffle-hover);
-        }
-        .nav-btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        .progress {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        .results {
-            display: none;
-            background-color: var(--card-bg);
-            padding: 20px;
+
+        /* Styling for navigation and submit buttons */
+        .navigation-buttons button,
+        .submit-button {
+            padding: 14px 30px;
+            border: none;
             border-radius: 10px;
-            margin-top: 20px;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Stronger shadow for main buttons */
         }
-        .wrong-answers {
-            margin-top: 20px;
+
+        /* Hover effect for navigation and submit buttons */
+        .navigation-buttons button:hover:not(:disabled),
+        .submit-button:hover:not(:disabled) {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
         }
-        .wrong-answer {
+
+        /* Disabled state for buttons */
+        .navigation-buttons button:disabled,
+        .submit-button:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Submit button container alignment */
+        .submit-button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Results container styling */
+        .results-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Results heading styling */
+        .results-container h2 {
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        /* Incorrect answers heading styling */
+        .results-container h3 {
+            color: var(--error-color);
+            margin-top: 30px;
             margin-bottom: 15px;
-            padding: 15px;
-            background-color: var(--feedback-bg-incorrect);
-            border-radius: 5px;
-            color: var(--text-color);
-            border-left: 4px solid var(--feedback-incorrect);
+            font-size: 1.5em;
+            font-weight: 600;
         }
-        .correct-answer {
-            color: var(--feedback-correct);
-            font-weight: bold;
+
+        /* List for incorrect answers */
+        .results-container ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
         }
-        .user-answer {
-            color: var(--feedback-incorrect);
-            font-weight: normal;
+
+        /* Individual incorrect answer list item */
+        .results-container li {
+            background-color: #FEEAEA; /* Light red background for incorrect answers in light mode */
+            color: var(--error-color);
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--error-color);
+            font-size: 1.1em;
+            line-height: 1.4;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
+
+        /* Dark mode styling for incorrect answer list items */
+        body.dark-mode .results-container li {
+            background-color: #5C2323; /* Darker red for night mode */
+            color: #FFCCCC;
+            border-color: var(--error-color);
+        }
+
+        /* Strong text within list items */
+        .results-container li strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* Mode Toggle Button Styling */
+        .mode-toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow-light);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .mode-toggle-button:hover {
+            transform: translateY(-2px);
+            background-color: var(--border-color);
+        }
+
+        .mode-toggle-button svg {
+            width: 28px;
+            height: 28px;
+            transition: fill 0.3s ease;
+        }
+
+        /* Hide both icons by default */
+        .mode-toggle-button .sun-icon,
+        .mode-toggle-button .moon-icon {
+            display: none;
+        }
+
+        /* Show moon icon in light mode */
+        body:not(.dark-mode) .mode-toggle-button .moon-icon {
+            display: block;
+            fill: var(--day-mode-icon-color);
+        }
+
+        /* Show sun icon in dark mode */
+        body.dark-mode .mode-toggle-button .sun-icon {
+            display: block;
+            fill: var(--night-mode-icon-color);
+        }
+
+        /* Responsive adjustments for smaller screens */
         @media (max-width: 600px) {
-            .options {
-                grid-template-columns: 1fr;
+            .quiz-container, .results-container {
+                padding: 20px;
             }
+            .question-text {
+                font-size: 1.3em;
+            }
+            .options-container button {
+                padding: 15px;
+                font-size: 1em;
+            }
+            .navigation-buttons button,
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .mode-toggle-button {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+            }
+            .mode-toggle-button svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* Firework Animation Styling */
+        .firework-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* Allows clicks to pass through */
+            overflow: hidden;
+            z-index: 9999; /* Ensures fireworks are on top */
+        }
+
+        .firework {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #FFD700; /* Default firework color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-burst 1.8s ease-out forwards; /* Firework burst animation */
+        }
+
+        @keyframes firework-burst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(3); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .firework::before, .firework::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: white; /* Sparkle color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-sparkle 1.8s ease-out forwards; /* Sparkle animation */
+        }
+
+        .firework::before {
+            transform: translate(-18px, -18px); /* Position of first set of sparks */
+            animation-delay: 0.1s;
+        }
+        .firework::after {
+            transform: translate(18px, 18px); /* Position of second set of sparks */
+            animation-delay: 0.2s;
+        }
+
+        /* Multi-color firework effects */
+        .firework.multi::before {
+            box-shadow: 20px 0 #FF6347, -20px 0 #FF6347, 0 20px #FF6347, 0 -20px #FF6347,
+                        15px 15px #FF6347, -15px -15px #FF6347, 15px -15px #FF6347, -15px 15px #FF6347;
+        }
+        .firework.multi::after {
+            box-shadow: 30px 0 #ADFF2F, -30px 0 #ADFF2F, 0 30px #ADFF2F, 0 -30px #ADFF2F,
+                        22px 22px #ADFF2F, -22px -22px #ADFF2F, 22px -22px #ADFF2F, -22px 22px #ADFF2F;
+        }
+
+        @keyframes firework-sparkle {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(3); }
         }
     </style>
 </head>
 <body>
-    <h1>Vocabulary Quiz</h1>
-    <div class="controls">
-        <button id="night-mode-btn">Night Mode</button>
-    </div>
-    
-    <div class="quiz-container" id="quiz-container">
-        <div class="progress" id="progress">Question 1 of 10</div>
-        <div class="question-container">
-            <div class="question" id="question"></div>
-            <div class="options" id="options"></div>
+
+    <!-- Mode Toggle Button (Sun/Moon icon) -->
+    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
+        <!-- Sun icon (visible in Night Mode) -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
+        <!-- Moon icon (visible in Day Mode) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+    </button>
+
+    <!-- Main Quiz Application Container -->
+    <div id="quiz-app" class="quiz-container">
+        <!-- Quiz Content Section -->
+        <div id="quiz-content">
+            <h2 id="question-text" class="question-text"></h2>
+            <div id="options-container" class="options-container">
+                <!-- Options will be dynamically inserted here by JavaScript -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-button" onclick="previousQuestion()">Previous</button>
+                <button id="next-button" onclick="nextQuestion()">Next</button>
+            </div>
+            <div class="submit-button-container">
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn" id="prev-btn" disabled>Previous</button>
-            <button class="nav-btn" id="next-btn">Next</button>
-            <button id="submit-btn" style="display: none;">Submit Quiz</button>
+
+        <!-- Quiz Results Section -->
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2 id="results-message"></h2>
+            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+            <ul id="incorrect-answers-list">
+                <!-- Incorrect answers will be dynamically inserted here by JavaScript -->
+            </ul>
+            <button class="submit-button" onclick="startQuiz()">Try Again</button>
         </div>
     </div>
-    
-    <div class="results" id="results">
-        <h2>Quiz Results</h2>
-        <div id="score"></div>
-        <div class="wrong-answers" id="wrong-answers">
-            <h3>Words to Review:</h3>
-        </div>
-        <button id="restart-btn" style="margin-top: 20px;">Take Quiz Again</button>
-    </div>
+
+    <!-- Firework Display Container -->
+    <div id="firework-display" class="firework-container"></div>
 
     <script>
-        // Vocabulary data
-        const vocabulary = [
-            { word: "obstacle", definition: "Something that blocks progress (synonym: barrier)" },
-            { word: "to feature", definition: "To include or show something prominently (synonym: highlight)" },
-            { word: "commonplace", definition: "Ordinary or frequently seen (synonym: usual)" },
-            { word: "eye-catching", definition: "Attracting attention (synonym: striking)" },
-            { word: "novelty", definition: "Something new and unusual (synonym: innovation)" },
-            { word: "transparent", definition: "Easy to understand (synonym: clear)" },
-            { word: "inclined to", definition: "Likely to do something (synonym: tend to)" },
-            { word: "entail", definition: "To involve something necessary (synonym: require)" },
-            { word: "prevalent", definition: "Widespread (synonym: common)" },
-            { word: "to take off", definition: "To become successful (synonym: flourish)" },
-            { word: "a long way to go", definition: "Much progress needed (synonym: far from complete)" },
-            { word: "simultaneous", definition: "Happening at the same time (synonym: concurrent)" },
-            { word: "oblige", definition: "To require someone to do something (synonym: compel)" },
-            { word: "apprehensions", definition: "Worries or fears (synonym: concerns)" },
-            { word: "accumulate", definition: "To gather over time (synonym: collect)" },
-            { word: "cloud", definition: "Internet-based storage (synonym: online storage)" },
-            { word: "solemn", definition: "Serious and formal (synonym: dignified)" },
-            { word: "Etiquette-sensitive", definition: "Aware of social rules (synonym: manner-conscious)" },
-            { word: "first-name terms", definition: "Informal relationship (synonym: on a casual basis)" },
-            { word: "outsource", definition: "To have work done externally (synonym: contract out)" },
-            { word: "matures into", definition: "Develops into (synonym: evolves into)" },
-            { word: "seamless", definition: "Smooth without interruptions (synonym: flawless)" },
-            { word: "ubiquitous", definition: "Present everywhere (synonym: omnipresent)" },
-            { word: "a dubbed movie", definition: "Film with replaced voices (synonym: voice-over version)" },
-            { word: "underline", definition: "To emphasize (synonym: highlight)" },
-            { word: "a sense of belonging", definition: "Feeling of acceptance (synonym: inclusion)" },
-            { word: "lingua franca", definition: "Common language (synonym: common tongue)" },
-            { word: "diminish", definition: "To become smaller/less (synonym: decrease)" },
-            { word: "persist", definition: "To continue (synonym: endure)" },
-            { word: "substitute", definition: "Replacement (synonym: alternative)" },
-            { word: "reluctance", definition: "Unwillingness (synonym: hesitation)" }
+        // Array of vocabulary words and their definitions
+        const vocabularyWords = [
+            { word: "Obstacle", definition: "A thing that blocks one's way or prevents progress." },
+            { word: "To feature", definition: "To include someone or something as an important part." },
+            { word: "Commonplace", definition: "Happening or found often; not unusual." },
+            { word: "Eye-catching", definition: "Immediately noticeable or attractive." },
+            { word: "Novelty", definition: "The quality of being new, original, or unusual." },
+            { word: "Transparent", definition: "Open, see-through, or easy to understand." },
+            { word: "Inclined to", definition: "Likely to do something." }, // Simplified definition
+            { word: "Entail", definition: "To involve something as a necessary part or result." },
+            { word: "Prevalent", definition: "Widespread in a particular area or at a particular time; common." },
+            { word: "To take off", definition: "To become successful or popular very quickly." },
+            { word: "A long way to go", definition: "A lot of progress still needs to be made." },
+            { word: "Simultaneous", definition: "Happening or existing at the same time." },
+            { word: "Oblige", definition: "To make someone do something because it is a law, rule, or duty." },
+            { word: "Apprehensions", definition: "Worries or fears that something bad might happen." },
+            { word: "Accumulate", definition: "To gather or acquire an increasing number or quantity of." },
+            { word: "Cloud", definition: "A system for storing and accessing data over the internet, rather than on your computer's hard drive." }, // Updated definition
+            { word: "Solemn", definition: "Formal and dignified; serious and sincere." },
+            { word: "Etiquette-sensitive", definition: "Aware of and careful about polite behavior in society." },
+            { word: "First-name terms", definition: "Having a relationship with someone in which you call each other by your first names, showing familiarity." },
+            { word: "Outsource", definition: "To pay another company to do work that your own company usually does." },
+            { word: "Matures into", definition: "Develops into a more advanced or complete form." },
+            { word: "Seamless", definition: "Smooth and continuous, without breaks or difficulties." },
+            { word: "Ubiquitous", definition: "Found everywhere." },
+            { word: "A dubbed movie", definition: "A movie where the original spoken language has been replaced with another language." },
+            { word: "Underline", definition: "To emphasize something; to draw attention to something." },
+            { word: "A sense of belonging", definition: "The feeling of being accepted and comfortable in a group or place." },
+            { word: "Lingua franca", definition: "A language that is adopted as a common language between speakers whose native languages are different." },
+            { word: "Diminish", definition: "To make or become less; to reduce or decrease." },
+            { word: "Persist", definition: "To continue to do something even if it is difficult." },
+            { word: "Substitute", definition: "A person or thing acting or serving in place of another." },
+            { word: "Reluctance", definition: "Unwillingness or hesitation to do something." }
         ];
 
-        // Quiz variables
-        let currentQuestion = 0;
-        let selectedQuestions = [];
-        let userAnswers = [];
-        let correctAnswerIndices = [];
-        let score = 0;
+        let currentQuizWords = []; // Stores the 10 words for the current quiz session
+        let currentQuestionIndex = 0; // Tracks the current question being displayed
+        let userAnswers = []; // Stores the user's selected definition for each question
+        let incorrectAnswers = []; // Stores words the user got wrong
 
-        // DOM elements
-        const nightModeBtn = document.getElementById('night-mode-btn');
-        const quizContainer = document.getElementById('quiz-container');
-        const questionElement = document.getElementById('question');
-        const optionsElement = document.getElementById('options');
-        const progressElement = document.getElementById('progress');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const submitBtn = document.getElementById('submit-btn');
-        const resultsContainer = document.getElementById('results');
-        const scoreElement = document.getElementById('score');
-        const wrongAnswersElement = document.getElementById('wrong-answers');
-        const restartBtn = document.getElementById('restart-btn');
+        // Get references to DOM elements
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkDisplay = document.getElementById('firework-display');
+        const modeToggleButton = document.getElementById('mode-toggle');
 
-        // Initialize quiz automatically
-        window.addEventListener('DOMContentLoaded', initQuiz);
-
-        // Initialize quiz
-        function initQuiz() {
-            // Select 10 random questions
-            selectedQuestions = [...vocabulary]
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 10);
-            
-            // Initialize arrays
-            userAnswers = new Array(selectedQuestions.length).fill(null);
-            correctAnswerIndices = new Array(selectedQuestions.length).fill(null);
-            score = 0;
-            
-            // Show quiz container
-            quizContainer.style.display = 'block';
-            resultsContainer.style.display = 'none';
-            
-            // Load first question
-            loadQuestion();
+        /**
+         * Shuffles an array randomly.
+         * @param {Array} array - The array to shuffle.
+         * @returns {Array} The shuffled array.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
 
-        // Load question
-        function loadQuestion() {
-            progressElement.textContent = `Question ${currentQuestion + 1} of ${selectedQuestions.length}`;
-            const question = selectedQuestions[currentQuestion];
-            questionElement.textContent = `What does "${question.word}" mean?`;
-            optionsElement.innerHTML = '';
-            
-            // Generate 4 options (1 correct + 3 incorrect)
-            const options = [question.definition];
-            
-            // Get 3 unique incorrect definitions
-            const usedDefinitions = new Set([question.definition]);
-            while (options.length < 4) {
-                const randomItem = vocabulary[Math.floor(Math.random() * vocabulary.length)];
-                if (!usedDefinitions.has(randomItem.definition)) {
-                    options.push(randomItem.definition);
-                    usedDefinitions.add(randomItem.definition);
+        /**
+         * Initializes or restarts the quiz.
+         * Selects 10 random words, resets user answers and incorrect answers,
+         * and displays the first question.
+         */
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            incorrectAnswers = [];
+
+            // Ensure there are enough words for a 10-question quiz
+            if (vocabularyWords.length < 10) {
+                console.error("Not enough vocabulary words to create a 10-question quiz.");
+                // Optionally display an error message to the user
+                quizContent.innerHTML = "<p>Error: Not enough vocabulary words available to start the quiz.</p>";
+                return;
+            }
+
+            // Shuffle all words and select the first 10 for the current quiz
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentQuizWords = shuffledAllWords.slice(0, 10);
+
+            // Show quiz content and hide results
+            quizContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none'; // Hide submit button until last question
+            fireworkDisplay.innerHTML = ''; // Clear any previous fireworks
+
+            displayQuestion(currentQuestionIndex);
+        }
+
+        /**
+         * Displays the question and its options for the given index.
+         * @param {number} index - The index of the question to display.
+         */
+        function displayQuestion(index) {
+            const currentWordObject = currentQuizWords[index];
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            let incorrectOptionsCount = 0;
+            // Create a pool of all definitions to pick incorrect options from
+            const definitionsPool = vocabularyWords.map(item => item.definition);
+
+            // Add 3 unique incorrect definitions
+            while (incorrectOptionsCount < 3) {
+                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
+                // Ensure the random definition is not already in the options and is not the correct answer
+                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
                 }
             }
-            
-            // Shuffle options and remember correct index
-            const shuffledOptions = [...options].sort(() => 0.5 - Math.random());
-            const correctIndex = shuffledOptions.indexOf(question.definition);
-            correctAnswerIndices[currentQuestion] = correctIndex;
-            
-            // Create option elements
-            shuffledOptions.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.textContent = option;
-                optionElement.dataset.index = index;
-                
-                if (userAnswers[currentQuestion] === index) {
-                    optionElement.classList.add('selected');
-                }
-                
-                optionElement.addEventListener('click', () => selectOption(optionElement, index));
-                optionsElement.appendChild(optionElement);
-            });
-            
-            // Update navigation
-            prevBtn.disabled = currentQuestion === 0;
-            nextBtn.style.display = currentQuestion === selectedQuestions.length - 1 ? 'none' : 'block';
-            submitBtn.style.display = currentQuestion === selectedQuestions.length - 1 ? 'block' : 'none';
-        }
 
-        // Select option
-        function selectOption(optionElement, optionIndex) {
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            optionElement.classList.add('selected');
-            userAnswers[currentQuestion] = optionIndex;
-        }
+            // Shuffle the options to randomize their order
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
 
-        // Show results
-        function showResults() {
-            score = 0;
-            const wrongAnswers = [];
-            
-            selectedQuestions.forEach((question, index) => {
-                const userAnswerIndex = userAnswers[index];
-                const isCorrect = userAnswerIndex === correctAnswerIndices[index];
-                
-                if (isCorrect) {
-                    score++;
-                } else {
-                    const userAnswerText = userAnswerIndex !== null 
-                        ? document.querySelectorAll('.option')[userAnswerIndex].textContent 
-                        : "No answer selected";
-                    
-                    wrongAnswers.push({
-                        word: question.word,
-                        userAnswer: userAnswerText,
-                        correctAnswer: question.definition
-                    });
+            // Create and append buttons for each option
+            allOptionDefinitions.forEach(definition => {
+                const button = document.createElement('button');
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition); // Attach click handler
+                optionsContainer.appendChild(button);
+
+                // If the user has already answered this question, mark their selection
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
                 }
             });
-            
-            quizContainer.style.display = 'none';
+
+            updateNavigationButtons();
+        }
+
+        /**
+         * Handles the selection of an answer by the user.
+         * Marks the selected button and stores the answer.
+         * @param {string} selectedDefinition - The definition chosen by the user.
+         */
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition; // Store the user's answer
+            // Remove 'selected' class from all buttons and add to the newly selected one
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
+                }
+            });
+        }
+
+        /**
+         * Updates the state of the 'Previous', 'Next', and 'Submit' buttons
+         * based on the current question index.
+         */
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0; // Disable 'Previous' on the first question
+            // Show 'Next' button unless it's the last question
+            nextButton.style.display = (currentQuestionIndex === currentQuizWords.length - 1) ? 'none' : 'inline-block';
+            // Show 'Submit' button only on the last question
+            submitButton.style.display = (currentQuestionIndex === currentQuizWords.length - 1) ? 'inline-block' : 'none';
+        }
+
+        /**
+         * Moves to the next question if available.
+         */
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuizWords.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        /**
+         * Moves to the previous question if available.
+         */
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        /**
+         * Submits the quiz, calculates the score, and displays results.
+         * Also triggers fireworks if all answers are correct.
+         */
+        function submitQuiz() {
+            incorrectAnswers = []; // Reset incorrect answers list
+            // Check each answer
+            for (let i = 0; i < currentQuizWords.length; i++) {
+                // If the user's answer does not match the correct definition
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push(currentQuizWords[i]); // Add to incorrect list
+                }
+            }
+
+            // Hide quiz content and show results container
+            quizContent.style.display = 'none';
             resultsContainer.style.display = 'block';
-            scoreElement.innerHTML = `You scored <strong>${score} out of ${selectedQuestions.length}</strong>`;
-            
-            if (wrongAnswers.length > 0) {
-                wrongAnswersElement.innerHTML = '<h3>Words to Review:</h3>';
-                wrongAnswers.forEach(item => {
-                    const wrongAnswerElement = document.createElement('div');
-                    wrongAnswerElement.className = 'wrong-answer';
-                    wrongAnswerElement.innerHTML = `
-                        <p><strong>${item.word}</strong></p>
-                        <p>Your answer: <span class="user-answer">${item.userAnswer}</span></p>
-                        <p class="correct-answer">Correct answer: ${item.correctAnswer}</p>
-                    `;
-                    wrongAnswersElement.appendChild(wrongAnswerElement);
+            incorrectAnswersList.innerHTML = ''; // Clear previous incorrect answers display
+
+            if (incorrectAnswers.length > 0) {
+                // If there are incorrect answers
+                resultsMessage.textContent = "Quiz Completed!";
+                incorrectAnswersHeading.style.display = 'block'; // Show "Words you got wrong" heading
+                // Populate the list of incorrect answers
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: ${item.definition}`;
+                    incorrectAnswersList.appendChild(listItem);
                 });
             } else {
-                wrongAnswersElement.innerHTML = '<p>Great job! You got all questions correct!</p>';
+                // If all answers are correct
+                resultsMessage.textContent = "Congratulations! You got all 10 words correct!";
+                incorrectAnswersHeading.style.display = 'none'; // Hide "Words you got wrong" heading
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                // Apply success styling to the message
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks(); // Celebrate with fireworks!
             }
         }
 
-        // Event listeners
-        nightModeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('night-mode');
-            nightModeBtn.textContent = document.body.classList.contains('night-mode') 
-                ? 'Day Mode' 
-                : 'Night Mode';
-        });
-        
-        prevBtn.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                loadQuestion();
+        /**
+         * Toggles between light and dark mode by adding/removing a class on the body.
+         */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        /**
+         * Triggers a fireworks animation on the screen.
+         */
+        function triggerFireworks() {
+            fireworkDisplay.innerHTML = ''; // Clear existing fireworks
+            const numFireworks = 8; // Number of fireworks to display
+            // Array of colors for fireworks
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi'); // Add 'multi' class for multi-color effect
+                // Randomly position fireworks on the screen
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                // Assign a random color
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = `${i * 0.15}s`; // Stagger animation start times
+
+                fireworkDisplay.appendChild(firework);
+
+                // Remove the firework element after its animation ends to clean up DOM
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                });
             }
-        });
-        
-        nextBtn.addEventListener('click', () => {
-            if (currentQuestion < selectedQuestions.length - 1) {
-                currentQuestion++;
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        });
-        
-        submitBtn.addEventListener('click', showResults);
-        
-        restartBtn.addEventListener('click', initQuiz);
+        }
+
+        // Start the quiz when the window loads
+        window.onload = startQuiz;
     </script>
 </body>
 </html>
