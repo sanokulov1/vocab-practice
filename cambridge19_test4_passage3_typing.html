@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Typing Task</title>
-    <!-- Google Fonts - Inter for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Define CSS variables for colors, allowing easy switching between light and dark modes */
@@ -187,11 +186,12 @@
             list-style: none;
             padding: 0;
             text-align: left;
-            max-height: 300px; /* Set a max height for scrollability */
+            max-height: 250px; /* Adjusted max height for scrollability */
             overflow-y: auto; /* Enable vertical scrolling */
             border: 1px solid var(--border-color); /* Optional: Add a border to the scrollable area */
             border-radius: 8px;
             padding-right: 10px; /* Space for scrollbar */
+            margin-top: 20px; /* Added margin-top for spacing from heading */
         }
 
         /* Individual incorrect answer list item */
@@ -363,21 +363,15 @@
 </head>
 <body>
 
-    <!-- Mode Toggle Button (Sun/Moon icon) -->
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
-        <!-- Sun icon (visible in Night Mode) -->
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
-        <!-- Moon icon (visible in Day Mode) -->
         <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
     </button>
 
-    <!-- Main Typing Task Application Container -->
     <div id="typing-app" class="quiz-container">
-        <!-- Typing Task Content Section -->
         <div id="typing-content">
             <h2 id="definition-text" class="question-text"></h2>
             <input type="text" id="word-input" class="typing-input" placeholder="Type the word here..." onkeyup="handleInput(event)">
-            <!-- The check-button is removed as per user request -->
             <div id="feedback-message" class="feedback-message"></div>
             <div class="navigation-buttons">
                 <button id="prev-button" onclick="previousQuestion()">Previous</button>
@@ -388,54 +382,43 @@
             </div>
         </div>
 
-        <!-- Task Results Section -->
         <div id="results-container" class="results-container" style="display: none;">
             <h2 id="results-message"></h2>
             <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
             <ul id="incorrect-answers-list">
-                <!-- Incorrect answers will be dynamically inserted here by JavaScript -->
-            </ul>
+                </ul>
             <button class="submit-button" onclick="startTask()">Try Again</button>
         </div>
     </div>
 
-    <!-- Firework Display Container -->
     <div id="firework-display" class="firework-container"></div>
 
     <script>
         // Array of vocabulary words and their definitions, with acceptable answers for smart typing
         const vocabularyWords = [
-            { word: "Obstacle", definition: "A thing that blocks one's way or prevents progress.", acceptableAnswers: ["obstacle", "obstacles"] },
-            { word: "To feature", definition: "To include someone or something as an important part.", acceptableAnswers: ["feature", "features", "featured", "featuring", "to feature"] },
-            { word: "Commonplace", definition: "Happening or found often; not unusual.", acceptableAnswers: ["commonplace"] },
-            { word: "Eye-catching", definition: "Immediately noticeable or attractive.", acceptableAnswers: ["eye-catching"] },
-            { word: "Novelty", definition: "The quality of being new, original, or unusual.", acceptableAnswers: ["novelty", "novelties"] },
-            { word: "Transparent", definition: "Open, see-through, or easy to understand.", acceptableAnswers: ["transparent"] },
-            { word: "Inclined to", definition: "Likely to do something.", acceptableAnswers: ["inclined to"] },
-            { word: "Entail", definition: "To involve something as a necessary part or result.", acceptableAnswers: ["entail", "entails", "entailed", "entailing"] },
-            { word: "Prevalent", definition: "Widespread in a particular area or at a particular time; common.", acceptableAnswers: ["prevalent"] },
-            { word: "To take off", definition: "To become successful or popular very quickly.", acceptableAnswers: ["take off", "takes off", "took off", "taking off", "to take off"] },
-            { word: "A long way to go", definition: "A lot of progress still needs to be made.", acceptableAnswers: ["a long way to go", "long way to go"] },
-            { word: "Simultaneous", definition: "Happening or existing at the same time.", acceptableAnswers: ["simultaneous"] },
-            { word: "Oblige", definition: "To make someone do something because it is a law, rule, or duty.", acceptableAnswers: ["oblige", "obliges", "obliged", "obliging"] },
-            { word: "Apprehensions", definition: "Worries or fears that something bad might happen.", acceptableAnswers: ["apprehensions", "apprehension"] },
-            { word: "Accumulate", definition: "To gather or acquire an increasing number or quantity of.", acceptableAnswers: ["accumulate", "accumulates", "accumulated", "accumulating"] },
-            { word: "Cloud", definition: "A system for storing and accessing data over the internet, rather than on your computer's hard drive.", acceptableAnswers: ["cloud"] },
-            { word: "Solemn", definition: "Formal and dignified; serious and sincere.", acceptableAnswers: ["solemn"] },
-            { word: "Etiquette-sensitive", definition: "Aware of and careful about polite behavior in society.", acceptableAnswers: ["etiquette-sensitive"] },
-            { word: "First-name terms", definition: "Having a relationship with someone in which you call each other by your first names, showing familiarity.", acceptableAnswers: ["first-name terms"] },
-            { word: "Outsource", definition: "To pay another company to do work that your own company usually does.", acceptableAnswers: ["outsource", "outsources", "outsourced", "outsourcing"] },
-            { word: "Matures into", definition: "Develops into a more advanced or complete form.", acceptableAnswers: ["matures into", "mature into", "matured into", "maturing into"] },
-            { word: "Seamless", definition: "Smooth and continuous, without breaks or difficulties.", acceptableAnswers: ["seamless"] },
-            { word: "Ubiquitous", definition: "Found everywhere.", acceptableAnswers: ["ubiquitous"] },
-            { word: "A dubbed movie", definition: "A movie where the original spoken language has been replaced with another language.", acceptableAnswers: ["a dubbed movie", "dubbed movie"] },
-            { word: "Underline", definition: "To emphasize something; to draw attention to something.", acceptableAnswers: ["underline", "underlines", "underlined", "underlining"] },
-            { word: "A sense of belonging", definition: "The feeling of being accepted and comfortable in a group or place.", acceptableAnswers: ["a sense of belonging", "sense of belonging"] },
-            { word: "Lingua franca", definition: "A language that is adopted as a common language between speakers whose native languages are different.", acceptableAnswers: ["lingua franca"] },
-            { word: "Diminish", definition: "To make or become less; to reduce or decrease.", acceptableAnswers: ["diminish", "diminishes", "diminished", "diminishing"] },
-            { word: "Persist", definition: "To continue to do something even if it is difficult.", acceptableAnswers: ["persist", "persists", "persisted", "persisting"] },
-            { word: "Substitute", definition: "A person or thing acting or serving in place of another.", acceptableAnswers: ["substitute", "substitutes", "substituted", "substituting"] },
-            { word: "Reluctance", definition: "Unwillingness or hesitation to do something.", acceptableAnswers: ["reluctance"] }
+            { word: "Ruthless", definition: "Cruel and showing no pity for others.", acceptableAnswers: ["ruthless"] },
+            { word: "Impulse", definition: "A sudden strong desire to do something without thinking.", acceptableAnswers: ["impulse", "impulses"] },
+            { word: "Possessions", definition: "Things that you own.", acceptableAnswers: ["possessions", "possession"] },
+            { word: "Ulterior motive", definition: "A secret reason for doing something.", acceptableAnswers: ["ulterior motive", "ulterior motives"] },
+            { word: "Transcend", definition: "To go beyond the usual limits or boundaries.", acceptableAnswers: ["transcend", "transcends", "transcended", "transcending"] },
+            { word: "Brutality", definition: "Cruel and violent behavior.", acceptableAnswers: ["brutality"] },
+            { word: "Bleak", definition: "Not hopeful or cheerful; cold and unwelcoming.", acceptableAnswers: ["bleak"] },
+            { word: "Traits", definition: "Qualities or characteristics that belong to a person.", acceptableAnswers: ["traits", "trait"] },
+            { word: "Brutal", definition: "Very cruel and violent.", acceptableAnswers: ["brutal"] },
+            { word: "Sparsely populated", definition: "An area where very few people live.", acceptableAnswers: ["sparsely populated"] },
+            { word: "To back", definition: "To support someone or something.", acceptableAnswers: ["back", "backs", "backed", "backing", "to back"] },
+            { word: "Obligation", definition: "Something you must do because it's your duty or a rule.", acceptableAnswers: ["obligation", "obligations"] },
+            { word: "Preserve", definition: "To keep something in its original state or protect it.", acceptableAnswers: ["preserve", "preserves", "preserved", "preserving"] },
+            { word: "Disparity", definition: "A great difference between two or more things.", acceptableAnswers: ["disparity", "disparities"] },
+            { word: "Swap", definition: "To exchange one thing for another.", acceptableAnswers: ["swap", "swaps", "swapped", "swapping"] },
+            { word: "Acclaim", definition: "Public praise and strong approval.", acceptableAnswers: ["acclaim", "acclaims", "acclaimed", "acclaiming"] },
+            { word: "Domineering", definition: "Trying to control others without listening to them.", acceptableAnswers: ["domineering"] },
+            { word: "To ostracise", definition: "To exclude someone from a group or society.", acceptableAnswers: ["ostracise", "ostracises", "ostracised", "ostracising", "to ostracise", "ostracize", "ostracizes", "ostracized", "ostracizing"] }, // Include both s and z spelling
+            { word: "Exile", definition: "The state of being forced to live away from your own country.", acceptableAnswers: ["exile", "exiles", "exiled", "exiling"] },
+            { word: "In view of", definition: "Considering something; because of something.", acceptableAnswers: ["in view of"] },
+            { word: "Altruism", definition: "Caring about other people more than yourself.", acceptableAnswers: ["altruism"] },
+            { word: "The advent of", definition: "The beginning or arrival of something important.", acceptableAnswers: ["the advent of", "advent of"] },
+            { word: "Feasible", definition: "Possible to do easily or conveniently.", acceptableAnswers: ["feasible"] }
         ];
 
         let currentTaskWords = []; // Stores the 10 words for the current task session
