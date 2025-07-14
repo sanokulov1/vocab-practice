@@ -3,711 +3,655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Typing Challenge</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Vocabulary Typing Task</title>
+    <!-- Google Fonts - Inter for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+        /* Define CSS variables for colors, allowing easy switching between light and dark modes */
+        :root {
+            /* Light Mode Colors */
+            --primary-bg: #1A5276; /* Dark Teal for page background */
+            --secondary-bg: #EAF2F8; /* Light, complementary blue-gray for quiz container */
+            --text-primary: #333333; /* Dark grey for main text */
+            --text-secondary: #666666; /* Medium grey for less important text */
+            --accent-color: #3498DB; /* Brighter blue accent for buttons */
+            --accent-light: #5DADE2; /* Lighter shade of accent for hover/active states */
+            --success-color: #28B463; /* Green for correct feedback */
+            --error-color: #E74C3C; /* Red for incorrect feedback */
+            --border-color: #CCD1D1; /* Light grey border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            --button-text-color: white; /* Text color for accent buttons */
+            --day-mode-icon-color: #1A5276; /* Icon color for light mode (moon icon) */
         }
-        
+
+        /* Dark Mode Colors - Applied when 'dark-mode' class is added to body */
+        body.dark-mode {
+            --primary-bg: #1F2937; /* Very dark blue-gray for page background */
+            --secondary-bg: #2D3748; /* Slightly lighter dark blue-gray for quiz container */
+            --text-primary: #E2E8F0; /* Light text for dark background */
+            --text-secondary: #A0AEC0; /* Lighter grey for secondary text */
+            --accent-color: #63B3ED; /* Softer blue accent for night mode */
+            --accent-light: #90CDF4; /* Lighter accent for hover */
+            --success-color: #48BB78; /* Softer green */
+            --error-color: #FC8181; /* Softer red */
+            --border-color: #4A5568; /* Darker border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.6); /* Stronger shadow for contrast in dark mode */
+            --night-mode-icon-color: #FFEB3B; /* Bright Yellow for Sun Icon */
+        }
+
+        /* Base body styling */
         body {
-            background: linear-gradient(135deg, #e0f7fa, #bbdefb);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #2c3e50;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+            position: relative; /* Needed for absolute positioning of fireworks */
+            overflow: hidden; /* Hides fireworks outside the viewport */
         }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(41, 128, 185, 0.2);
-            width: 90%;
-            max-width: 800px;
+
+        /* Quiz container styling */
+        .quiz-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
             padding: 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            width: 100%;
+            max-width: 700px; /* Max width for larger screens */
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-        
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            border-radius: 20px 20px 0 0;
-        }
-        
-        h1 {
-            color: #2980b9;
-            margin: 15px 0;
-            font-size: 2.5rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-            color: #7f8c8d;
+
+        /* Question text styling */
+        .question-text {
+            font-size: 1.8em; /* Larger font for the word to be defined */
+            font-weight: 700;
             margin-bottom: 30px;
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
+            text-align: center;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
-        
-        .progress-container {
+
+        /* Input field styling */
+        .typing-input {
+            width: calc(100% - 40px); /* Full width minus padding */
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.15em;
+            color: var(--text-primary);
+            background-color: var(--secondary-bg);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .typing-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(52, 152, 219, 0.3); /* Focus ring */
+            outline: none;
+        }
+
+        /* Feedback message styling (now only for visual spacing) */
+        .feedback-message {
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 15px;
+            min-height: 1.5em; /* Reserve space to prevent layout shift */
+            color: transparent; /* Make text invisible as feedback is removed */
+        }
+
+        /* Navigation buttons container */
+        .navigation-buttons {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            background: #f8f9fa;
-            padding: 15px;
+            margin-top: 35px;
+        }
+
+        /* Styling for navigation and submit buttons */
+        .navigation-buttons button,
+        .submit-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Stronger shadow for main buttons */
+        }
+
+        /* Hover effect for navigation and submit buttons */
+        .navigation-buttons button:hover:not(:disabled),
+        .submit-button:hover:not(:disabled) {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Disabled state for buttons */
+        .navigation-buttons button:disabled,
+        .submit-button:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Submit button container alignment */
+        .submit-button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Results container styling */
+        .results-container {
+            background-color: var(--secondary-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        
-        .progress-bar {
-            height: 14px;
-            background-color: #ecf0f1;
-            border-radius: 7px;
-            flex-grow: 1;
-            margin: 0 20px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            border-radius: 7px;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-        
-        .question-container {
-            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-            border-radius: 15px;
+            box-shadow: var(--shadow-light);
             padding: 30px;
-            margin: 25px 0;
-            min-height: 220px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Results heading styling */
+        .results-container h2 {
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        /* Incorrect answers heading styling */
+        .results-container h3 {
+            color: var(--error-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        /* List for incorrect answers */
+        .results-container ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        /* Individual incorrect answer list item */
+        .results-container li {
+            background-color: #FEEAEA; /* Light red background for incorrect answers in light mode */
+            color: var(--error-color);
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--error-color);
+            font-size: 1.1em;
+            line-height: 1.4;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Dark mode styling for incorrect answer list items */
+        body.dark-mode .results-container li {
+            background-color: #5C2323; /* Darker red for night mode */
+            color: #FFCCCC;
+            border-color: var(--error-color);
+        }
+
+        /* Strong text within list items */
+        .results-container li strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* Mode Toggle Button Styling */
+        .mode-toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.15);
-            border: 1px solid #e0e7ff;
+            box-shadow: var(--shadow-light);
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-        
-        .definition {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            text-align: center;
-            padding: 0 20px;
+
+        .mode-toggle-button:hover {
+            transform: translateY(-2px);
+            background-color: var(--border-color);
         }
-        
-        .input-container {
-            display: flex;
-            width: 100%;
-            max-width: 550px;
-            margin: 0 auto;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
+
+        .mode-toggle-button svg {
+            width: 28px;
+            height: 28px;
+            transition: fill 0.3s ease;
         }
-        
-        input {
-            flex-grow: 1;
-            padding: 18px;
-            border: none;
-            font-size: 1.2rem;
-            outline: none;
-            transition: all 0.3s;
-            background: #f8f9fa;
-        }
-        
-        input:focus {
-            background: #fff;
-            box-shadow: inset 0 0 0 2px #3498db;
-        }
-        
-        button {
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 0 35px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        button:hover {
-            background: linear-gradient(to right, #2980b9, #2573a7);
-        }
-        
-        .progress-text {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 1.1rem;
-            min-width: 130px;
-        }
-        
-        .score-container {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 1.1rem;
-            min-width: 100px;
-        }
-        
-        .hidden {
+
+        /* Hide both icons by default */
+        .mode-toggle-button .sun-icon,
+        .mode-toggle-button .moon-icon {
             display: none;
         }
-        
-        .btn-primary {
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 55px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 25px 0;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+
+        /* Show moon icon in light mode */
+        body:not(.dark-mode) .mode-toggle-button .moon-icon {
+            display: block;
+            fill: var(--day-mode-icon-color);
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+
+        /* Show sun icon in dark mode */
+        body.dark-mode .mode-toggle-button .sun-icon {
+            display: block;
+            fill: var(--night-mode-icon-color);
         }
-        
-        .btn-primary:active {
-            transform: translateY(1px);
-        }
-        
-        .btn-restart {
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 14px 40px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-        
-        .btn-restart:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-        }
-        
-        .result-title {
-            color: #2980b9;
-            margin-bottom: 15px;
-            font-size: 2.2rem;
-        }
-        
-        .final-score {
-            font-size: 5rem;
-            font-weight: 800;
-            color: #3498db;
-            margin: 20px 0;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
-            background: linear-gradient(135deg, #3498db, #2ecc71);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .message {
-            font-size: 1.4rem;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .result-details {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
-            text-align: left;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .result-item {
-            padding: 15px;
-            border-bottom: 1px solid #e0e7ff;
-            display: flex;
-            align-items: center;
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-icon {
-            font-size: 1.8rem;
-            width: 50px;
-            text-align: center;
-            margin-right: 20px;
-        }
-        
-        .correct .result-icon {
-            color: #2ecc71;
-        }
-        
-        .incorrect .result-icon {
-            color: #e74c3c;
-        }
-        
-        .result-content {
-            flex: 1;
-        }
-        
-        .result-word {
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-        
-        .user-answer {
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        
-        .correct .user-answer {
-            color: #27ae60;
-        }
-        
-        .incorrect .user-answer {
-            color: #e74c3c;
-            text-decoration: line-through;
-        }
-        
-        .correct-answer {
-            color: #27ae60;
-            font-weight: 700;
-        }
-        
-        .floating {
-            position: absolute;
-            z-index: -1;
-            opacity: 0.1;
-            font-size: 8rem;
-            color: #3498db;
-        }
-        
-        .floating-1 {
-            top: 30px;
-            left: 40px;
-            transform: rotate(-15deg);
-        }
-        
-        .floating-2 {
-            bottom: 30px;
-            right: 50px;
-            transform: rotate(15deg);
-        }
-        
+
+        /* Responsive adjustments for smaller screens */
         @media (max-width: 600px) {
-            .container {
+            .quiz-container, .results-container {
                 padding: 20px;
             }
-            
-            h1 {
-                font-size: 2rem;
+            .question-text {
+                font-size: 1.3em;
             }
-            
-            .definition {
-                font-size: 1.2rem;
+            .typing-input {
+                padding: 12px 15px;
+                font-size: 1em;
             }
-            
-            .input-container {
-                flex-direction: column;
+            .navigation-buttons button,
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 1em;
             }
-            
-            button {
-                padding: 15px;
-                width: 100%;
+            .mode-toggle-button {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
             }
-            
-            .progress-container {
-                flex-direction: column;
-                gap: 10px;
+            .mode-toggle-button svg {
+                width: 24px;
+                height: 24px;
             }
-            
-            .progress-bar {
-                width: 100%;
-                margin: 10px 0;
-            }
+        }
+
+        /* Firework Animation Styling */
+        .firework-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* Allows clicks to pass through */
+            overflow: hidden;
+            z-index: 9999; /* Ensures fireworks are on top */
+        }
+
+        .firework {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #FFD700; /* Default firework color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-burst 1.8s ease-out forwards; /* Firework burst animation */
+        }
+
+        @keyframes firework-burst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(3); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .firework::before, .firework::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: white; /* Sparkle color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-sparkle 1.8s ease-out forwards; /* Sparkle animation */
+        }
+
+        .firework::before {
+            transform: translate(-18px, -18px); /* Position of first set of sparks */
+            animation-delay: 0.1s;
+        }
+        .firework::after {
+            transform: translate(18px, 18px); /* Position of second set of sparks */
+            animation-delay: 0.2s;
+        }
+
+        /* Multi-color firework effects */
+        .firework.multi::before {
+            box-shadow: 20px 0 #FF6347, -20px 0 #FF6347, 0 20px #FF6347, 0 -20px #FF6347,
+                        15px 15px #FF6347, -15px -15px #FF6347, 15px -15px #FF6347, -15px 15px #FF6347;
+        }
+        .firework.multi::after {
+            box-shadow: 30px 0 #ADFF2F, -30px 0 #ADFF2F, 0 30px #ADFF2F, 0 -30px #ADFF2F,
+                        22px 22px #ADFF2F, -22px -22px #ADFF2F, 22px -22px #ADFF2F, -22px 22px #ADFF2F;
+        }
+
+        @keyframes firework-sparkle {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(3); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="floating floating-1">
-            <i class="fas fa-book"></i>
-        </div>
-        <div class="floating floating-2">
-            <i class="fas fa-globe"></i>
-        </div>
-        
-        <h1>Vocabulary Typing Challenge</h1>
-        <p class="subtitle">Type the correct word or phrase for each definition. Answers will be checked after completing all 10 questions.</p>
-        
-        <div id="start-screen">
-            <div class="question-container">
-                <p style="font-size: 1.2rem; margin-bottom: 20px; line-height: 1.7;">
-                    This activity will test your knowledge of advanced vocabulary. You'll see 10 definitions one by one.<br>
-                    Type the word or phrase that matches each definition.<br>
-                    <span style="color: #2980b9; font-weight: 600;">Smart matching</span> will accept different forms of words (past tense, plural, etc.).
-                </p>
-                <div style="background: #e3f2fd; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left;">
-                    <p style="font-weight: 600; color: #1565c0; margin-bottom: 10px;">How it works:</p>
-                    <ul style="padding-left: 25px; line-height: 1.8;">
-                        <li>You'll complete all 10 questions before seeing results</li>
-                        <li>Different forms of words are accepted (past tense, plural, etc.)</li>
-                        <li>Progress bar shows your advancement</li>
-                        <li>Get your detailed score at the end</li>
-                    </ul>
-                </div>
+
+    <!-- Mode Toggle Button (Sun/Moon icon) -->
+    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
+        <!-- Sun icon (visible in Night Mode) -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
+        <!-- Moon icon (visible in Day Mode) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+    </button>
+
+    <!-- Main Typing Task Application Container -->
+    <div id="typing-app" class="quiz-container">
+        <!-- Typing Task Content Section -->
+        <div id="typing-content">
+            <h2 id="definition-text" class="question-text"></h2>
+            <input type="text" id="word-input" class="typing-input" placeholder="Type the word here..." onkeyup="handleInput(event)">
+            <!-- The check-button is removed as per user request -->
+            <div id="feedback-message" class="feedback-message"></div>
+            <div class="navigation-buttons">
+                <button id="prev-button" onclick="previousQuestion()">Previous</button>
+                <button id="next-button" onclick="nextQuestion()">Next</button>
             </div>
-            <button id="start-btn" class="btn-primary">Start Vocabulary Challenge</button>
-        </div>
-        
-        <div id="quiz-container" class="hidden">
-            <div class="progress-container">
-                <div class="progress-text" id="progress-text">Question 1 of 10</div>
-                <div class="progress-bar">
-                    <div id="progress" class="progress"></div>
-                </div>
-                <div class="score-container" id="score">Score: -</div>
-            </div>
-            
-            <div class="question-container">
-                <div id="definition" class="definition"></div>
-                <div class="input-container">
-                    <input type="text" id="answer-input" placeholder="Type the word/phrase here..." autocomplete="off">
-                    <button id="submit-btn">Submit</button>
-                </div>
+            <div class="submit-button-container">
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitTask()">Submit Task</button>
             </div>
         </div>
-        
-        <div id="result-container" class="hidden">
-            <h2 class="result-title">Challenge Completed!</h2>
-            <div class="final-score" id="final-score">0/10</div>
-            <p class="message" id="result-message"></p>
-            
-            <div class="result-details" id="result-details">
-                <!-- Results will be inserted here -->
-            </div>
-            
-            <button id="restart-btn" class="btn-restart">
-                <i class="fas fa-redo-alt"></i> Try Again
-            </button>
+
+        <!-- Task Results Section -->
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2 id="results-message"></h2>
+            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+            <ul id="incorrect-answers-list">
+                <!-- Incorrect answers will be dynamically inserted here by JavaScript -->
+            </ul>
+            <button class="submit-button" onclick="startTask()">Try Again</button>
         </div>
     </div>
 
+    <!-- Firework Display Container -->
+    <div id="firework-display" class="firework-container"></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM elements
-            const startScreen = document.getElementById('start-screen');
-            const quizContainer = document.getElementById('quiz-container');
-            const resultContainer = document.getElementById('result-container');
-            const startBtn = document.getElementById('start-btn');
-            const submitBtn = document.getElementById('submit-btn');
-            const restartBtn = document.getElementById('restart-btn');
-            const definitionEl = document.getElementById('definition');
-            const answerInput = document.getElementById('answer-input');
-            const progressText = document.getElementById('progress-text');
-            const progressBar = document.getElementById('progress');
-            const scoreEl = document.getElementById('score');
-            const finalScoreEl = document.getElementById('final-score');
-            const resultMessage = document.getElementById('result-message');
-            const resultDetails = document.getElementById('result-details');
-            
-            // Vocabulary data with definitions and acceptable answers
-            const vocabulary = [
-                {
-                    word: "breakthrough",
-                    definition: "An important discovery or development that helps solve a problem",
-                    answers: ["breakthrough", "breakthroughs"]
-                },
-                {
-                    word: "antibiotic-resistant",
-                    definition: "Not affected by antibiotics (used to describe bacteria)",
-                    answers: ["antibiotic-resistant"]
-                },
-                {
-                    word: "responsible for",
-                    definition: "Being the cause of something or having control over it",
-                    answers: ["responsible for"]
-                },
-                {
-                    word: "undocumented",
-                    definition: "Not having the necessary documents or official papers",
-                    answers: ["undocumented"]
-                },
-                {
-                    word: "prospecting",
-                    definition: "Searching for mineral deposits or other valuable resources",
-                    answers: ["prospecting", "prospect", "prospected"]
-                },
-                {
-                    word: "to exploit",
-                    definition: "To use something in a way that helps you, often unfairly",
-                    answers: ["exploit", "exploits", "exploited", "exploiting", "to exploit"]
-                },
-                {
-                    word: "to weigh up the pros and cons",
-                    definition: "To consider the advantages and disadvantages before making a decision",
-                    answers: ["weigh up the pros and cons", "weighing up the pros and cons", "weighed up the pros and cons", "to weigh up the pros and cons"]
-                },
-                {
-                    word: "abyss",
-                    definition: "A very deep hole that seems to have no bottom",
-                    answers: ["abyss", "abysses"]
-                },
-                {
-                    word: "to yield",
-                    definition: "To produce or provide something (like results or benefits)",
-                    answers: ["yield", "yields", "yielded", "yielding", "to yield"]
-                },
-                {
-                    word: "terrestrial",
-                    definition: "Relating to the Earth or living on land (rather than in water)",
-                    answers: ["terrestrial"]
-                },
-                {
-                    word: "caution",
-                    definition: "Care taken to avoid danger or mistakes",
-                    answers: ["caution"]
-                },
-                {
-                    word: "ramifications",
-                    definition: "The complex and unexpected results of an action or decision",
-                    answers: ["ramifications", "ramification"]
-                },
-                {
-                    word: "regulatory framework",
-                    definition: "A system of rules and laws that control how something is done",
-                    answers: ["regulatory framework", "regulatory frameworks"]
-                },
-                {
-                    word: "to draft",
-                    definition: "To write a document, plan, or law that may be changed later",
-                    answers: ["draft", "drafts", "drafted", "drafting", "to draft"]
-                },
-                {
-                    word: "marginalisation",
-                    definition: "The process of making a group of people less important",
-                    answers: ["marginalisation", "marginalization", "marginalizations"]
-                },
-                {
-                    word: "indigenous peoples",
-                    definition: "The original inhabitants of a region before colonization",
-                    answers: ["indigenous peoples", "indigenous people"]
-                },
-                {
-                    word: "poses a grave threat to",
-                    definition: "Presents a serious danger to someone or something",
-                    answers: ["poses a grave threat to", "pose a grave threat to", "posed a grave threat to"]
-                },
-                {
-                    word: "untapped potential",
-                    definition: "Available but not yet used ability or possibility",
-                    answers: ["untapped potential"]
-                },
-                {
-                    word: "to deplete",
-                    definition: "To reduce the amount of something by using it up",
-                    answers: ["deplete", "depletes", "depleted", "depleting", "to deplete"]
-                },
-                {
-                    word: "assault",
-                    definition: "A violent physical or verbal attack",
-                    answers: ["assault", "assaults"]
-                },
-                {
-                    word: "to inflict",
-                    definition: "To cause something unpleasant to be suffered by someone",
-                    answers: ["inflict", "inflicts", "inflicted", "inflicting", "to inflict"]
-                },
-                {
-                    word: "to be off-limits",
-                    definition: "Not allowed to be entered, used, or visited",
-                    answers: ["be off-limits", "is off-limits", "are off-limits", "was off-limits", "were off-limits", "to be off-limits"]
-                },
-                {
-                    word: "spin-offs",
-                    definition: "Products or benefits that are produced as a result of something else",
-                    answers: ["spin-offs", "spin-off", "spinoffs", "spinoff"]
-                }
-            ];
-            
-            // Game state
-            let currentQuestionIndex = 0;
-            let userAnswers = [];
-            let questions = [];
-            
-            // Initialize the game
-            function initGame() {
-                // Reset game state
-                currentQuestionIndex = 0;
-                userAnswers = [];
-                questions = [...vocabulary];
-                
-                // Shuffle questions and select 10
-                shuffleArray(questions);
-                questions = questions.slice(0, 10);
-                
-                // Update UI
-                updateProgress();
-                showQuestion();
-                scoreEl.textContent = `Score: -`;
-                answerInput.value = "";
-                answerInput.focus();
-                
-                // Show quiz container
-                startScreen.classList.add('hidden');
-                resultContainer.classList.add('hidden');
-                quizContainer.classList.remove('hidden');
+        // Array of vocabulary words and their definitions, with acceptable answers for smart typing
+        const vocabularyWords = [
+            { word: "Breakthrough", definition: "A very important discovery or development.", acceptableAnswers: ["breakthrough", "breakthroughs"] },
+            { word: "Antibiotic-resistant", definition: "Not affected by medicines that kill bacteria.", acceptableAnswers: ["antibiotic-resistant"] },
+            { word: "Responsible for", definition: "Having the duty of dealing with or taking care of something.", acceptableAnswers: ["responsible for"] },
+            { word: "Undocumented", definition: "Not officially recorded or proved.", acceptableAnswers: ["undocumented"] },
+            { word: "Prospecting", definition: "Searching for valuable minerals, especially gold.", acceptableAnswers: ["prospecting", "prospect"] },
+            { word: "To exploit", definition: "To use something in a way that helps you; to treat someone unfairly to benefit from their work.", acceptableAnswers: ["exploit", "exploits", "exploited", "exploiting", "to exploit"] },
+            { word: "To weigh up the pros and cons", definition: "To consider the advantages and disadvantages of something.", acceptableAnswers: ["weigh up the pros and cons", "weighs up the pros and cons", "weighed up the pros and cons", "weighing up the pros and cons", "to weigh up the pros and cons"] },
+            { word: "Abyss", definition: "A very deep hole or a difficult situation that seems to have no end.", acceptableAnswers: ["abyss", "abysses"] },
+            { word: "To yield", definition: "To produce or provide something; to give way to pressure.", acceptableAnswers: ["yield", "yields", "yielded", "yielding", "to yield"] },
+            { word: "Terrestrial", definition: "Relating to the Earth rather than to other planets; living on land.", acceptableAnswers: ["terrestrial"] },
+            { word: "Caution", definition: "Care taken to avoid danger or mistakes.", acceptableAnswers: ["caution"] },
+            { word: "Ramifications", definition: "Possible results or effects of an action or decision.", acceptableAnswers: ["ramifications", "ramification"] },
+            { word: "Regulatory framework", definition: "A system of rules and laws that control how something is done.", acceptableAnswers: ["regulatory framework", "regulatory frameworks"] },
+            { word: "To draft", definition: "To write the first version of a document.", acceptableAnswers: ["draft", "drafts", "drafted", "drafting", "to draft"] },
+            { word: "Marginalisation", definition: "The process of making a group of people feel unimportant or powerless.", acceptableAnswers: ["marginalisation", "marginalization"] },
+            { word: "Indigenous peoples", definition: "The original inhabitants of a country or region.", acceptableAnswers: ["indigenous peoples", "indigenous people"] },
+            { word: "Poses a grave threat to", definition: "Creates a serious danger for.", acceptableAnswers: ["poses a grave threat to", "pose a grave threat to", "posed a grave threat to", "posing a grave threat to"] },
+            { word: "Untapped potential", definition: "Ability or resources that are not yet used or developed.", acceptableAnswers: ["untapped potential"] },
+            { word: "To deplete", definition: "To use up a supply or resource.", acceptableAnswers: ["deplete", "depletes", "depleted", "depleting", "to deplete"] },
+            { word: "Assault", definition: "A strong attack.", acceptableAnswers: ["assault", "assaults", "assaulted", "assaulting"] },
+            { word: "To inflict", definition: "To cause someone to suffer something unpleasant or painful.", acceptableAnswers: ["inflict", "inflicts", "inflicted", "inflicting", "to inflict"] },
+            { word: "To be off-limits", definition: "Not allowed to be entered or used.", acceptableAnswers: ["off-limits"] },
+            { word: "Spin-offs", definition: "New products or ideas that come from an existing one.", acceptableAnswers: ["spin-offs", "spin-off"] }
+        ];
+
+        let currentTaskWords = []; // Stores the 10 words for the current task session
+        let currentQuestionIndex = 0; // Tracks the current question being displayed
+        let userTypedAnswers = []; // Stores the user's typed answer for each question
+        let incorrectAnswers = []; // Stores words the user got wrong
+
+        // Get references to DOM elements
+        const definitionTextElement = document.getElementById('definition-text');
+        const wordInput = document.getElementById('word-input');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const typingContent = document.getElementById('typing-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkDisplay = document.getElementById('firework-display');
+        const modeToggleButton = document.getElementById('mode-toggle');
+
+        /**
+         * Updates the state of the 'Previous', 'Next', and 'Submit' buttons
+         * based on the current question index.
+         */
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0; // Disable 'Previous' on the first question
+            // Show 'Next' button unless it's the last question
+            nextButton.style.display = (currentQuestionIndex === currentTaskWords.length - 1) ? 'none' : 'inline-block';
+            // Show 'Submit' button only on the last question
+            submitButton.style.display = (currentQuestionIndex === currentTaskWords.length - 1) ? 'inline-block' : 'none';
+        }
+
+        /**
+         * Shuffles an array randomly.
+         * @param {Array} array - The array to shuffle.
+         * @returns {Array} The shuffled array.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
-            
-            // Shuffle array using Fisher-Yates algorithm
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
+            return array;
+        }
+
+        /**
+         * Initializes or restarts the typing task.
+         * Selects 10 random words, resets user answers and incorrect answers,
+         * and displays the first question.
+         */
+        function startTask() {
+            currentQuestionIndex = 0;
+            userTypedAnswers = [];
+            incorrectAnswers = [];
+
+            // Ensure there are enough words for a 10-question task
+            if (vocabularyWords.length < 10) {
+                console.error("Not enough vocabulary words to create a 10-question task.");
+                // Optionally display an error message to the user
+                typingContent.innerHTML = "<p>Error: Not enough vocabulary words available to start the task.</p>";
+                return;
             }
-            
-            // Display current question
-            function showQuestion() {
-                const question = questions[currentQuestionIndex];
-                definitionEl.textContent = question.definition;
-                answerInput.value = "";
-                answerInput.focus();
+
+            // Shuffle all words and select the first 10 for the current task
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentTaskWords = shuffledAllWords.slice(0, 10);
+
+            // Initialize userTypedAnswers with empty strings for each question
+            userTypedAnswers = new Array(currentTaskWords.length).fill('');
+
+            // Show typing content and hide results
+            typingContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none'; // Hide submit button until last question
+            fireworkDisplay.innerHTML = ''; // Clear any previous fireworks
+
+            displayQuestion(currentQuestionIndex);
+        }
+
+        /**
+         * Displays the definition for the given question index.
+         * @param {number} index - The index of the question to display.
+         */
+        function displayQuestion(index) {
+            const currentWordObject = currentTaskWords[index];
+            definitionTextElement.textContent = currentWordObject.definition;
+
+            wordInput.value = userTypedAnswers[index] || ''; // Load saved answer or clear
+            wordInput.focus(); // Focus the input field
+            feedbackMessage.textContent = ''; // Clear previous feedback
+            feedbackMessage.className = 'feedback-message'; // Reset feedback styling
+
+            updateNavigationButtons();
+        }
+
+        /**
+         * Handles input changes and 'Enter' key press in the word input field.
+         * @param {Event} event - The keyboard event.
+         */
+        function handleInput(event) {
+            if (event.key === 'Enter') {
+                // Save the current answer before moving
+                userTypedAnswers[currentQuestionIndex] = wordInput.value.trim();
+                nextQuestion(); // Move to the next question
             }
-            
-            // Update progress bar and text
-            function updateProgress() {
-                const progress = ((currentQuestionIndex) / questions.length) * 100;
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-            }
-            
-            // Check if answer is correct (smart matching)
-            function isAnswerCorrect(userAnswer, correctAnswers) {
-                // Normalize user input
-                const normalizedUserAnswer = userAnswer.trim().toLowerCase();
-                
-                // Check against all acceptable answers
-                return correctAnswers.some(correct => 
-                    normalizedUserAnswer === correct.toLowerCase()
-                );
-            }
-            
-            // Handle answer submission
-            function submitAnswer() {
-                const userAnswer = answerInput.value.trim();
-                
-                // Store the user's answer
-                userAnswers.push({
-                    question: questions[currentQuestionIndex],
-                    answer: userAnswer
-                });
-                
-                // Move to next question
+        }
+
+        /**
+         * Moves to the next question if available.
+         */
+        function nextQuestion() {
+            // Save the current answer before moving
+            userTypedAnswers[currentQuestionIndex] = wordInput.value.trim();
+
+            if (currentQuestionIndex < currentTaskWords.length - 1) {
                 currentQuestionIndex++;
-                
-                if (currentQuestionIndex < questions.length) {
-                    updateProgress();
-                    showQuestion();
+                displayQuestion(currentQuestionIndex);
+            } else {
+                // If it's the last question and 'Next' is pressed, it's like submitting
+                submitTask();
+            }
+        }
+
+        /**
+         * Moves to the previous question if available.
+         */
+        function previousQuestion() {
+            // Save the current answer before moving
+            userTypedAnswers[currentQuestionIndex] = wordInput.value.trim();
+
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        /**
+         * Submits the task, calculates the score, and displays results.
+         * Also triggers fireworks if all answers are correct.
+         */
+        function submitTask() {
+            // Ensure the answer for the last question is saved before submitting
+            userTypedAnswers[currentQuestionIndex] = wordInput.value.trim();
+
+            incorrectAnswers = []; // Reset incorrect answers list
+            let correctCount = 0;
+
+            // Check each answer
+            for (let i = 0; i < currentTaskWords.length; i++) {
+                const currentWordObject = currentTaskWords[i];
+                const userAnswer = userTypedAnswers[i].toLowerCase();
+                const acceptableAnswersLower = currentWordObject.acceptableAnswers.map(ans => ans.toLowerCase());
+
+                if (acceptableAnswersLower.includes(userAnswer)) {
+                    correctCount++;
                 } else {
-                    // All questions answered, show results
-                    showResults();
+                    incorrectAnswers.push(currentWordObject); // Add to incorrect list
                 }
             }
-            
-            // Show final results
-            function showResults() {
-                quizContainer.classList.add('hidden');
-                resultContainer.classList.remove('hidden');
-                
-                // Calculate score
-                let score = 0;
-                let resultsHTML = '';
-                
-                userAnswers.forEach((item, index) => {
-                    const isCorrect = isAnswerCorrect(item.answer, item.question.answers);
-                    if (isCorrect) score++;
-                    
-                    resultsHTML += `
-                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
-                        <div class="result-icon">
-                            ${isCorrect ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                        </div>
-                        <div class="result-content">
-                            <div class="result-word">${item.question.word}</div>
-                            <div class="definition">${item.question.definition}</div>
-                            <div class="user-answer">Your answer: ${item.answer || '(no answer)'}</div>
-                            ${!isCorrect ? `<div class="correct-answer">Correct: ${item.question.answers.join(', ')}</div>` : ''}
-                        </div>
-                    </div>
-                    `;
+
+            // Hide typing content and show results container
+            typingContent.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            incorrectAnswersList.innerHTML = ''; // Clear previous incorrect answers display
+
+            if (incorrectAnswers.length > 0) {
+                // If there are incorrect answers
+                resultsMessage.textContent = `Task Completed! You got ${correctCount} out of ${currentTaskWords.length} correct.`;
+                incorrectAnswersHeading.style.display = 'block'; // Show "Words you got wrong" heading
+                // Populate the list of incorrect answers
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: ${item.definition}`;
+                    incorrectAnswersList.appendChild(listItem);
                 });
-                
-                resultDetails.innerHTML = resultsHTML;
-                finalScoreEl.textContent = `${score}/${questions.length}`;
-                
-                // Different messages based on score
-                if (score === questions.length) {
-                    resultMessage.textContent = "Perfect score! You're a vocabulary master!";
-                } else if (score >= questions.length * 0.8) {
-                    resultMessage.textContent = "Excellent job! You have an impressive vocabulary.";
-                } else if (score >= questions.length * 0.6) {
-                    resultMessage.textContent = "Good work! You're making solid progress.";
-                } else if (score >= questions.length * 0.4) {
-                    resultMessage.textContent = "Nice effort! Keep practicing to improve.";
-                } else {
-                    resultMessage.textContent = "Keep studying! Review these words to strengthen your vocabulary.";
-                }
+            } else {
+                // If all answers are correct
+                resultsMessage.textContent = "Congratulations! You got all 10 words correct!";
+                incorrectAnswersHeading.style.display = 'none'; // Hide "Words you got wrong" heading
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                // Apply success styling to the message
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks(); // Celebrate with fireworks!
             }
-            
-            // Event listeners
-            startBtn.addEventListener('click', initGame);
-            
-            submitBtn.addEventListener('click', submitAnswer);
-            
-            answerInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    submitAnswer();
-                }
-            });
-            
-            restartBtn.addEventListener('click', initGame);
-        });
+        }
+
+        /**
+         * Toggles between light and dark mode by adding/removing a class on the body.
+         */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        /**
+         * Triggers a fireworks animation on the screen.
+         */
+        function triggerFireworks() {
+            fireworkDisplay.innerHTML = ''; // Clear existing fireworks
+            const numFireworks = 8; // Number of fireworks to display
+            // Array of colors for fireworks
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi'); // Add 'multi' class for multi-color effect
+                // Randomly position fireworks on the screen
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                // Assign a random color
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = `${i * 0.15}s`; // Stagger animation start times
+
+                fireworkDisplay.appendChild(firework);
+
+                // Remove the firework element after its animation ends to clean up DOM
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                });
+            }
+        }
+
+        // Start the task when the window loads
+        window.onload = startTask;
     </script>
 </body>
 </html>
