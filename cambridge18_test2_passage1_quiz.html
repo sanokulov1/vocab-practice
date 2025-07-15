@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Default (Light) Mode Colors - Dark Teal for Page, Complementary for Quiz Box */
+    :root {
+        --primary-bg: #1A5276; /* Dark Teal for page background (Day Mode) */
+        --secondary-bg: #EAF2F8; /* Light, complementary blue-gray for quiz container (Day Mode) */
+        --text-primary: #333333; /* Dark grey for main text (Day Mode) */
+        --text-secondary: #666666; /* Medium grey for less important text (Day Mode) */
+        --accent-color: #3498DB; /* Brighter blue accent */
+        --accent-light: #5DADE2; /* Lighter shade of accent for hover/active */
+        --success-color: #28B463; /* Green for correct feedback */
+        --error-color: #E74C3C; /* Red for incorrect feedback */
+        --border-color: #CCD1D1; /* Light grey border */
+        --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for contrast */
+        --button-text-color: white;
+
+        /* Icon Color for Light Mode (Moon icon is visible) */
+        --day-mode-icon-color: #1A5276; /* Dark Teal for Moon Icon */
+    }
+
+    /* Night Mode Colors - Least Eye-Straining Dark Blue-Gray Palette */
+    body.dark-mode {
+        --primary-bg: #1F2937; /* Very dark blue-gray for page background (Night Mode) */
+        --secondary-bg: #2D3748; /* Slightly lighter dark blue-gray for quiz container (Night Mode) */
+        --text-primary: #E2E8F0; /* Light text for dark background (Night Mode) */
+        --text-secondary: #A0AEC0; /* Lighter grey for secondary text (Night Mode) */
+        --accent-color: #63B3ED; /* Softer blue accent for night */
+        --accent-light: #90CDF4;
+        --success-color: #48BB78; /* Softer green */
+        --error-color: #FC8181; /* Softer red */
+        --border-color: #4A5568; /* Darker border */
+        --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+        /* Icon Color for Dark Mode (Sun icon is visible) */
+        --night-mode-icon-color: #FFEB3B; /* Bright Yellow for Sun Icon */
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        position: relative; /* For fireworks */
+        overflow: hidden; /* For fireworks */
+    }
+
+    .quiz-container {
+        background-color: var(--secondary-bg);
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        padding: 30px;
+        width: 100%;
+        max-width: 700px;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .question-text {
+        font-size: 1.8em; /* Larger for words */
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-align: center;
+        color: var(--text-primary);
+        line-height: 1.4;
+    }
+
+    .options-container button {
+        display: block;
+        width: 100%;
+        padding: 18px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background-color: var(--secondary-bg); /* Options background same as container */
+        color: var(--text-primary);
+        font-size: 1.15em;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+        text-align: left;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .options-container button:hover:not(.selected):not(.correct):not(.wrong) {
+        background-color: var(--border-color); /* Lighter hover */
+        border-color: var(--accent-light);
+        transform: translateY(-2px);
+    }
+
+    .options-container button.selected {
+        background-color: var(--accent-light);
+        border-color: var(--accent-color);
+        color: var(--button-text-color); /* Selected text color */
+        font-weight: 600;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .options-container button.correct {
+        background-color: var(--success-color);
+        color: white;
+        border-color: var(--success-color);
+        font-weight: 600;
+    }
+    .options-container button.wrong {
+        background-color: var(--error-color);
+        color: white;
+        border-color: var(--error-color);
+        font-weight: 600;
+    }
+
+    .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 35px;
+    }
+
+    .navigation-buttons button,
+    .submit-button {
+        padding: 14px 30px;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--accent-color);
+        color: var(--button-text-color);
+        font-size: 1.15em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .navigation-buttons button:hover:not(:disabled),
+    .submit-button:hover:not(:disabled) {
+        background-color: var(--accent-light);
+        transform: translateY(-2px);
+    }
+
+    .navigation-buttons button:disabled,
+    .submit-button:disabled {
+        background-color: var(--border-color);
+        color: var(--text-secondary);
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .submit-button-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .results-container {
+        background-color: var(--secondary-bg);
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        padding: 30px;
+        width: 100%;
+        max-width: 700px;
+        box-sizing: border-box;
+        text-align: center;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .results-container h2 {
+        color: var(--text-primary);
+        margin-bottom: 25px;
+        font-size: 2em;
+        font-weight: 700;
+    }
+
+    .results-container h3 {
+        color: var(--error-color);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        font-weight: 600;
+    }
+
+    .results-container ul {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+    }
+
+    .results-container li {
+        background-color: #FEEAEA; /* Very light red background for incorrect */
+        color: var(--error-color);
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--error-color);
+        font-size: 1.1em;
+        line-height: 1.4;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.dark-mode .results-container li {
+        background-color: #5C2323; /* Darker red for night mode */
+        color: #FFCCCC;
+        border-color: var(--error-color); /* Use error color from dark mode */
+    }
+
+    .results-container li strong {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    /* --- Improved Mode Toggle Button --- */
+    .mode-toggle-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        cursor: pointer;
+        background-color: var(--secondary-bg); /* Gives the button a solid background */
+        border: 1px solid var(--border-color); /* Defines the button edge */
+        width: 50px;  /* Explicit size for a consistent circle */
+        height: 50px; /* Explicit size for a consistent circle */
+        border-radius: 50%;
+        display: flex; /* Easiest way to center the icon inside */
+        justify-content: center;
+        align-items: center;
+        box-shadow: var(--shadow-light); /* Adds depth, consistent with the quiz box */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .mode-toggle-button:hover {
+        transform: translateY(-2px); /* Lifts the button on hover */
+        background-color: var(--border-color); /* Consistent hover effect */
+    }
+
+    .mode-toggle-button svg {
+        width: 28px; /* Sized to fit comfortably within the button */
+        height: 28px;
+        transition: fill 0.3s ease;
+    }
+
+    /* Hide both icons by default */
+    .mode-toggle-button .sun-icon,
+    .mode-toggle-button .moon-icon {
+        display: none;
+    }
+
+    /* Show moon icon in light mode */
+    body:not(.dark-mode) .mode-toggle-button .moon-icon {
+        display: block;
+        fill: var(--day-mode-icon-color);
+    }
+
+    /* Show sun icon in dark mode */
+    body.dark-mode .mode-toggle-button .sun-icon {
+        display: block;
+        fill: var(--night-mode-icon-color);
+    }
+
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .quiz-container, .results-container {
+            padding: 20px;
+        }
+        .question-text {
+            font-size: 1.3em;
+        }
+        .options-container button {
+            padding: 15px;
+            font-size: 1em;
+        }
+        .navigation-buttons button,
+        .submit-button {
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+        .mode-toggle-button {
+            top: 10px;
+            right: 10px;
+            width: 45px;
+            height: 45px;
+        }
+        .mode-toggle-button svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    /* Firework Animation */
+    .firework-container {
+        position: fixed; /* Use fixed to cover entire viewport */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 9999;
+    }
+
+    /* New overlay for fireworks */
+    .firework-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.85); /* Darker overlay for more contrast */
+        z-index: 9998; /* Below fireworks, above quiz content */
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none; /* Allow clicks to pass through */
+    }
+
+    .firework-overlay.show {
+        opacity: 1;
+    }
+
+    .firework {
+        position: absolute;
+        width: 20px; /* Significantly larger initial size */
+        height: 20px;
+        background-color: #FFD700; /* Initial flash color */
+        border-radius: 50%;
+        opacity: 0;
+        animation: firework-burst 2.5s ease-out forwards; /* Longer burst animation */
+        animation-delay: var(--delay, 0s); /* Allow delay for multiple fireworks */
+        transform: scale(0.1) translateY(80px); /* Start smaller and slightly lower */
+        filter: brightness(1.5); /* Make the initial burst brighter */
+    }
+
+    @keyframes firework-burst {
+        0% { transform: scale(0.1) translateY(80px); opacity: 0; } /* Start invisible, lower */
+        5% { opacity: 1; transform: scale(0.5) translateY(0px); filter: brightness(2); } /* Quick fade in, move up, very bright */
+        30% { transform: scale(2) translateY(-100px); opacity: 1; filter: brightness(1.5); } /* Expand, move further up */
+        100% { transform: scale(0) translateY(-200px); opacity: 0; filter: brightness(0.5); } /* Fade out, move off screen */
+    }
+
+    .firework::before, .firework::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0; /* No intrinsic size, only box-shadow */
+        height: 0;
+        border-radius: 50%;
+        background-color: transparent; /* No background, only shadows */
+        opacity: 0;
+        animation: firework-sparkle-spread 2.8s ease-out forwards; /* Longer for spread */
+        animation-delay: var(--delay, 0s); /* Inherit delay */
+        transform: translate(-50%, -50%); /* Center the pseudo-elements */
+        filter: brightness(1.2); /* Make sparks brighter */
+    }
+
+    /* Animation for the scattering sparks */
+    @keyframes firework-sparkle-spread {
+        0% { opacity: 1; transform: translate(-50%, -50%) scale(0.1); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(4); } /* Much larger spread */
+    }
+
+    .firework.multi::before {
+        box-shadow: var(--firework-before-shadow);
+    }
+    .firework.multi::after {
+        box-shadow: var(--firework-after-shadow);
+    }
+
+</style>
+</head>
+<body>
+    <div id="firework-overlay" class="firework-overlay"></div>
+
+    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
+        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+        </svg>
+        <!-- Moon icon (visible in Day Mode) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+    </button>
+
+    <div id="quiz-app" class="quiz-container">
+        <div id="quiz-content">
+            <h2 id="question-text" class="question-text"></h2>
+            <div id="options-container" class="options-container">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-button" onclick="previousQuestion()">Previous</button>
+                <button id="next-button" onclick="nextQuestion()">Next</button>
+            </div>
+            <div class="submit-button-container">
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+        </div>
+
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2 id="results-message"></h2>
+            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+            <ul id="incorrect-answers-list">
+                <!-- Incorrect answers will be dynamically inserted here -->
+            </ul>
+            <button class="submit-button" onclick="startQuiz()">Try Again</button>
+        </div>
+    </div>
+
+    <div class="firework-container">
+        <!-- CSS fireworks will be rendered here -->
+    </div>
+
+    <script>
+        const vocabularyWords = [
+            { word: "To puzzle over", definition: "To think deeply and with difficulty about something mysterious or confusing." },
+            { word: "Mystery", definition: "Something that is difficult or impossible to understand or explain." },
+            { word: "Comprise", definition: "To consist of or be made up of." },
+            { word: "Iconic", definition: "Widely recognized and well-established, often symbolizing something important." },
+            { word: "Primitive", definition: "Very basic or simple; relating to an early stage of development." },
+            { word: "To fashion", definition: "To make or shape something by hand or with tools." },
+            { word: "Bank (noun)", definition: "A raised area of ground, especially around a ditch or river." },
+            { word: "To hoist", definition: "To raise or lift something, especially with effort." },
+            { word: "Sophisticated", definition: "Highly developed or complex." },
+            { word: "To haul", definition: "To pull or drag something with effort." },
+            { word: "Boulder", definition: "A very large rock, often rounded." },
+            { word: "Long-standing", definition: "Existing or continuing for a long time." },
+            { word: "To tow", definition: "To pull something (often a vehicle or heavy object) along behind." },
+            { word: "Hypotheses", definition: "Ideas or guesses that scientists make to explain something, which they then test." },
+            { word: "To come into being", definition: "To begin to exist." },
+            { word: "Glaciers", definition: "Large, slow-moving masses of ice." },
+            { word: "Sceptical", definition: "Doubting or not easily convinced." },
+            { word: "To reposition", definition: "To move something to a new place or position." },
+            { word: "To unearth", definition: "To discover something buried or hidden." },
+            { word: "Solstice", definition: "The longest or shortest day of the year, when the sun reaches its highest or lowest point." },
+            { word: "Radiocarbon dating", definition: "A method for determining the age of organic materials." },
+            { word: "To undertake", definition: "To begin or take on a task or responsibility." },
+            { word: "Indigenous", definition: "Native to a particular place or environment." },
+            { word: "Shadowy", definition: "Mysterious or unclear." },
+            { word: "At best", definition: "Even in the most favorable case; not better than." },
+            { word: "Consensus", definition: "A general agreement among a group." },
+            { word: "Equinox", definition: "One of two times in the year when day and night are approximately equal in length." },
+            { word: "Eclipse", definition: "When one celestial body blocks the light of another." },
+            { word: "To speculate", definition: "To form a theory without firm evidence." },
+            { word: "Curative", definition: "Able to heal or make someone feel better." },
+            { word: "Aligned with", definition: "In agreement with; matching values or goals." },
+            { word: "To police", definition: "To control or enforce rules and behaviors." },
+            { word: "Feat", definition: "An impressive achievement." },
+            { word: "Prodigious", definition: "Extremely impressive in size, ability, or amount." },
+            { word: "Temporary", definition: "Lasting for a short time." },
+            { word: "Constraints", definition: "Limits or restrictions." },
+            { word: "Handicap", definition: "A disadvantage or limitation." },
+            { word: "Accelerate", definition: "To speed up or increase in progress." },
+            { word: "Coexistence", definition: "Living or existing together in peace." },
+            { word: "Far from", definition: "Not at all; the opposite of." },
+            { word: "Superintendent", definition: "A person or system responsible for managing or overseeing something." },
+            { word: "Amplify", definition: "To make stronger or more intense." },
+            { word: "Fallible", definition: "Capable of making mistakes." },
+            { word: "Moral high ground", definition: "A position of moral superiority." },
+            { word: "Trough", definition: "A low or bad point in a situation." },
+            { word: "Utopian vision", definition: "An ideal but unrealistic idea of a perfect world." },
+            { word: "Gatekeeper", definition: "A person or thing that controls access to something." },
+            { word: "Sacrifice", definition: "To give up something important for a greater purpose." },
+            { word: "Lapses", definition: "Temporary failures in behavior or attention." },
+            { word: "Take for granted", definition: "To fail to appreciate something fully." },
+            { word: "Discriminate", definition: "To treat someone unfairly based on differences." },
+            { word: "In favor of", definition: "Supporting or preferring something." },
+            { word: "Far-fetched", definition: "Difficult to believe; unlikely." },
+            { word: "Act in the interests of someone", definition: "To do something for someone’s benefit." },
+            { word: "Depriving someone of something", definition: "Taking something away that someone needs or enjoys." },
+            { word: "Set aside", definition: "To ignore or leave something out, usually for a greater goal." },
+            { word: "Reasoning", definition: "The process of thinking through something logically." },
+            { word: "Soar", definition: "To rise quickly and strongly." },
+            { word: "Aggravate", definition: "To make a problem or situation worse." },
+            { word: "Scramble", definition: "A hurried effort to do something, often under pressure." },
+            { word: "Underpin", definition: "To support or form the foundation of something." },
+            { word: "Extent", definition: "The degree or amount of something." },
+            { word: "Sheer", definition: "Complete or absolute (often used for emphasis)." },
+            { word: "Scale", definition: "The size or level of something, especially compared to something else." },
+            { word: "In abundance", definition: "In large quantities; more than enough." },
+            { word: "Properties", definition: "Qualities or features of something." },
+            { word: "Reinforce", definition: "To make something stronger or more effective." },
+            { word: "To drive", definition: "To cause or motivate something to happen." },
+            { word: "Emergence", definition: "The appearance or rise of something new." },
+            { word: "Straightforward", definition: "Easy to understand or do." },
+            { word: "Absorb", definition: "To take in or soak up." },
+            { word: "Moisture", definition: "Tiny amounts of water in the air or on a surface." },
+            { word: "Susceptible", definition: "Likely to be affected or harmed by something." },
+            { word: "Not to mention", definition: "Used to add emphasis to something already mentioned." },
+            { word: "Adhesive", definition: "A substance used for sticking things together (like glue)." },
+            { word: "Lock away", definition: "To trap or store securely (often used for carbon or emotions)." },
+            { word: "Byproduct", definition: "Something that is produced as a result of making something else." },
+            { word: "Incorporation", definition: "The act of including or adding something into a larger whole." },
+            { word: "Promising", definition: "Showing signs of success or improvement." },
+            { word: "To break through", definition: "To succeed or become accepted after difficulty." },
+            { word: "Cost-effective", definition: "Worth the money spent; giving good value for the cost." },
+            { word: "Conventional", definition: "Traditional or commonly used." },
+            { word: "Resistance", definition: "Refusal to accept or support something." },
+            { word: "Ahead of its time", definition: "Having ideas or designs that are advanced compared to the current time." },
+            { word: "Embody", definition: "To represent or show the qualities of something clearly." },
+            { word: "Fade into insignificance", definition: "To become unimportant or unnoticed over time." },
+            { word: "Plague", definition: "A deadly infectious disease that spreads rapidly." },
+            { word: "On the cusp of (something)", definition: "About to experience or enter a new stage or change." },
+            { word: "Displacement", definition: "Forcing people or animals to leave their homes, often due to danger or disaster." },
+            { word: "Call for", definition: "To demand or require something." },
+            { word: "Safeguard", definition: "To protect something from harm or danger." },
+            { word: "Excessive costs", definition: "Spending that is too high or more than reasonable." },
+            { word: "Unfulfilled", definition: "Not completed or not achieved." },
+            { word: "Renowned", definition: "Well-known and respected." },
+            { word: "Discipline", definition: "A branch of learning or knowledge." },
+            { word: "Prominent", definition: "Well-known and important." },
+            { word: "Reconfiguration", definition: "The act of rearranging or redesigning something." },
+            { word: "To pile", definition: "To place things on top of each other in a messy or stacked way." },
+            { word: "Consistent with", definition: "Matching or in agreement with something." },
+            { word: "Unconventional", definition: "Different from what is usual or expected." },
+            { word: "Implement", definition: "To put a plan or idea into action." },
+            { word: "Thoroughly", definition: "Completely and carefully." },
+            { word: "To conceive", definition: "To form or imagine an idea or plan." },
+            { word: "Integrate", definition: "To combine parts into a whole; to connect different things." },
+            { word: "Miniaturized", definition: "Made into a much smaller version." },
+            { word: "Inherit", definition: "To receive or take on characteristics from something earlier." },
+            { word: "Replenishment", definition: "The act of refilling or restoring something." },
+            { word: "Reservoirs", definition: "Storage areas (often for water or fuel)." },
+            { word: "Shortcoming", definition: "A fault or weakness." },
+            { word: "Self-propelled", definition: "Able to move without being pushed or pulled." },
+            { word: "Shuttle", definition: "To move people or things back and forth repeatedly." },
+            { word: "Phase out", definition: "To gradually stop using or producing something." },
+            { word: "Rekindle", definition: "To bring back or restart something, especially interest or emotion." },
+            { word: "Prototype", definition: "An early version of a product used to test its design." },
+            { word: "Swift", definition: "Fast or quick." },
+            { word: "Eliminate", definition: "To remove or get rid of something completely." },
+            { word: "To ignite", definition: "To start something burning." },
+            { word: "Sluggish", definition: "Slow or lacking energy." },
+            { word: "Erratic", definition: "Not consistent; unpredictable." },
+            { word: "Plagued with", definition: "Troubled or affected by many problems." },
+            { word: "Glitches", definition: "Small problems or faults, especially in machines or systems." },
+            { word: "Viable", definition: "Workable; able to be successful." },
+            { word: "Negligible", definition: "So small or unimportant that it can be ignored." },
+            { word: "Tinker with", definition: "To make small changes to something, often just to experiment." },
+            { word: "Adamant", definition: "Very firm and determined; refusing to change one’s mind." },
+            { word: "To picture (something)", definition: "To imagine or visualize something in your mind." },
+            { word: "Be beyond someone", definition: "Too difficult for someone to understand or do." },
+            { word: "Tentative", definition: "Not certain or fully developed; hesitant." },
+            { word: "Advocate (verb)", definition: "To publicly support a particular idea or cause." },
+            { word: "Attainment", definition: "The achievement of something, especially through hard work." },
+            { word: "Selective", definition: "Involving choosing only certain people or things." },
+            { word: "Bright", definition: "Intelligent and quick to learn." },
+            { word: "Comprehensive schools", definition: "Non-selective schools that accept all students regardless of ability." },
+            { word: "Intuitively", definition: "Based on feelings or instincts rather than facts." },
+            { word: "Appealing", definition: "Attractive or interesting." },
+            { word: "Stakeholder", definition: "A person or group involved in or affected by a decision or system." },
+            { word: "Analogy", definition: "A comparison used to explain or clarify something." },
+            { word: "Wane", definition: "To decrease or fade away over time." },
+            { word: "Summit", definition: "To reach the top of a mountain." },
+            { word: "Stroll", definition: "A slow, relaxed walk." },
+            { word: "Mediocrity", definition: "The state of being average or not very good." },
+            { word: "Prevail", definition: "To win or succeed in the end." },
+            { word: "Scaffolding (education)", definition: "Support given to help a student learn something new, gradually removed as they improve." },
+            { word: "To stream (students)", definition: "To group students by ability into different classes or sets." },
+            { word: "Empirical evidence", definition: "Information based on observation or experiment, not just theory." },
+            { word: "Low socioeconomic class", definition: "People with limited income, education, and social status." },
+            { word: "Entrench", definition: "To firmly establish something so it is difficult to change." },
+            { word: "Social divide", definition: "A separation or gap between different groups in society." },
+            { word: "Zeal", definition: "Strong energy or enthusiasm for something." },
+            { word: "Reluctant", definition: "Not willing or eager to do something." },
+            { word: "Disadvantaged background", definition: "A situation where a person lacks opportunities due to poverty or social inequality." },
+            { word: "Drawn to", definition: "Attracted by or interested in something." },
+            { word: "Mitigate", definition: "To reduce or lessen the severity of something." },
+            { word: "Radical", definition: "Very new, different, or extreme in nature." },
+            { word: "Monumental", definition: "Very important or enormous in scale." },
+            { word: "Forward-thinking", definition: "Planning for the future in a creative or smart way." },
+            { word: "Pave the way to", definition: "To make something possible or easier in the future." },
+            { word: "Integrate with", definition: "To connect or combine with something else." },
+            { word: "Drainage systems", definition: "Systems for removing excess water from an area." },
+            { word: "Prescribe", definition: "To recommend or officially suggest something." },
+            { word: "Mainstream", definition: "Accepted by or common among most people." },
+            { word: "Edible", definition: "Safe to eat." },
+            { word: "Vibrant", definition: "Full of energy, life, or activity." },
+            { word: "Sustainable", definition: "Able to continue over time without harming the environment." },
+            { word: "Replicate", definition: "To copy or repeat something exactly." },
+            { word: "Controversy", definition: "A strong public disagreement or debate." },
+            { word: "Laterally", definition: "In a sideways or horizontal direction." },
+            { word: "Plausible", definition: "Seeming reasonable or likely to be true." },
+            { word: "Namely", definition: "Specifically; to be exact." },
+            { word: "Respects", definition: "Aspects or features of something." },
+            { word: "Descendant", definition: "Something that developed from an earlier form." },
+            { word: "Intriguing", definition: "Very interesting or mysterious." },
+            { word: "To make a name for oneself", definition: "To become well known or respected." },
+            { word: "Sideline", definition: "A secondary interest or activity." },
+            { word: "Devote", definition: "To give time, effort, or attention to something." },
+            { word: "Shift", definition: "A change or move from one thing to another." },
+            { word: "Speculation", definition: "Guessing or forming ideas without full evidence." },
+            { word: "Retrospectively", definition: "Looking back at the past." },
+            { word: "Happenstance", definition: "A chance or random event." },
+            { word: "Coherent narrative", definition: "A story or explanation that is logical and well-organized." },
+            { word: "Fulfilled intention", definition: "A goal or plan that has been successfully completed." },
+            { word: "Take root in", definition: "To become established or widely accepted." },
+            { word: "Innate", definition: "Existing from birth; natural." },
+            { word: "Supplant", definition: "To replace something, especially something older or less modern." },
+            { word: "Revolt against", definition: "To strongly oppose or reject something." },
+            { word: "Inherent", definition: "Naturally part of something; built-in." },
+            { word: "Destiny", definition: "The events that will happen in the future, often believed to be unavoidable." },
+            { word: "Coax", definition: "To gently persuade someone to do something." },
+            { word: "Infer", definition: "To draw a conclusion based on evidence and reasoning." },
+            { word: "Impediment", definition: "Something that makes progress difficult; obstacle." },
+            { word: "Cognitive dissonance", definition: "The mental discomfort felt when holding two conflicting thoughts or beliefs." },
+            { word: "Applaud", definition: "To praise or approve of something." },
+            { word: "Misapply", definition: "To use something in the wrong way or for the wrong purpose." },
+            { word: "Misappropriate", definition: "To use something (especially money or ideas) in an unauthorized or wrong way." },
+            { word: "Conflated", definition: "Mixed together two or more things that should be separate." },
+            { word: "Translate into", definition: "To turn one idea or plan into action or results." },
+            { word: "Drive", definition: "To motivate or cause something to happen." },
+            { word: "Vague", definition: "Not clear or specific." },
+            { word: "Proponent", definition: "A person who supports an idea or cause." },
+            { word: "Targeted intervention", definition: "A focused action aimed at solving a specific problem." },
+            { word: "Dispute (verb)", definition: "To argue or question whether something is true or right." },
+            { word: "Attribute (noun)", definition: "A quality or feature of something or someone." },
+            { word: "Aspiration", definition: "A strong desire to achieve something." },
+            { word: "Deluded notion", definition: "A false or unrealistic belief." }
+        ];
+
+        let currentQuizWords = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let incorrectAnswers = [];
+
+        const quizLength = 10; // Number of questions in the quiz
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkOverlay = document.getElementById('firework-overlay');
+        const modeToggleButton = document.getElementById('mode-toggle');
+        const fireworkContainer = document.querySelector('.firework-container'); // Get the container for CSS fireworks
+
+        // Function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Starts a new quiz session
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizLength).fill(null); // Reset user answers
+            incorrectAnswers = []; // Reset incorrect answers list
+
+            // Ensure there are enough words for the quiz
+            if (vocabularyWords.length < quizLength) {
+                console.error(`Not enough vocabulary words to create a ${quizLength}-question quiz.`);
+                alert(`Error: Not enough vocabulary words to create a ${quizLength}-question quiz.`); // Use alert for critical error
+                return;
+            }
+            
+            // Select 10 random unique words for the current quiz
+            const shuffledAllWords = shuffleArray([...vocabularyWords]); // Create a shallow copy to shuffle
+            currentQuizWords = shuffledAllWords.slice(0, quizLength);
+
+            // Show quiz content, hide results, and reset submit button state
+            quizContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none';
+            fireworkOverlay.classList.remove('show'); // Ensure overlay is hidden
+            fireworkContainer.innerHTML = ''; // Clear any residual fireworks
+
+            displayQuestion(currentQuestionIndex); // Display the first question
+        }
+
+        // Displays the question and its options for the given index
+        function displayQuestion(index) {
+            const currentWordObject = currentQuizWords[index];
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            // Generate 3 random incorrect definitions
+            let incorrectOptionsCount = 0;
+            // Create a pool of all definitions, excluding the current correct one
+            const definitionsPool = vocabularyWords.map(item => item.definition).filter(def => def !== correctOptionDefinition);
+            
+            while (incorrectOptionsCount < 3 && definitionsPool.length > 0) {
+                const randomDefinitionIndex = Math.floor(Math.random() * definitionsPool.length);
+                const randomDefinition = definitionsPool[randomDefinitionIndex];
+                
+                // Add only if not already in the options list
+                if (!allOptionDefinitions.includes(randomDefinition)) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
+                }
+                // Remove the chosen definition from the pool to avoid duplicates for other options
+                definitionsPool.splice(randomDefinitionIndex, 1); 
+            }
+
+            // Shuffle the options to randomize their order
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
+
+            // Create and append option buttons
+            allOptionDefinitions.forEach(definition => {
+                const button = document.createElement('button');
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition);
+                optionsContainer.appendChild(button);
+
+                // If this question was previously answered, highlight the selected option
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
+                }
+            });
+
+            updateNavigationButtons(); // Update button states
+        }
+
+        // Handles user selecting an answer
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition; // Store the selected answer
+            // Remove 'selected' class from all options and add to the newly selected one
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
+                }
+            });
+        }
+
+        // Updates the state of navigation and submit buttons
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0; // Disable 'Previous' on first question
+            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block'; // Hide 'Next' on last question
+            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none'; // Show 'Submit' on last question
+        }
+
+        // Navigates to the next question
+        function nextQuestion() {
+            if (currentQuestionIndex < quizLength - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        // Navigates to the previous question
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        // Submits the quiz and displays results
+        function submitQuiz() {
+            incorrectAnswers = []; // Clear previous incorrect answers
+            let correctCount = 0;
+
+            // Check each answer
+            for (let i = 0; i < quizLength; i++) {
+                if (userAnswers[i] === currentQuizWords[i].definition) {
+                    correctCount++;
+                } else {
+                    // Store incorrect answers for display
+                    incorrectAnswers.push({
+                        word: currentQuizWords[i].word,
+                        correctDefinition: currentQuizWords[i].definition,
+                        userAnswer: userAnswers[i] || "No answer provided" // Handle unanswered questions
+                    });
+                }
+            }
+
+            quizContent.style.display = 'none'; // Hide quiz
+            resultsContainer.style.display = 'block'; // Show results
+            incorrectAnswersList.innerHTML = ''; // Clear previous results list
+
+            // Display overall score and feedback
+            if (incorrectAnswers.length > 0) {
+                resultsMessage.textContent = `Quiz Completed! You got ${correctCount} out of ${quizLength} correct.`;
+                incorrectAnswersHeading.style.display = 'block';
+                // Populate the list of incorrect answers
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
+                    incorrectAnswersList.appendChild(listItem);
+                });
+            } else {
+                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
+                incorrectAnswersHeading.style.display = 'none';
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks(); // Trigger fireworks for perfect score
+            }
+        }
+
+        // Toggles between light and dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Triggers a firework animation for a perfect score
+        function triggerFireworks() {
+            fireworkOverlay.classList.add('show'); // Show the shadowy overlay
+            fireworkContainer.innerHTML = ''; // Clear previous fireworks
+
+            const numFireworks = 15; // Increased number of fireworks for more impact
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF', '#FFA500', '#BA55D3']; // Added more colors
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi');
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                firework.style.setProperty('--delay', `${i * 0.15}s`); // Adjusted delay for more sequential bursts
+
+                // Set the base color of the firework (which will be used for its initial flash if any)
+                // and for the primary color of the sparks.
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                // Set CSS variables for dynamic box-shadow colors
+                firework.style.setProperty('--firework-before-shadow', `
+                    0 0 0 5px ${randomColor},
+                    0 0 0 10px ${colors[Math.floor(Math.random() * colors.length)]},
+                    0 0 0 15px ${colors[Math.floor(Math.random() * colors.length)]},
+                    0 0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}
+                `);
+                firework.style.setProperty('--firework-after-shadow', `
+                    0 0 0 5px ${colors[Math.floor(Math.random() * colors.length)]},
+                    0 0 0 10px ${colors[Math.floor(Math.random() * colors.length)]},
+                    0 0 0 15px ${colors[Math.floor(Math.random() * colors.length)]},
+                    0 0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}
+                `);
+                
+                fireworkContainer.appendChild(firework);
+
+                // Remove firework and hide overlay after animation
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                    // Only hide overlay if all fireworks have finished
+                    if (fireworkContainer.children.length === 0) {
+                        fireworkOverlay.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // Start the quiz when the page loads
+        window.onload = startQuiz;
+    </script>
+</body>
+</html>
