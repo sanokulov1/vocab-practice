@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Flashcards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8d0e6, #c5e1f9); /* Light mode background */
+            padding: 20px;
+        }
+
+        /* Dark mode styling for body - Updated for a more night-time friendly color */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #1a2a3a); /* Darker, more muted night-time background */
+        }
+
+        /* Container for the flashcard app */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Header styling */
+        header {
+            margin-bottom: 25px;
+            color: #2c3e50; /* Light mode header text color */
+        }
+
+        /* Dark mode styling for header */
+        body.dark-mode header {
+            color: #fff; /* Dark mode header text color */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header h1 i {
+            color: #e74c3c; /* Icon color */
+            animation: float 3s ease-in-out infinite; /* Floating animation */
+        }
+
+        /* Flashcard container for 3D perspective */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            height: 320px; /* Fixed height for flashcard */
+        }
+
+        /* Individual flashcard styling */
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d; /* Enable 3D transformations */
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth flip transition */
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Shadow for depth */
+            cursor: pointer;
+        }
+
+        /* Flipped state for flashcard */
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Common styling for flashcard faces (front and back) */
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hide back face when not flipped */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        /* Front face styling */
+        .front {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Light mode front background */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode styling for front face */
+        body.dark-mode .front {
+            background: linear-gradient(135deg, #e6e6fa, #d8bfd8); /* Dark mode front background */
+            color: #000;
+        }
+
+        /* Back face styling */
+        .back {
+            background: linear-gradient(135deg, #d1ecf1, #e8f4f8); /* Light mode back background */
+            transform: rotateY(180deg); /* Initially rotated to show front */
+            text-align: left;
+            overflow-y: auto; /* Enable scrolling for long content */
+        }
+
+        /* Dark mode styling for back face */
+        body.dark-mode .back {
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb); /* Dark mode back background */
+            color: #000;
+        }
+
+        /* Word styling */
+        .word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50; /* Light mode word color */
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Dark mode styling for word */
+        body.dark-mode .word {
+            color: #000;
+        }
+
+        /* Definition styling */
+        .definition {
+            font-size: 1.3rem;
+            color: #3498db; /* Light mode definition color */
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        /* Dark mode styling for definition */
+        body.dark-mode .definition {
+            color: #1a5276;
+        }
+
+        /* Example styling */
+        .example {
+            font-size: 1.1rem;
+            color: #7f8c8d; /* Light mode example color */
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+            border-radius: 10px;
+            max-width: 90%;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Dark mode styling for example */
+        body.dark-mode .example {
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Hint text styling */
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* Controls (buttons) styling */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px; /* Rounded buttons */
+            background: linear-gradient(to right, #3498db, #2c3e50); /* Gradient background */
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Button shadow */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effects */
+        }
+
+        /* Dark mode styling for buttons */
+        body.dark-mode button {
+            background: linear-gradient(to right, #9370db, #6a5acd);
+        }
+
+        button:hover {
+            transform: translateY(-3px); /* Lift on hover */
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px); /* Press effect */
+        }
+
+        /* Dark mode toggle button */
+        #darkModeToggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #2c3e50, #34495e); /* Dark background for toggle */
+            z-index: 100;
+        }
+
+        /* Dark mode styling for toggle */
+        body.dark-mode #darkModeToggle {
+            background: linear-gradient(to right, #6a5acd, #9370db);
+        }
+
+        /* Progress indicator styling */
+        .progress {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50; /* Light mode progress text color */
+            font-weight: 500;
+        }
+
+        /* Dark mode styling for progress */
+        body.dark-mode .progress {
+            color: #fff;
+        }
+
+        .counter {
+            display: inline-block;
+            background: #3498db; /* Light mode counter background */
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        /* Dark mode styling for counter */
+        body.dark-mode .counter {
+            background: #9370db;
+        }
+
+        /* Keyframe animation for floating icon */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 300px;
+            }
+            
+            .word {
+                font-size: 1.5rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .example {
+                font-size: 0.95rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book"></i> Vocabulary Flashcards</h1>
+            <p>Master essential English expressions and phrases</p>
+        </header>
+        
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face front">
+                    <div class="word" id="word">Word</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="definition" id="definition">Definition</div>
+                    <div class="example" id="example">Example sentence will appear here</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="shuffleBtn"><i class="fas fa-random"></i> Shuffle</button>
+            <button id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="progress">
+            Card: <span class="counter" id="currentCount">1</span> of <span id="totalCount">27</span>
+        </div>
+    </div>
+
+    <script>
+        // Array of vocabulary words, definitions, and examples
+        const words = [
+            { word: "Aligned with", definition: "In agreement with; matching values or goals.", example: "The company’s actions are aligned with its environmental mission." },
+            { word: "To police", definition: "To control or enforce rules and behaviors.", example: "The school hired staff to police students’ online activity." },
+            { word: "Feat", definition: "An impressive achievement.", example: "Climbing Mount Everest is a remarkable feat of strength." },
+            { word: "Prodigious", definition: "Extremely impressive in size, ability, or amount.", example: "The child showed prodigious talent in mathematics." },
+            { word: "Temporary", definition: "Lasting for a short time.", example: "The store offered temporary discounts during the holiday." },
+            { word: "Constraints", definition: "Limits or restrictions.", example: "Budget constraints prevented them from hiring more staff." },
+            { word: "Handicap", definition: "A disadvantage or limitation.", example: "Poor eyesight can be a handicap in sports like tennis." },
+            { word: "Accelerate", definition: "To speed up or increase in progress.", example: "New technology will accelerate the pace of medical research." },
+            { word: "Coexistence", definition: "Living or existing together in peace.", example: "The goal is peaceful coexistence between different communities." },
+            { word: "Far from", definition: "Not at all; the opposite of.", example: "The exam was far from easy – it was extremely difficult." },
+            { word: "Superintendent", definition: "A person or system responsible for managing or overseeing something.", example: "The superintendent of the building ensures everything works properly." },
+            { word: "Amplify", definition: "To make stronger or more intense.", example: "Social media can amplify both positive and negative messages." },
+            { word: "Fallible", definition: "Capable of making mistakes.", example: "All humans are fallible – nobody is perfect." },
+            { word: "Moral high ground", definition: "A position of moral superiority.", example: "She refused to lie, believing it was better to take the moral high ground." },
+            { word: "Trough", definition: "A low or bad point in a situation.", example: "The company went through a financial trough last year." },
+            { word: "Utopian vision", definition: "An ideal but unrealistic idea of a perfect world.", example: "His plan for world peace was dismissed as a utopian vision." },
+            { word: "Gatekeeper", definition: "A person or thing that controls access to something.", example: "Editors act as gatekeepers of what gets published in magazines." },
+            { word: "Sacrifice", definition: "To give up something important for a greater purpose.", example: "She sacrificed her career to care for her children." },
+            { word: "Lapses", definition: "Temporary failures in behavior or attention.", example: "His driving license was suspended due to repeated lapses in judgment." },
+            { word: "Take for granted", definition: "To fail to appreciate something fully.", example: "We often take clean water for granted until it’s gone." },
+            { word: "Discriminate", definition: "To treat someone unfairly based on differences.", example: "It’s illegal to discriminate against someone because of their race." },
+            { word: "In favor of", definition: "Supporting or preferring something.", example: "She voted in favor of stricter environmental laws." },
+            { word: "Far-fetched", definition: "Difficult to believe; unlikely.", example: "The idea that aliens built the pyramids is far-fetched." },
+            { word: "Act in the interests of someone", definition: "To do something for someone’s benefit.", example: "The lawyer acted in the best interests of her client." },
+            { word: "Depriving someone of something", definition: "Taking something away that someone needs or enjoys.", example: "The blackout deprived the city of electricity for hours." },
+            { word: "Set aside", definition: "To ignore or leave something out, usually for a greater goal.", example: "They set aside their differences to finish the project." },
+            { word: "Reasoning", definition: "The process of thinking through something logically.", example: "His reasoning for choosing that solution was well explained." }
+        ];
+
+        let currentIndex = 0;
+        let shuffled = false;
+        let shuffledWords = [...words]; // Create a copy for shuffling
+
+        // Get DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const exampleElement = document.getElementById('example');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currentCountElement = document.getElementById('currentCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const darkModeIcon = document.querySelector('#darkModeToggle i');
+
+        // Initialize the total card count and display the first card
+        totalCountElement.textContent = words.length;
+        updateCard();
+        
+        // Set initial dark mode preference based on user's system settings
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeIcon.className = 'fas fa-sun'; // Change icon to sun for dark mode
+        }
+
+        // Event listener for flipping the flashcard
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        // Event listener for previous button
+        prevBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped'); // Flip back before changing card
+            currentIndex = (currentIndex - 1 + words.length) % words.length; // Loop around
+            updateCard();
+        });
+
+        // Event listener for next button
+        nextBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped'); // Flip back before changing card
+            currentIndex = (currentIndex + 1) % words.length; // Loop around
+            updateCard();
+        });
+
+        // Event listener for shuffle button
+        shuffleBtn.addEventListener('click', () => {
+            flashcard.classList.remove('flipped'); // Flip back before shuffling
+            shuffled = !shuffled; // Toggle shuffle state
+            if (shuffled) {
+                // Shuffle the words array
+                shuffledWords = [...words].sort(() => Math.random() - 0.5);
+                currentIndex = 0; // Reset to the first card of the shuffled deck
+                shuffleBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> Sort'; // Change button text
+            } else {
+                // If sorting, revert to original order and find current word's index
+                shuffledWords = [...words]; // Reset to original order
+                const currentWordText = wordElement.textContent; // Get current word text
+                currentIndex = words.findIndex(card => card.word === currentWordText); // Find its index in original array
+                shuffleBtn.innerHTML = '<i class="fas fa-random"></i> Shuffle'; // Change button text
+            }
+            updateCard();
+        });
+
+        // Event listener for dark mode toggle button
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode'); // Toggle dark mode class on body
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.className = 'fas fa-sun'; // Change icon to sun
+            } else {
+                darkModeIcon.className = 'fas fa-moon'; // Change icon to moon
+            }
+        });
+
+        // Function to update the content of the flashcard
+        function updateCard() {
+            const currentWord = shuffled ? shuffledWords[currentIndex] : words[currentIndex];
+            wordElement.textContent = currentWord.word;
+            definitionElement.textContent = currentWord.definition;
+            
+            // Display example if available, otherwise hide it
+            if (currentWord.example) {
+                exampleElement.textContent = currentWord.example;
+                exampleElement.style.display = 'block';
+            } else {
+                exampleElement.style.display = 'none';
+            }
+            
+            // Update current card count
+            currentCountElement.textContent = currentIndex + 1;
+        }
+
+        // Keyboard navigation for accessibility and ease of use
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click(); // Simulate click on previous button
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click(); // Simulate click on next button
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flashcard.click(); // Simulate click on flashcard to flip
+            } else if (e.key === 's') {
+                shuffleBtn.click(); // Simulate click on shuffle button
+            } else if (e.key === 'd') {
+                darkModeToggle.click(); // Simulate click on dark mode toggle
+            }
+        });
+    </script>
+</body>
+</html>
