@@ -1,84 +1,336 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cambridge18 Test1 Passage3</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Quicksand', sans-serif;
-      background-color: #d0ebff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cambridge 18 Study Hub | Test 1, Passage 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            --primary-bg: #f8f9fa;
+            --card-bg: #ffffff; /* Default card background in light mode */
+            --card-border: rgba(0, 0, 0, 0.05);
+            --text-primary: #263238;
+            --text-secondary: #546e7a;
+            --shadow: 0 6px 15px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            
+            /* Card specific backgrounds (light mode) */
+            --card1-bg: #e3f2fd; /* Flashcards */
+            --card2-bg: #f3e5f5; /* Matching */
+            --card3-bg: #e8f5e9; /* Quiz */
+            --card4-bg: #fff8e1; /* Typing Task */
+            
+            /* Accent colors for icons (light mode) */
+            --accent-1: #1e88e5;
+            --accent-2: #7e57c2;
+            --accent-3: #43a047;
+            --accent-4: #ff8f00;
+        }
 
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 15px;
-      width: 70vw;
-      max-width: 500px;
-      height: 70vh;
-      max-height: 400px;
-      padding: 10px;
-      box-sizing: border-box;
-    }
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary-bg: #0f172a;
+            --card-bg: #1e293b; /* Dark mode card background */
+            --card-border: rgba(255, 255, 255, 0.05);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            
+            /* Card specific backgrounds (dark mode - adjusted for better contrast/theme) */
+            --card1-bg: #0c4a6e;
+            --card2-bg: #0c4a6e;
+            --card3-bg: #0c4a6e;
+            --card4-bg: #0c4a6e;
+            
+            /* Accent colors for icons (dark mode) */
+            --accent-1: #60a5fa;
+            --accent-2: #38bdf8;
+            --accent-3: #0ea5e9;
+            --accent-4: #0284c7;
+        }
 
-    .grid-item a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-      text-decoration: none;
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #000;
-      background-color: #a8c9f0;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s ease;
-      text-align: center;
-    }
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .grid-item a:hover {
-      transform: scale(1.05);
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
 
-    @media (max-width: 768px) {
-      body {
-        align-items: flex-start;
-        padding-top: 40px;
-      }
+        /* Main container for content */
+        .container {
+            width: 95%;
+            max-width: 700px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            min-height: 100vh;
+            justify-content: center;
+        }
 
-      .grid-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
-        width: 90vw;
-        height: auto;
-      }
+        /* Grid layout for cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
 
-      .grid-item a {
-        height: 20vh;
-      }
-    }
-  </style>
+        /* Individual card styling */
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            padding: 1.3rem;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            z-index: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Card icon styling */
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+            transition: var(--transition);
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .card:hover .card-icon {
+            transform: translateY(-5px);
+        }
+
+        /* Card title styling */
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* Card description styling */
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            max-width: 90%;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Specific card background colors */
+        .card1 { background: var(--card1-bg); }
+        .card2 { background: var(--card2-bg); }
+        .card3 { background: var(--card3-bg); }
+        .card4 { background: var(--card4-bg); }
+
+        /* Specific card icon colors */
+        .card1 .card-icon { background: rgba(30, 136, 229, 0.15); color: var(--accent-1); }
+        .card2 .card-icon { background: rgba(126, 87, 194, 0.15); color: var(--accent-2); }
+        .card3 .card-icon { background: rgba(67, 160, 71, 0.15); color: var(--accent-3); }
+        .card4 .card-icon { background: rgba(255, 143, 0, 0.15); color: var(--accent-4); }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--card-bg); /* Use card-bg for consistency */
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle i {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                gap: 1rem;
+            }
+            
+            .card {
+                min-height: 110px;
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+                gap: 1rem;
+                justify-content: center;
+                padding-top: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
+            }
+            
+            .card-desc {
+                font-size: 0.75rem;
+            }
+            
+            .card-icon {
+                font-size: 1.8rem;
+                width: 46px;
+                height: 46px;
+                margin-bottom: 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-title {
+                font-size: 1rem;
+            }
+            
+            .card-desc {
+                font-size: 0.7rem;
+            }
+            
+            .card-icon {
+                font-size: 1.6rem;
+                width: 42px;
+                height: 42px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <div class="container">
+        <div class="grid">
+            <a href="cambridge18_test1_passage3_flashcards.html" class="card card1">
+                <div class="card-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3 class="card-title">Flashcards</h3>
+                <p class="card-desc">Master vocabulary with interactive flashcards</p>
+            </a>
+            
+            <a href="cambridge18_test1_passage3_matching.html" class="card card2">
+                <div class="card-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <h3 class="card-title">Matching</h3>
+                <p class="card-desc">Connect terms with their definitions</p>
+            </a>
+            
+            <a href="cambridge18_test1_passage3_quiz.html" class="card card3">
+                <div class="card-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3 class="card-title">Quiz</h3>
+                <p class="card-desc">Test your knowledge with challenging questions</p>
+            </a>
+            
+            <a href="cambridge18_test1_passage3_typing.html" class="card card4">
+                <div class="card-icon">
+                    <i class="fas fa-keyboard"></i>
+                </div>
+                <h3 class="card-title">Typing Task</h3>
+                <p class="card-desc">Improve recall through active typing exercises</p>
+            </a>
+        </div>
+    </div>
 
-  <div class="grid-container">
-    <div class="grid-item"><a href="cambridge18_test1_passage3_flashcards.html">📘 Flashcards</a></div>
-    <div class="grid-item"><a href="cambridge18_test1_passage3_matching.html">🔗 Matching</a></div>
-    <div class="grid-item"><a href="cambridge18_test1_passage3_quiz.html">📝 Quiz</a></div>
-    <div class="grid-item"><a href="cambridge18_test1_passage3_typing.html">⌨️ Typing Task</a></div>
-  </div>
-
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+            
+            // Save theme preference
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference on load
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            // Ensure moon icon is visible if not dark mode
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+        
+        // Add subtle animation to cards on page load
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index); // Reduced delay for faster animation
+        });
+    </script>
 </body>
 </html>
