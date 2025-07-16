@@ -3,131 +3,855 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>sanokulov.uz – Home</title>
+  <title>sanokulov.uz – Learn English Effectively</title>
   <link rel="icon" type="image/png" href="sanokulov_favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #6C63FF;
+      --primary-dark: #5a52e0;
+      --secondary: #fbb03b;
+      --secondary-dark: #e69a2b;
+      --accent: #4CAF50;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --gradient: linear-gradient(135deg, var(--primary) 0%, #8e6bff 100%);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #ffffff;
-      background-image: url('https://cdn.pixabay.com/photo/2016/11/29/04/17/abstract-1867905_1280.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: #333;
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px 40px;
-      background: white;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
     }
+
     .logo {
+      font-family: 'Quicksand', sans-serif;
       font-weight: 700;
-      font-size: 40px;
-      color: #6C63FF;
+      font-size: 32px;
+      color: var(--primary);
       cursor: pointer;
-    }
-    .logo:hover {
-      text-decoration: underline;
-    }
-    .hero {
-      text-align: center;
-      padding: 80px 20px 40px;
-      background-color: rgba(255, 255, 255, 0.85);
-    }
-    .hero h1 {
-      font-size: 40px;
-      font-weight: 700;
-    }
-    .hero h1 .learn {
-      color: #6C63FF;
-    }
-    .hero h1 .play {
-      color: #fbb03b;
-    }
-    .hero p {
-      margin: 20px auto;
-      max-width: 600px;
-      font-size: 18px;
-      color: #555;
-    }
-    .features {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 60px 20px;
-      gap: 20px;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
     }
-    .feature-box {
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      width: 280px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .logo i {
+      color: var(--secondary);
+    }
+
+    .logo:hover {
+      transform: translateY(-2px);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 16px;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .cta-button {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s ease-in-out;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
     }
-    .feature-box:hover {
-      transform: scale(1.03);
-      background: #f0f8ff;
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
     }
-    .feature-box h3 {
-      font-size: 20px;
-      color: #6C63FF;
+
+    /* Hero Section */
+    .hero {
+      padding: 180px 20px 100px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.05) 0%, rgba(251, 176, 59, 0.05) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://cdn.pixabay.com/photo/2016/11/29/04/17/abstract-1867905_1280.jpg') center/cover no-repeat;
+      opacity: 0.05;
+      z-index: -1;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero h1 .learn {
+      color: var(--primary);
+      position: relative;
+    }
+
+    .hero h1 .learn::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+
+    .hero h1 .play {
+      color: var(--secondary);
+    }
+
+    .hero p {
+      margin: 30px auto;
+      max-width: 600px;
+      font-size: 1.2rem;
+      color: var(--gray);
+      animation: fadeInUp 1s ease 0.2s forwards;
+      opacity: 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+      animation: fadeInUp 1s ease 0.4s forwards;
+      opacity: 0;
+    }
+
+    .hero-buttons .cta-button {
+      padding: 12px 30px;
+      font-size: 1rem;
+    }
+
+    .hero-buttons .outline-button {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .hero-buttons .outline-button:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 0;
+      background: white;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .section-header p {
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient);
+      opacity: 0;
+      z-index: -1;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .feature-card:hover::before {
+      opacity: 0.1;
+    }
+
+    .feature-icon {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: var(--primary);
+      background: rgba(108, 99, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover .feature-icon {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--primary-dark);
+    }
+
+    .feature-content {
+      padding: 30px;
+    }
+
+    .feature-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .feature-content p {
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .feature-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .feature-link i {
+      margin-left: 8px;
+      transition: var(--transition);
+    }
+
+    .feature-link:hover {
+      color: var(--primary-dark);
+    }
+
+    .feature-link:hover i {
+      transform: translateX(4px);
+    }
+
+    /* Stats Section */
+    .stats {
+      padding: 80px 0;
+      background: linear-gradient(135deg, var(--primary) 0%, #8e6bff 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+
+    .stat-item {
+      padding: 30px;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
       margin-bottom: 10px;
     }
-    .feature-box p {
-      font-size: 14px;
-      color: #444;
+
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
     }
-    footer {
-      text-align: center;
+
+    /* Testimonials */
+    .testimonials {
+      padding: 100px 0;
+      background: #f9f9ff;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 20px;
       padding: 30px;
-      font-size: 14px;
-      color: #aaa;
+      box-shadow: var(--shadow);
+      position: relative;
     }
-    @media (max-width: 600px) {
-      header nav {
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
+      color: rgba(108, 99, 255, 0.1);
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient);
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .author-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .author-info p {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .footer-col p {
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+      
+      .logo {
+        font-size: 24px;
+      }
+      
+      nav {
         display: none;
+      }
+      
+      .hero {
+        padding: 150px 20px 80px;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .section-header h2 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo" onclick="location.reload()">sanokulov.uz</div>
+    <div class="logo" onclick="location.reload()">
+      <i class="fas fa-graduation-cap"></i>
+      sanokulov.uz
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+    
+    <button class="cta-button">Get Started</button>
   </header>
 
   <section class="hero">
-    <h1>The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
-    <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey.</p>
+    <div class="container">
+      <div class="hero-content">
+        <h1>The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
+        <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey. Transform your English proficiency with our proven methods.</p>
+        <div class="hero-buttons">
+          <button class="cta-button">Start Learning Now</button>
+          <button class="cta-button outline-button">View Courses</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="features">
-    <div class="feature-box" onclick="window.location.href='vocab-practice.html'">
-      <h3>🧠 Vocabulary Practice</h3>
-      <p>Boost your language skills with curated vocabulary sets and review tasks.</p>
+    <div class="container">
+      <div class="section-header">
+        <h2>Learning Features</h2>
+        <p>Discover our comprehensive tools designed to accelerate your language learning journey</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Vocabulary Practice</h3>
+            <p>Boost your language skills with curated vocabulary sets and review tasks. Interactive exercises tailored to your learning level.</p>
+            <a href="vocab-practice.html" class="feature-link">
+              Start Practicing
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Join My Lessons</h3>
+            <p>Enroll in private or group classes to accelerate your English learning journey with personalized guidance.</p>
+            <a href="#" class="feature-link">
+              View Schedule
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="feature-content">
+            <h3>About Me</h3>
+            <p>Learn about the educator behind this platform and the specialized courses designed for your success.</p>
+            <a href="#" class="feature-link">
+              My Story
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="feature-box">
-      <h3>👨‍🏫 Join My Lessons</h3>
-      <p>Enroll in private or group classes to accelerate your English learning journey.</p>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">1500+</div>
+          <div class="stat-label">Active Learners</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Vocabulary Sets</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+      </div>
     </div>
-    <div class="feature-box">
-      <h3>📘 About Me</h3>
-      <p>Learn about the educator behind this platform and the courses I offer.</p>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2>Student Success Stories</h2>
+        <p>Hear what our students say about their learning experience</p>
+      </div>
+      
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "The vocabulary practice tools transformed my English skills. I passed my IELTS exam with flying colors thanks to this platform!"
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">SA</div>
+            <div class="author-info">
+              <h4>Sarah Ahmed</h4>
+              <p>University Student</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "The personalized lessons helped me gain confidence in business English. My career prospects have improved significantly."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">MR</div>
+            <div class="author-info">
+              <h4>Michael Rodriguez</h4>
+              <p>Marketing Professional</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "As a busy professional, the flexible scheduling made all the difference. I can learn at my own pace without compromising my work."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">EJ</div>
+            <div class="author-info">
+              <h4>Emma Johnson</h4>
+              <p>Software Developer</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <footer>
-    &copy; 2025 sanokulov.uz – All rights reserved
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>sanokulov.uz</h3>
+          <p>Your premier destination for effective English language learning. Transform your communication skills with our proven methods.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Courses</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Vocabulary Practice</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> About Me</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Learning Materials</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Tests</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Study Guides</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Blog & Tips</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Webinars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Contact</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fas fa-envelope"></i> info@sanokulov.uz</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> +998 99 123 4567</a></li>
+            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Tashkent, Uzbekistan</a></li>
+            <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        &copy; 2025 sanokulov.uz – All rights reserved
+      </div>
+    </div>
   </footer>
+
+  <script>
+    // Simple animations and interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Feature card hover effect
+      const featureCards = document.querySelectorAll('.feature-card');
+      featureCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-10px)';
+        });
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+      
+      // Smooth scrolling for navigation
+      document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if(targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if(targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Add animation to stats when they come into view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach((num, index) => {
+              const target = +num.innerText.replace('+', '').replace('%', '');
+              let count = 0;
+              const duration = 1500;
+              const increment = target / (duration / 16);
+              
+              const updateCount = () => {
+                if (count < target) {
+                  count += increment;
+                  num.innerText = Math.ceil(count) + (index === 1 ? '%' : index !== 3 ? '+' : '');
+                  setTimeout(updateCount, 16);
+                } else {
+                  num.innerText = target + (index === 1 ? '%' : index !== 3 ? '+' : '');
+                }
+              };
+              
+              setTimeout(updateCount, index * 300);
+            });
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(document.querySelector('.stats'));
+    });
+  </script>
 </body>
 </html>
