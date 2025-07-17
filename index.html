@@ -260,6 +260,7 @@
       transition: var(--transition);
       position: relative;
       z-index: 1;
+      cursor: pointer; /* Indicate clickable area */
     }
 
     .feature-card::before {
@@ -623,43 +624,43 @@
       </div>
       
       <div class="features-grid">
-        <div class="feature-card">
+        <div class="feature-card" data-href="vocab-practice.html">
           <div class="feature-icon">
             <i class="fas fa-brain"></i>
           </div>
           <div class="feature-content">
             <h3>Vocabulary Practice</h3>
             <p>Boost your language skills with curated vocabulary sets and review tasks. Interactive exercises tailored to your learning level.</p>
-            <a href="vocab-practice.html" class="feature-link">
+            <a href="vocab-practice.html" class="feature-link" aria-hidden="true" tabindex="-1">
               Start Practicing
               <i class="fas fa-arrow-right"></i>
             </a>
           </div>
         </div>
         
-        <div class="feature-card">
+        <div class="feature-card" data-href="#">
           <div class="feature-icon">
             <i class="fas fa-chalkboard-teacher"></i>
           </div>
           <div class="feature-content">
             <h3>Join My Lessons</h3>
             <p>Enroll in private or group classes to accelerate your English learning journey with personalized guidance.</p>
-            <a href="#" class="feature-link">
+            <a href="#" class="feature-link" aria-hidden="true" tabindex="-1">
               View Schedule
               <i class="fas fa-arrow-right"></i>
             </a>
           </div>
         </div>
         
-        <div class="feature-card">
+        <div class="feature-card" data-href="donation.html">
           <div class="feature-icon">
-            <i class="fas fa-user-graduate"></i>
+            <i class="fas fa-hand-holding-heart"></i>
           </div>
           <div class="feature-content">
-            <h3>About Me</h3>
-            <p>Learn about the educator behind this platform and the specialized courses designed for your success.</p>
-            <a href="#" class="feature-link">
-              My Story
+            <h3>Support My Work</h3>
+            <p>Your contribution helps us continue providing high-quality English learning resources and expand our offerings.</p>
+            <a href="donation.html" class="feature-link" aria-hidden="true" tabindex="-1">
+              Support Now
               <i class="fas fa-arrow-right"></i>
             </a>
           </div>
@@ -805,6 +806,14 @@
         });
         card.addEventListener('mouseleave', function() {
           this.style.transform = 'translateY(0)';
+        });
+
+        // Make the entire card clickable
+        card.addEventListener('click', function() {
+          const link = this.querySelector('.feature-link');
+          if (link && link.href) {
+            window.location.href = link.href;
+          }
         });
       });
       
