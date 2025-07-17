@@ -102,6 +102,7 @@
       width: 0;
       height: 2px;
       background: var(--primary);
+      border-radius: 2px;
       transition: var(--transition);
     }
 
@@ -123,6 +124,8 @@
       cursor: pointer;
       transition: var(--transition);
       box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+      text-decoration: none; /* Added for anchor tags */
+      display: inline-block; /* Added for anchor tags */
     }
 
     .cta-button:hover {
@@ -596,7 +599,7 @@
       </ul>
     </nav>
     
-    <button class="cta-button">Get Started</button>
+    <a href="#features-section" class="cta-button scroll-link">Get Started</a>
   </header>
 
   <section class="hero">
@@ -605,14 +608,14 @@
         <h1>The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
         <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey. Transform your English proficiency with our proven methods.</p>
         <div class="hero-buttons">
-          <button class="cta-button">Start Learning Now</button>
-          <button class="cta-button outline-button">View Courses</button>
+          <a href="#features-section" class="cta-button scroll-link">Start Learning Now</a>
+          <a href="#features-section" class="cta-button outline-button scroll-link">View Courses</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="features">
+  <section class="features" id="features-section">
     <div class="container">
       <div class="section-header">
         <h2>Learning Features</h2>
@@ -805,17 +808,17 @@
         });
       });
       
-      // Smooth scrolling for navigation
-      document.querySelectorAll('nav a').forEach(anchor => {
+      // Smooth scrolling for navigation and cta buttons
+      document.querySelectorAll('nav a, .scroll-link').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
           const targetId = this.getAttribute('href');
-          if(targetId === '#') return;
+          if(targetId === '#') return; // Skip if href is just '#'
           
           const targetElement = document.querySelector(targetId);
           if(targetElement) {
             window.scrollTo({
-              top: targetElement.offsetTop - 80,
+              top: targetElement.offsetTop - 80, // Adjust for fixed header
               behavior: 'smooth'
             });
           }
