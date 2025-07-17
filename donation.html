@@ -181,6 +181,7 @@
     textarea {
       min-height: 120px;
       resize: vertical;
+      margin-bottom: 10px; /* Added space below textarea */
     }
     
     textarea:focus, input[type="email"]:focus, input[type="file"]:focus {
@@ -402,10 +403,8 @@
         <div class="form-group">
           <label for="message"><i class="fas fa-comment"></i> Your message means a lot to me and I will read every one of them ❤️❤️❤️:</label>
           <textarea name="message" id="message" placeholder="Your kind words mean a lot to us..."></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="photo"><i class="fas fa-image"></i> Attach a photo (optional):</label>
+          
+          <label for="photo" style="margin-top: 10px;"><i class="fas fa-image"></i> Attach a photo (optional):</label>
           <input type="file" name="photo" id="photo" accept="image/*">
         </div>
 
