@@ -166,7 +166,7 @@
       font-size: 15px;
     }
     
-    textarea, input[type="email"], input[type="file"] {
+    textarea, input[type="email"] { /* Removed input[type="file"] */
       width: 100%;
       padding: 14px 18px;
       margin-bottom: 5px;
@@ -181,10 +181,10 @@
     textarea {
       min-height: 120px;
       resize: vertical;
-      margin-bottom: 10px; /* Added space below textarea */
+      margin-bottom: 10px;
     }
     
-    textarea:focus, input[type="email"]:focus, input[type="file"]:focus {
+    textarea:focus, input[type="email"]:focus { /* Removed input[type="file"] */
       outline: none;
       border-color: #4a6cf7;
       box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
@@ -192,10 +192,6 @@
     
     textarea::placeholder, input[type="email"]::placeholder {
       color: #aaa;
-    }
-
-    input[type="file"] {
-        padding-top: 10px; /* Adjust padding for file input */
     }
     
     .button-container {
@@ -399,13 +395,12 @@
         </button>
       </div>
       
-      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST" enctype="multipart/form-data">
+      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST"> <!-- Removed enctype="multipart/form-data" -->
         <div class="form-group">
           <label for="message"><i class="fas fa-comment"></i> Your message means a lot to me and I will read every one of them ❤️❤️❤️:</label>
           <textarea name="message" id="message" placeholder="Your kind words mean a lot to us..."></textarea>
           
-          <label for="photo" style="margin-top: 10px;"><i class="fas fa-image"></i> Attach a photo (optional):</label>
-          <input type="file" name="photo" id="photo" accept="image/*">
+          <!-- Removed photo input field -->
         </div>
 
         <div class="form-group">
@@ -485,7 +480,7 @@
     document.getElementById('cardNumberElement').addEventListener('click', copyCardNumber);
     
     // Add animation to form elements when focused
-    const inputs = document.querySelectorAll('textarea, input[type="email"], input[type="file"]');
+    const inputs = document.querySelectorAll('textarea, input[type="email"]'); /* Removed input[type="file"] */
     inputs.forEach(input => {
       input.addEventListener('focus', function() {
         this.parentElement.style.transform = 'scale(1.01)';
