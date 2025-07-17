@@ -457,9 +457,7 @@
         if (response.ok) { // Check if the form submission was successful
           button.innerHTML = '<i class="fas fa-check"></i> Sent!';
           button.style.background = '#28a745'; // Green for success
-          setTimeout(() => {
-            window.location.href = 'index.html'; // Redirect to homepage after success
-          }, 1000); // Give a moment for the user to see "Sent!"
+          // No redirect here. Formspree will handle it.
         } else {
           // Handle non-OK responses (e.g., Formspree validation errors)
           const data = await response.json();
