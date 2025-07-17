@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Our Project | Donation Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 480px;
+      width: 100%;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .donation-card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    
+    .donation-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-header {
+      margin-bottom: 25px;
+    }
+    
+    .card-header i {
+      font-size: 3.5rem;
+      color: #ff6b9d;
+      margin-bottom: 15px;
+      animation: pulse 2s infinite;
+    }
+    
+    .donation-card h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 700;
+    }
+    
+    .donation-card p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    
+    .card-info {
+      background: linear-gradient(145deg, #f3f8ff, #e8f4ff);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 123, 255, 0.1);
+    }
+    
+    .card-info h3 {
+      font-size: 14px;
+      color: #4a6cf7;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    
+    .card-number {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      background: #fff;
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: #2d3748;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      font-family: 'Courier New', monospace;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .card-number:hover {
+      background-color: #f8faff;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-number::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    .card-details {
+      display: flex;
+      justify-content: space-between;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    
+    .card-detail {
+      text-align: left;
+      margin: 10px 0;
+    }
+    
+    .card-detail .label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .card-detail .value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .note {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
+      font-size: 15px;
+    }
+    
+    textarea, input[type="email"] {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 5px;
+      border-radius: 12px;
+      border: 1px solid #d1d8e0;
+      font-size: 15px;
+      background: #fff;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    textarea:focus, input[type="email"]:focus {
+      outline: none;
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+    }
+    
+    textarea::placeholder, input[type="email"]::placeholder {
+      color: #aaa;
+    }
+    
+    .button-container {
+      margin-top: 15px;
+      position: relative;
+    }
+    
+    button {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #4a6cf7, #6a11cb);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 15px rgba(74, 108, 247, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(74, 108, 247, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: 0.5s;
+    }
+    
+    button:hover::after {
+      left: 100%;
+    }
+    
+    .footer-note {
+      font-size: 13px;
+      color: #888;
+      margin-top: 25px;
+      line-height: 1.6;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .copy-btn {
+      background: #eef4ff;
+      color: #4a6cf7;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 15px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .copy-btn:hover {
+      background: #4a6cf7;
+      color: white;
+    }
+    
+    .copied-notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    @media (max-width: 480px) {
+      .donation-card {
+        padding: 25px 20px;
+      }
+      
+      .card-number {
+        font-size: 18px;
+        letter-spacing: 2px;
+        padding: 12px 15px;
+      }
+      
+      .donation-card h2 {
+        font-size: 24px;
+      }
+      
+      .card-details {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="copied-notification" id="copiedNotification">
+    <i class="fas fa-check-circle"></i> Card number copied to clipboard!
+  </div>
+  
+  <div class="container">
+    <div class="donation-card">
+      <div class="card-header">
+        <i class="fas fa-heart"></i>
+        <h2>Support Our Project ❤️</h2>
+        <p>Like the site? Your donation helps improve it — and a portion will be donated to charity.</p>
+      </div>
+      
+      <div class="card-info">
+        <h3>Direct Bank Transfer</h3>
+        <div class="card-number" id="cardNumberElement">5614 6818 1203 4217</div>
+        
+        <div class="card-details">
+          <div class="card-detail">
+            <div class="label">Card Holder</div>
+            <div class="value">SANOQULOV JORABEK</div>
+          </div>
+          <div class="card-detail">
+            <div class="label">Card Type</div>
+            <div class="value">Uzcard</div>
+          </div>
+        </div>
+        
+        <button class="copy-btn" id="copyBtn">
+          <i class="fas fa-copy"></i> Copy Card Number
+        </button>
+      </div>
+      
+      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST">
+        <div class="form-group">
+          <label for="message"><i class="fas fa-comment"></i> Leave a message (optional):</label>
+          <textarea name="message" id="message" placeholder="Your kind words mean a lot to us..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Your email (optional):</label>
+          <input type="email" name="email" id="email" placeholder="name@example.com">
+        </div>
+        
+        <div class="button-container">
+          <button type="submit">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </div>
+      </form>
+      
+      <p class="footer-note">
+        <i class="fas fa-lock"></i> Your information is secure. This form uses HTTPS encryption.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Copy card number functionality
+    const copyCardNumber = () => {
+      const cardNumber = '5614681812034217'; // The actual card number to copy
+      
+      // Use document.execCommand('copy') for better compatibility in iframes
+      const tempInput = document.createElement('textarea');
+      tempInput.value = cardNumber;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        // Show notification
+        const notification = document.getElementById('copiedNotification');
+        notification.style.opacity = '1';
+        setTimeout(() => {
+          notification.style.opacity = '0';
+        }, 2000);
+        
+        // Button feedback (if copied via button)
+        const copyBtn = document.getElementById('copyBtn');
+        if (copyBtn) {
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          copyBtn.style.background = '#4CAF50';
+          copyBtn.style.color = 'white';
+          
+          setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+            copyBtn.style.background = '#eef4ff';
+            copyBtn.style.color = '#4a6cf7';
+          }, 2000);
+        }
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+        // Fallback for older browsers or if execCommand fails
+        // You might want to display a message to the user here
+      } finally {
+        document.body.removeChild(tempInput);
+      }
+    };
+    
+    // Add event listeners for both card number element and copy button
+    document.getElementById('copyBtn').addEventListener('click', copyCardNumber);
+    document.getElementById('cardNumberElement').addEventListener('click', copyCardNumber);
+    
+    // Add animation to form elements when focused
+    const inputs = document.querySelectorAll('textarea, input[type="email"]');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.01)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+    
+    // Form submission handler
+    document.getElementById('donationForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
+      
+      // Create a simple loader effect
+      const button = this.querySelector('button');
+      const originalButtonText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      button.disabled = true;
+      
+      // Simulate form submission delay (replace with actual form submission logic if needed)
+      setTimeout(() => {
+        // Redirect after form submission
+        window.location.href = 'index.html'; // Redirect to homepage
+      }, 1500); // Simulate a 1.5 second delay
+    });
+  </script>
+</body>
+</html>
