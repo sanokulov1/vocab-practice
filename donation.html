@@ -166,7 +166,7 @@
       font-size: 15px;
     }
     
-    textarea, input[type="email"] {
+    textarea, input[type="email"], input[type="file"] {
       width: 100%;
       padding: 14px 18px;
       margin-bottom: 5px;
@@ -183,7 +183,7 @@
       resize: vertical;
     }
     
-    textarea:focus, input[type="email"]:focus {
+    textarea:focus, input[type="email"]:focus, input[type="file"]:focus {
       outline: none;
       border-color: #4a6cf7;
       box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
@@ -191,6 +191,10 @@
     
     textarea::placeholder, input[type="email"]::placeholder {
       color: #aaa;
+    }
+
+    input[type="file"] {
+        padding-top: 10px; /* Adjust padding for file input */
     }
     
     .button-container {
@@ -296,6 +300,48 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
+
+    /* Styles for success message and homepage button */
+    .success-container {
+        display: none; /* Hidden by default */
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .success-message {
+        font-size: 1.1em;
+        color: #28a745; /* Green for success */
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .refresh-prompt {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .go-home-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #6c757d, #495057); /* Grey gradient */
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      margin-top: 15px;
+    }
+
+    .go-home-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #5a6268, #343a40); /* Darker grey on hover */
+    }
     
     @media (max-width: 480px) {
       .donation-card {
@@ -352,12 +398,17 @@
         </button>
       </div>
       
-      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST">
+      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-          <label for="message"><i class="fas fa-comment"></i> Leave a message (optional):</label>
+          <label for="message"><i class="fas fa-comment"></i> Your message means a lot to me and I will read every one of them ❤️❤️❤️:</label>
           <textarea name="message" id="message" placeholder="Your kind words mean a lot to us..."></textarea>
         </div>
         
+        <div class="form-group">
+          <label for="photo"><i class="fas fa-image"></i> Attach a photo (optional):</label>
+          <input type="file" name="photo" id="photo" accept="image/*">
+        </div>
+
         <div class="form-group">
           <label for="email"><i class="fas fa-envelope"></i> Your email (optional):</label>
           <input type="email" name="email" id="email" placeholder="name@example.com">
@@ -370,6 +421,18 @@
         </div>
       </form>
       
+      <div id="successMessageContainer" class="success-container">
+          <p class="success-message">
+              <i class="fas fa-check-circle"></i> Your message has been sent successfully!
+          </p>
+          <p class="refresh-prompt">
+              Please refresh the page to send another message.
+          </p>
+          <a href="index.html" class="go-home-btn">
+              Go to Homepage <i class="fas fa-home"></i>
+          </a>
+      </div>
+
       <p class="footer-note">
         <i class="fas fa-lock"></i> Your information is secure. This form uses HTTPS encryption.
       </p>
@@ -423,7 +486,7 @@
     document.getElementById('cardNumberElement').addEventListener('click', copyCardNumber);
     
     // Add animation to form elements when focused
-    const inputs = document.querySelectorAll('textarea, input[type="email"]');
+    const inputs = document.querySelectorAll('textarea, input[type="email"], input[type="file"]');
     inputs.forEach(input => {
       input.addEventListener('focus', function() {
         this.parentElement.style.transform = 'scale(1.01)';
@@ -441,6 +504,7 @@
       const form = e.target;
       const button = form.querySelector('button[type="submit"]');
       const originalButtonText = button.innerHTML;
+      const successContainer = document.getElementById('successMessageContainer');
 
       button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       button.disabled = true;
@@ -457,7 +521,11 @@
         if (response.ok) { // Check if the form submission was successful
           button.innerHTML = '<i class="fas fa-check"></i> Sent!';
           button.style.background = '#28a745'; // Green for success
-          // No redirect here. Formspree will handle it.
+          
+          // Hide the form and show success message
+          form.style.display = 'none';
+          successContainer.style.display = 'block';
+
         } else {
           // Handle non-OK responses (e.g., Formspree validation errors)
           const data = await response.json();
