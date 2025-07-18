@@ -114,7 +114,6 @@
       color: #666;
     }
     
-    /* New Support My Work Section Styling */
     .support-card {
       background: var(--card-bg);
       border-radius: 15px;
@@ -123,13 +122,13 @@
       max-width: 600px;
       box-shadow: var(--shadow);
       transition: var(--transition);
-      cursor: pointer; /* Make the entire card clickable */
+      cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-decoration: none; /* Remove underline from link */
-      color: inherit; /* Inherit text color */
+      text-decoration: none;
+      color: inherit;
     }
     
     .support-card:hover {
@@ -139,7 +138,7 @@
 
     .support-card .icon {
       font-size: 3.5rem;
-      color: #ff6b9d; /* Red heart color */
+      color: #ff6b9d;
       margin-bottom: 10px;
       animation: pulse 2s infinite;
     }
@@ -147,7 +146,7 @@
     .support-card .text {
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--primary); /* Use primary color for text */
+      color: var(--primary);
     }
     
     .content-grid {
@@ -164,7 +163,6 @@
       box-shadow: var(--shadow);
       transition: var(--transition);
       border: 1px solid rgba(67, 97, 238, 0.1);
-      cursor: pointer; /* Make the entire card clickable */
     }
     
     .collection-card:hover {
@@ -318,6 +316,12 @@
       color: var(--primary);
     }
     
+    .passage-link i {
+      margin-left: auto;
+      color: var(--accent);
+      transition: var(--transition);
+    }
+    
     .passage-link:hover i {
       transform: translateX(5px);
     }
@@ -337,7 +341,6 @@
       color: var(--primary);
     }
     
-    /* Animations */
     @keyframes fadeInDown {
       from {
         opacity: 0;
@@ -349,16 +352,18 @@
       }
     }
     
-    @keyframes progressShine {
+    @keyframes pulse {
       0% {
-        transform: translateX(-100%);
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
       }
       100% {
-        transform: translateX(100%);
+        transform: scale(1);
       }
     }
     
-    /* Responsive design */
     @media (max-width: 768px) {
       .stats {
         gap: 10px;
@@ -412,7 +417,6 @@
         </div>
       </div>
       
-      <!-- Replaced progress bar with Support My Work section -->
       <a href="donation.html" class="support-card">
         <div class="icon">
           <i class="fas fa-heart"></i>
@@ -422,7 +426,6 @@
     </header>
     
     <div class="content-grid">
-      <!-- IELTS Trainer 2 -->
       <div class="collection-card">
         <div class="collection-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
@@ -432,7 +435,7 @@
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
-          <div class="test-item" data-href="ieltstrainer2_test1_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -442,7 +445,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test1_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test1_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -451,7 +454,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test1_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test1_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -460,14 +463,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test1_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test1_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="ieltstrainer2_test2_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -477,7 +480,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test2_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test2_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -486,7 +489,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test2_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test2_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -495,14 +498,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test2_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test2_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="ieltstrainer2_test3_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -512,7 +515,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test3_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test3_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -521,7 +524,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test3_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test3_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -530,14 +533,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test3_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test3_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="ieltstrainer2_test4_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -547,7 +550,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test4_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test4_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -556,7 +559,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test4_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test4_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -565,14 +568,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test4_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test4_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="ieltstrainer2_test5_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -582,7 +585,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test5_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test5_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -591,7 +594,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test5_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test5_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -600,14 +603,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test5_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test5_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="ieltstrainer2_test6_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -617,7 +620,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test6_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test6_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -626,7 +629,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test6_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test6_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -635,7 +638,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="ieltstrainer2_test6_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="ieltstrainer2_test6_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -645,7 +648,6 @@
         </div>
       </div>
       
-      <!-- Cambridge 17 -->
       <div class="collection-card">
         <div class="collection-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
@@ -655,7 +657,7 @@
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
-          <div class="test-item" data-href="cambridge17_test1_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -665,7 +667,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test1_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test1_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -674,7 +676,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test1_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test1_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -683,14 +685,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test1_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test1_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge17_test2_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -700,7 +702,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test2_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test2_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -709,7 +711,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test2_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test2_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -718,14 +720,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test2_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test2_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge17_test3_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -735,7 +737,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test3_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test3_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -744,7 +746,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test3_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test3_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -753,14 +755,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test3_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test3_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge17_test4_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -770,7 +772,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test4_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test4_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -779,7 +781,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test4_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test4_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -788,7 +790,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge17_test4_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge17_test4_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -798,7 +800,6 @@
         </div>
       </div>
       
-      <!-- Cambridge 18 -->
       <div class="collection-card">
         <div class="collection-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
@@ -808,7 +809,7 @@
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
-          <div class="test-item" data-href="cambridge18_test1_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -818,7 +819,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test1_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test1_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -827,7 +828,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test1_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test1_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -836,14 +837,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test1_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test1_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge18_test2_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -853,7 +854,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test2_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test2_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -862,7 +863,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test2_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test2_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -871,14 +872,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test2_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test2_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge18_test3_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -888,7 +889,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test3_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test3_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -897,7 +898,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test3_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test3_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -906,14 +907,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test3_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test3_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge18_test4_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -923,7 +924,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test4_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test4_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -932,7 +933,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test4_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test4_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -941,7 +942,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge18_test4_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge18_test4_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -951,7 +952,6 @@
         </div>
       </div>
       
-      <!-- Cambridge 19 -->
       <div class="collection-card">
         <div class="collection-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
@@ -961,7 +961,7 @@
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
-          <div class="test-item" data-href="test1_passage1_activities.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -971,7 +971,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="test1_passage1_activities.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="test1_passage1_activities.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -980,7 +980,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test1_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test1_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -989,14 +989,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test1_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test1_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge19_test2_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1006,7 +1006,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test2_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test2_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1015,7 +1015,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test2_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test2_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1024,14 +1024,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test2_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test2_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge19_test3_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1041,7 +1041,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test3_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test3_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1050,7 +1050,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test3_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test3_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1059,14 +1059,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test3_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test3_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge19_test4_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1076,7 +1076,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test4_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test4_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1085,7 +1085,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test4_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test4_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1094,7 +1094,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge19_test4_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge19_test4_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1104,7 +1104,6 @@
         </div>
       </div>
       
-      <!-- Cambridge 20 -->
       <div class="collection-card">
         <div class="collection-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
@@ -1114,7 +1113,7 @@
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
-          <div class="test-item" data-href="cambridge20_test1_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1124,7 +1123,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test1_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test1_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1133,7 +1132,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test1_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test1_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1142,14 +1141,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test1_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test1_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge20_test2_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1159,7 +1158,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test2_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test2_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1168,7 +1167,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test2_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test2_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1177,14 +1176,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test2_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test2_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge20_test3_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1194,7 +1193,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test3_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test3_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1203,7 +1202,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test3_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test3_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1212,14 +1211,14 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test3_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test3_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div class="test-item" data-href="cambridge20_test4_passage1.html">
+          <div class="test-item" onclick="toggleTest(this)">
             <div class="test-icon">
               <i class="fas fa-file-alt"></i>
             </div>
@@ -1229,7 +1228,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test4_passage1.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test4_passage1.html" class="passage-link">
                   Passage 1
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1238,7 +1237,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test4_passage2.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test4_passage2.html" class="passage-link">
                   Passage 2
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1247,7 +1246,7 @@
                 <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <a href="cambridge20_test4_passage3.html" class="passage-link" aria-hidden="true" tabindex="-1">
+                <a href="cambridge20_test4_passage3.html" class="passage-link">
                   Passage 3
                   <i class="fas fa-arrow-right"></i>
                 </a>
@@ -1269,58 +1268,9 @@
       card.classList.toggle('active');
     }
     
-    // Function to toggle test item content
     function toggleTest(element) {
       element.classList.toggle('active');
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Make entire collection cards clickable
-      document.querySelectorAll('.collection-card').forEach(card => {
-        card.addEventListener('click', function(event) {
-          // Prevent default if clicking on a specific link inside, or the header toggle
-          if (event.target.closest('.passage-link') || event.target.closest('.collection-header')) {
-            return;
-          }
-          // Toggle collection content if clicking anywhere else on the card
-          toggleCollection(this.querySelector('.collection-header'));
-        });
-      });
-
-      // Make entire test items clickable
-      document.querySelectorAll('.test-item').forEach(item => {
-        item.addEventListener('click', function(event) {
-          // Prevent default if clicking on a specific link inside
-          if (event.target.closest('.passage-link')) {
-            return;
-          }
-          // If the test item has a data-href, navigate to it
-          const href = this.dataset.href;
-          if (href) {
-            window.location.href = href;
-          } else {
-            // Otherwise, toggle the passage list
-            toggleTest(this);
-          }
-        });
-      });
-
-      // Ensure passage links still work as intended
-      document.querySelectorAll('.passage-link').forEach(link => {
-        link.addEventListener('click', function(event) {
-          // Allow the default link behavior
-          event.stopPropagation(); // Prevent the parent .test-item click from firing
-        });
-      });
-
-      // Handle click for the new support card
-      const supportCard = document.querySelector('.support-card');
-      if (supportCard) {
-        supportCard.addEventListener('click', function() {
-          window.location.href = this.href;
-        });
-      }
-    });
   </script>
 </body>
 </html>
