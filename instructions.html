@@ -162,6 +162,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: #666;
+            text-align: center;
         }
 
         .instructions-wrapper { padding: 1rem; }
@@ -270,82 +273,10 @@
                 height: 2.5cm; /* Set fixed height in cm */
                 width: 4.5cm; /* Set fixed width in cm */
                 overflow: hidden; /* Hide anything that overflows the fixed height */
-            }
-
-            /* Further adjust inner screenshot elements for better fit on very small screens */
-            .ss-container {
-                height: 100%; /* Ensure inner container fills the screenshot height */
-                width: 100%; /* Ensure inner container fills the screenshot width */
-                display: flex; /* Use flexbox to manage content distribution */
-                flex-direction: column;
-                justify-content: space-between; /* Distribute space vertically */
-                padding: 0.1rem; /* Even smaller padding */
-            }
-
-            .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg {
-                padding: 0.1rem; /* Even smaller padding for background */
-            }
-
-            .flashcard-ss-header { font-size: 0.6rem; margin-bottom: 0.05rem; } /* Smaller header */
-            .flashcard-ss-subtitle { font-size: 0.4rem; margin-bottom: 0.1rem; }
-            .flashcard-ss-card {
-                width: 98%;
-                padding: 0.2rem 0.1rem; /* Much smaller card padding */
-            }
-            .flashcard-ss-card-text { font-size: 0.7rem; } /* Even smaller font */
-            .flashcard-ss-card-subtext { font-size: 0.3rem; margin-top: 0.05rem; }
-            .flashcard-ss-footer { width: 98%; margin-top: 0.1rem; }
-            .flashcard-ss-buttons { gap: 1px; }
-            .flashcard-ss-btn {
-                padding: 1px 3px; /* Very small buttons */
-                font-size: 0.4rem;
-            }
-            .flashcard-ss-counter {
-                padding: 0.5px 1.5px; /* Very small counter */
-                font-size: 0.4rem;
-            }
-
-            .matching-ss-header { font-size: 0.5rem; padding: 2px; }
-            .matching-ss-content {
-                grid-template-columns: 1fr; /* Force single column on very small screens */
-                gap: 1px; /* Even smaller gap */
-                padding: 0.1rem; /* Reduced padding */
-            }
-            .matching-ss-item {
-                padding: 2px; /* Very small padding */
-                font-size: 0.45rem; /* Smaller font */
-            }
-            .check-mark { font-size: 0.4rem; margin-left: 0.5px; } /* Smaller check mark */
-
-            .quiz-ss-bg { padding: 0.5rem; } /* Reduced quiz bg padding */
-            .quiz-ss-word {
-                font-size: 0.8rem; /* Smaller word font */
-                margin-bottom: 0.3rem;
-            }
-            .quiz-ss-options { width: 100%; }
-            .quiz-ss-option {
-                padding: 3px; /* Smaller options padding */
-                font-size: 0.55rem; /* Smaller font */
-                margin-bottom: 3px;
-            }
-            .quiz-ss-btn {
-                padding: 3px 6px; /* Smaller buttons */
-                font-size: 0.55rem;
-            }
-
-            .typing-ss-bg { padding: 0.5rem; } /* Reduced typing bg padding */
-            .typing-ss-definition {
-                font-size: 0.7rem; /* Smaller definition font */
-                margin-bottom: 0.3rem;
-            }
-            .typing-ss-input {
-                padding: 3px; /* Smaller input field */
-                font-size: 0.6rem;
-                margin-bottom: 0.3rem;
-            }
-            .typing-ss-btn {
-                padding: 3px 6px; /* Smaller buttons */
-                font-size: 0.55rem;
+                display: flex; /* Ensure flex properties are applied */
+                align-items: center;
+                justify-content: center;
+                font-size: 0.7rem; /* Smaller font for placeholder text */
             }
         }
 
@@ -354,71 +285,13 @@
             .screenshot {
                 height: 2.5cm; /* Fixed height in cm */
                 width: 4.5cm; /* Fixed width in cm */
+                font-size: 0.6rem; /* Even smaller font for placeholder text */
             }
-            .flashcard-ss-header { font-size: 0.6rem; }
-            .flashcard-ss-card-text { font-size: 0.7rem; }
-            .flashcard-ss-btn { font-size: 0.4rem; padding: 1px 3px; }
-            .flashcard-ss-counter { font-size: 0.4rem; padding: 0.5px 1.5px; }
-
-            .matching-ss-content {
-                grid-template-columns: 1fr; /* Force single column on very small screens */
-                gap: 1px;
-            }
-            .matching-ss-item { font-size: 0.45rem; padding: 2px; }
-
-            .quiz-ss-word { font-size: 0.8rem; }
-            .quiz-ss-option { font-size: 0.55rem; padding: 3px; }
-            .quiz-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
-
-            .typing-ss-definition { font-size: 0.7rem; }
-            .typing-ss-input { font-size: 0.6rem; padding: 3px; }
-            .typing-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
         }
 
-        /* --- Original STYLES FOR EMULATED SCREENSHOTS (Fallback for larger screens) --- */
-        .ss-container { width: 100%; height: 100%; }
-        .flashcard-ss-bg { background-color: #e0f0fa; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
-        .flashcard-ss-header { display: flex; align-items: center; color: #536f8a; font-size: 1.6rem; font-weight: bold; margin-bottom: 0.5rem; }
-        .flashcard-ss-header i { margin-right: 10px; }
-        .flashcard-ss-subtitle { color: #6b88a5; font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .flashcard-ss-card { background-color: white; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); width: 85%; padding: 3.5rem 1rem; text-align: center; }
-        .flashcard-ss-card-text { font-size: 1.8rem; font-weight: bold; color: #333; }
-        .flashcard-ss-card-subtext { font-size: 0.8rem; color: var(--grey-text); margin-top: 0.5rem; }
-        .flashcard-ss-footer { display: flex; justify-content: space-between; align-items: center; width: 90%; margin-top: 1.5rem; }
-        .flashcard-ss-buttons { display: flex; gap: 8px; }
-        .flashcard-ss-btn { background-color: #3e5e8a; color: white; border: none; border-radius: 15px; padding: 10px 20px; font-size: 0.9rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .flashcard-ss-btn.shuffle { background-color: #5d8cc0; }
-        .flashcard-ss-counter { background-color: #5d8cc0; color: white; border-radius: 15px; padding: 8px 12px; font-size: 0.9rem; }
-
-        .matching-ss-bg { background-color: #f7f9fa; padding: 1rem; }
-        .matching-ss-header { background-color: var(--teal-header-bg); color: white; padding: 12px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1rem;}
-        .matching-ss-header-arrow { font-weight: bold; }
-        .matching-ss-content { padding: 1.5rem 1rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .matching-ss-item { background-color: white; border: 1px solid var(--grey-border); border-radius: 8px; padding: 12px; text-align: center; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .matching-ss-item-def { border-style: dashed; }
-        .matching-ss-item.selected { background-color: var(--green-dark); color: white; }
-        .matching-ss-item-def.matched { background-color: #eafcf9; border: 1px solid var(--green-dark); color: var(--green-dark); }
-        .check-mark { font-weight: bold; margin-left: 5px; }
-
-        .quiz-ss-bg { background-color: #3b5998; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .quiz-ss-word { color: white; font-size: 2.2rem; font-weight: bold; margin-bottom: 2rem; }
-        .quiz-ss-options { width: 100%; }
-        .quiz-ss-option { background-color: white; border: 1px solid var(--grey-border); border-radius: 8px; padding: 14px; margin-bottom: 12px; font-size: 1rem; cursor: pointer; transition: transform 0.2s; }
-        .quiz-ss-option:hover { transform: scale(1.02); }
-        .quiz-ss-option.selected { background-color: #8b9dc3; color: white; border-color: #8b9dc3; }
-        .quiz-ss-footer { display: flex; justify-content: space-between; width: 100%; margin-top: 1rem; }
-        .quiz-ss-btn { border: none; border-radius: 6px; padding: 12px 24px; font-weight: bold; cursor: pointer; }
-        .quiz-ss-btn.prev { background-color: #dfe3ee; color: #4a5568; }
-        .quiz-ss-btn.next { background-color: var(--blue-button-bg); color: white; }
-
-        .typing-ss-bg { background-color: #34495e; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .typing-ss-definition { color: white; font-size: 1.4rem; font-weight: bold; margin-bottom: 2rem; }
-        .typing-ss-input { width: 100%; border: 1px solid #7f8c8d; border-radius: 8px; padding: 14px; font-size: 1.1rem; text-align: center; background-color: white; margin-bottom: 2rem; }
-        .typing-ss-input::placeholder { color: #bdc3c7; }
-        .typing-ss-footer { display: flex; justify-content: space-between; width: 100%; }
-        .typing-ss-btn { border: none; border-radius: 6px; padding: 12px 24px; font-weight: bold; cursor: pointer; }
-        .typing-ss-btn.prev { background-color: #bdc3c7; color: #2c3e50; }
-        .typing-ss-btn.next { background-color: #3498db; color: white; }
+        /* --- REMOVED: Original STYLES FOR EMULATED SCREENSHOTS --- */
+        /* All .ss-container, .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg,
+           and their child elements' specific styling has been removed. */
 
     </style>
 </head>
@@ -438,22 +311,7 @@
                 </summary>
                 <div class="activity-details-content">
                     <div class="screenshot">
-                        <div class="ss-container flashcard-ss-bg">
-                            <h2 class="flashcard-ss-header"><i class="fas fa-book-open"></i>Vocabulary Flashcards</h2>
-                            <p class="flashcard-ss-subtitle">Master essential English expressions and phrases</p>
-                            <div class="flashcard-ss-card">
-                                <p class="flashcard-ss-card-text">To conquer</p>
-                                <p class="flashcard-ss-card-subtext">Click to flip</p>
-                            </div>
-                            <div class="flashcard-ss-footer">
-                                <div class="flashcard-ss-buttons">
-                                    <button class="flashcard-ss-btn">← Previous</button>
-                                    <button class="flashcard-ss-btn shuffle">Shuffle</button>
-                                    <button class="flashcard-ss-btn">Next →</button>
-                                </div>
-                                <div class="flashcard-ss-counter">Card: 1 of 19</div>
-                            </div>
-                        </div>
+                        (activity1.jpg)
                     </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
@@ -478,26 +336,7 @@
                 </summary>
                 <div class="activity-details-content">
                     <div class="screenshot">
-                        <div class="ss-container matching-ss-bg">
-                            <div class="matching-ss-header">
-                                <span>Group 2</span>
-                                <span class="matching-ss-header-arrow">▲</span>
-                            </div>
-                            <div class="matching-ss-content">
-                                <div class="matching-ss-item">To vent</div>
-                                <div class="matching-ss-item">Steer away</div>
-                                <div class="matching-ss-item">Render</div>
-                                <div class="matching-ss-item selected">Compile</div>
-                                <div class="matching-ss-item">Properties</div>
-                                <div class="matching-ss-item">Cascade</div>
-                                <div class="matching-ss-item matching-ss-item-def">Qualities or features of something.</div>
-                                <div class="matching-ss-item matching-ss-item-def">To cause something to become a certain way.</div>
-                                <div class="matching-ss-item matching-ss-item-def matched">Compile – To collect and put information together.<span class="check-mark">✔</span></div>
-                                <div class="matching-ss-item matching-ss-item-def">To move in a different direction to avoid something.</div>
-                                <div class="matching-ss-item matching-ss-item-def">A fast, chain reaction of falling or spreading.</div>
-                                <div class="matching-ss-item matching-ss-item-def">To release gas or air.</div>
-                            </div>
-                        </div>
+                        (activity2.jpg)
                     </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
@@ -522,19 +361,7 @@
                 </summary>
                 <div class="activity-details-content">
                     <div class="screenshot">
-                        <div class="ss-container quiz-ss-bg">
-                             <div class="quiz-ss-word">Alleviate</div>
-                             <div class="quiz-ss-options">
-                                 <div class="quiz-ss-option selected">To make something less bad or less painful.</div>
-                                 <div class="quiz-ss-option">To release gas or air.</div>
-                                 <div class="quiz-ss-option">To spread over a distance.</div>
-                                 <div class="quiz-ss-option">To fall apart into small pieces.</div>
-                             </div>
-                             <div class="quiz-ss-footer">
-                                 <button class="quiz-ss-btn prev">Previous</button>
-                                 <button class="quiz-ss-btn next">Next</button>
-                             </div>
-                        </div>
+                        (activity3.jpg)
                     </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
@@ -559,14 +386,7 @@
                 </summary>
                 <div class="activity-details-content">
                     <div class="screenshot">
-                        <div class="ss-container typing-ss-bg">
-                            <p class="typing-ss-definition">To solve or take control of a big problem.</p>
-                            <input type="text" class="typing-ss-input" placeholder="Type the word here...">
-                            <div class="typing-ss-footer">
-                                <button class="typing-ss-btn prev">Previous</button>
-                                <button class="typing-ss-btn next">Next</button>
-                            </div>
-                        </div>
+                        (activity4.jpg)
                     </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
