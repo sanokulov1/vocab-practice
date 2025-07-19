@@ -167,6 +167,24 @@
       color: var(--primary);
     }
 
+    .scroll-down-indicator {
+      display: none; /* Hidden by default */
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      color: var(--primary);
+      font-weight: 500;
+      animation: bounce 1.5s infinite;
+      font-size: 1.1rem;
+    }
+
+    .scroll-down-indicator i {
+      display: block;
+      font-size: 2rem;
+      margin-top: 10px;
+    }
+
+
     .content-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -516,6 +534,9 @@
         padding: 4px 8px;
         margin-left: 10px;
       }
+      .scroll-down-indicator {
+        display: block; /* Show on mobile */
+      }
     }
 
     @media (max-width: 480px) {
@@ -561,7 +582,6 @@
           </div>
           <div class="stat-label">Instructions</div>
         </a>
-        <!-- New "Writing Practice" button with stamp-like element -->
         <a href="writingpractice.html" class="stat-card bounce-button writing-practice-button">
           <div class="stat-icon">
             <i class="fas fa-pencil-alt"></i>
@@ -569,7 +589,6 @@
           <div class="stat-label flex flex-col items-center">
             Writing Practice
           </div>
-          <!-- The stamp-like "New" element -->
           <span class="new-stamp">NEW</span>
         </a>
       </div>
@@ -580,6 +599,12 @@
         </div>
         <div class="text">Support My Work</div>
       </a>
+
+      <div class="scroll-down-indicator">
+        Scroll down to see vocabulary activities
+        <i class="fas fa-chevron-down"></i>
+      </div>
+
     </header>
 
     <div class="content-grid">
@@ -1444,7 +1469,6 @@
     </div>
   </div>
 
-  <!-- Custom Alert Modal HTML -->
   <div id="customAlertModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
       <p id="customAlertMessage" class="text-lg font-semibold mb-4"></p>
