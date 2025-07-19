@@ -691,15 +691,16 @@
         preventFormSubmit = true;
       }
 
-      // Check word count if task is selected (only show alert, don't prevent submission)
+      // Check word count
       const text = answerTextArea.value.trim();
       const words = text === '' ? [] : text.split(/\s+/).filter(word => word.length > 0);
 
-      if (taskSelector.value === "1" && words.length < 150) {
+      if (words.length < 60) {
+        showCustomAlert("Your response is too short. Please write at least 60 words to submit.");
+        preventFormSubmit = true;
+      } else if (taskSelector.value === "1" && words.length < 150) {
         showCustomAlert("Task 1 requires at least 150 words. You currently have " + words.length + " words.");
-      }
-
-      if (taskSelector.value === "2" && words.length < 250) {
+      } else if (taskSelector.value === "2" && words.length < 250) {
         showCustomAlert("Task 2 requires at least 250 words. You currently have " + words.length + " words.");
       }
       
