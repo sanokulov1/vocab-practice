@@ -379,7 +379,7 @@
                   Write your answer below:
                   <span class="text-sm font-normal text-gray-500">(Minimum 150 words for Task 1, 250 words for Task 2)</span>
                 </label>
-                <textarea name="answer" id="answerTextArea" placeholder="Start writing your response here..." class="writing-area w-full p-4 rounded-lg flex-grow min-h-[300px]"></textarea>
+                <textarea name="answer" id="answerTextArea" placeholder="Start writing your response here..." class="writing-area w-full p-4 rounded-lg flex-grow min-h-[300px]" spellcheck="false"></textarea>
 
                 <div class="mt-4 flex justify-between items-center">
                   <div id="wordCount" class="text-gray-600">
@@ -462,6 +462,7 @@
     let countdownInterval;
     let timeRemaining = 0;
     let totalTime = 0;
+    let selectedTaskDuration = 0; // To store duration for starting timer after warning
 
     // Function to display a custom alert message
     function showCustomAlert(message, isSubmission = false) {
@@ -480,6 +481,7 @@
 
       if (isSubmission) {
         document.getElementById('continuePracticeBtn').addEventListener('click', () => {
+          document.body.removeChild(modal); // Remove modal before redirecting
           window.location.href = 'vocab-practice.html'; // Redirect to vocab-practice.html
         });
       } else {
@@ -489,18 +491,40 @@
       }
     }
 
+    // Function to show copy/paste warning and then start test
+    function showCopyPasteWarningAndStartTest(duration) {
+        selectedTaskDuration = duration; // Store duration
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                </div>
+                <p class="text-lg font-semibold mb-4">To prevent plagiarism, we have disabled copy/pasting in this field.</p>
+                <p class="text-md text-gray-700 mb-6">In the real IELTS exam, you are allowed to copy and paste within your response field.</p>
+                <button id="understoodBtn" class="btn-primary py-2 px-6 rounded-lg">I Understood</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('understoodBtn').addEventListener('click', () => {
+            document.body.removeChild(modal);
+            startTimer(selectedTaskDuration); // Start timer after user understands
+        });
+    }
+
+
     // Function to start the timer
     function startTimer(duration) {
       clearInterval(countdownInterval);
       timeRemaining = duration;
       totalTime = duration;
       updateTimerDisplay();
-      // Progress bar removed, so no updateProgressBar() call here
 
       countdownInterval = setInterval(() => {
         timeRemaining--;
         updateTimerDisplay();
-        // Progress bar removed
         if (timeRemaining <= 0) {
           clearInterval(countdownInterval);
           showCustomAlert(`
@@ -513,16 +537,10 @@
       }, 1000);
     }
 
-    // Function to update progress bar (removed from usage)
-    function updateProgressBar() {
-      // This function is no longer called as the progress bar is removed
-    }
-
     // Function to update the timer display
     function updateTimerDisplay() {
       const minutes = Math.floor(timeRemaining / 60);
       const seconds = timeRemaining % 60;
-      // Timer text is now standard size
       timerDisplay.innerHTML = `<span>Time remaining: <span class="text-red-600">${minutes}:${seconds < 10 ? '0' : ''}${seconds}</span></span>`;
     }
 
@@ -555,7 +573,6 @@
 
       clearInterval(countdownInterval);
       updateWordCount();
-      // Progress bar removed, so no updateProgressBar() call here
 
       if (selectedType === "1") {
         const i = Math.floor(Math.random() * task1Data.length);
@@ -578,7 +595,7 @@
         writingArea.classList.add("flex-grow");
         task1ImagePanel.classList.add("flex-grow"); // Ensure image area expands
 
-        startTimer(20 * 60);
+        showCopyPasteWarningAndStartTest(20 * 60); // Show warning then start timer
       } else if (selectedType === "2") {
         const q = task2Questions[Math.floor(Math.random() * task2Questions.length)];
         // Display question in content area
@@ -608,7 +625,7 @@
         task1ImagePanel.classList.remove("flex-grow"); // Ensure image panel doesn't interfere
         task1ImagePanel.classList.add("hidden"); // Ensure image panel is hidden for Task 2
 
-        startTimer(40 * 60);
+        showCopyPasteWarningAndStartTest(40 * 60); // Show warning then start timer
       } else {
         taskContent.innerHTML = `<div class="header-gradient p-4">
             <h3 class="text-xl font-bold flex items-center">
@@ -677,6 +694,12 @@
 
     // Event listener for textarea input to update word count
     answerTextArea.addEventListener("input", updateWordCount);
+
+    // Prevent pasting into the textarea
+    answerTextArea.addEventListener("paste", (event) => {
+      event.preventDefault();
+      showCustomAlert("Pasting is not allowed. Please type your answer.");
+    });
 
     // Initial state
     timerDisplay.innerHTML = `<span>Time remaining: <span class="text-gray-600 timer-text">--:--</span></span>`; // Simplified initial timer
