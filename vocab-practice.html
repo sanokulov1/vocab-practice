@@ -18,6 +18,12 @@
       --card-bg: rgba(255, 255, 255, 0.92);
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
+
+      /* New status colors */
+      --coming-soon-bg: #fff3cd;
+      --coming-soon-color: #856404;
+      --working-bg: #d4edda;
+      --working-color: #155724;
     }
 
     * {
@@ -200,6 +206,7 @@
       align-items: center;
       justify-content: center;
       margin-right: 15px;
+      flex-shrink: 0;
     }
 
     .collection-icon i {
@@ -215,6 +222,7 @@
     .toggle-icon {
       font-size: 1.2rem;
       transition: transform 0.3s ease;
+      margin-left: auto; /* Push to the right */
     }
 
     .collection-content {
@@ -352,6 +360,47 @@
       color: var(--primary);
     }
 
+    /* New styles for status indicators */
+    .collection-status {
+      margin-left: 15px; /* Space from title */
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .collection-status.coming-soon {
+      background-color: var(--coming-soon-bg);
+      color: var(--coming-soon-color);
+      border: 1px solid var(--coming-soon-color);
+    }
+
+    .collection-status.working-active {
+      background-color: var(--working-bg);
+      color: var(--working-color);
+      border: 1px solid var(--working-color);
+      cursor: pointer; /* Indicate it's clickable */
+    }
+
+    /* Adjust collection header for coming soon to make it less interactive visually */
+    .collection-header.coming-soon-header {
+        cursor: default; /* Change cursor to default */
+        opacity: 0.8; /* Slightly dim it */
+    }
+    .collection-header.coming-soon-header:hover {
+        transform: none; /* Remove hover transform */
+        box-shadow: var(--shadow); /* Keep original shadow */
+    }
+    /* Hide toggle icon for coming soon */
+    .collection-header.coming-soon-header .toggle-icon {
+        display: none;
+    }
+
+
     @keyframes fadeInDown {
       from {
         opacity: 0;
@@ -392,6 +441,11 @@
       .content-grid {
         grid-template-columns: 1fr;
       }
+      .collection-status {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+        margin-left: 10px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -402,6 +456,11 @@
 
       .stat-value, .stat-icon {
         font-size: 1.6rem;
+      }
+      .collection-status {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+        margin-left: 5px;
       }
     }
   </style>
@@ -444,11 +503,14 @@
 
     <div class="content-grid">
       <div class="collection-card">
-        <div class="collection-header" onclick="toggleCollection(this)">
+        <div class="collection-header coming-soon-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
           <div class="collection-title">IELTS Trainer 2</div>
+          <span class="collection-status coming-soon">
+            <i class="fas fa-hourglass-half"></i> Coming Soon
+          </span>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -666,11 +728,14 @@
       </div>
 
       <div class="collection-card">
-        <div class="collection-header" onclick="toggleCollection(this)">
+        <div class="collection-header coming-soon-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
           <div class="collection-title">Cambridge 17</div>
+          <span class="collection-status coming-soon">
+            <i class="fas fa-hourglass-half"></i> Coming Soon
+          </span>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -823,6 +888,9 @@
             <i class="fas fa-book"></i>
           </div>
           <div class="collection-title">Cambridge 18</div>
+          <span class="collection-status working-active">
+            <i class="fas fa-check-circle"></i> Working - Click Here
+          </span>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -975,6 +1043,9 @@
             <i class="fas fa-book"></i>
           </div>
           <div class="collection-title">Cambridge 19</div>
+          <span class="collection-status working-active">
+            <i class="fas fa-check-circle"></i> Working - Click Here
+          </span>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -1122,11 +1193,14 @@
       </div>
 
       <div class="collection-card">
-        <div class="collection-header" onclick="toggleCollection(this)">
+        <div class="collection-header coming-soon-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
           <div class="collection-title">Cambridge 20</div>
+          <span class="collection-status coming-soon">
+            <i class="fas fa-hourglass-half"></i> Coming Soon
+          </span>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -1282,9 +1356,20 @@
   <script>
     function toggleCollection(element) {
       const card = element.closest('.collection-card');
+      const isComingSoon = element.classList.contains('coming-soon-header'); // Check for the new class
+
+      if (isComingSoon) {
+        // Only show alert if trying to open a coming soon collection
+        if (!card.classList.contains('active')) {
+          alert('This collection is coming soon!');
+        }
+        card.classList.toggle('active'); // Still allow toggle to close if open
+        return; // Prevent further execution for coming soon
+      }
+      
       card.classList.toggle('active');
     }
-
+    
     function toggleTest(element) {
       element.classList.toggle('active');
     }
