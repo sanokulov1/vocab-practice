@@ -26,13 +26,12 @@
             --typing-bg: #fffbeb;
             --typing-color: #f59e0b;
 
-            /* Custom styles for emulating images */
-            --green-dark: #1f7d73;
-            --grey-text: #718096;
-            --grey-border: #e2e8f0;
-            --grey-button-bg: #e2e8f0;
-            --blue-button-bg: #4299e1;
-            --teal-header-bg: #22a094;
+            /* Custom styles for instruction sections */
+            --instruction-section-bg: #fdfdfd;
+            --instruction-border-color: #e0e0e0;
+            --step-number-color: var(--primary);
+            --tip-bg-light: #f0f8ff;
+            --tip-border-color: #a7d9ff;
         }
         
         * {
@@ -142,72 +141,84 @@
         }
 
         .activity-details-content {
-            padding: 2rem 2rem 2rem 2rem;
+            padding: 2rem; /* Adjusted padding */
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr; /* Always single column for instructions */
             gap: 2.5rem;
-            align-items: center;
+            align-items: start; /* Align content to the top */
         }
         
+        /* Removed .screenshot specific styles as it's no longer for images */
         .screenshot {
-            height: auto;
-            min-height: 400px; 
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #666;
-            text-align: center;
+            display: none; /* Hide the screenshot div entirely if no images are present */
         }
 
-        .instructions-wrapper { padding: 1rem; }
+        .instructions-wrapper { 
+            padding: 0; /* Remove padding here, will manage within steps/tips */
+            width: 100%; /* Ensure it takes full width of its grid column */
+        }
         
         .steps {
             list-style: none;
             padding-left: 0;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem; /* More space below steps */
+            background-color: var(--instruction-section-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--instruction-border-color);
         }
         
         .steps li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem; /* More space between steps */
             position: relative;
-            padding-left: 30px; /* Space for custom icon */
-            font-size: 1.05rem;
+            padding-left: 35px; /* Space for custom icon */
+            font-size: 1.1rem; /* Slightly larger font for readability */
+            line-height: 1.5;
         }
         
-        /* NEW: Custom list bullet style */
+        /* Custom list bullet style */
         .steps li::before {
-            content: "✓";
-            color: var(--success);
+            content: counter(step-counter); /* Use a counter for step numbers */
+            counter-increment: step-counter;
+            background-color: var(--step-number-color);
+            color: white;
             font-weight: bold;
             position: absolute;
             left: 0;
-            top: -2px;
-            font-size: 1.4rem;
-            line-height: 1;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Reset counter for each activity */
+        .activity-details-content .steps {
+            counter-reset: step-counter;
         }
         
         .tips {
-            background: linear-gradient(to right, rgba(76, 201, 240, 0.08), rgba(67, 97, 238, 0.05));
-            border-left: 4px solid var(--accent);
-            padding: 1.2rem;
-            border-radius: 0 8px 8px 0;
+            background: var(--tip-bg-light);
+            border-left: 5px solid var(--tip-border-color); /* Thicker border */
+            padding: 1.5rem; /* More padding */
+            border-radius: 0 12px 12px 0;
+            font-size: 1.05rem; /* Slightly larger font */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         
         .tips-title {
             font-weight: 700;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.8rem; /* More space below title */
             color: var(--secondary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px; /* More space for icon */
+            font-size: 1.1rem; /* Larger tip title */
         }
         
         footer {
@@ -259,33 +270,62 @@
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; } /* Slightly smaller for mobile */
-            header { padding: 1.5rem 1rem; } /* Reduced header padding */
-            .activity-summary { font-size: 1.3rem; padding: 1rem 1.2rem; } /* Smaller summary text */
-            .activity-details-content { padding: 0.5rem 1rem 1.5rem 1rem; } /* More aggressive content padding reduction */
-
-            /* Aggressive adjustments for screenshots on very small screens */
-            .screenshot {
-                min-height: unset; /* Remove min-height completely for mobile */
-                max-width: 98%; /* Allow it to be almost full width, relying on inner padding */
-                margin: 0.5rem auto 1rem auto; /* Reduce margins */
-                padding: 5px; /* Significantly reduce padding */
-                height: 283px; /* Set fixed height in pixels (tripled) */
-                width: 510px; /* Set fixed width in pixels (tripled) */
-                overflow: hidden; /* Hide anything that overflows the fixed height */
-                display: flex; /* Ensure flex properties are applied */
-                align-items: center;
-                justify-content: center;
-                font-size: 1.1rem; /* Adjusted font size for larger box */
+            h1 { font-size: 2.2rem; }
+            header { padding: 2rem 1.5rem; }
+            .activity-summary { font-size: 1.5rem; padding: 1.2rem 1.5rem; }
+            .activity-details-content { padding: 1rem 1.5rem; }
+            
+            .steps {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .steps li {
+                font-size: 1rem;
+                padding-left: 30px;
+                margin-bottom: 1rem;
+            }
+            .steps li::before {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
+            .tips {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+            .tips-title {
+                font-size: 1rem;
+                margin-bottom: 0.6rem;
             }
         }
 
-        /* Add a very small breakpoint for extreme cases, if 768px is still too big */
         @media (max-width: 480px) {
-            .screenshot {
-                height: 283px; /* Fixed height in pixels (tripled) */
-                width: 510px; /* Fixed width in pixels (tripled) */
-                font-size: 1.1rem; /* Adjusted font size for larger box */
+            h1 { font-size: 1.8rem; }
+            header { padding: 1.5rem 1rem; }
+            .activity-summary { font-size: 1.3rem; padding: 1rem; }
+            .activity-details-content { padding: 0.8rem 1rem; }
+
+            .steps {
+                padding: 0.8rem;
+                margin-bottom: 1rem;
+            }
+            .steps li {
+                font-size: 0.9rem;
+                padding-left: 25px;
+                margin-bottom: 0.8rem;
+            }
+            .steps li::before {
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+            }
+            .tips {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
+            .tips-title {
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
             }
         }
 
@@ -299,21 +339,20 @@
         </header>
         
         <div class="activities-container">
+            <!-- Flashcard Activity -->
             <details class="activity-accordion" open>
                 <summary class="activity-summary activity-summary--flashcards">
                     <span><i class="fas fa-layer-group"></i> Flashcards</span>
                     <i class="fas fa-plus summary-icon"></i>
                 </summary>
                 <div class="activity-details-content">
-                    <div class="screenshot">
-                        (activity1.jpg)
-                    </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
                             <li>Click on a flashcard to reveal the definition and example.</li>
                             <li>Use navigation buttons to move between cards.</li>
                             <li>Shuffle cards for a randomized learning experience.</li>
                             <li>Track your progress with the card counter.</li>
+                            <li>Once you have mastered all the words, move on to the next activity.</li>
                         </ol>
                         <div class="tips">
                             <div class="tips-title"><i class="fas fa-lightbulb"></i> Pro Tip:</div>
@@ -323,15 +362,13 @@
                 </div>
             </details>
             
+            <!-- Matching Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--matching">
                     <span><i class="fas fa-link"></i> Matching Game</span>
                     <i class="fas fa-plus summary-icon"></i>
                 </summary>
                 <div class="activity-details-content">
-                    <div class="screenshot">
-                        (activity2.jpg)
-                    </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
                             <li>Tap vocabulary words to match them with their definitions.</li>
@@ -347,21 +384,20 @@
                 </div>
             </details>
             
+            <!-- Quick Quiz Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--quiz">
                     <span><i class="fas fa-edit"></i> Quick Quiz</span>
                     <i class="fas fa-plus summary-icon"></i>
                 </summary>
                 <div class="activity-details-content">
-                    <div class="screenshot">
-                        (activity3.jpg)
-                    </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
                             <li>Read the question carefully.</li>
                             <li>Select the best answer from the options provided.</li>
                             <li>Get feedback after answering 10 questions.</li>
                             <li>Use navigation buttons to move between questions.</li>
+                            <!-- Removed duplicate instruction 5 -->
                         </ol>
                         <div class="tips">
                             <div class="tips-title"><i class="fas fa-lightbulb"></i> Pro Tip:</div>
@@ -371,21 +407,19 @@
                 </div>
             </details>
             
+            <!-- Typing Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--typing">
                     <span><i class="fas fa-keyboard"></i> Typing Task</span>
                     <i class="fas fa-plus summary-icon"></i>
                 </summary>
                 <div class="activity-details-content">
-                    <div class="screenshot">
-                        (activity4.jpg)
-                    </div>
                     <div class="instructions-wrapper">
                         <ol class="steps">
                             <li>Read the definition carefully.</li>
                             <li>Type the word that matches the definition in the input field.</li>
-                            <li>Press Enter or click "Next" to submit your answer.</li>
-                            <li>Pay close attention to spelling and capitalization.</li>
+                            <li>Get feedback after answering 10 questions.</li>
+                            <li>Pay close attention to spelling.</li>
                         </ol>
                         <div class="tips">
                             <div class="tips-title"><i class="fas fa-lightbulb"></i> Pro Tip:</div>
