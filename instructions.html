@@ -270,28 +270,24 @@
                 max-width: 98%; /* Allow it to be almost full width, relying on inner padding */
                 margin: 0.5rem auto 1rem auto; /* Reduce margins */
                 padding: 5px; /* Significantly reduce padding */
-                height: 2.5cm; /* Set fixed height in cm */
-                width: 4.5cm; /* Set fixed width in cm */
+                height: 283px; /* Set fixed height in pixels (tripled) */
+                width: 510px; /* Set fixed width in pixels (tripled) */
                 overflow: hidden; /* Hide anything that overflows the fixed height */
                 display: flex; /* Ensure flex properties are applied */
                 align-items: center;
                 justify-content: center;
-                font-size: 0.7rem; /* Smaller font for placeholder text */
+                font-size: 1.1rem; /* Adjusted font size for larger box */
             }
         }
 
         /* Add a very small breakpoint for extreme cases, if 768px is still too big */
         @media (max-width: 480px) {
             .screenshot {
-                height: 2.5cm; /* Fixed height in cm */
-                width: 4.5cm; /* Fixed width in cm */
-                font-size: 0.6rem; /* Even smaller font for placeholder text */
+                height: 283px; /* Fixed height in pixels (tripled) */
+                width: 510px; /* Fixed width in pixels (tripled) */
+                font-size: 1.1rem; /* Adjusted font size for larger box */
             }
         }
-
-        /* --- REMOVED: Original STYLES FOR EMULATED SCREENSHOTS --- */
-        /* All .ss-container, .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg,
-           and their child elements' specific styling has been removed. */
 
     </style>
 </head>
@@ -303,7 +299,6 @@
         </header>
         
         <div class="activities-container">
-            <!-- Flashcard Activity -->
             <details class="activity-accordion" open>
                 <summary class="activity-summary activity-summary--flashcards">
                     <span><i class="fas fa-layer-group"></i> Flashcards</span>
@@ -328,7 +323,6 @@
                 </div>
             </details>
             
-            <!-- Matching Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--matching">
                     <span><i class="fas fa-link"></i> Matching Game</span>
@@ -353,7 +347,6 @@
                 </div>
             </details>
             
-            <!-- Quick Quiz Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--quiz">
                     <span><i class="fas fa-edit"></i> Quick Quiz</span>
@@ -378,7 +371,6 @@
                 </div>
             </details>
             
-            <!-- Typing Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--typing">
                     <span><i class="fas fa-keyboard"></i> Typing Task</span>
