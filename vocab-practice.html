@@ -168,7 +168,7 @@
     }
 
     .scroll-down-indicator {
-      display: none; /* Hidden by default */
+      display: block; /* Changed to display on desktop */
       text-align: center;
       margin-top: 20px;
       margin-bottom: 30px;
@@ -447,7 +447,7 @@
         transform: translateY(0);
       }
       50% {
-        transform: translateY(-10px);
+        transform: translateY(-20px); /* Increased bounce */
       }
     }
 
@@ -534,9 +534,7 @@
         padding: 4px 8px;
         margin-left: 10px;
       }
-      .scroll-down-indicator {
-        display: block; /* Show on mobile */
-      }
+      /* Removed display: block; from here as it's now default */
     }
 
     @media (max-width: 480px) {
@@ -762,76 +760,6 @@
               </div>
             </div>
           </div>
-          <div class="test-item" onclick="toggleTest(this)">
-            <div class="test-icon">
-              <i class="fas fa-file-alt"></i>
-            </div>
-            <div class="test-title">Test 5</div>
-            <div class="passage-list">
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 1
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 2
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 3
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="test-item" onclick="toggleTest(this)">
-            <div class="test-icon">
-              <i class="fas fa-file-alt"></i>
-            </div>
-            <div class="test-title">Test 6</div>
-            <div class="passage-list">
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 1
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 2
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-              <div class="passage-item">
-                <div class="passage-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <a href="#" class="passage-link">
-                  Passage 3
-                  <i class="fas fa-arrow-right"></i>
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -970,7 +898,7 @@
                 </a>
               </div>
               <div class="passage-item">
-                <div class="passage-icon">
+                <div sanded the passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
                 <a href="#" class="passage-link">
