@@ -151,7 +151,7 @@
         
         .screenshot {
             height: auto;
-            min-height: 400px; /* Keep for larger screens if desired, but mobile will override */
+            min-height: 400px; 
             background: white;
             border-radius: 12px;
             overflow: hidden;
@@ -267,64 +267,109 @@
                 max-width: 98%; /* Allow it to be almost full width, relying on inner padding */
                 margin: 0.5rem auto 1rem auto; /* Reduce margins */
                 padding: 5px; /* Significantly reduce padding */
+                height: 250px; /* NEW: Fixed height to force horizontal aspect ratio */
+                overflow: hidden; /* Hide anything that overflows the fixed height */
             }
 
             /* Further adjust inner screenshot elements for better fit on very small screens */
-            .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg {
-                padding: 0.5rem; /* Reduce background padding */
+            .ss-container {
+                height: 100%; /* Ensure inner container fills the screenshot height */
+                display: flex; /* Use flexbox to manage content distribution */
+                flex-direction: column;
+                justify-content: space-between; /* Distribute space vertically */
+                padding: 0.2rem; /* Even smaller padding */
             }
 
-            .flashcard-ss-header { font-size: 1.2rem; } /* Smaller header */
-            .flashcard-ss-subtitle { font-size: 0.8rem; margin-bottom: 0.8rem; }
-            .flashcard-ss-card {
-                width: 98%; /* Maximize card width within screenshot */
-                padding: 1.5rem 0.5rem; /* Much smaller card padding */
+            .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg {
+                padding: 0.5rem; /* Still keep some padding for background */
             }
-            .flashcard-ss-card-text { font-size: 1.2rem; } /* Even smaller font */
-            .flashcard-ss-footer { width: 98%; margin-top: 1rem; }
+
+            .flashcard-ss-header { font-size: 1rem; margin-bottom: 0.2rem; } /* Smaller header */
+            .flashcard-ss-subtitle { font-size: 0.7rem; margin-bottom: 0.5rem; }
+            .flashcard-ss-card {
+                width: 98%;
+                padding: 0.8rem 0.3rem; /* Much smaller card padding */
+            }
+            .flashcard-ss-card-text { font-size: 1rem; } /* Even smaller font */
+            .flashcard-ss-card-subtext { font-size: 0.6rem; margin-top: 0.2rem; }
+            .flashcard-ss-footer { width: 98%; margin-top: 0.5rem; }
+            .flashcard-ss-buttons { gap: 4px; }
             .flashcard-ss-btn {
-                padding: 6px 10px; /* Very small buttons */
-                font-size: 0.7rem;
+                padding: 4px 8px; /* Very small buttons */
+                font-size: 0.6rem;
             }
             .flashcard-ss-counter {
-                padding: 4px 8px; /* Very small counter */
-                font-size: 0.7rem;
+                padding: 3px 6px; /* Very small counter */
+                font-size: 0.6rem;
             }
 
-            .matching-ss-header { font-size: 0.9rem; padding: 8px; }
+            .matching-ss-header { font-size: 0.8rem; padding: 6px; }
             .matching-ss-content {
-                grid-template-columns: 1fr; /* Force single column for matching items on very small screens */
-                gap: 5px; /* Smaller gap */
-                padding: 0.8rem 0.5rem; /* Reduced padding */
+                grid-template-columns: repeat(2, 1fr); /* Try two columns first, if it overflows, go to 1 */
+                gap: 3px; /* Even smaller gap */
+                padding: 0.5rem 0.3rem; /* Reduced padding */
             }
             .matching-ss-item {
-                padding: 8px; /* Very small padding */
-                font-size: 0.75rem; /* Smaller font */
+                padding: 5px; /* Very small padding */
+                font-size: 0.65rem; /* Smaller font */
             }
+            .check-mark { font-size: 0.6rem; margin-left: 2px; } /* Smaller check mark */
 
+            .quiz-ss-bg { padding: 1rem; } /* Reduced quiz bg padding */
             .quiz-ss-word {
-                font-size: 1.5rem; /* Smaller word font */
-                margin-bottom: 1rem;
+                font-size: 1.2rem; /* Smaller word font */
+                margin-bottom: 0.8rem;
             }
+            .quiz-ss-options { width: 100%; }
             .quiz-ss-option {
-                padding: 8px; /* Smaller options padding */
-                font-size: 0.8rem; /* Smaller font */
-                margin-bottom: 8px;
+                padding: 6px; /* Smaller options padding */
+                font-size: 0.75rem; /* Smaller font */
+                margin-bottom: 6px;
             }
             .quiz-ss-btn {
-                padding: 8px 15px; /* Smaller buttons */
-                font-size: 0.8rem;
+                padding: 6px 12px; /* Smaller buttons */
+                font-size: 0.75rem;
             }
 
+            .typing-ss-bg { padding: 1rem; } /* Reduced typing bg padding */
             .typing-ss-definition {
-                font-size: 1rem; /* Smaller definition font */
-                margin-bottom: 1rem;
+                font-size: 0.9rem; /* Smaller definition font */
+                margin-bottom: 0.8rem;
             }
             .typing-ss-input {
-                padding: 8px; /* Smaller input field */
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
+                padding: 6px; /* Smaller input field */
+                font-size: 0.8rem;
+                margin-bottom: 0.8rem;
             }
+            .typing-ss-btn {
+                padding: 6px 12px; /* Smaller buttons */
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Add a very small breakpoint for extreme cases, if 768px is still too big */
+        @media (max-width: 480px) {
+            .screenshot {
+                height: 200px; /* Even smaller fixed height */
+            }
+            .flashcard-ss-header { font-size: 0.9rem; }
+            .flashcard-ss-card-text { font-size: 0.9rem; }
+            .flashcard-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
+            .flashcard-ss-counter { font-size: 0.55rem; padding: 2px 4px; }
+
+            .matching-ss-content {
+                grid-template-columns: 1fr; /* Force single column on very small screens */
+                gap: 2px;
+            }
+            .matching-ss-item { font-size: 0.6rem; padding: 4px; }
+
+            .quiz-ss-word { font-size: 1rem; }
+            .quiz-ss-option { font-size: 0.7rem; padding: 5px; }
+            .quiz-ss-btn { font-size: 0.65rem; padding: 5px 10px; }
+
+            .typing-ss-definition { font-size: 0.8rem; }
+            .typing-ss-input { font-size: 0.7rem; padding: 5px; }
+            .typing-ss-btn { font-size: 0.65rem; padding: 5px 10px; }
         }
 
         /* --- STYLES FOR EMULATED SCREENSHOTS --- */
@@ -382,6 +427,7 @@
         </header>
         
         <div class="activities-container">
+            <!-- Flashcard Activity -->
             <details class="activity-accordion" open>
                 <summary class="activity-summary activity-summary--flashcards">
                     <span><i class="fas fa-layer-group"></i> Flashcards</span>
@@ -421,6 +467,7 @@
                 </div>
             </details>
             
+            <!-- Matching Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--matching">
                     <span><i class="fas fa-link"></i> Matching Game</span>
@@ -464,6 +511,7 @@
                 </div>
             </details>
             
+            <!-- Quick Quiz Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--quiz">
                     <span><i class="fas fa-edit"></i> Quick Quiz</span>
@@ -500,6 +548,7 @@
                 </div>
             </details>
             
+            <!-- Typing Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--typing">
                     <span><i class="fas fa-keyboard"></i> Typing Task</span>
