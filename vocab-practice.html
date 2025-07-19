@@ -95,6 +95,11 @@
       min-width: 120px;
       flex: 1;
       max-width: 160px;
+      text-decoration: none;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     
     .stat-card:hover {
@@ -105,6 +110,12 @@
     .stat-value {
       font-size: 2.2rem;
       font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat-icon {
+      font-size: 2.2rem; /* Same size as stat-value */
       color: var(--primary);
       margin-bottom: 5px;
     }
@@ -374,7 +385,7 @@
         padding: 12px 15px;
       }
       
-      .stat-value {
+      .stat-value, .stat-icon {
         font-size: 1.8rem;
       }
       
@@ -389,7 +400,7 @@
         padding: 10px;
       }
       
-      .stat-value {
+      .stat-value, .stat-icon {
         font-size: 1.6rem;
       }
     }
@@ -415,6 +426,13 @@
           <div class="stat-value">66</div>
           <div class="stat-label">Passages</div>
         </div>
+        <!-- NEW INSTRUCTIONS BUTTON -->
+        <a href="instructions.html" class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <div class="stat-label">Instructions</div>
+        </a>
       </div>
       
       <a href="donation.html" class="support-card">
