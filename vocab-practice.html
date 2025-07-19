@@ -106,6 +106,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      position: relative; /* Added for absolute positioning of the stamp */
     }
 
     .stat-card:hover {
@@ -213,10 +214,16 @@
       font-size: 24px;
     }
 
+    .collection-title-wrapper { /* New wrapper for title and status */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Align text and status to the left */
+      flex-grow: 1;
+    }
+
     .collection-title {
       font-size: 1.4rem;
       font-weight: 600;
-      flex-grow: 1;
     }
 
     .toggle-icon {
@@ -362,7 +369,6 @@
 
     /* New styles for status indicators */
     .collection-status {
-      margin-left: 15px; /* Space from title */
       font-size: 0.9rem;
       font-weight: 500;
       display: flex;
@@ -371,6 +377,7 @@
       padding: 5px 10px;
       border-radius: 20px;
       white-space: nowrap; /* Prevent text wrapping */
+      margin-top: 5px; /* Added spacing from title */
     }
 
     .collection-status.coming-soon {
@@ -398,6 +405,69 @@
     /* Hide toggle icon for coming soon */
     .collection-header.coming-soon-header .toggle-icon {
         display: none;
+    }
+
+    /* Keyframes for glowing effect */
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+      }
+      50% {
+        box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff;
+      }
+      100% {
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+      }
+    }
+
+    /* Keyframes for bouncing effect */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Apply glow animation to the 'New' span */
+    .glow-text {
+      animation: glow 1.5s infinite alternate;
+      color: white; /* Ensure text is visible against glow */
+    }
+
+    /* Apply bounce animation to the button */
+    .bounce-button {
+      animation: bounce 1s infinite;
+    }
+
+    /* Specific styles for the Writing Practice button */
+    .writing-practice-button {
+      background: linear-gradient(135deg, #FF6B6B, #E04B4B); /* Light red shade */
+      color: white;
+      border: none; /* Remove default button border */
+    }
+    .writing-practice-button .stat-label {
+      font-size: 1.2rem; /* Bigger text */
+      color: white; /* Ensure text is white */
+    }
+    .writing-practice-button .new-stamp { /* Styling for the stamp-like element */
+      position: absolute;
+      top: -10px; /* Adjust position */
+      right: -10px; /* Adjust position */
+      background-color: #00f; /* Blue background for the stamp itself */
+      color: white;
+      font-size: 0.8rem; /* Smaller font for "New" in stamp */
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 8px; /* Rounded corners for the stamp */
+      transform: rotate(15deg); /* Rotate for a stamp effect */
+      z-index: 10; /* Ensure it's on top */
+      animation: glow 1.5s infinite alternate; /* Apply glow animation */
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7); /* White glow effect */
     }
 
 
@@ -491,6 +561,17 @@
           </div>
           <div class="stat-label">Instructions</div>
         </a>
+        <!-- New "Writing Practice" button with stamp-like element -->
+        <a href="writingpractice.html" class="stat-card bounce-button writing-practice-button">
+          <div class="stat-icon">
+            <i class="fas fa-pencil-alt"></i>
+          </div>
+          <div class="stat-label flex flex-col items-center">
+            Writing Practice
+          </div>
+          <!-- The stamp-like "New" element -->
+          <span class="new-stamp">NEW</span>
+        </a>
       </div>
 
       <a href="donation.html" class="support-card">
@@ -507,10 +588,12 @@
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
-          <div class="collection-title">IELTS Trainer 2</div>
-          <span class="collection-status coming-soon">
-            <i class="fas fa-hourglass-half"></i> Coming Soon
-          </span>
+          <div class="collection-title-wrapper">
+            <div class="collection-title">IELTS Trainer 2</div>
+            <span class="collection-status coming-soon">
+              <i class="fas fa-hourglass-half"></i> Coming Soon
+            </span>
+          </div>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -732,10 +815,12 @@
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
-          <div class="collection-title">Cambridge 17</div>
-          <span class="collection-status coming-soon">
-            <i class="fas fa-hourglass-half"></i> Coming Soon
-          </span>
+          <div class="collection-title-wrapper">
+            <div class="collection-title">Cambridge 17</div>
+            <span class="collection-status coming-soon">
+              <i class="fas fa-hourglass-half"></i> Coming Soon
+            </span>
+          </div>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -887,10 +972,12 @@
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
-          <div class="collection-title">Cambridge 18</div>
-          <span class="collection-status working-active">
-            <i class="fas fa-check-circle"></i> Working - Click Here
-          </span>
+          <div class="collection-title-wrapper">
+            <div class="collection-title">Cambridge 18</div>
+            <span class="collection-status working-active">
+              <i class="fas fa-check-circle"></i> Working - Click Here
+            </span>
+          </div>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -1042,10 +1129,12 @@
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
-          <div class="collection-title">Cambridge 19</div>
-          <span class="collection-status working-active">
-            <i class="fas fa-check-circle"></i> Working - Click Here
-          </span>
+          <div class="collection-title-wrapper">
+            <div class="collection-title">Cambridge 19</div>
+            <span class="collection-status working-active">
+              <i class="fas fa-check-circle"></i> Working - Click Here
+            </span>
+          </div>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -1197,10 +1286,12 @@
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
-          <div class="collection-title">Cambridge 20</div>
-          <span class="collection-status coming-soon">
-            <i class="fas fa-hourglass-half"></i> Coming Soon
-          </span>
+          <div class="collection-title-wrapper">
+            <div class="collection-title">Cambridge 20</div>
+            <span class="collection-status coming-soon">
+              <i class="fas fa-hourglass-half"></i> Coming Soon
+            </span>
+          </div>
           <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="collection-content">
@@ -1353,15 +1444,37 @@
     </div>
   </div>
 
+  <!-- Custom Alert Modal HTML -->
+  <div id="customAlertModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+      <p id="customAlertMessage" class="text-lg font-semibold mb-4"></p>
+      <button id="closeCustomAlert" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">OK</button>
+    </div>
+  </div>
+
   <script>
+    // Function to show custom alert
+    function showCustomAlert(message) {
+      const modal = document.getElementById('customAlertModal');
+      const messageElement = document.getElementById('customAlertMessage');
+      const closeButton = document.getElementById('closeCustomAlert');
+
+      messageElement.textContent = message;
+      modal.classList.remove('hidden');
+
+      closeButton.onclick = () => {
+        modal.classList.add('hidden');
+      };
+    }
+
     function toggleCollection(element) {
       const card = element.closest('.collection-card');
       const isComingSoon = element.classList.contains('coming-soon-header'); // Check for the new class
 
       if (isComingSoon) {
-        // Only show alert if trying to open a coming soon collection
+        // Only show custom alert if trying to open a coming soon collection
         if (!card.classList.contains('active')) {
-          alert('This collection is coming soon!');
+          showCustomAlert('This collection is coming soon!');
         }
         card.classList.toggle('active'); // Still allow toggle to close if open
         return; // Prevent further execution for coming soon
