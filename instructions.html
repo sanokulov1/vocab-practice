@@ -257,6 +257,66 @@
             header { padding: 2rem 1.5rem; }
             .activity-summary { font-size: 1.4rem; padding: 1.2rem 1.5rem; }
             .activity-details-content { padding: 0 1.5rem 1.5rem 1.5rem; }
+
+            /* Adjustments for screenshots on smaller screens */
+            .screenshot {
+                min-height: auto; /* Allow height to adjust based on content */
+                max-width: 90%; /* Limit width to prevent overflow */
+                margin: 0 auto 1.5rem auto; /* Center and add space below */
+                padding: 10px; /* Reduce padding */
+            }
+
+            /* Adjust inner screenshot elements for better fit */
+            .flashcard-ss-card {
+                width: 95%; /* Increase width within the card for more space */
+                padding: 2.5rem 0.8rem; /* Adjust padding */
+            }
+            .flashcard-ss-card-text {
+                font-size: 1.5rem; /* Smaller font for better fit */
+            }
+            .flashcard-ss-footer {
+                width: 95%; /* Adjust footer width */
+            }
+            .flashcard-ss-btn {
+                padding: 8px 15px; /* Smaller buttons */
+                font-size: 0.8rem;
+            }
+            .flashcard-ss-counter {
+                padding: 6px 10px; /* Smaller counter */
+                font-size: 0.8rem;
+            }
+
+            .matching-ss-content {
+                grid-template-columns: repeat(2, 1fr); /* Two columns for matching items */
+                gap: 8px;
+            }
+            .matching-ss-item {
+                padding: 10px; /* Smaller padding */
+                font-size: 0.85rem;
+            }
+
+            .quiz-ss-word {
+                font-size: 1.8rem; /* Smaller word font */
+                margin-bottom: 1.5rem;
+            }
+            .quiz-ss-option {
+                padding: 12px; /* Smaller options padding */
+                font-size: 0.9rem;
+            }
+            .quiz-ss-btn {
+                padding: 10px 20px; /* Smaller buttons */
+                font-size: 0.9rem;
+            }
+
+            .typing-ss-definition {
+                font-size: 1.2rem; /* Smaller definition font */
+                margin-bottom: 1.5rem;
+            }
+            .typing-ss-input {
+                padding: 12px; /* Smaller input field */
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         /* --- STYLES FOR EMULATED SCREENSHOTS --- */
@@ -314,7 +374,6 @@
         </header>
         
         <div class="activities-container">
-            <!-- Flashcard Activity -->
             <details class="activity-accordion" open>
                 <summary class="activity-summary activity-summary--flashcards">
                     <span><i class="fas fa-layer-group"></i> Flashcards</span>
@@ -354,7 +413,6 @@
                 </div>
             </details>
             
-            <!-- Matching Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--matching">
                     <span><i class="fas fa-link"></i> Matching Game</span>
@@ -398,7 +456,6 @@
                 </div>
             </details>
             
-            <!-- Quick Quiz Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--quiz">
                     <span><i class="fas fa-edit"></i> Quick Quiz</span>
@@ -435,7 +492,6 @@
                 </div>
             </details>
             
-            <!-- Typing Activity -->
             <details class="activity-accordion">
                 <summary class="activity-summary activity-summary--typing">
                     <span><i class="fas fa-keyboard"></i> Typing Task</span>
