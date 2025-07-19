@@ -267,7 +267,7 @@
                 max-width: 98%; /* Allow it to be almost full width, relying on inner padding */
                 margin: 0.5rem auto 1rem auto; /* Reduce margins */
                 padding: 5px; /* Significantly reduce padding */
-                height: 250px; /* Fixed height to force horizontal aspect ratio */
+                height: 200px; /* Adjusted fixed height to force horizontal aspect ratio */
                 overflow: hidden; /* Hide anything that overflows the fixed height */
             }
 
@@ -281,95 +281,95 @@
             }
 
             .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg {
-                padding: 0.5rem; /* Still keep some padding for background */
+                padding: 0.2rem; /* Even smaller padding for background */
             }
 
-            .flashcard-ss-header { font-size: 1rem; margin-bottom: 0.2rem; } /* Smaller header */
-            .flashcard-ss-subtitle { font-size: 0.7rem; margin-bottom: 0.5rem; }
+            .flashcard-ss-header { font-size: 0.9rem; margin-bottom: 0.1rem; } /* Smaller header */
+            .flashcard-ss-subtitle { font-size: 0.6rem; margin-bottom: 0.3rem; }
             .flashcard-ss-card {
                 width: 98%;
-                padding: 0.8rem 0.3rem; /* Much smaller card padding */
+                padding: 0.5rem 0.2rem; /* Much smaller card padding */
             }
-            .flashcard-ss-card-text { font-size: 1rem; } /* Even smaller font */
-            .flashcard-ss-card-subtext { font-size: 0.6rem; margin-top: 0.2rem; }
-            .flashcard-ss-footer { width: 98%; margin-top: 0.5rem; }
-            .flashcard-ss-buttons { gap: 4px; }
+            .flashcard-ss-card-text { font-size: 0.9rem; } /* Even smaller font */
+            .flashcard-ss-card-subtext { font-size: 0.5rem; margin-top: 0.1rem; }
+            .flashcard-ss-footer { width: 98%; margin-top: 0.3rem; }
+            .flashcard-ss-buttons { gap: 2px; }
             .flashcard-ss-btn {
-                padding: 4px 8px; /* Very small buttons */
-                font-size: 0.6rem;
+                padding: 2px 5px; /* Very small buttons */
+                font-size: 0.5rem;
             }
             .flashcard-ss-counter {
-                padding: 3px 6px; /* Very small counter */
-                font-size: 0.6rem;
+                padding: 1px 3px; /* Very small counter */
+                font-size: 0.5rem;
             }
 
-            .matching-ss-header { font-size: 0.8rem; padding: 6px; }
+            .matching-ss-header { font-size: 0.7rem; padding: 4px; }
             .matching-ss-content {
                 grid-template-columns: repeat(2, 1fr); /* Try two columns first, if it overflows, go to 1 */
-                gap: 3px; /* Even smaller gap */
-                padding: 0.5rem 0.3rem; /* Reduced padding */
+                gap: 2px; /* Even smaller gap */
+                padding: 0.3rem 0.2rem; /* Reduced padding */
             }
             .matching-ss-item {
-                padding: 5px; /* Very small padding */
-                font-size: 0.65rem; /* Smaller font */
+                padding: 3px; /* Very small padding */
+                font-size: 0.55rem; /* Smaller font */
             }
-            .check-mark { font-size: 0.6rem; margin-left: 2px; } /* Smaller check mark */
+            .check-mark { font-size: 0.5rem; margin-left: 1px; } /* Smaller check mark */
 
-            .quiz-ss-bg { padding: 1rem; } /* Reduced quiz bg padding */
+            .quiz-ss-bg { padding: 0.8rem; } /* Reduced quiz bg padding */
             .quiz-ss-word {
-                font-size: 1.2rem; /* Smaller word font */
-                margin-bottom: 0.8rem;
+                font-size: 1rem; /* Smaller word font */
+                margin-bottom: 0.5rem;
             }
             .quiz-ss-options { width: 100%; }
             .quiz-ss-option {
-                padding: 6px; /* Smaller options padding */
-                font-size: 0.75rem; /* Smaller font */
-                margin-bottom: 6px;
+                padding: 4px; /* Smaller options padding */
+                font-size: 0.65rem; /* Smaller font */
+                margin-bottom: 4px;
             }
             .quiz-ss-btn {
-                padding: 6px 12px; /* Smaller buttons */
-                font-size: 0.75rem;
+                padding: 4px 8px; /* Smaller buttons */
+                font-size: 0.65rem;
             }
 
-            .typing-ss-bg { padding: 1rem; } /* Reduced typing bg padding */
+            .typing-ss-bg { padding: 0.8rem; } /* Reduced typing bg padding */
             .typing-ss-definition {
-                font-size: 0.9rem; /* Smaller definition font */
-                margin-bottom: 0.8rem;
+                font-size: 0.8rem; /* Smaller definition font */
+                margin-bottom: 0.5rem;
             }
             .typing-ss-input {
-                padding: 6px; /* Smaller input field */
-                font-size: 0.8rem;
-                margin-bottom: 0.8rem;
+                padding: 4px; /* Smaller input field */
+                font-size: 0.7rem;
+                margin-bottom: 0.5rem;
             }
             .typing-ss-btn {
-                padding: 6px 12px; /* Smaller buttons */
-                font-size: 0.75rem;
+                padding: 4px 8px; /* Smaller buttons */
+                font-size: 0.65rem;
             }
         }
 
         /* Add a very small breakpoint for extreme cases, if 768px is still too big */
         @media (max-width: 480px) {
             .screenshot {
-                height: 200px; /* Even smaller fixed height */
+                height: 180px; /* Even smaller fixed height */
             }
-            .flashcard-ss-header { font-size: 0.9rem; }
-            .flashcard-ss-card-text { font-size: 0.9rem; }
-            .flashcard-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
-            .flashcard-ss-counter { font-size: 0.55rem; padding: 2px 4px; }
+            .flashcard-ss-header { font-size: 0.8rem; }
+            .flashcard-ss-card-text { font-size: 0.8rem; }
+            .flashcard-ss-btn { font-size: 0.5rem; padding: 2px 4px; }
+            .flashcard-ss-counter { font-size: 0.5rem; padding: 1px 2px; }
 
             .matching-ss-content {
                 grid-template-columns: 1fr; /* Force single column on very small screens */
-                gap: 2px;
+                gap: 1px;
             }
-            .matching-ss-item { font-size: 0.6rem; padding: 4px; }
+            .matching-ss-item { font-size: 0.5rem; padding: 3px; }
 
-            .quiz-ss-word { font-size: 1rem; }
-            .quiz-ss-option { font-size: 0.7rem; padding: 5px; }
-            .quiz-ss-btn { font-size: 0.65rem; padding: 5px 10px; }
+            .quiz-ss-word { font-size: 0.9rem; }
+            .quiz-ss-option { font-size: 0.6rem; padding: 3px; }
+            .quiz-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
 
-            .typing-ss-definition { font-size: 0.8rem; }
-            .typing-ss-input { font-size: 0.7rem; padding: 5px; }
-            .typing-ss-btn { font-size: 0.65rem; padding: 5px 10px; }
+            .typing-ss-definition { font-size: 0.7rem; }
+            .typing-ss-input { font-size: 0.6rem; padding: 3px; }
+            .typing-ss-btn { font-size: 0.55rem; padding: 3px 6px; }
         }
 
         /* --- STYLES FOR EMULATED SCREENSHOTS --- */
