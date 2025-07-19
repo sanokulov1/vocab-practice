@@ -441,13 +441,23 @@
       }
     }
 
-    /* Keyframes for bouncing effect */
+    /* Keyframes for bouncing effect (for scroll down indicator) */
     @keyframes bounce {
       0%, 100% {
         transform: translateY(0);
       }
       50% {
         transform: translateY(-20px); /* Increased bounce */
+      }
+    }
+
+    /* Keyframes for subtle bouncing effect (for headers) */
+    @keyframes subtle-bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px); /* Subtle bounce */
       }
     }
 
@@ -460,6 +470,11 @@
     /* Apply bounce animation to the button */
     .bounce-button {
       animation: bounce 1s infinite;
+    }
+
+    /* Apply subtle bounce animation to headers */
+    .subtle-bouncy-header {
+      animation: subtle-bounce 1.5s infinite; /* Apply the new subtle bounce */
     }
 
     /* Specific styles for the Writing Practice button */
@@ -898,7 +913,7 @@
                 </a>
               </div>
               <div class="passage-item">
-                <div sanded the passage-icon">
+                <div class="passage-icon">
                   <i class="fas fa-book"></i>
                 </div>
                 <a href="#" class="passage-link">
@@ -921,7 +936,7 @@
       </div>
 
       <div class="collection-card">
-        <div class="collection-header" onclick="toggleCollection(this)">
+        <div class="collection-header subtle-bouncy-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
@@ -1078,7 +1093,7 @@
       </div>
 
       <div class="collection-card">
-        <div class="collection-header" onclick="toggleCollection(this)">
+        <div class="collection-header subtle-bouncy-header" onclick="toggleCollection(this)">
           <div class="collection-icon">
             <i class="fas fa-book"></i>
           </div>
