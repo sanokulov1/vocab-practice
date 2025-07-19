@@ -151,7 +151,7 @@
         
         .screenshot {
             height: auto;
-            min-height: 400px;
+            min-height: 400px; /* Keep for larger screens if desired, but mobile will override */
             background: white;
             border-radius: 12px;
             overflow: hidden;
@@ -249,73 +249,81 @@
         }
         
         @media (max-width: 992px) {
-            .activity-details-content { grid-template-columns: 1fr; }
+            .activity-details-content { 
+                grid-template-columns: 1fr; 
+                padding: 1.5rem; /* Adjust padding for 1-column layout */
+            }
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            header { padding: 2rem 1.5rem; }
-            .activity-summary { font-size: 1.4rem; padding: 1.2rem 1.5rem; }
-            .activity-details-content { padding: 0 1.5rem 1.5rem 1.5rem; }
+            h1 { font-size: 2rem; } /* Slightly smaller for mobile */
+            header { padding: 1.5rem 1rem; } /* Reduced header padding */
+            .activity-summary { font-size: 1.3rem; padding: 1rem 1.2rem; } /* Smaller summary text */
+            .activity-details-content { padding: 0.5rem 1rem 1.5rem 1rem; } /* More aggressive content padding reduction */
 
-            /* Adjustments for screenshots on smaller screens */
+            /* Aggressive adjustments for screenshots on very small screens */
             .screenshot {
-                min-height: auto; /* Allow height to adjust based on content */
-                max-width: 90%; /* Limit width to prevent overflow */
-                margin: 0 auto 1.5rem auto; /* Center and add space below */
-                padding: 10px; /* Reduce padding */
+                min-height: unset; /* Remove min-height completely for mobile */
+                max-width: 98%; /* Allow it to be almost full width, relying on inner padding */
+                margin: 0.5rem auto 1rem auto; /* Reduce margins */
+                padding: 5px; /* Significantly reduce padding */
             }
 
-            /* Adjust inner screenshot elements for better fit */
+            /* Further adjust inner screenshot elements for better fit on very small screens */
+            .flashcard-ss-bg, .matching-ss-bg, .quiz-ss-bg, .typing-ss-bg {
+                padding: 0.5rem; /* Reduce background padding */
+            }
+
+            .flashcard-ss-header { font-size: 1.2rem; } /* Smaller header */
+            .flashcard-ss-subtitle { font-size: 0.8rem; margin-bottom: 0.8rem; }
             .flashcard-ss-card {
-                width: 95%; /* Increase width within the card for more space */
-                padding: 2.5rem 0.8rem; /* Adjust padding */
+                width: 98%; /* Maximize card width within screenshot */
+                padding: 1.5rem 0.5rem; /* Much smaller card padding */
             }
-            .flashcard-ss-card-text {
-                font-size: 1.5rem; /* Smaller font for better fit */
-            }
-            .flashcard-ss-footer {
-                width: 95%; /* Adjust footer width */
-            }
+            .flashcard-ss-card-text { font-size: 1.2rem; } /* Even smaller font */
+            .flashcard-ss-footer { width: 98%; margin-top: 1rem; }
             .flashcard-ss-btn {
-                padding: 8px 15px; /* Smaller buttons */
-                font-size: 0.8rem;
+                padding: 6px 10px; /* Very small buttons */
+                font-size: 0.7rem;
             }
             .flashcard-ss-counter {
-                padding: 6px 10px; /* Smaller counter */
-                font-size: 0.8rem;
+                padding: 4px 8px; /* Very small counter */
+                font-size: 0.7rem;
             }
 
+            .matching-ss-header { font-size: 0.9rem; padding: 8px; }
             .matching-ss-content {
-                grid-template-columns: repeat(2, 1fr); /* Two columns for matching items */
-                gap: 8px;
+                grid-template-columns: 1fr; /* Force single column for matching items on very small screens */
+                gap: 5px; /* Smaller gap */
+                padding: 0.8rem 0.5rem; /* Reduced padding */
             }
             .matching-ss-item {
-                padding: 10px; /* Smaller padding */
-                font-size: 0.85rem;
+                padding: 8px; /* Very small padding */
+                font-size: 0.75rem; /* Smaller font */
             }
 
             .quiz-ss-word {
-                font-size: 1.8rem; /* Smaller word font */
-                margin-bottom: 1.5rem;
+                font-size: 1.5rem; /* Smaller word font */
+                margin-bottom: 1rem;
             }
             .quiz-ss-option {
-                padding: 12px; /* Smaller options padding */
-                font-size: 0.9rem;
+                padding: 8px; /* Smaller options padding */
+                font-size: 0.8rem; /* Smaller font */
+                margin-bottom: 8px;
             }
             .quiz-ss-btn {
-                padding: 10px 20px; /* Smaller buttons */
-                font-size: 0.9rem;
+                padding: 8px 15px; /* Smaller buttons */
+                font-size: 0.8rem;
             }
 
             .typing-ss-definition {
-                font-size: 1.2rem; /* Smaller definition font */
-                margin-bottom: 1.5rem;
+                font-size: 1rem; /* Smaller definition font */
+                margin-bottom: 1rem;
             }
             .typing-ss-input {
-                padding: 12px; /* Smaller input field */
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
+                padding: 8px; /* Smaller input field */
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
             }
         }
 
