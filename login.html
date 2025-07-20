@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Login with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -34,7 +34,6 @@
   <p id="user-info"></p>
 
   <script>
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyChct6kCeqD1gbAuAJw3wP_tHOYN6gV-n4",
       authDomain: "website-vocabulary.firebaseapp.com",
@@ -45,7 +44,8 @@
       measurementId: "G-1RZLN9HJ65"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
 
