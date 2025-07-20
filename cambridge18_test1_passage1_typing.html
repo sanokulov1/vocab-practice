@@ -46,14 +46,14 @@
             display: flex;
             flex-direction: column; /* Changed to column to stack elements */
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            justify-content: space-between; /* Distribute space between items */
+            height: 100vh; /* Set to 100% of viewport height */
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Remove body padding, manage internally */
             box-sizing: border-box;
             transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
             position: relative; /* Needed for absolute positioning of fireworks */
-            overflow: hidden; /* Hides fireworks outside the viewport */
+            overflow: hidden; /* Hides body scrollbar, content will scroll within containers */
         }
 
         /* Quiz container styling */
@@ -66,8 +66,15 @@
             max-width: 700px; /* Max width for larger screens */
             box-sizing: border-box;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 80px; /* Space for fixed diamond count */
-            margin-bottom: 40px; /* Space for navigation */
+            margin-top: 80px; /* Space for fixed diamond count and mode toggle */
+            margin-bottom: 20px; /* Space above navigation */
+            flex-grow: 1; /* Allow container to grow and take available vertical space */
+            overflow-y: auto; /* Enable scrolling for content within the quiz container */
+            display: flex; /* Use flexbox for content alignment within the container */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center content vertically if space allows */
+            align-items: center; /* Center content horizontally */
+            text-align: center; /* Center text within the container */
         }
 
         /* Question text styling */
@@ -78,6 +85,7 @@
             text-align: center;
             color: var(--text-primary);
             line-height: 1.4;
+            flex-shrink: 0; /* Prevent shrinking on smaller screens */
         }
 
         /* Input field styling */
@@ -92,6 +100,7 @@
             background-color: var(--secondary-bg);
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         .typing-input:focus {
@@ -109,6 +118,7 @@
             min-height: 1.5em; /* Reserve space to prevent layout shift */
             opacity: 0; /* Always start hidden, only show if needed for specific feedback */
             transition: opacity 0.3s ease; /* Smooth fade out */
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         /* Navigation buttons container */
@@ -116,6 +126,8 @@
             display: flex;
             justify-content: space-between;
             margin-top: 35px;
+            width: 100%; /* Ensure buttons take full width of container */
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         /* Styling for navigation and submit buttons */
@@ -153,6 +165,7 @@
         .submit-button-container {
             text-align: center;
             margin-top: 30px;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         /* Results container styling */
@@ -166,6 +179,12 @@
             box-sizing: border-box;
             text-align: center;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            flex-grow: 1; /* Allow results container to grow */
+            overflow-y: auto; /* Enable scrolling for results list */
+            display: flex; /* Make it a flex container */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
         }
 
         /* Results heading styling */
@@ -174,6 +193,7 @@
             margin-bottom: 25px;
             font-size: 2em;
             font-weight: 700;
+            flex-shrink: 0;
         }
 
         /* Incorrect answers heading styling */
@@ -183,6 +203,7 @@
             margin-bottom: 15px;
             font-size: 1.5em;
             font-weight: 600;
+            flex-shrink: 0;
         }
 
         /* List for incorrect answers */
@@ -196,6 +217,8 @@
             border-radius: 8px;
             padding-right: 10px; /* Space for scrollbar */
             margin-top: 20px; /* Added margin-top for spacing from heading */
+            width: 100%; /* Take full width */
+            flex-grow: 1; /* Allow list to grow */
         }
 
         /* Individual incorrect answer list item */
@@ -226,7 +249,7 @@
 
         /* Mode Toggle Button Styling */
         .mode-toggle-button {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
@@ -276,6 +299,8 @@
         @media (max-width: 600px) {
             .quiz-container, .results-container {
                 padding: 20px;
+                margin-top: 60px; /* Smaller margin for smaller screens */
+                margin-bottom: 15px; /* Smaller margin for smaller screens */
             }
             .question-text {
                 font-size: 1.3em;
@@ -298,6 +323,10 @@
             .mode-toggle-button svg {
                 width: 24px;
                 height: 24px;
+            }
+             .activity-nav {
+                margin-top: 15px; /* Adjust margin for smaller screens */
+                margin-bottom: 15px;
             }
         }
 
@@ -497,6 +526,7 @@
         max-width: 800px;
         margin: 40px auto 20px;
         padding: 0 20px;
+        flex-shrink: 0; /* Prevent shrinking */
     }
 
     .nav-buttons {
