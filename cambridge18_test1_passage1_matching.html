@@ -846,9 +846,10 @@ body.dark-mode .typing-step {
 
         const userRef = doc(db, "users", user.uid);
         try {
-            await updateDoc(userRef, {
+            // THIS IS THE CRITICAL CHANGE: Use setDoc with merge: true
+            await setDoc(userRef, {
                 diamonds: increment(diamondsEarned)
-            });
+            }, { merge: true }); // <--- Changed from updateDoc to setDoc with merge
             console.log(`Diamonds updated: +${diamondsEarned}`);
             showDiamondPopup(diamondsEarned);
             updateDiamondCountDisplay(); // Update top-left display immediately
