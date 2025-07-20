@@ -323,18 +323,15 @@
       signOut,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    // Replace with your Firebase config
-   const firebaseConfig = {
-  apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+  const firebaseConfig = {
+  apiKey: "AIzaSyChct6kCeqD1gbAuAJw3wP_tHOYN6gV-n4",
   authDomain: "website-vocabulary.firebaseapp.com",
   projectId: "website-vocabulary",
-  storageBucket: "website-vocabulary.firebasestorage.app",
+  storageBucket: "website-vocabulary.appspot.com",
   messagingSenderId: "216286165163",
   appId: "1:216286165163:web:5f502a45c9d09bb4a11fee",
   measurementId: "G-9TNR3V6VMC"
 };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
