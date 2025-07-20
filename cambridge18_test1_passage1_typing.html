@@ -745,7 +745,8 @@
 <!-- Firebase SDKs and Initialization (Modular API) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    // Removed signInAnonymously and signInWithCustomToken from imports
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     // Firebase Configuration (from user)
@@ -768,23 +769,8 @@
     window.auth = auth;
     window.db = db;
 
-    // Handle authentication for Canvas environment or anonymous sign-in
-    async function authenticateUser() {
-        try {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-                console.log("Authenticated with custom token.");
-            } else {
-                await signInAnonymously(auth);
-                console.log("Signed in anonymously.");
-            }
-        } catch (error) {
-            console.error("Firebase authentication error:", error);
-        }
-    }
-
-    // Call authentication when the script loads
-    authenticateUser();
+    // Removed the authenticateUser() function and its call.
+    // Firebase Auth will automatically restore the session if persistence is enabled (default).
 
     // Function to update diamond count display (top-left)
     async function updateDiamondCountDisplay() {
@@ -793,23 +779,34 @@
 
         const user = auth.currentUser;
         if (user) {
-            const userRef = doc(db, "users", user.uid);
-            try {
-                const docSnap = await getDoc(userRef);
-                if (docSnap.exists()) {
-                    const diamonds = docSnap.data().diamonds || 0;
-                    diamondCountElement.textContent = `${diamonds} 💎`;
-                } else {
-                    // If user document doesn't exist, initialize diamonds to 0
-                    await setDoc(userRef, { diamonds: 0 }, { merge: true });
-                    diamondCountElement.textContent = '0 �';
+            // Only attempt to fetch diamonds if the user is a Google-signed-in user
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (isGoogleSignedIn) {
+                const userRef = doc(db, "users", user.uid);
+                try {
+                    const docSnap = await getDoc(userRef);
+                    if (docSnap.exists()) {
+                        const diamonds = docSnap.data().diamonds || 0;
+                        diamondCountElement.textContent = `${diamonds} 💎`;
+                    } else {
+                        // If user document doesn't exist for a Google user, initialize diamonds to 0
+                        await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
+                        diamondCountElement.textContent = '0 💎';
+                    }
+                } catch (error) {
+                    console.error("Error fetching or initializing diamond count:", error);
+                    diamondCountElement.textContent = 'Error 💎';
                 }
-            } catch (error) {
-                console.error("Error fetching or initializing diamond count:", error);
-                diamondCountElement.textContent = 'Error 💎';
+            } else {
+                // If not a Google-signed-in user, display N/A or 0
+                diamondCountElement.textContent = 'N/A 💎'; // Or '0 💎' if you prefer
+                console.log("Not a Google-signed-in user. Diamond count display limited.");
             }
         } else {
-            diamondCountElement.textContent = '0 💎'; // Or a login prompt for logged-out users
+            diamondCountElement.textContent = '0 💎'; // Display 0 if no user is signed in at all
         }
     }
 
@@ -841,7 +838,7 @@
     window.updateDiamondCount = async function(diamondsEarned) {
         const user = auth.currentUser;
         if (!user) {
-            console.log("No user logged in to record diamond update.");
+            console.log("Diamond update skipped: No user logged in.");
             return;
         }
 
@@ -850,19 +847,21 @@
             (provider) => provider.providerId === 'google.com'
         );
 
-        if (user.isAnonymous || !isGoogleSignedIn) {
+        if (!isGoogleSignedIn) { // Only check for Google sign-in
             console.warn("Diamond update skipped: User is not signed in with a Google account.");
             // Optionally, display a message to the user here, e.g., using a small modal
-            // For now, just a console log.
+            // "Please sign in with Google to earn diamonds!"
             return;
         }
 
         const userRef = doc(db, "users", user.uid);
         try {
             await setDoc(userRef, {
-                diamonds: increment(diamondsEarned)
+                diamonds: increment(diamondsEarned),
+                // Store user's display name for the scoreboard
+                displayName: user.displayName || 'Google User' // Use displayName from Google, fallback if null
             }, { merge: true });
-            console.log(`Diamonds updated: +${diamondsEarned}`);
+            console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
             showDiamondPopup(diamondsEarned);
             updateDiamondCountDisplay();
         } catch (error) {
@@ -897,4 +896,3 @@
 
 </body>
 </html>
-�
