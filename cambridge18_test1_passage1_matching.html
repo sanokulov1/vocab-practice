@@ -23,324 +23,709 @@
       --accordion-hover: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
       --card-bg: white;
       --card-border: #e2e8f0;
-      --drop-zone-bg: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-      --drop-zone-border: #a0aec0;
-      --button-bg: #3498db;
-      --button-hover: #2980b9;
-      --button-text: white;
-      --correct-color: #28b463;
-      --incorrect-color: #e74c3c;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      --inner-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-      --highlight-color: #f7fafc;
-      --modal-bg: rgba(255, 255, 255, 0.98);
-      --modal-backdrop: rgba(0, 0, 0, 0.6);
+      --drop-zone-bg: linear-gradient(135deg, #f0f4ff 0%, #e9ecef 100%);
+      --drop-zone-border: #cbd5e0;
+      --selected-bg: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+      --match-bg: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      --wrong-bg: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
     }
 
     /* Dark Mode Variables */
-    body.dark-mode {
-      --bg-gradient: linear-gradient(135deg, #1f2937 0%, #111827 50%, #0c121e 100%);
-      --container-bg: rgba(31, 41, 55, 0.95);
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --container-bg: rgba(30, 30, 45, 0.95);
       --text-primary: #e2e8f0;
-      --text-secondary: #a0aec0;
-      --accordion-bg: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
-      --accordion-hover: linear-gradient(135deg, #0d9488 0%, #0c4b46 100%);
+      --text-secondary: #cbd5e0;
+      --accordion-bg: linear-gradient(135deg, #065f5b 0%, #047c70 100%);
+      --accordion-hover: linear-gradient(135deg, #047c70 0%, #059488 100%);
       --card-bg: #2d3748;
       --card-border: #4a5568;
-      --drop-zone-bg: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-      --drop-zone-border: #636b77;
-      --button-bg: #63b3ed;
-      --button-hover: #4299e1;
-      --button-text: #1a202c;
-      --correct-color: #48bb78;
-      --incorrect-color: #fc8181;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      --inner-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-      --highlight-color: #2d3748;
-      --modal-bg: #1a202c;
-      --modal-backdrop: rgba(0, 0, 0, 0.8);
+      --drop-zone-bg: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+      --drop-zone-border: #4a5568;
+      --selected-bg: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
+      --match-bg: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+      --wrong-bg: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
     }
 
+    /* Body styling */
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: var(--bg-gradient);
-      display: flex;
-      flex-direction: column; /* Changed to column to stack elements */
-      align-items: center;
       min-height: 100vh;
-      color: var(--text-primary);
-      transition: background 0.3s ease, color 0.3s ease;
-      padding: 20px; /* Add padding to body */
-    }
-
-    .container {
-      background: var(--container-bg);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      max-width: 900px;
-      width: 100%;
-      margin-top: 80px; /* Adjust for fixed elements like diamond count */
-      margin-bottom: 40px; /* Space for navigation */
-    }
-
-    h1 {
-      color: var(--text-primary);
-      margin-bottom: 25px;
-      font-size: 2.5em;
-      font-weight: 700;
-    }
-
-    .game-area {
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-      gap: 30px;
-      margin-top: 30px;
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    }
-
-    .words-container, .definitions-container {
-      flex: 1;
-      min-width: 300px;
-      max-width: 45%;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      background: var(--drop-zone-bg);
       padding: 20px;
-      border-radius: 12px;
-      border: 2px dashed var(--drop-zone-border);
-    }
-
-    .word-card, .definition-card {
-      background: var(--card-bg);
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      cursor: grab;
-      border: 1px solid var(--card-border);
-      transition: all 0.2s ease;
-      font-weight: 600;
       color: var(--text-primary);
-      min-height: 60px; /* Ensure cards have minimum height */
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transition: all 0.3s ease;
     }
 
-    .word-card.dragging {
-      opacity: 0.5;
-      border: 2px dashed var(--button-bg);
-    }
-
-    .definition-card.drag-over {
-      box-shadow: 0 0 0 3px var(--button-bg);
-    }
-
-    .feedback {
-      margin-top: 20px;
-      font-size: 1.1em;
-      font-weight: bold;
-      min-height: 25px;
-    }
-
-    .feedback.correct {
-      color: var(--correct-color);
-    }
-
-    .feedback.incorrect {
-      color: var(--incorrect-color);
-    }
-
-    button#checkMatch {
-      background: var(--button-bg);
-      color: var(--button-text);
-      border: none;
-      padding: 15px 30px;
-      border-radius: 10px;
-      font-size: 1.2em;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: var(--shadow);
-    }
-
-    button#checkMatch:hover {
-      background: var(--button-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    button#checkMatch:active {
-      transform: translateY(0);
-    }
-
-    .instructions {
-      margin-bottom: 20px;
-      font-size: 1.1em;
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
+    /* Orientation reminder overlay */
+   .orientation-reminder {
       position: fixed;
-      z-index: 1000;
-      left: 0;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-color: var(--modal-backdrop);
-      justify-content: center;
+      background: rgba(0, 0, 0, 0.9); /* Shadowy background */
+      display: none; /* Hidden by default, shown only on mobile portrait via media query */
       align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
     }
 
-    .modal-content {
-      background-color: var(--modal-bg);
-      padding: 40px;
-      border-radius: 15px;
+   .orientation-content {
       text-align: center;
-      box-shadow: var(--shadow);
-      max-width: 500px;
-      width: 90%;
-      color: var(--text-primary);
+      color: white;
+      padding: 40px;
+      max-width: 400px;
     }
 
-    .modal-content h2 {
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      color: var(--correct-color); /* Use correct color for success */
+   .phone-icon {
+      width: 80px;
+      height: 120px;
+      border: 3px solid white;
+      border-radius: 15px;
+      margin: 0 auto 30px;
+      position: relative;
+      animation: rotatePhone 2s ease-in-out infinite; /* Animated phone icon */
     }
 
-    .modal-content p {
-      font-size: 1.1em;
+   .phone-icon::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 5px;
+      background: white;
+      border-radius: 3px;
+    }
+
+   .phone-icon::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+
+    /* Phone rotation animation */
+    @keyframes rotatePhone {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      50% {
+        transform: rotate(90deg);
+      }
+    }
+
+   .orientation-content h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      animation: pulse 1.5s ease infinite; /* Pulse animation for text */
+    }
+
+    /* Pulse animation for text */
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+   .orientation-content p {
+      font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
     }
 
-    .modal-content button {
-      background: var(--button-bg);
-      color: var(--button-text);
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .modal-content button:hover {
-      background: var(--button-hover);
-    }
-
-    /* Toggle Switch Styles */
-    .theme-switch-wrapper {
-        position: fixed;
-        top: 20px;
-        right: 20px;
+    /* Show reminder only on mobile portrait */
+    @media (max-width: 768px) and (orientation: portrait) {
+     .orientation-reminder {
         display: flex;
-        align-items: center;
-        z-index: 10001; /* Above everything else */
+      }
     }
 
-    .theme-switch {
-        display: inline-block;
-        height: 34px;
-        position: relative;
-        width: 60px;
+    /* Theme toggle button */
+   .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accordion-bg);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1000;
     }
 
-    .theme-switch input {
-        display: none;
+   .theme-toggle:hover {
+      transform: scale(1.1);
     }
 
-    .slider {
-        background-color: #ccc;
-        bottom: 0;
-        cursor: pointer;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transition: .4s;
+   .theme-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
     }
 
-    .slider:before {
-        background-color: #fff;
-        bottom: 4px;
-        content: "";
-        height: 26px;
-        left: 4px;
-        position: absolute;
-        transition: .4s;
-        width: 26px;
+    /* Main container styling */
+   .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--container-bg);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      backdrop-filter: blur(10px);
     }
 
-    input:checked + .slider {
-        background-color: #66bb6a;
+    /* Main title styling */
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary); /* Solid color based on theme */
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
     }
 
-    input:checked + .slider:before {
-        transform: translateX(26px);
+    /* Accordion button styling */
+   .accordion {
+      background: var(--accordion-bg);
+      color: white;
+      cursor: pointer;
+      padding: 20px 30px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 15px;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
     }
 
-    .slider.round {
-        border-radius: 34px;
+   .accordion::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
     }
 
-    .slider.round:before {
-        border-radius: 50%;
+   .accordion:hover::before {
+      transform: translateX(0);
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
+   .accordion:hover {
+      background: var(--accordion-hover);
+    }
+
+   .accordion::after {
+      content: '▼';
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      transition: transform 0.3s ease;
+      font-size: 14px;
+    }
+
+   .accordion.active::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+   .active,.accordion:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
+    }
+
+    /* Panel (accordion content) styling */
+   .panel {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      background: transparent;
+      border-radius: 15px;
+      margin-top: 10px;
+    }
+
+   .panel.show {
+      max-height: 2000px; /* Sufficiently large to show content */
+      padding: 30px 0;
+    }
+
+    /* Game area grid layout - Default for larger screens (3 columns) */
+   .game-area {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Default 3 columns for desktop/tablet */
+      gap: 15px;
+      padding: 15px 0;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Card and drop zone base styling - Default for larger screens */
+   .card,.drop-zone {
+      padding: 10px 15px; /* Ample padding */
+      font-size: 14px;
+      border-radius: 12px;
+      min-height: 70px; /* Designed for 2 lines of 14px text in 3 columns */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+   .card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+   .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+
+   .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-color: #14b8a6;
+    }
+
+   .drop-zone {
+      background: var(--drop-zone-bg);
+      border: 2px dashed var(--drop-zone-border);
+      position: relative;
+    }
+
+   .drop-zone:hover {
+      border-color: #14b8a6;
+    }
+
+    /* Matched state styling */
+   .matched {
+      background: var(--match-bg)!important;
+      border: 2px solid #38a169!important;
+      color: white!important;
+      cursor: default;
+      animation: matchPulse 0.6s ease;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    }
+
+   .matched-pair {
+      display: flex;
+      flex-direction: column; /* Stack word and definition vertically */
+      gap: 5px; /* Reduced gap for vertical stacking */
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-wrap: nowrap; /* Prevent wrapping of the pair itself */
+    }
+
+   .matched-pair::before {
+      content: '✓';
+      font-size: 20px;
+      margin-right: 0; /* No right margin for vertical stacking */
+      margin-bottom: 5px; /* Add bottom margin for separator */
+    }
+
+    /* Match pulse animation */
+    @keyframes matchPulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Wrong match state styling */
+   .wrong {
+      animation: shake 0.5s ease;
+      background: var(--wrong-bg)!important;
+      border-color: #f56565!important;
+      color: white!important;
+    }
+
+    /* Shake animation for wrong matches */
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-5px);
+      }
+      75% {
+        transform: translateX(5px);
+      }
+    }
+
+    /* Selected card styling */
+   .selected {
+      background: var(--selected-bg);
+      border-color: #ed8936;
+      color: #744210;
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+    }
+
+    /* Selected card styling in dark mode */
+    [data-theme="dark"].selected {
+      color: white;
+    }
+
+   .selected::before {
+      opacity: 0.1;
+    }
+
+    /* Result message styling */
+   .result-message {
+      text-align: center;
+      font-size: 18px;
+      color: #38a169;
+      font-weight: 600;
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Result message styling in dark mode */
+    [data-theme="dark"].result-message {
+      color: #68d391;
+    }
+
+    /* Responsive adjustments for mobile (3 columns, tighter) */
+    @media (max-width: 768px) { /* This media query applies to most tablets and phones */
+      .game-area {
+        grid-template-columns: repeat(3, 1fr); /* Always 3 columns on mobile */
+        gap: 8px; /* Slightly smaller gap */
+      }
+      
+      .card, .drop-zone {
+        padding: 6px 10px; /* Reduced padding for mobile */
+        min-height: 65px; /* Adjusted to fit 2 lines with smaller font */
+        font-size: 11px; /* Smaller font for mobile */
+      }
+      
+      .container {
+        padding: 15px; /* Reduce container padding too */
+      }
+      
+      h1 {
+        font-size: 1.6rem; /* Smaller title on mobile */
+        margin-bottom: 20px;
+      }
+      
+      .accordion {
+        padding: 12px 15px; /* Smaller accordion buttons */
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    }
+
+    /* For very small phone screens (still 3 columns, even tighter) */
+    @media (max-width: 480px) {
         .game-area {
-            flex-direction: column;
-            align-items: center;
+            gap: 6px; /* Even smaller gap */
         }
-        .words-container, .definitions-container {
-            max-width: 90%;
+        .card, .drop-zone {
+            font-size: 10px; /* Even smaller font */
+            min-height: 60px; /* Adjust min-height accordingly */
+            padding: 5px 8px; /* Even smaller padding */
         }
-        h1 {
-            font-size: 2em;
+        .orientation-content h2 {
+            font-size: 20px;
         }
-        .container {
-            padding: 20px;
+        .orientation-content p {
+            font-size: 16px;
         }
     }
 </style>
 </head>
 <body>
-
-<!-- Theme Switch -->
-<div class="theme-switch-wrapper">
-    <label class="theme-switch" for="checkbox">
-        <input type="checkbox" id="checkbox" />
-        <div class="slider round"></div>
-    </label>
+<div class="orientation-reminder" id="orientationReminder">
+  <div class="orientation-content">
+    <div class="phone-icon"></div>
+    <h2>📱 Rotate Your Phone!</h2>
+    <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
+    </div>
 </div>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <svg id="theme-icon" viewBox="0 0 24 24">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
 
 <div class="container">
-    <h1>Vocabulary Matching Game</h1>
-    <p class="instructions">Drag each vocabulary word to its correct definition.</p>
-    <div class="game-area">
-        <div class="words-container" id="wordsContainer">
-            <!-- Words will be dynamically loaded here -->
-        </div>
-        <div class="definitions-container" id="definitionsContainer">
-            <!-- Definitions will be dynamically loaded here -->
-        </div>
-    </div>
-    <p id="feedback" class="feedback"></p>
-    <button id="checkMatch">Check Matches</button>
+  <h1>Matching Tasks</h1>
+  
+  <button class="accordion">Group 1</button>
+  <div class="panel">
+    <div class="game-area" id="group1-words"></div>
+    <div class="game-area" id="group1-defs"></div>
+    <div id="group1-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 2</button>
+  <div class="panel">
+    <div class="game-area" id="group2-words"></div>
+    <div class="game-area" id="group2-defs"></div>
+    <div id="group2-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 3</button>
+  <div class="panel">
+    <div class="game-area" id="group3-words"></div>
+    <div class="game-area" id="group3-defs"></div>
+    <div id="group3-result" class="result-message"></div>
+  </div>
 </div>
 
-<!-- Diamond Count Display (Top-Left) - Added for consistency -->
+<audio id="correctSound" preload="auto">
+  <source src="correct.mp3" type="audio/mpeg">
+</audio>
+<audio id="wrongSound" preload="auto">
+  <source src="wrong.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Sound functions: plays a sound for correct and wrong matches.
+function playCorrectSound() {
+  const sound = document.getElementById('correctSound');
+  sound.currentTime = 0; // Rewind to start
+  sound.play().catch(e => console.log('Audio play failed:', e));
+}
+
+function playWrongSound() {
+  const sound = document.getElementById('wrongSound');
+  sound.currentTime = 0; // Rewind to start
+  sound.play().catch(e => console.log('Audio play failed:', e));
+}
+
+// Theme toggle functionality: Toggles between light and dark themes and updates the theme icon.
+function toggleTheme() {
+  const body = document.body;
+  const currentTheme = body.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  body.setAttribute('data-theme', newTheme);
+  
+  const icon = document.getElementById('theme-icon');
+  // Update SVG path for sun/moon icon based on new theme
+  if (newTheme === 'dark') {
+    icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+  } else {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+  }
+  
+  // Save theme preference to local storage
+  localStorage.setItem('theme', newTheme);
+}
+
+// Loads the saved theme preference on page load.
+window.addEventListener('load', () => {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-icon').innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+  }
+
+  // Accordion functionality: Toggles the visibility of content panels.
+  const acc = document.getElementsByClassName("accordion");
+  for (let i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      panel.classList.toggle("show"); // Uses 'show' class for CSS transitions
+    });
+  }
+
+  // Hide orientation reminder after 2 seconds
+  setTimeout(() => {
+      const reminder = document.getElementById('orientationReminder');
+      // Only hide if it's currently displayed (i.e., on a mobile portrait device)
+      if (reminder && getComputedStyle(reminder).display !== 'none') {
+          reminder.style.display = 'none';
+      }
+  }, 2000); // Hide after 2 seconds
+});
+
+// Shared game setup function: Initializes a matching game for a given group of word pairs.
+function setupGame(wordPairs, groupId) {
+  let score = 0; // Tracks the number of correct matches for this group
+  const wordsContainer = document.getElementById(groupId + '-words');
+  const defsContainer = document.getElementById(groupId + '-defs');
+  const resultContainer = document.getElementById(groupId + '-result');
+
+  // Shuffles an array randomly.
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  // Renders the word and definition cards for the game.
+  function render() {
+    wordsContainer.innerHTML = ""; // Clear previous cards
+    defsContainer.innerHTML = ""; // Clear previous drop zones
+    let selected = null; // Stores the currently selected word card
+
+    const shuffledWords = shuffle(wordPairs);
+    const shuffledDefs = shuffle(wordPairs);
+
+    // Create and append word cards
+    shuffledWords.forEach(obj => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.textContent = obj.word;
+      card.dataset.word = obj.word; // Store the word for matching
+      card.addEventListener("click", () => {
+        // Remove 'selected' class from all other word cards in this group
+        document.querySelectorAll(`#${groupId}-words .card`).forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected"); // Add 'selected' class to the clicked card
+        selected = card; // Set the clicked card as selected
+      });
+      wordsContainer.appendChild(card);
+    });
+
+    // Create and append definition drop zones
+    shuffledDefs.forEach(obj => {
+      const zone = document.createElement("div");
+      zone.className = "drop-zone";
+      zone.textContent = obj.definition; // Corrected: Use obj.definition for definition text
+      zone.dataset.word = obj.word; // Store the correct word for this definition
+      zone.dataset.def = obj.definition; // Store the definition text
+      zone.addEventListener("click", () => {
+        // Only proceed if a word card is selected and not already matched
+        if (!selected || selected.classList.contains("matched")) return;
+
+        const draggedWord = selected.dataset.word; // Get the word from the selected card
+        
+        // Check for a match
+        if (draggedWord === zone.dataset.word) {
+          // Correct match
+          selected.classList.add("matched");
+          zone.classList.add("matched");
+          selected.classList.remove("selected");
+          
+          // Display the matched pair directly in the drop zone
+          zone.innerHTML = `<div class="matched-pair">${draggedWord} – ${zone.dataset.def}</div>`;
+          
+          playCorrectSound(); // Play success sound
+          
+          selected = null; // Reset selected card
+          score++; // Increment score
+          
+          // Check if all pairs are matched in this group
+          if (score === wordPairs.length) {
+            resultContainer.innerHTML = "<b>🎉 Group completed! Well done!</b>";
+            // Call onMatchingComplete only when a group is fully completed
+            window.onMatchingComplete();
+          }
+        } else {
+          // Incorrect match
+          zone.classList.add("wrong");
+          selected.classList.add("wrong");
+          
+          playWrongSound(); // Play error sound
+          
+          // Remove 'wrong' classes and reset selected after a short delay
+          setTimeout(() => {
+            zone.classList.remove("wrong");
+            selected.classList.remove("wrong");
+            selected.classList.remove("selected");
+            selected = null;
+          }, 600);
+        }
+      });
+      defsContainer.appendChild(zone); // Moved inside the forEach loop
+    });
+  }
+
+  render(); // Initial render of the game
+}
+
+// --- Word Data for Each Group ---
+
+// Group 1 (6 words)
+(function() {
+  const wordPairs = [
+    { word: "To sprout", definition: "To begin to grow." },
+    { word: "To peer", definition: "To look closely or carefully." },
+    { word: "Hollow", definition: "Empty inside." },
+    { word: "To burst", definition: "To suddenly come out or break open." },
+    { word: "Aromatic", definition: "Having a strong, pleasant smell." },
+    { word: "To harvest", definition: "To collect crops or plants when they are ready." }
+  ];
+  setupGame(wordPairs, 'group1');
+})();
+
+// Group 2 (6 words)
+(function() {
+  const wordPairs = [
+    { word: "A showcase", definition: "Something that shows the best of something." },
+    { word: "A breed", definition: "A type or kind of something (often animals or plants)." },
+    { word: "To withstand", definition: "To resist or survive something." },
+    { word: "Produce (noun)", definition: "Fruits and vegetables grown for eating." },
+    { word: "-free (suffix)", definition: "Without something." },
+    { word: "Resistance", definition: "The ability to stop something or not be affected." }
+  ];
+  setupGame(wordPairs, 'group2');
+})();
+
+// Group 3 (5 words)
+(function() {
+  const wordPairs = [
+    { word: "Exhausted (soil)", definition: "Used up or worn out." },
+    { word: "Yield (noun)", definition: "The amount of food or crops produced." },
+    { word: "Disused", definition: "Not used anymore." },
+    { word: "Fraction", definition: "A small part of something." },
+    { word: "Return (in farming)", definition: "The amount of result (like crops) from something." }
+  ];
+  setupGame(wordPairs, 'group3');
+})();
+</script>
+
+<!-- Diamond Count Display (Top-Left) -->
 <div id="diamond-count-container">
     <span id="diamond-count">0 💎</span>
 </div>
@@ -364,18 +749,18 @@
     gap: 5px; /* Space between number and diamond emoji */
 }
 
-body.dark-mode #diamond-count-container {
+body[data-theme="dark"] #diamond-count-container { /* Adjusted for data-theme attribute */
     background-color: rgba(255, 255, 255, 0.2);
     color: #E2E8F0;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 </style>
 
-<!-- Diamond Popup Styles & HTML (User's provided, with minor animation enhancement) -->
+<!-- Diamond Popup Styles & HTML -->
 <style>
   #diamond-popup {
     position: fixed;
-    bottom: 30px; /* Changed to bottom-right as per user's previous preference */
+    bottom: 30px;
     right: 30px;
     background: gold;
     color: black;
@@ -386,14 +771,13 @@ body.dark-mode #diamond-count-container {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     display: none;
     z-index: 9999;
-    /* Basic animation for fade in/out */
     opacity: 0;
-    transform: translateY(0); /* Initial state for animation */
+    transform: translateY(0);
     transition: transform 1s ease-out, opacity 1s ease-out;
   }
   #diamond-popup.show {
     opacity: 1;
-    transform: translateY(-80px); /* Move up for animation */
+    transform: translateY(-80px);
   }
 </style>
 <div id="diamond-popup">+1 💎</div>
@@ -504,247 +888,38 @@ body.dark-mode #diamond-count-container {
     box-shadow: 0 0 0 2px #3498DB;
 }
 /* Dark mode adjustments */
-body.dark-mode .progress-indicator::before {
+body[data-theme="dark"] .progress-indicator::before { /* Adjusted for data-theme attribute */
     background: #4A5568;
 }
 
-body.dark-mode .progress-step::before {
+body[data-theme="dark"] .progress-step::before { /* Adjusted for data-theme attribute */
     background: #4A5568;
     border-color: #1F2937;
     box-shadow: 0 0 0 2px #4A5568;
 }
 
-body.dark-mode .progress-step {
+body[data-theme="dark"] .progress-step { /* Adjusted for data-theme attribute */
     color: #A0AEC0;
 }
 
-body.dark-mode .progress-step.matching-step::before,
-body.dark-mode .progress-step.quiz-step::before,
-body.dark-mode .progress-step.typing-step::before {
+body[data-theme="dark"] .progress-step.matching-step::before,
+body[data-theme="dark"] .progress-step.quiz-step::before,
+body[data-theme="dark"] .progress-step.typing-step::before { /* Adjusted for data-theme attribute */
     background: #63B3ED;
     box-shadow: 0 0 0 2px #63B3ED;
 }
 
-body.dark-mode .matching-step,
-body.dark-mode .quiz-step,
-body.dark-mode .typing-step {
+body[data-theme="dark"] .matching-step,
+body[data-theme="dark"] .quiz-step,
+body[data-theme="dark"] .typing-step { /* Adjusted for data-theme attribute */
     color: #E2E8F0;
 }
 </style>
 
-<script>
-    // Theme toggle logic
-    const toggleSwitch = document.getElementById('checkbox');
-    const currentTheme = localStorage.getItem('theme');
-
-    if (currentTheme) {
-        document.body.classList.add(currentTheme);
-        if (currentTheme === 'dark-mode') {
-            toggleSwitch.checked = true;
-        }
-    }
-
-    function switchTheme(e) {
-        if (e.target.checked) {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light-mode');
-        }
-    }
-    toggleSwitch.addEventListener('change', switchTheme);
-
-
-    const words = [
-        { word: "Big", definition: "Large in size." },
-        { word: "Small", definition: "Little in size." },
-        { word: "Happy", definition: "Feeling or showing pleasure." },
-        { word: "Sad", definition: "Feeling or showing sorrow." },
-        { word: "Fast", definition: "Moving or capable of moving at high speed." }
-    ];
-
-    let currentMatches = {}; // Stores {wordId: definitionId}
-    let matchedCount = 0;
-    const feedbackElement = document.getElementById('feedback');
-    const wordsContainer = document.getElementById('wordsContainer');
-    const definitionsContainer = document.getElementById('definitionsContainer');
-    const checkMatchButton = document.getElementById('checkMatch');
-    const completionModal = document.getElementById('completionModal');
-
-    // Shuffle arrays
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    let shuffledWords = shuffleArray([...words]);
-    let shuffledDefinitions = shuffleArray([...words]); // Shuffle definitions separately
-
-    function renderCards() {
-        wordsContainer.innerHTML = '';
-        definitionsContainer.innerHTML = '';
-        currentMatches = {}; // Reset matches
-
-        shuffledWords.forEach((item, index) => {
-            const wordCard = document.createElement('div');
-            wordCard.classList.add('word-card');
-            wordCard.textContent = item.word;
-            wordCard.draggable = true;
-            wordCard.dataset.wordId = item.word; // Use word itself as ID
-            wordCard.addEventListener('dragstart', dragStart);
-            wordsContainer.appendChild(wordCard);
-        });
-
-        shuffledDefinitions.forEach((item, index) => {
-            const definitionCard = document.createElement('div');
-            definitionCard.classList.add('definition-card');
-            definitionCard.textContent = item.definition;
-            definitionCard.dataset.definitionId = item.definition; // Use definition itself as ID
-            definitionCard.addEventListener('dragover', dragOver);
-            definitionCard.addEventListener('dragleave', dragLeave);
-            definitionCard.addEventListener('drop', drop);
-            definitionsContainer.appendChild(definitionCard);
-        });
-        feedbackElement.textContent = '';
-        checkMatchButton.style.display = 'none'; // Hide button until all matched
-        matchedCount = 0;
-    }
-
-    let draggedWordCard = null;
-
-    function dragStart(e) {
-        draggedWordCard = e.target;
-        e.dataTransfer.setData('text/plain', draggedWordCard.dataset.wordId);
-        setTimeout(() => {
-            draggedWordCard.classList.add('dragging');
-        }, 0);
-    }
-
-    function dragOver(e) {
-        e.preventDefault(); // Necessary to allow drop
-        e.target.classList.add('drag-over');
-    }
-
-    function dragLeave(e) {
-        e.target.classList.remove('drag-over');
-    }
-
-    function drop(e) {
-        e.preventDefault();
-        e.target.classList.remove('drag-over');
-        draggedWordCard.classList.remove('dragging');
-
-        const wordId = e.dataTransfer.getData('text/plain');
-        const definitionCard = e.target;
-        const definitionId = definitionCard.dataset.definitionId;
-
-        // Check if the definition card already has a word associated
-        const existingWordCard = definitionCard.querySelector('.word-card');
-        if (existingWordCard) {
-            // If it does, return the existing word card to its original container
-            wordsContainer.appendChild(existingWordCard);
-            // Remove the old match from currentMatches
-            for (const key in currentMatches) {
-                if (currentMatches[key] === definitionId) {
-                    delete currentMatches[key];
-                    matchedCount--; // Decrement matched count as a match is broken
-                    break;
-                }
-            }
-        }
-
-        // Check if the word card was previously matched to a different definition
-        for (const key in currentMatches) {
-            if (key === wordId) {
-                // If so, remove the old match
-                delete currentMatches[key];
-                matchedCount--; // Decrement matched count as a match is broken
-                break;
-            }
-        }
-
-        // Append the dragged word card to the definition card
-        definitionCard.appendChild(draggedWordCard);
-        currentMatches[wordId] = definitionId; // Store the new match
-        matchedCount++; // Increment matched count for the new match
-
-        // Show check button if all words are placed
-        if (matchedCount === words.length) {
-            checkMatchButton.style.display = 'block';
-        } else {
-            checkMatchButton.style.display = 'none';
-        }
-
-        feedbackElement.textContent = ''; // Clear feedback on new drops
-    }
-
-    checkMatchButton.addEventListener('click', () => {
-        let allCorrect = true;
-        let correctCount = 0;
-
-        // Iterate through the original words array to check against currentMatches
-        words.forEach(wordObj => {
-            const correctDefinition = wordObj.definition;
-            const currentMatchedDefinition = currentMatches[wordObj.word];
-
-            // Check if a word was matched and if the match is correct
-            if (currentMatchedDefinition && currentMatchedDefinition === correctDefinition) {
-                correctCount++;
-            } else {
-                allCorrect = false;
-            }
-        });
-
-        if (allCorrect) {
-            feedbackElement.textContent = 'All matches are correct! Well done!';
-            feedbackElement.classList.remove('incorrect');
-            feedbackElement.classList.add('correct');
-            checkMatchButton.style.display = 'none'; // Hide button after success
-            showCompletionModal();
-            onMatchingComplete(); // Trigger diamond update
-        } else {
-            feedbackElement.textContent = 'Some matches are incorrect. Try again!';
-            feedbackElement.classList.remove('correct');
-            feedbackElement.classList.add('incorrect');
-        }
-    });
-
-    function showCompletionModal() {
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h2>Congratulations!</h2>
-                <p>You have successfully matched all the vocabulary words to their definitions.</p>
-                <button onclick="closeCompletionModal()">Continue</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        modal.style.display = 'flex'; // Make it visible
-    }
-
-    function closeCompletionModal() {
-        const modal = document.querySelector('.modal');
-        if (modal) {
-            modal.remove(); // Remove modal from DOM
-        }
-        renderCards(); // Reset the game
-    }
-
-    // Initial render
-    renderCards();
-
-</script>
-
 <!-- Firebase SDKs and Initialization (Modular API) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    // FIX: Added setDoc to the import list
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     // Firebase Configuration (from user)
@@ -767,24 +942,6 @@ body.dark-mode .typing-step {
     window.auth = auth;
     window.db = db;
 
-    // Handle authentication for Canvas environment or anonymous sign-in
-    async function authenticateUser() {
-        try {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-                console.log("Authenticated with custom token.");
-            } else {
-                await signInAnonymously(auth);
-                console.log("Signed in anonymously.");
-            }
-        } catch (error) {
-            console.error("Firebase authentication error:", error);
-        }
-    }
-
-    // Call authentication when the script loads
-    authenticateUser();
-
     // Function to update diamond count display (top-left)
     async function updateDiamondCountDisplay() {
         const diamondCountElement = document.getElementById('diamond-count');
@@ -792,23 +949,34 @@ body.dark-mode .typing-step {
 
         const user = auth.currentUser;
         if (user) {
-            const userRef = doc(db, "users", user.uid);
-            try {
-                const docSnap = await getDoc(userRef);
-                if (docSnap.exists()) {
-                    const diamonds = docSnap.data().diamonds || 0;
-                    diamondCountElement.textContent = `${diamonds} 💎`;
-                } else {
-                    // If user document doesn't exist, initialize diamonds to 0
-                    await setDoc(userRef, { diamonds: 0 }, { merge: true });
-                    diamondCountElement.textContent = '0 �';
+            // Only attempt to fetch diamonds if the user is a Google-signed-in user
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (isGoogleSignedIn) {
+                const userRef = doc(db, "users", user.uid);
+                try {
+                    const docSnap = await getDoc(userRef);
+                    if (docSnap.exists()) {
+                        const diamonds = docSnap.data().diamonds || 0;
+                        diamondCountElement.textContent = `${diamonds} 💎`;
+                    } else {
+                        // If user document doesn't exist for a Google user, initialize diamonds to 0
+                        await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
+                        diamondCountElement.textContent = '0 💎';
+                    }
+                } catch (error) {
+                    console.error("Error fetching or initializing diamond count:", error);
+                    diamondCountElement.textContent = 'Error 💎';
                 }
-            } catch (error) {
-                console.error("Error fetching or initializing diamond count:", error);
-                diamondCountElement.textContent = 'Error 💎';
+            } else {
+                // If not a Google-signed-in user, display N/A or 0
+                diamondCountElement.textContent = 'N/A 💎'; // Or '0 💎' if you prefer
+                console.log("Not a Google-signed-in user. Diamond count display limited.");
             }
         } else {
-            diamondCountElement.textContent = '0 💎'; // Or a login prompt for logged-out users
+            diamondCountElement.textContent = '0 💎'; // Display 0 if no user is signed in at all
         }
     }
 
@@ -817,45 +985,55 @@ body.dark-mode .typing-step {
         updateDiamondCountDisplay();
     });
 
-    // Diamond Popup Function (moved here to use Firebase's increment)
+    // Diamond Popup Function
     function showDiamondPopup(amount) {
         const popup = document.getElementById("diamond-popup");
         if (!popup) return;
 
-        // Format amount to show at most one decimal place
         const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
         popup.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
 
-        // Trigger reflow to restart animation:
         popup.classList.remove('show');
-        void popup.offsetWidth; // This line forces a reflow
+        void popup.offsetWidth;
         popup.classList.add('show');
 
-        // Hide after animation
         setTimeout(() => {
             popup.classList.remove('show');
-            popup.style.display = 'none'; // Hide fully after transition
-        }, 1500); // Total display time (animation duration + slight delay)
-        popup.style.display = 'block'; // Ensure it's visible to start animation
+            popup.style.display = 'none';
+        }, 1500);
+        popup.style.display = 'block';
     }
 
     // Function to update user's diamond count in Firestore
     window.updateDiamondCount = async function(diamondsEarned) {
         const user = auth.currentUser;
         if (!user) {
-            console.log("No user logged in to record diamond update.");
+            console.log("Diamond update skipped: No user logged in.");
+            return;
+        }
+
+        // Check if the user is signed in with Google
+        const isGoogleSignedIn = user.providerData.some(
+            (provider) => provider.providerId === 'google.com'
+        );
+
+        if (!isGoogleSignedIn) { // Only check for Google sign-in
+            console.warn("Diamond update skipped: User is not signed in with a Google account.");
+            // Optionally, display a message to the user here, e.g., using a small modal
+            // "Please sign in with Google to earn diamonds!"
             return;
         }
 
         const userRef = doc(db, "users", user.uid);
         try {
-            // THIS IS THE CRITICAL CHANGE: Use setDoc with merge: true
             await setDoc(userRef, {
-                diamonds: increment(diamondsEarned)
-            }, { merge: true }); // <--- Changed from updateDoc to setDoc with merge
-            console.log(`Diamonds updated: +${diamondsEarned}`);
+                diamonds: increment(diamondsEarned),
+                // Store user's display name for the scoreboard
+                displayName: user.displayName || 'Google User' // Use displayName from Google, fallback if null
+            }, { merge: true });
+            console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
             showDiamondPopup(diamondsEarned);
-            updateDiamondCountDisplay(); // Update top-left display immediately
+            updateDiamondCountDisplay();
         } catch (error) {
             console.error("Error updating document for diamonds:", error);
         }
@@ -868,8 +1046,6 @@ body.dark-mode .typing-step {
         window.updateDiamondCount(1);
     };
 
-    // No onQuizComplete or onTypingComplete here, they belong in their respective files.
-
     // Initial update of diamond count display on page load
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -881,4 +1057,3 @@ body.dark-mode .typing-step {
 
 </body>
 </html>
-�
