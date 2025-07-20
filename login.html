@@ -1,78 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
       background: linear-gradient(to right, #667eea, #764ba2);
       color: white;
-      text-align: center;
-      padding-top: 100px;
+    }
+    .container {
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+    input {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
     }
     button {
-      padding: 10px 20px;
-      font-size: 18px;
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      background: #4f46e5;
+      color: white;
       border: none;
-      border-radius: 5px;
-      background-color: #ffffff;
-      color: #333;
       cursor: pointer;
     }
-    #status-message {
-      margin-top: 20px;
+    .google-btn {
+      background: #ea4335;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <h1>Sign in to Website Vocabulary</h1>
-  <button onclick="signInWithGoogle()">Sign in with Google</button>
-  <p id="status-message">No user is logged in.</p>
-  <p id="user-info"></p>
+  <div class="container">
+    <h2>Login or Sign Up</h2>
+    
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <div id="error" class="error"></div>
 
-  <script>
+    <button onclick="login()">Log In</button>
+    <button onclick="signup()">Sign Up</button>
+    <hr />
+    <button class="google-btn" onclick="signInWithGoogle()">Sign in with Google</button>
+  </div>
+
+  <!-- Firebase v9+ -->
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+
+    // Replace with your Firebase config:
     const firebaseConfig = {
-      apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-      authDomain: "website-vocabulary.firebaseapp.com",
-      projectId: "website-vocabulary",
-      storageBucket: "website-vocabulary.appspot.com",
-      messagingSenderId: "216286165163",
-      appId: "1:216286165163:web:0d45648c2b998870a11fee",
-      measurementId: "G-1RZLN9HJ65"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    const statusMessage = document.getElementById('status-message');
-    const userInfo = document.getElementById('user-info');
+    window.signup = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorBox = document.getElementById("error");
 
-    function signInWithGoogle() {
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          statusMessage.textContent = `Welcome, ${user.displayName}`;
-          userInfo.textContent = `Email: ${user.email}`;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Signed up successfully");
         })
         .catch((error) => {
-          statusMessage.textContent = `Error: ${error.message}`;
+          errorBox.textContent = error.message;
         });
-    }
+    };
 
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        statusMessage.textContent = `Already signed in as ${user.displayName}`;
-        userInfo.textContent = `Email: ${user.email}`;
-      } else {
-        statusMessage.textContent = 'No user is logged in.';
-        userInfo.textContent = '';
-      }
-    });
+    window.login = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorBox = document.getElementById("error");
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Logged in!");
+          // You can redirect here
+        })
+        .catch((error) => {
+          errorBox.textContent = error.message;
+        });
+    };
+
+    window.signInWithGoogle = () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          alert("Google sign-in successful!");
+          // Redirect or store user info if needed
+        })
+        .catch((error) => {
+          document.getElementById("error").textContent = error.message;
+        });
+    };
   </script>
 </body>
 </html>
