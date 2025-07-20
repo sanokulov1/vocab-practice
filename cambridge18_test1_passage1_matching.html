@@ -317,6 +317,7 @@
 </head>
 <body>
 
+<!-- Theme Switch -->
 <div class="theme-switch-wrapper">
     <label class="theme-switch" for="checkbox">
         <input type="checkbox" id="checkbox" />
@@ -329,14 +330,17 @@
     <p class="instructions">Drag each vocabulary word to its correct definition.</p>
     <div class="game-area">
         <div class="words-container" id="wordsContainer">
-            </div>
+            <!-- Words will be dynamically loaded here -->
+        </div>
         <div class="definitions-container" id="definitionsContainer">
-            </div>
+            <!-- Definitions will be dynamically loaded here -->
+        </div>
     </div>
     <p id="feedback" class="feedback"></p>
     <button id="checkMatch">Check Matches</button>
 </div>
 
+<!-- Diamond Count Display (Top-Left) - Added for consistency -->
 <div id="diamond-count-container">
     <span id="diamond-count">0 💎</span>
 </div>
@@ -367,12 +371,12 @@ body.dark-mode #diamond-count-container {
 }
 </style>
 
+<!-- Diamond Popup Styles & HTML (User's provided, with minor animation enhancement) -->
 <style>
   #diamond-popup {
     position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    bottom: 30px; /* Changed to bottom-right as per user's previous preference */
+    right: 30px;
     background: gold;
     color: black;
     font-weight: bold;
@@ -384,14 +388,17 @@ body.dark-mode #diamond-count-container {
     z-index: 9999;
     /* Basic animation for fade in/out */
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transform: translateY(0); /* Initial state for animation */
+    transition: transform 1s ease-out, opacity 1s ease-out;
   }
   #diamond-popup.show {
     opacity: 1;
+    transform: translateY(-80px); /* Move up for animation */
   }
 </style>
 <div id="diamond-popup">+1 💎</div>
 
+<!-- Navigation Buttons -->
 <div class="activity-nav">
     <div class="nav-buttons">
         <a href="cambridge18_test1_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
@@ -550,11 +557,11 @@ body.dark-mode .typing-step {
 
 
     const words = [
-        { word: "Serendipity", definition: "The occurrence and development of events by chance in a happy or beneficial way." },
-        { word: "Ephemeral", definition: "Lasting for a very short time." },
-        { word: "Luminous", definition: "Emitting or reflecting light; shining." },
-        { word: "Mellifluous", definition: "Pleasant to hear." },
-        { word: "Sycophant", definition: "A person who acts obsequiously toward someone important in order to gain advantage." }
+        { word: "Big", definition: "Large in size." },
+        { word: "Small", definition: "Little in size." },
+        { word: "Happy", definition: "Feeling or showing pleasure." },
+        { word: "Sad", definition: "Feeling or showing sorrow." },
+        { word: "Fast", definition: "Moving or capable of moving at high speed." }
     ];
 
     let currentMatches = {}; // Stores {wordId: definitionId}
@@ -733,123 +740,139 @@ body.dark-mode .typing-step {
 
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<!-- Firebase SDKs and Initialization (Modular API) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-    authDomain: "website-vocabulary.firebaseapp.com",
-    projectId: "website-vocabulary",
-    storageBucket: "website-vocabulary.firebasestorage.app",
-    messagingSenderId: "216286165163",
-    appId: "1:216286165163:web:0d45648c2b998070a11fee",
-    measurementId: "G-1RZLN9HJ65"
-  };
+    // Firebase Configuration (from user)
+    const firebaseConfig = {
+        apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+        authDomain: "website-vocabulary.firebaseapp.com",
+        projectId: "website-vocabulary",
+        storageBucket: "website-vocabulary.firebasestorage.app",
+        messagingSenderId: "216286165163",
+        appId: "1:216286165163:web:0d45648c2b998070a11fee",
+        measurementId: "G-1RZLN9HJ65"
+    };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  window.auth = auth; // Expose to global window object for console debugging
-  window.db = db;     // Expose to global window object for console debugging
+    // Initialize Firebase App
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  let startTime = Date.now();
-  window.addEventListener("beforeunload", () => {
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-    const user = auth.currentUser;
-    if (user) {
-      const userRef = db.collection("users").doc(user.uid);
-      userRef.update({
-        timeSpent: firebase.firestore.FieldValue.increment(timeSpent),
-        diamonds: firebase.firestore.FieldValue.increment(Math.floor(timeSpent / 3600) * 10)
-      }).catch(error => {
-        console.error("Error updating time spent/diamonds on unload:", error);
-      });
+    // Expose auth and db globally for existing activity scripts to use
+    window.auth = auth;
+    window.db = db;
+
+    // Handle authentication for Canvas environment or anonymous sign-in
+    async function authenticateUser() {
+        try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+                console.log("Authenticated with custom token.");
+            } else {
+                await signInAnonymously(auth);
+                console.log("Signed in anonymously.");
+            }
+        } catch (error) {
+            console.error("Firebase authentication error:", error);
+        }
     }
-  });
 
-  // Function to update diamond count display (top-left)
-  async function updateDiamondCountDisplay(user) {
-      const diamondCountElement = document.getElementById('diamond-count');
-      if (diamondCountElement) {
-          if (user) {
-              const userRef = db.collection("users").doc(user.uid);
-              try {
-                  const docSnap = await userRef.get();
-                  if (docSnap.exists) {
-                      const diamonds = docSnap.data().diamonds || 0;
-                      diamondCountElement.textContent = `${diamonds} 💎`;
-                  } else {
-                      diamondCountElement.textContent = '0 💎';
-                  }
-              } catch (error) {
-                  console.error("Error fetching diamond count:", error);
-                  diamondCountElement.textContent = 'Error 💎';
-              }
-          } else {
-              diamondCountElement.textContent = '0 💎';
-          }
-      }
-  }
+    // Call authentication when the script loads
+    authenticateUser();
 
-  // Listen for auth state changes to update diamond count and potentially other UI
-  auth.onAuthStateChanged((user) => {
-      updateDiamondCountDisplay(user);
-  });
+    // Function to update diamond count display (top-left)
+    async function updateDiamondCountDisplay() {
+        const diamondCountElement = document.getElementById('diamond-count');
+        if (!diamondCountElement) return;
 
-  function showDiamondPopup(amount = 1) {
-    const popup = document.getElementById("diamond-popup");
-    popup.textContent = `+${amount} 💎`;
-    popup.classList.add('show'); // Add 'show' class to trigger animation
-    setTimeout(() => {
-      popup.classList.remove('show'); // Remove 'show' to fade out
-      // Hide completely after fade out animation (if needed for older browsers)
-      setTimeout(() => { popup.style.display = "none"; }, 500); // Match transition duration
-    }, 1500); // Total display time
-    popup.style.display = "block"; // Make visible to start transition
-  }
+        const user = auth.currentUser;
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            try {
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    const diamonds = docSnap.data().diamonds || 0;
+                    diamondCountElement.textContent = `${diamonds} �`;
+                } else {
+                    diamondCountElement.textContent = '0 💎';
+                }
+            } catch (error) {
+                console.error("Error fetching diamond count:", error);
+                diamondCountElement.textContent = 'Error 💎';
+            }
+        } else {
+            diamondCountElement.textContent = '0 💎'; // Or a login prompt for logged-out users
+        }
+    }
 
-  function updateDiamondCount(diamondsEarned) {
-    const user = auth.currentUser;
-    if (!user) return;
-    const userRef = db.collection("users").doc(user.uid);
-
-    userRef.get().then(doc => {
-      const current = doc.exists && doc.data().diamonds ? doc.data().diamonds : 0;
-      userRef.set({ diamonds: current + diamondsEarned }, { merge: true })
-        .then(() => {
-          showDiamondPopup(diamondsEarned);
-          updateDiamondCountDisplay(user); // Update top-left display after earning
-        })
-        .catch(error => {
-          console.error("Error updating diamond count:", error);
-        });
-    }).catch(error => {
-        console.error("Error getting user document for diamond update:", error);
+    // Listen for auth state changes to update diamond count display
+    onAuthStateChanged(auth, (user) => {
+        updateDiamondCountDisplay();
     });
-  }
 
-  // Example hook (call this when an activity is completed)
-  function onQuizComplete(correctAnswers) {
-    if (correctAnswers >= 10) {
-      updateDiamondCount(1.5);
-    } else if (correctAnswers >= 7) {
-      updateDiamondCount(1);
+    // Diamond Popup Function (moved here to use Firebase's increment)
+    function showDiamondPopup(amount) {
+        const popup = document.getElementById("diamond-popup");
+        if (!popup) return;
+
+        // Format amount to show at most one decimal place
+        const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+        popup.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
+
+        // Trigger reflow to restart animation:
+        popup.classList.remove('show');
+        void popup.offsetWidth; // This line forces a reflow
+        popup.classList.add('show');
+
+        // Hide after animation
+        setTimeout(() => {
+            popup.classList.remove('show');
+            popup.style.display = 'none'; // Hide fully after transition
+        }, 1500); // Total display time (animation duration + slight delay)
+        popup.style.display = 'block'; // Ensure it's visible to start animation
     }
-  }
 
-  function onTypingComplete(correctAnswers) {
-    if (correctAnswers >= 10) {
-      updateDiamondCount(1.5);
-    } else if (correctAnswers >= 6) {
-      updateDiamondCount(1);
-    }
-  }
+    // Function to update user's diamond count in Firestore
+    window.updateDiamondCount = async function(diamondsEarned) {
+        const user = auth.currentUser;
+        if (!user) {
+            console.log("No user logged in to record diamond update.");
+            return;
+        }
 
-  function onMatchingComplete() {
-    updateDiamondCount(1);
-  }
+        const userRef = doc(db, "users", user.uid);
+        try {
+            await updateDoc(userRef, {
+                diamonds: increment(diamondsEarned)
+            });
+            console.log(`Diamonds updated: +${diamondsEarned}`);
+            showDiamondPopup(diamondsEarned);
+            updateDiamondCountDisplay(); // Update top-left display immediately
+        } catch (error) {
+            console.error("Error updating document for diamonds:", error);
+        }
+    };
+
+    // Activity completion hooks (now call window.updateDiamondCount)
+    window.onMatchingComplete = function() {
+        // In matching, they should get 1 diamond if they complete all the groups
+        // The game logic already ensures allCorrect before calling this.
+        window.updateDiamondCount(1);
+    };
+
+    // No onQuizComplete or onTypingComplete here, they belong in their respective files.
+
+    // Initial update of diamond count display on page load
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            updateDiamondCountDisplay();
+        }
+    });
+
 </script>
 
 </body>
