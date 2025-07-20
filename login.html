@@ -163,6 +163,35 @@
     .google-btn:active {
       transform: translateY(0);
     }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: #dc3545; /* Red color for logout */
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-top: 20px; /* Spacing from user info */
+    }
+
+    .logout-btn:hover {
+      background: #c82333;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .logout-btn:active {
+      transform: translateY(0);
+    }
     
     .google-icon {
       width: 24px;
@@ -268,7 +297,6 @@
         height: 100%; /* Full height */
         overflow: auto; /* Enable scroll if needed */
         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        /* Removed display: flex; from here as it was conflicting */
         align-items: center;
         justify-content: center;
     }
@@ -392,12 +420,12 @@
         <!-- Removed: <h2>Sign in to Website Vocabulary</h2> -->
         <p>Access your saved words and learning progress</p>
         
-        <button class="google-btn" onclick="signInWithGoogle()">
+        <button id="signInButton" class="google-btn" onclick="signInWithGoogle()">
           <div class="google-icon"></div>
           Sign in with Google
         </button>
         
-        <div class="divider">
+        <div id="dividerOr" class="divider">
           <span>or</span>
         </div>
         
@@ -416,6 +444,9 @@
           <div class="status-message">
             <i class="fas fa-check-circle"></i> You're successfully signed in!
           </div>
+          <button id="logoutButton" class="logout-btn" onclick="signOutGoogle()">
+            <i class="fas fa-sign-out-alt"></i> Sign Out
+          </button>
         </div>
       </div>
     </div>
@@ -449,11 +480,14 @@
 
     const statusMessage = document.getElementById('status-message');
     const userInfo = document.getElementById('user-info');
-    const userNameElement = document.getElementById('user-name'); // Renamed to avoid conflict
-    const userEmailElement = document.getElementById('user-email'); // Renamed to avoid conflict
+    const userNameElement = document.getElementById('user-name');
+    const userEmailElement = document.getElementById('user-email');
     const userAvatar = document.getElementById('user-avatar');
     const welcomeModal = document.getElementById('welcomeModal');
     const welcomeUserName = document.getElementById('welcomeUserName');
+    const signInButton = document.getElementById('signInButton'); // Get sign-in button
+    const logoutButton = document.getElementById('logoutButton'); // Get logout button
+    const dividerOr = document.getElementById('dividerOr'); // Get 'or' divider
 
     // Function to handle Google Sign-in
     function signInWithGoogle() {
@@ -475,6 +509,21 @@
         });
     }
 
+    // Function to handle Google Sign-out
+    function signOutGoogle() {
+      auth.signOut().then(() => {
+        // Sign-out successful.
+        sessionStorage.removeItem('userName'); // Clear stored user name
+        updateUserInfo(null); // Update UI to logged out state
+        statusMessage.innerHTML = '<i class="fas fa-info-circle"></i> You have been signed out.';
+        // Optionally redirect to login page or refresh
+        window.location.href = 'login.html'; 
+      }).catch((error) => {
+        // An error happened.
+        statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error signing out: ${error.message}`;
+      });
+    }
+
     // Function to update user information on the page
     function updateUserInfo(user) {
       if (user) {
@@ -486,20 +535,27 @@
           userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
         }
         
-        // Show user info section
+        // Show user info section and hide sign-in elements
         userInfo.style.display = 'block';
+        signInButton.style.display = 'none';
+        dividerOr.style.display = 'none';
+        statusMessage.style.display = 'none'; // Hide initial status message when logged in
       } else {
+        // Hide user info section and show sign-in elements
         userInfo.style.display = 'none';
+        signInButton.style.display = 'flex'; // Use flex for button
+        dividerOr.style.display = 'flex'; // Use flex for divider
+        statusMessage.style.display = 'block'; // Show initial status message when logged out
       }
     }
 
-    // Function to display the welcome modal
+    // Function to display the welcome modal (kept for completeness, though not used in login.html)
     function showWelcomeModal(name) {
         welcomeUserName.textContent = `Welcome, ${name}!`;
         welcomeModal.style.display = 'flex'; // Use flex to center the modal
     }
 
-    // Function to close the welcome modal
+    // Function to close the welcome modal (kept for completeness, though not used in login.html)
     function closeWelcomeModal() {
         welcomeModal.style.display = 'none';
     }
@@ -509,24 +565,22 @@
       if (user) {
         statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Already signed in';
         updateUserInfo(user);
-        // If already signed in on this page, and coming from a redirect, show modal
-        // This part is more relevant for index.html or vocab-practice.html
-        // For this login page, the redirect handles the welcome message.
       } else {
         statusMessage.innerHTML = '<i class="fas fa-info-circle"></i> No user is logged in.';
-        userInfo.style.display = 'none';
+        updateUserInfo(null); // Ensure UI reflects logged out state
       }
     });
 
-    // Check if coming from a redirect and display welcome message
+    // Check if coming from a redirect and display welcome message (still here for consistency, but pop-up is removed from index.html)
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const showWelcome = urlParams.get('welcome');
         const storedUserName = sessionStorage.getItem('userName');
 
+        // This part is primarily for handling redirects from other pages back to login.html
+        // If the user was redirected here with 'welcome=true' but the pop-up is not needed,
+        // we still clear the session storage to ensure a clean state.
         if (showWelcome === 'true' && storedUserName) {
-            showWelcomeModal(storedUserName);
-            // Clear the welcome parameter and stored name from URL and session storage
             history.replaceState({}, document.title, window.location.pathname);
             sessionStorage.removeItem('userName');
         }
