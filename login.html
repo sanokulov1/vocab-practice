@@ -2,13 +2,39 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
-  <script type="module">
-    // Import Firebase SDKs
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  <title>Login with Google</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+      padding-top: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffffff;
+      color: #333;
+      cursor: pointer;
+    }
+    #status-message {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sign in to Website Vocabulary</h1>
+  <button onclick="signInWithGoogle()">Sign in with Google</button>
+  <p id="status-message">No user is logged in.</p>
+  <p id="user-info"></p>
 
-    // Firebase config (correct version with valid appId and apiKey)
+  <script>
+    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyChct6kCeqD1gbAuAJw3wP_tHOYN6gV-n4",
       authDomain: "website-vocabulary.firebaseapp.com",
@@ -19,60 +45,34 @@
       measurementId: "G-1RZLN9HJ65"
     };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-    // Sign in
-    window.loginWithGoogle = () => {
-      signInWithPopup(auth, provider)
-        .then(result => {
+    const statusMessage = document.getElementById('status-message');
+    const userInfo = document.getElementById('user-info');
+
+    function signInWithGoogle() {
+      auth.signInWithPopup(provider)
+        .then((result) => {
           const user = result.user;
-          document.getElementById("status").textContent = `Logged in as ${user.displayName}`;
-          document.getElementById("logout").style.display = "inline";
+          statusMessage.textContent = `Welcome, ${user.displayName}`;
+          userInfo.textContent = `Email: ${user.email}`;
         })
-        .catch(error => {
-          console.error(error);
-          document.getElementById("status").textContent = "Login failed. Check the console.";
+        .catch((error) => {
+          statusMessage.textContent = `Error: ${error.message}`;
         });
-    };
+    }
 
-    // Sign out
-    window.logout = () => {
-      signOut(auth).then(() => {
-        document.getElementById("status").textContent = "Logged out.";
-        document.getElementById("logout").style.display = "none";
-      });
-    };
-
-    // Listen to auth state
-    onAuthStateChanged(auth, user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        document.getElementById("status").textContent = `Logged in as ${user.displayName}`;
-        document.getElementById("logout").style.display = "inline";
+        statusMessage.textContent = `Already signed in as ${user.displayName}`;
+        userInfo.textContent = `Email: ${user.email}`;
       } else {
-        document.getElementById("status").textContent = "No user is logged in.";
-        document.getElementById("logout").style.display = "none";
+        statusMessage.textContent = 'No user is logged in.';
+        userInfo.textContent = '';
       }
     });
   </script>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 30px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 10px 5px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Login Page</h2>
-  <p id="status">Checking login status...</p>
-  <button onclick="loginWithGoogle()">Login with Google</button>
-  <button id="logout" onclick="logout()" style="display:none;">Logout</button>
 </body>
 </html>
