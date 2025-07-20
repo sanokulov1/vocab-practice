@@ -674,7 +674,7 @@
     <!-- This div will dynamically show user name or sign-in button -->
     <div id="auth-container">
       <span id="user-display" class="user-name" style="display: none;"></span>
-      <button id="sign-out-button" style="display: none;">Sign Out</button>
+      <button id="sign-out-button" style="display: none;" onclick="signOut()">Sign Out</button> <!-- Added onclick -->
       <!-- The Google Sign-In button will be rendered here by GIS -->
       <div id="google-signin-button"></div>
     </div>
@@ -972,7 +972,7 @@
       try {
         await signOut(auth); // Sign out from Firebase Auth
         console.log('User signed out from Firebase Auth.');
-        // GIS auto_select will be disabled by this sign out, preventing immediate re-login
+        // UI will be updated by onAuthStateChanged listener
       } catch (error) {
         console.error("Error signing out from Firebase Auth:", error);
         alert("Failed to sign out. Please try again.");
@@ -1004,6 +1004,7 @@
         );
 
         // Listen for Firebase Authentication state changes to update UI
+        // This is the primary way to manage UI based on Firebase auth state
         onAuthStateChanged(auth, (user) => {
             updateUI(user); // Call the unified UI update function
         });
