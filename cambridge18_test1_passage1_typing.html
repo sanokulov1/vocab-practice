@@ -18,215 +18,246 @@
             --success-color: #28B463; /* Green for correct feedback */
             --error-color: #E74C3C; /* Red for incorrect feedback */
             --border-color: #CCD1D1; /* Light grey border */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15); /* Light shadow for elements */
-            --input-bg: white; /* Background for input fields */
-            --input-border: #D5DBDB; /* Border for input fields */
-            --disabled-bg: #F2F4F4; /* Background for disabled elements */
-            --disabled-text: #AAB7B8; /* Text for disabled elements */
-            --text-correct: #28B463; /* Green for correct characters */
-            --text-incorrect: #E74C3C; /* Red for incorrect characters */
-            --typing-area-bg: #FDFEFE; /* Light background for typing area */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 6px 16px rgba(0, 0, 0, 0.2);
+            --button-text: white;
+            --input-bg: white;
+            --input-border: #CCD1D1;
+            --modal-bg: #FFFFFF;
+            --modal-backdrop: rgba(0, 0, 0, 0.6);
         }
 
         /* Dark Mode Colors */
         body.dark-mode {
-            --primary-bg: #1F2937; /* Darker background for Dark Mode */
-            --secondary-bg: #2D3748; /* Darker container background for Dark Mode */
-            --text-primary: #E2E8F0; /* Light text for Dark Mode */
-            --text-secondary: #A0AEC0; /* Lighter grey for secondary text */
-            --accent-color: #63B3ED; /* Brighter blue accent for Dark Mode */
-            --accent-light: #4299E1; /* Lighter shade of accent for hover/active */
-            --success-color: #48BB78; /* Green for correct feedback in Dark Mode */
-            --error-color: #FC8181; /* Red for incorrect feedback in Dark Mode */
-            --border-color: #4A5568; /* Darker border for Dark Mode */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.4); /* Darker shadow */
-            --input-bg: #2D3748; /* Darker background for input fields */
-            --input-border: #4A5568; /* Darker border for input fields */
-            --disabled-bg: #1A202C; /* Background for disabled elements */
-            --disabled-text: #667085; /* Text for disabled elements */
-            --text-correct: #48BB78; /* Green for correct characters */
-            --text-incorrect: #FC8181; /* Red for incorrect characters */
-            --typing-area-bg: #1A202C; /* Dark background for typing area */
+            --primary-bg: #123456; /* Darker Teal for page background */
+            --secondary-bg: #2C3E50; /* Darker complementary blue-gray for quiz container */
+            --text-primary: #ECF0F1; /* Light grey for main text */
+            --text-secondary: #BDC3C7; /* Lighter grey for less important text (Night Mode) */
+            --accent-color: #5DADE2; /* Brighter blue accent for buttons */
+            --accent-light: #85C1E9; /* Lighter shade of accent for hover/active states */
+            --success-color: #2ECC71; /* Green for correct feedback */
+            --error-color: #E74C3C; /* Red for incorrect feedback */
+            --border-color: #4A6572; /* Darker grey border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-dark: 0 6px 16px rgba(0, 0, 0, 0.6);
+            --button-text: #ECF0F1;
+            --input-bg: #34495E;
+            --input-border: #4A6572;
+            --modal-bg: #2C3E50;
+            --modal-backdrop: rgba(0, 0, 0, 0.8);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 20px;
             background-color: var(--primary-bg);
             color: var(--text-primary);
             display: flex;
-            flex-direction: column; /* Changed to column to stack elements */
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .container {
+        .typing-container {
             background-color: var(--secondary-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow-light);
-            padding: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-dark);
             width: 100%;
-            max-width: 800px;
-            margin-top: 80px; /* Adjust for fixed elements like diamond count */
-            margin-bottom: 40px; /* Space for navigation */
-            box-sizing: border-box;
+            max-width: 700px;
             text-align: center;
+            margin-top: 80px; /* Space for fixed diamond count */
+            margin-bottom: 40px; /* Space for navigation */
         }
 
         h1 {
             color: var(--text-primary);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 2.5em;
+            font-weight: 700;
         }
 
         .instructions {
-            margin-bottom: 25px;
             font-size: 1.1em;
             color: var(--text-secondary);
-        }
-
-        .typing-area {
-            background-color: var(--typing-area-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            font-size: 1.5em; /* Larger font for readability */
+            margin-bottom: 25px;
             line-height: 1.6;
-            text-align: left; /* Align text left within typing area */
-            min-height: 120px; /* Ensure enough space for text */
-            white-space: pre-wrap; /* Preserve spaces and line breaks */
-            word-wrap: break-word; /* Break long words */
         }
 
-        #input-field {
-            width: calc(100% - 40px); /* Adjust width for padding */
-            padding: 15px 20px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            font-size: 1.2em;
-            margin-bottom: 20px;
+        .word-display {
             background-color: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 600;
             color: var(--text-primary);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-light);
+            word-wrap: break-word; /* Ensure long words wrap */
         }
 
-        #input-field:focus {
+        #typing-input {
+            width: calc(100% - 40px); /* Adjust for padding */
+            padding: 15px 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            font-size: 1.4em;
+            color: var(--text-primary);
+            background-color: var(--input-bg);
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        #typing-input:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3); /* Accent color glow */
+            border-color: var(--accent-light);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.4);
         }
 
-        #input-field:disabled {
-            background-color: var(--disabled-bg);
-            color: var(--disabled-text);
-            cursor: not-allowed;
-        }
-
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
+        .feedback-text {
             font-size: 1.1em;
             font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: var(--accent-color);
-            color: white;
-            margin: 0 10px;
+            min-height: 25px;
+            margin-bottom: 20px;
         }
 
-        button:hover {
+        .feedback-text.correct {
+            color: var(--success-color);
+        }
+
+        .feedback-text.incorrect {
+            color: var(--error-color);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .control-button {
+            background-color: var(--accent-color);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-button:hover:not(:disabled) {
             background-color: var(--accent-light);
             transform: translateY(-2px);
         }
 
-        button:disabled {
-            background-color: var(--disabled-bg);
-            color: var(--disabled-text);
+        .control-button:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
-            transform: translateY(0);
-            box-shadow: none;
         }
 
-        .correct {
-            color: var(--text-correct);
-        }
-
-        .incorrect {
-            color: var(--text-incorrect);
-            text-decoration: underline; /* Highlight incorrect */
-        }
-
-        /* Results Display */
-        #results {
-            margin-top: 25px;
-            font-size: 1.2em;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* Result Modal */
+        /* Results Modal */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
+            display: none;
+            position: fixed;
+            z-index: 1000;
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            backdrop-filter: blur(5px);
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-backdrop);
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
-            background-color: var(--secondary-bg);
-            margin: auto;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            width: 80%;
-            max-width: 500px;
+            background-color: var(--modal-bg);
+            padding: 40px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--shadow-dark);
+            max-width: 600px;
+            width: 90%;
             color: var(--text-primary);
         }
 
         .modal-content h2 {
+            font-size: 2.5em;
             margin-bottom: 20px;
-            font-size: 2em;
             color: var(--accent-color);
         }
 
         .modal-content p {
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            margin-bottom: 20px;
         }
 
-        .modal-content button {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .results-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+        }
+
+        .results-list li {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
             font-size: 1em;
-            transition: background-color 0.2s ease;
         }
 
-        .modal-content button:hover {
+        .results-list li:last-child {
+            border-bottom: none;
+        }
+
+        .results-list li.correct {
+            color: var(--success-color);
+        }
+
+        .results-list li.incorrect {
+            color: var(--error-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-buttons button {
+            background-color: var(--accent-color);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-buttons button:hover {
             background-color: var(--accent-light);
         }
 
-        /* Toggle Switch Styles */
+        /* Theme Toggle Switch */
         .theme-switch-wrapper {
             position: fixed;
             top: 20px;
@@ -285,31 +316,192 @@
             border-radius: 50%;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 2em;
-            }
-            .typing-area {
-                font-size: 1.2em;
-                padding: 15px;
-            }
-            #input-field {
-                font-size: 1em;
-                padding: 12px 15px;
-            }
-            button {
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
+        /* Diamond Count Display */
+        #diamond-count-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 9999; /* Ensure it's above most content but below popup */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex; /* Use flexbox for better alignment */
+            align-items: center;
+            gap: 5px; /* Space between number and diamond emoji */
+        }
+
+        body.dark-mode #diamond-count-container {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Diamond Popup Styles */
+        #diamond-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: gold;
+            color: black;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(0);
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+        #diamond-popup.show {
+            opacity: 1;
+            transform: translateY(-80px);
+        }
+
+        /* Unified Navigation Styles */
+        .activity-nav {
+            max-width: 800px;
+            margin: 40px auto 20px;
+            padding: 0 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .nav-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .prev-button {
+            background: #3498DB;
+            color: white;
+        }
+
+        .next-button {
+            background: #28B463;
+            color: white;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-button:active {
+            transform: translateY(0);
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .progress-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #E2E8F0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 33.33%;
+            font-weight: 600;
+            color: #A0AEC0;
+        }
+
+        .progress-step::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: #E2E8F0;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #E2E8F0;
+        }
+        .matching-step {
+            color: #A0AEC0; /* Default color */
+        }
+        .matching-step::before {
+            background: #E2E8F0; /* Default color */
+            box-shadow: 0 0 0 2px #E2E8F0;
+        }
+        .quiz-step {
+            color: #A0AEC0; /* Default color */
+        }
+        .quiz-step::before {
+            background: #E2E8F0; /* Default color */
+            box-shadow: 0 0 0 2px #E2E8F0;
+        }
+        .typing-step {
+            color: #2D3748; /* Active color for Typing */
+        }
+        .typing-step::before {
+            background: #3498DB; /* Active color for Typing */
+            box-shadow: 0 0 0 2px #3498DB;
+        }
+        /* Dark mode adjustments */
+        body.dark-mode .progress-indicator::before {
+            background: #4A5568;
+        }
+
+        body.dark-mode .progress-step::before {
+            background: #4A5568;
+            border-color: #1F2937;
+            box-shadow: 0 0 0 2px #4A5568;
+        }
+
+        body.dark-mode .progress-step {
+            color: #A0AEC0;
+        }
+
+        body.dark-mode .progress-step.matching-step::before,
+        body.dark-mode .progress-step.quiz-step::before,
+        body.dark-mode .progress-step.typing-step::before {
+            background: #63B3ED;
+            box-shadow: 0 0 0 2px #63B3ED;
+        }
+
+        body.dark-mode .matching-step,
+        body.dark-mode .quiz-step,
+        body.dark-mode .typing-step {
+            color: #E2E8F0;
         }
     </style>
 </head>
 <body>
 
+<!-- Theme Switch -->
 <div class="theme-switch-wrapper">
     <label class="theme-switch" for="checkbox">
         <input type="checkbox" id="checkbox" />
@@ -317,82 +509,43 @@
     </label>
 </div>
 
-<div class="container">
-    <h1>Vocabulary Typing Task</h1>
-    <p class="instructions">Type the words as accurately and quickly as possible.</p>
-    <div id="typing-area" class="typing-area"></div>
-    <input type="text" id="input-field" placeholder="Start typing here...">
-    <div id="results"></div>
-    <button id="start-button">Start Typing</button>
-    <button id="reset-button" style="display:none;">Reset</button>
-</div>
-
-<div id="resultModal" class="modal">
-    <div class="modal-content">
-        <h2 id="modalTitle"></h2>
-        <p id="modalMessage"></p>
-        <button onclick="closeModal()">Close</button>
-    </div>
-</div>
-
+<!-- Diamond Count Display (Top-Left) -->
 <div id="diamond-count-container">
     <span id="diamond-count">0 💎</span>
 </div>
 
-<style>
-#diamond-count-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.2em;
-    font-weight: bold;
-    z-index: 9999; /* Ensure it's above most content but below popup */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex; /* Use flexbox for better alignment */
-    align-items: center;
-    gap: 5px; /* Space between number and diamond emoji */
-}
+<div class="typing-container">
+    <h1>Vocabulary Typing Task</h1>
+    <p class="instructions">Type the **word** that matches the definition shown below. Press Enter to check your answer.</p>
+    <div class="word-display" id="word-display"></div>
+    <input type="text" id="typing-input" placeholder="Type the word here...">
+    <p class="feedback-text" id="feedback-text"></p>
+    <div class="controls">
+        <button id="next-word-button" class="control-button">Next Word</button>
+    </div>
+</div>
 
-body.dark-mode #diamond-count-container {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #E2E8F0;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-</style>
+<!-- Results Modal -->
+<div id="results-modal" class="modal">
+    <div class="modal-content">
+        <h2 id="modal-title">Typing Task Complete!</h2>
+        <p id="modal-message"></p>
+        <ul id="results-list" class="results-list"></ul>
+        <div class="modal-buttons">
+            <button id="retake-button">Retake Task</button>
+            <button id="close-modal-button">Close</button>
+        </div>
+    </div>
+</div>
 
-<style>
-  #diamond-popup {
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: gold;
-    color: black;
-    font-weight: bold;
-    font-size: 24px;
-    padding: 15px 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    display: none;
-    z-index: 9999;
-    /* Basic animation for fade in/out */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-  }
-  #diamond-popup.show {
-    opacity: 1;
-  }
-</style>
+<!-- Diamond Popup Styles & HTML -->
 <div id="diamond-popup">+1 💎</div>
 
+<!-- Navigation Buttons -->
 <div class="activity-nav">
     <div class="nav-buttons">
         <a href="cambridge18_test1_passage1_quiz.html" class="nav-button prev-button">← Previous Activity</a>
+        <a href="cambridge18_test1_passage1_matching.html" class="nav-button next-button">Next Activity →</a> <!-- Link back to matching as it's the start of the cycle -->
     </div>
     <div class="progress-indicator">
         <div class="progress-step matching-step">Matching</div>
@@ -400,128 +553,6 @@ body.dark-mode #diamond-count-container {
         <div class="progress-step typing-step">Typing</div>
     </div>
 </div>
-
-<style>
-/* Unified Navigation Styles */
-.activity-nav {
-    max-width: 800px;
-    margin: 40px auto 20px;
-    padding: 0 20px;
-}
-
-.nav-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.nav-button {
-    padding: 14px 30px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.15em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.prev-button {
-    background: #3498DB;
-    color: white;
-}
-
-.next-button {
-    background: #28B463;
-    color: white;
-}
-
-.nav-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.nav-button:active {
-    transform: translateY(0);
-}
-
-.progress-indicator {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    margin-top: 10px;
-}
-
-.progress-indicator::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: #E2E8F0;
-    z-index: 1;
-}
-
-.progress-step {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    width: 33.33%;
-    font-weight: 600;
-    color: #A0AEC0;
-}
-
-.progress-step::before {
-    content: '';
-    width: 24px;
-    height: 24px;
-    background: #E2E8F0;
-    border-radius: 50%;
-    display: block;
-    margin: 0 auto 10px;
-    border: 4px solid white;
-    box-shadow: 0 0 0 2px #E2E8F0;
-}
-.typing-step {
-    color: #2D3748;
-}
-.typing-step::before {
-    background: #3498DB;
-    box-shadow: 0 0 0 2px #3498DB;
-}
-/* Dark mode adjustments */
-body.dark-mode .progress-indicator::before {
-    background: #4A5568;
-}
-
-body.dark-mode .progress-step::before {
-    background: #4A5568;
-    border-color: #1F2937;
-    box-shadow: 0 0 0 2px #4A5568;
-}
-
-body.dark-mode .progress-step {
-    color: #A0AEC0;
-}
-
-body.dark-mode .progress-step.matching-step::before,
-body.dark-mode .progress-step.quiz-step::before,
-body.dark-mode .progress-step.typing-step::before {
-    background: #63B3ED;
-    box-shadow: 0 0 0 2px #63B3ED;
-}
-
-body.dark-mode .matching-step,
-body.dark-mode .quiz-step,
-body.dark-mode .typing-step {
-    color: #E2E8F0;
-}
-</style>
 
 <script>
     // Theme toggle logic
@@ -546,225 +577,311 @@ body.dark-mode .typing-step {
     }
     toggleSwitch.addEventListener('change', switchTheme);
 
-    const words = [
-        "Serendipity",
-        "Ephemeral",
-        "Luminous",
-        "Mellifluous",
-        "Sycophant"
+    // Changed vocabularyWords to an array of objects with word and definition
+    const vocabularyWords = [
+        { word: "cat", definition: "A small furry animal often kept as a pet." },
+        { word: "dog", definition: "A common pet known for loyalty and barking." },
+        { word: "run", definition: "To move quickly on foot." },
+        { word: "eat", definition: "To put food into the mouth and swallow it." },
+        { word: "sleep", definition: "To rest with eyes closed." },
+        { word: "happy", definition: "Feeling or showing pleasure or contentment." },
+        { word: "sad", definition: "Feeling or showing sorrow; unhappy." },
+        { word: "big", definition: "Of considerable size, extent, or intensity." },
+        { word: "small", definition: "Of a size that is less than normal or usual." },
+        { word: "jump", definition: "To push oneself off a surface into the air." }
     ];
 
+    let shuffledWords = [];
     let currentWordIndex = 0;
-    let timerId;
-    let timeLeft = 60; // seconds
-    let correctChars = 0;
-    let totalChars = 0;
-    let typingStarted = false;
+    let correctAnswers = 0;
 
-    const typingArea = document.getElementById('typing-area');
-    const inputField = document.getElementById('input-field');
-    const startButton = document.getElementById('start-button');
-    const resetButton = document.getElementById('reset-button');
-    const resultsDisplay = document.getElementById('results');
-    const resultModal = document.getElementById('resultModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
+    const wordDisplay = document.getElementById('word-display');
+    const typingInput = document.getElementById('typing-input');
+    const feedbackText = document.getElementById('feedback-text');
+    const nextWordButton = document.getElementById('next-word-button');
+    const resultsModal = document.getElementById('results-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const resultsList = document.getElementById('results-list');
+    const retakeButton = document.getElementById('retake-button');
+    const closeModalButton = document.getElementById('close-modal-button');
 
-    function displayWord() {
-        if (currentWordIndex < words.length) {
-            const word = words[currentWordIndex];
-            typingArea.innerHTML = word.split('').map(char => `<span>${char}</span>`).join('');
-            inputField.value = '';
-            inputField.focus();
+    // Shuffle array function
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initializeGame() {
+        shuffledWords = shuffleArray([...vocabularyWords]);
+        currentWordIndex = 0;
+        correctAnswers = 0;
+        typingInput.value = '';
+        feedbackText.textContent = '';
+        nextWordButton.disabled = true;
+        typingInput.disabled = false;
+        typingInput.focus();
+        loadWord();
+    }
+
+    function loadWord() {
+        if (currentWordIndex < shuffledWords.length) {
+            // Display the DEFINITION in the word-display area
+            wordDisplay.textContent = shuffledWords[currentWordIndex].definition;
+            typingInput.value = '';
+            feedbackText.textContent = '';
+            nextWordButton.disabled = true;
+            typingInput.disabled = false;
+            typingInput.focus();
         } else {
-            endTypingTest();
+            showResults();
         }
     }
 
-    function startTimer() {
-        timeLeft = 60;
-        timerId = setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) {
-                clearInterval(timerId);
-                endTypingTest();
-            }
-        }, 1000);
-    }
+    typingInput.addEventListener('input', () => {
+        const typedText = typingInput.value.toLowerCase(); // Convert to lowercase for case-insensitive check
+        const currentCorrectWord = shuffledWords[currentWordIndex].word.toLowerCase(); // Get the correct word and convert to lowercase
 
-    function updateTypingArea() {
-        const typedText = inputField.value;
-        const currentWord = words[currentWordIndex];
-        let html = '';
-        correctChars = 0;
+        if (currentCorrectWord.startsWith(typedText)) {
+            feedbackText.textContent = '';
+            feedbackText.classList.remove('incorrect');
+        } else {
+            feedbackText.textContent = 'Incorrect typing.';
+            feedbackText.classList.add('incorrect');
+        }
 
-        currentWord.split('').forEach((char, index) => {
-            let className = '';
-            if (index < typedText.length) {
-                if (typedText[index] === char) {
-                    className = 'correct';
-                    correctChars++;
-                } else {
-                    className = 'incorrect';
-                }
+        if (typedText === currentCorrectWord) { // Compare typed text to the correct word
+            feedbackText.textContent = 'Correct!';
+            feedbackText.classList.remove('incorrect');
+            feedbackText.classList.add('correct');
+            typingInput.disabled = true;
+            nextWordButton.disabled = false;
+            correctAnswers++;
+        }
+    });
+
+    typingInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !typingInput.disabled) {
+            // If Enter is pressed and the input is not disabled (meaning, not yet correct)
+            // Re-check for correctness to handle quick typers
+            const typedText = typingInput.value.toLowerCase();
+            const currentCorrectWord = shuffledWords[currentWordIndex].word.toLowerCase();
+
+            if (typedText === currentCorrectWord) {
+                feedbackText.textContent = 'Correct!';
+                feedbackText.classList.remove('incorrect');
+                feedbackText.classList.add('correct');
+                typingInput.disabled = true;
+                nextWordButton.disabled = false;
+                correctAnswers++;
+            } else {
+                feedbackText.textContent = `Incorrect. The word was "${shuffledWords[currentWordIndex].word}".`;
+                feedbackText.classList.remove('correct');
+                feedbackText.classList.add('incorrect');
+                typingInput.disabled = true; // Disable input after incorrect attempt too
+                nextWordButton.disabled = false;
             }
-            html += `<span class="${className}">${char}</span>`;
+        }
+    });
+
+    nextWordButton.addEventListener('click', () => {
+        currentWordIndex++;
+        loadWord();
+    });
+
+    function showResults() {
+        resultsModal.style.display = 'flex';
+        resultsList.innerHTML = ''; // Clear previous results
+
+        modalTitle.textContent = 'Typing Task Complete!';
+        modalMessage.textContent = `You got ${correctAnswers} out of ${vocabularyWords.length} correct.`;
+
+        if (correctAnswers === vocabularyWords.length) {
+            modalMessage.textContent += " Excellent job, perfect score!";
+        } else if (correctAnswers >= 6) {
+            modalMessage.textContent += " Great effort!";
+        } else {
+            modalMessage.textContent += " Keep practicing!";
+        }
+
+        // List all words and whether they were correct (based on final count)
+        vocabularyWords.forEach((item, index) => {
+            const listItem = document.createElement('li');
+            // This is a simplification. To show which specific words were missed,
+            // we'd need to store results for each word during the game.
+            // For now, if the total correct is less than total words, assume some were missed.
+            if (correctAnswers === vocabularyWords.length) {
+                listItem.textContent = `${item.word} - Correct`;
+                listItem.classList.add('correct');
+            } else {
+                // This logic needs to be more robust to show which specific ones were correct/incorrect
+                // For a simple display, if not perfect, just show all words and indicate general outcome.
+                listItem.textContent = `${item.word} - (Review)`;
+                listItem.classList.add('incorrect'); // Marking all as incorrect if not perfect score
+            }
+            resultsList.appendChild(listItem);
         });
 
-        typingArea.innerHTML = html;
+        onTypingComplete(); // Trigger diamond update
+    }
 
-        if (typedText === currentWord) {
-            currentWordIndex++;
-            totalChars += currentWord.length; // Count characters of correctly typed word
-            if (currentWordIndex < words.length) {
-                displayWord();
+    retakeButton.addEventListener('click', () => {
+        resultsModal.style.display = 'none';
+        initializeGame();
+    });
+
+    closeModalButton.addEventListener('click', () => {
+        resultsModal.style.display = 'none';
+        initializeGame(); // Reset for next time
+    });
+
+    initializeGame(); // Start the game when the page loads
+
+</script>
+
+<!-- Firebase SDKs and Initialization (Modular API) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Firebase Configuration (from user)
+    const firebaseConfig = {
+        apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+        authDomain: "website-vocabulary.firebaseapp.com",
+        projectId: "website-vocabulary",
+        storageBucket: "website-vocabulary.firebasestorage.app",
+        messagingSenderId: "216286165163",
+        appId: "1:216286165163:web:0d45648c2b998070a11fee",
+        measurementId: "G-1RZLN9HJ65"
+    };
+
+    // Initialize Firebase App
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Expose auth and db globally for existing activity scripts to use
+    window.auth = auth;
+    window.db = db;
+
+    // Handle authentication for Canvas environment or anonymous sign-in
+    async function authenticateUser() {
+        try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+                console.log("Authenticated with custom token.");
             } else {
-                endTypingTest();
+                await signInAnonymously(auth);
+                console.log("Signed in anonymously.");
             }
+        } catch (error) {
+            console.error("Firebase authentication error:", error);
         }
     }
 
-    function startTypingTest() {
-        startButton.style.display = 'none';
-        resetButton.style.display = 'inline-block';
-        inputField.disabled = false;
-        typingStarted = true;
-        resultsDisplay.textContent = 'Time left: 60s';
-        startTimer();
-        displayWord();
+    // Call authentication when the script loads
+    authenticateUser();
+
+    // Function to update diamond count display (top-left)
+    async function updateDiamondCountDisplay() {
+        const diamondCountElement = document.getElementById('diamond-count');
+        if (!diamondCountElement) return;
+
+        const user = auth.currentUser;
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            try {
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    const diamonds = docSnap.data().diamonds || 0;
+                    diamondCountElement.textContent = `${diamonds} 💎`;
+                } else {
+                    // If user document doesn't exist, initialize diamonds to 0
+                    await setDoc(userRef, { diamonds: 0 }, { merge: true });
+                    diamondCountElement.textContent = '0 💎';
+                }
+            } catch (error) {
+                console.error("Error fetching or initializing diamond count:", error);
+                diamondCountElement.textContent = 'Error 💎';
+            }
+        } else {
+            diamondCountElement.textContent = '0 💎'; // Or a login prompt for logged-out users
+        }
     }
 
-    function endTypingTest() {
-        clearInterval(timerId);
-        inputField.disabled = true;
-        typingStarted = false;
+    // Listen for auth state changes to update diamond count display
+    onAuthStateChanged(auth, (user) => {
+        updateDiamondCountDisplay();
+    });
 
-        const wpm = (correctChars / 5) / ((60 - timeLeft) / 60); // Words per minute calculation
-        const accuracy = totalChars > 0 ? (correctChars / totalChars) * 100 : 0; // Corrected accuracy calculation
+    // Diamond Popup Function
+    function showDiamondPopup(amount) {
+        const popup = document.getElementById("diamond-popup");
+        if (!popup) return;
 
-        resultsDisplay.innerHTML = `Time's up! WPM: ${wpm.toFixed(2)}, Accuracy: ${accuracy.toFixed(2)}%`;
+        const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+        popup.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
 
-        modalTitle.textContent = 'Typing Test Complete!';
-        modalMessage.innerHTML = `Words Per Minute (WPM): ${wpm.toFixed(2)}<br>Accuracy: ${accuracy.toFixed(2)}%`;
-        resultModal.style.display = 'flex'; // Show modal
+        popup.classList.remove('show');
+        void popup.offsetWidth;
+        popup.classList.add('show');
 
-        // Trigger diamond update
-        onTypingComplete(Math.floor(accuracy / 10)); // Example: 1 diamond for every 10% accuracy
+        setTimeout(() => {
+            popup.classList.remove('show');
+            popup.style.display = 'none';
+        }, 1500);
+        popup.style.display = 'block';
     }
 
-    function resetTest() {
-        clearInterval(timerId);
-        currentWordIndex = 0;
-        timeLeft = 60;
-        correctChars = 0;
-        totalChars = 0;
-        typingStarted = false;
-        inputField.value = '';
-        inputField.disabled = true;
-        typingArea.innerHTML = 'Click "Start Typing" to begin.';
-        resultsDisplay.textContent = '';
-        startButton.style.display = 'inline-block';
-        resetButton.style.display = 'none';
-    }
+    // Function to update user's diamond count in Firestore
+    window.updateDiamondCount = async function(diamondsEarned) {
+        const user = auth.currentUser;
+        if (!user) {
+            console.log("No user logged in to record diamond update.");
+            return;
+        }
 
-    function closeModal() {
-        resultModal.style.display = 'none';
-        resetTest();
-    }
+        const userRef = doc(db, "users", user.uid);
+        try {
+            await setDoc(userRef, {
+                diamonds: increment(diamondsEarned)
+            }, { merge: true });
+            console.log(`Diamonds updated: +${diamondsEarned}`);
+            showDiamondPopup(diamondsEarned);
+            updateDiamondCountDisplay();
+        } catch (error) {
+            console.error("Error updating document for diamonds:", error);
+        }
+    };
 
-    startButton.addEventListener('click', startTypingTest);
-    resetButton.addEventListener('click', resetTest);
-    inputField.addEventListener('input', updateTypingArea);
+    // Typing completion logic
+    window.onTypingComplete = function() {
+        let diamondEarned = 0;
+        if (correctAnswers === vocabularyWords.length) { // 10/10 correct
+            diamondEarned = 1.5;
+        } else if (correctAnswers >= 6) { // 6 or more correct
+            diamondEarned = 1;
+        }
+        
+        if (diamondEarned > 0) {
+            window.updateDiamondCount(diamondEarned);
+        } else {
+            console.log("Not enough correct answers to earn diamonds.");
+        }
+    };
 
-    // Initial setup
-    resetTest();
+    // Initial update of diamond count display on page load
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            updateDiamondCountDisplay();
+        }
+    });
+
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-    authDomain: "website-vocabulary.firebaseapp.com",
-    projectId: "website-vocabulary",
-    storageBucket: "website-vocabulary.firebasestorage.app",
-    messagingSenderId: "216286165163",
-    appId: "1:216286165163:web:0d45648c2b998070a11fee",
-    measurementId: "G-1RZLN9HJ65"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  window.auth = auth; // Expose to global window object for console debugging
-  window.db = db;     // Expose to global window object for console debugging
-
-  let startTime = Date.now();
-  window.addEventListener("beforeunload", () => {
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-    const user = auth.currentUser;
-    if (user) {
-      const userRef = db.collection("users").doc(user.uid);
-      userRef.update({
-        timeSpent: firebase.firestore.FieldValue.increment(timeSpent),
-        diamonds: firebase.firestore.FieldValue.increment(Math.floor(timeSpent / 3600) * 10)
-      }).catch(error => {
-        console.error("Error updating time spent/diamonds on unload:", error);
-      });
-    }
-  });
-
-  // Function to update diamond count display (top-left)
-  async function updateDiamondCountDisplay(user) {
-      const diamondCountElement = document.getElementById('diamond-count');
-      if (diamondCountElement) {
-          if (user) {
-              const userRef = db.collection("users").doc(user.uid);
-              try {
-                  const docSnap = await userRef.get();
-                  if (docSnap.exists) {
-                      const diamonds = docSnap.data().diamonds || 0;
-                      diamondCountElement.textContent = `${diamonds} 💎`;
-                  } else {
-                      diamondCountElement.textContent = '0 💎';
-                  }
-              } catch (error) {
-                  console.error("Error fetching diamond count:", error);
-                  diamondCountElement.textContent = 'Error 💎';
-              }
-          } else {
-              diamondCountElement.textContent = '0 💎';
-          }
-      }
-  }
-
-  // Listen for auth state changes to update diamond count and potentially other UI
-  auth.onAuthStateChanged((user) => {
-      updateDiamondCountDisplay(user);
-  });
-
-  function showDiamondPopup(amount = 1) {
-    const popup = document.getElementById("diamond-popup");
-    popup.textContent = `+${amount} 💎`;
-    popup.classList.add('show'); // Add 'show' class to trigger animation
-    setTimeout(() => {
-      popup.classList.remove('show'); // Remove 'show' to fade out
-      // Hide completely after fade out animation (if needed for older browsers)
-      setTimeout(() => { popup.style.display = "none"; }, 500); // Match transition duration
-    }, 1500); // Total display time
-    popup.style.display = "block"; // Make visible to start transition
-  }
-
-  function updateDiamondCount(diamondsEarned) {
-    const user = auth.currentUser;
-    if (!user) return;
-    const userRef = db.collection("users").doc(user.uid);
-
-    userRef.get().then(doc => {
-      const current = doc.exists && doc.data().diamonds ? doc.data().diamonds : 0;
-      userRef.set({ diamonds: current + diamondsEarned }, { merge: true })
-        .then(() => {
-          showDiamondPopup(diamondsEarned);
-          update
+</body>
+</html>
