@@ -133,6 +133,53 @@
       box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
     }
 
+    /* New styles for bouncy button */
+    .bouncy-button {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-15px);
+      }
+      60% {
+        transform: translateY(-7px);
+      }
+    }
+
+    /* Styles for auth container */
+    #auth-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    #auth-container .user-name {
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    #auth-container button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.9rem;
+    }
+
+    #auth-container button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
     /* Hero Section */
     .hero {
       padding: 180px 20px 100px;
@@ -570,6 +617,9 @@
       .section-header h2 {
         font-size: 2rem;
       }
+      #auth-container {
+        display: none; /* Hide auth container on smaller screens if navigation is hidden */
+      }
     }
 
     @media (max-width: 480px) {
@@ -582,6 +632,8 @@
       }
     }
   </style>
+  <!-- Google Sign-In Platform Library -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <!-- Firebase SDKs -->
   <script type="module">
     // Import the functions you need from the SDKs you need
@@ -629,7 +681,7 @@
       // Only submit a score if the __app_id is defined (indicating a Canvas environment)
       // and to avoid multiple submissions on page load/refresh during development
       if (typeof __app_id !== 'undefined' && !sessionStorage.getItem('scoreSubmitted')) {
-        submitScore("Jurabek", Math.floor(Math.random() * 100));
+        // submitScore("Jurabek", Math.floor(Math.random() * 100)); // Commenting out for now, as user sign-in is primary
         sessionStorage.setItem('scoreSubmitted', 'true'); // Prevent re-submission on refresh
       }
     });
@@ -653,7 +705,10 @@
       </ul>
     </nav>
     
-    <a href="#features-section" class="cta-button scroll-link">Get Started</a>
+    <!-- This div will dynamically show user name or sign-in button -->
+    <div id="auth-container">
+      <!-- Content will be rendered by JavaScript -->
+    </div>
   </header>
 
   <section class="hero">
@@ -662,7 +717,8 @@
         <h1 id="welcomeMessage">The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
         <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey. Transform your English proficiency with our proven methods.</p>
         <div class="hero-buttons">
-          <a href="#features-section" class="cta-button scroll-link">Start Learning Now</a>
+          <!-- Bouncy Sign Up Button -->
+          <a href="login.html" class="cta-button bouncy-button">Sign Up</a>
           <a href="#features-section" class="cta-button outline-button scroll-link">View Courses</a>
         </div>
       </div>
@@ -849,8 +905,82 @@
   </footer>
 
   <script>
+    // Google Sign-In Client ID - REPLACE WITH YOUR ACTUAL CLIENT ID
+    // You need to create a Google Cloud Project, enable the Google People API,
+    // and create OAuth 2.0 Client IDs for Web application.
+    // More info: https://developers.google.com/identity/sign-in/web/sign-in
+    const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'; // <<< IMPORTANT: Replace this with your actual client ID
+
+    // Initialize Google Sign-In
+    function initGoogleSignIn() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'profile email'
+        }).then(function() {
+          const auth2 = gapi.auth2.getAuthInstance();
+          // Listen for sign-in state changes.
+          auth2.isSignedIn.listen(updateSignInStatus);
+          // Initial render of the sign-in button.
+          updateSignInStatus(auth2.isSignedIn.get());
+        });
+      });
+    }
+
+    function updateSignInStatus(isSignedIn) {
+      const authContainer = document.getElementById('auth-container');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+
+      if (isSignedIn) {
+        const auth2 = gapi.auth2.getAuthInstance();
+        const profile = auth2.currentUser.get().getBasicProfile();
+        const userName = profile.getName();
+        
+        // Display user's name and sign out button
+        authContainer.innerHTML = `
+          <span class="user-name">Hello, ${userName}!</span>
+          <button onclick="signOut()">Sign Out</button>
+        `;
+        
+        // Update welcome message
+        welcomeMessage.innerHTML = `Welcome, <span class="learn">${userName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
+
+        // Store user name in session storage (optional, for simple persistence across refreshes)
+        sessionStorage.setItem('userName', userName);
+
+      } else {
+        // Display sign-in button
+        authContainer.innerHTML = `
+          <button class="g-signin2" data-onsuccess="onSignIn" data-width="150" data-height="40" data-longtitle="true" data-theme="dark"></button>
+        `;
+        // Reset welcome message if no user is signed in
+        welcomeMessage.innerHTML = `The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
+        sessionStorage.removeItem('userName');
+      }
+    }
+
+    // Google Sign-In success callback
+    function onSignIn(googleUser) {
+      // The ID token you need to pass to your backend:
+      // var id_token = googleUser.getAuthResponse().id_token;
+      // console.log("ID Token: " + id_token);
+      updateSignInStatus(true); // Manually update status after successful sign-in
+    }
+
+    // Google Sign-Out function
+    function signOut() {
+      const auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+        updateSignInStatus(false); // Manually update status after sign-out
+      });
+    }
+
     // Simple animations and interactions
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Google Sign-In when the DOM is ready
+      initGoogleSignIn();
+
       // Feature card hover effect
       const featureCards = document.querySelectorAll('.feature-card');
       featureCards.forEach(card => {
@@ -917,12 +1047,12 @@
       
       observer.observe(document.querySelector('.stats'));
 
-      // Display user's name on the page if available
-      const storedUserName = sessionStorage.getItem('userName');
-      const userNameDisplay = document.getElementById('welcomeMessage');
-      if (storedUserName) {
-        userNameDisplay.innerHTML = `Welcome, <span class="learn">${storedUserName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
-      }
+      // The welcome message update logic is now handled by Google Sign-In callbacks
+      // const storedUserName = sessionStorage.getItem('userName');
+      // const userNameDisplay = document.getElementById('welcomeMessage');
+      // if (storedUserName) {
+      //   userNameDisplay.innerHTML = `Welcome, <span class="learn">${storedUserName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
+      // }
     });
   </script>
 </body>
