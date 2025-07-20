@@ -46,9 +46,8 @@
             background-color: var(--primary-bg);
             color: var(--text-primary);
             display: flex;
-            flex-direction: column; /* Changed to column to stack elements */
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
@@ -67,8 +66,6 @@
             max-width: 700px;
             box-sizing: border-box;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 80px; /* Space for fixed diamond count */
-            margin-bottom: 40px; /* Space for navigation */
         }
 
         .question-text {
@@ -455,364 +452,6 @@
     </style>
     <div id="diamond-popup">+1 💎</div>
 
-    <!-- Navigation Buttons -->
-    <div class="activity-nav">
-        <div class="nav-buttons">
-            <a href="cambridge18_test1_passage1_matching.html" class="nav-button prev-button">← Previous Activity</a>
-            <a href="cambridge18_test1_passage1_typing.html" class="nav-button next-button">Next Activity →</a>
-        </div>
-        <div class="progress-indicator">
-            <div class="progress-step matching-step">Matching</div>
-            <div class="progress-step quiz-step">Quiz</div>
-            <div class="progress-step typing-step">Typing</div>
-        </div>
-    </div>
-
-    <style>
-    /* Unified Navigation Styles */
-    .activity-nav {
-        max-width: 800px;
-        margin: 40px auto 20px;
-        padding: 0 20px;
-    }
-
-    .nav-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
-
-    .nav-button {
-        padding: 14px 30px;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.15em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .prev-button {
-        background: #3498DB;
-        color: white;
-    }
-
-    .next-button {
-        background: #28B463;
-        color: white;
-    }
-
-    .nav-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .nav-button:active {
-        transform: translateY(0);
-    }
-
-    .progress-indicator {
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        margin-top: 10px;
-    }
-
-    .progress-indicator::before {
-        content: '';
-        position: absolute;
-        top: 20px;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: #E2E8F0;
-        z-index: 1;
-    }
-
-    .progress-step {
-        position: relative;
-        z-index: 2;
-        text-align: center;
-        width: 33.33%;
-        font-weight: 600;
-        color: #A0AEC0;
-    }
-
-    .progress-step::before {
-        content: '';
-        width: 24px;
-        height: 24px;
-        background: #E2E8F0;
-        border-radius: 50%;
-        display: block;
-        margin: 0 auto 10px;
-        border: 4px solid white;
-        box-shadow: 0 0 0 2px #E2E8F0;
-    }
-    .matching-step {
-        color: #A0AEC0; /* Default color */
-    }
-    .matching-step::before {
-        background: #E2E8F0; /* Default color */
-        box-shadow: 0 0 0 2px #E2E8F0;
-    }
-    .quiz-step {
-        color: #2D3748; /* Active color for Quiz */
-    }
-    .quiz-step::before {
-        background: #3498DB; /* Active color for Quiz */
-        box-shadow: 0 0 0 2px #3498DB;
-    }
-    .typing-step {
-        color: #A0AEC0; /* Default color */
-    }
-    .typing-step::before {
-        background: #E2E8F0; /* Default color */
-        box-shadow: 0 0 0 2px #E2E8F0;
-    }
-    /* Dark mode adjustments */
-    body.dark-mode .progress-indicator::before {
-        background: #4A5568;
-    }
-
-    body.dark-mode .progress-step::before {
-        background: #4A5568;
-        border-color: #1F2937;
-        box-shadow: 0 0 0 2px #4A5568;
-    }
-
-    body.dark-mode .progress-step {
-        color: #A0AEC0;
-    }
-
-    body.dark-mode .progress-step.matching-step::before,
-    body.dark-mode .progress-step.quiz-step::before,
-    body.dark-mode .progress-step.typing-step::before {
-        background: #63B3ED;
-        box-shadow: 0 0 0 2px #63B3ED;
-    }
-
-    body.dark-mode .matching-step,
-    body.dark-mode .quiz-step,
-    body.dark-mode .typing-step {
-        color: #E2E8F0;
-    }
-    </style>
-
-    <script>
-        const vocabularyWords = [
-            { word: "To sprout", definition: "To begin to grow." },
-            { word: "To peer", definition: "To look closely or carefully." },
-            { word: "Hollow", definition: "Empty inside." },
-            { word: "To burst", definition: "To suddenly come out or break open." },
-            { word: "Aromatic", definition: "Having a strong, pleasant smell." },
-            { word: "To harvest", definition: "To collect crops or plants when they are ready." },
-            { word: "A showcase", definition: "Something that shows the best of something." },
-            { word: "A breed", definition: "A type or kind of something (often animals or plants)." },
-            { word: "To withstand", definition: "To resist or survive something." },
-            { word: "Produce (noun)", definition: "Fruits and vegetables grown for eating." },
-            { word: "-free (suffix)", definition: "Without something." },
-            { word: "Resistance", definition: "The ability to stop something or not be affected." },
-            { word: "Exhausted (soil)", definition: "Used up or worn out." },
-            { word: "Yield (noun)", definition: "The amount of food or crops produced." },
-            { word: "Disused", definition: "Not used anymore." },
-            { word: "Fraction", definition: "A small part of something." },
-            { word: "Return (in farming)", definition: "The amount of result (like crops) from something." }
-        ];
-
-        let currentQuizWords = [];
-        let currentQuestionIndex = 0;
-        // userAnswers will store answers for the *current* 10-question quiz
-        let userAnswers = [];
-        let incorrectAnswers = [];
-
-        const quizLength = 10; // Define quiz length
-
-        const questionTextElement = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
-        const submitButton = document.getElementById('submit-button');
-        const quizContent = document.getElementById('quiz-content');
-        const resultsContainer = document.getElementById('results-container');
-        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
-        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
-        const resultsMessage = document.getElementById('results-message');
-        const fireworkDisplay = document.getElementById('firework-display');
-        const modeToggleButton = document.getElementById('mode-toggle');
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function startQuiz() {
-            currentQuestionIndex = 0;
-            userAnswers = new Array(quizLength).fill(null); // Initialize user answers for 10 questions
-            incorrectAnswers = [];
-
-            if (vocabularyWords.length < quizLength) {
-                console.error(`Not enough vocabulary words to create a ${quizLength}-question quiz.`);
-                // Potentially display a message to the user here
-                return;
-            }
-            
-            // Shuffle all words and then take the first 'quizLength' for the current quiz
-            const shuffledAllWords = shuffleArray([...vocabularyWords]);
-            currentQuizWords = shuffledAllWords.slice(0, quizLength);
-
-            quizContent.style.display = 'block';
-            resultsContainer.style.display = 'none';
-            submitButton.style.display = 'none';
-            fireworkDisplay.innerHTML = '';
-
-            displayQuestion(currentQuestionIndex);
-        }
-
-        function displayQuestion(index) {
-            const currentWordObject = currentQuizWords[index];
-            questionTextElement.textContent = currentWordObject.word;
-            optionsContainer.innerHTML = '';
-
-            const correctOptionDefinition = currentWordObject.definition;
-            let allOptionDefinitions = [correctOptionDefinition];
-
-            let incorrectOptionsCount = 0;
-            const definitionsPool = vocabularyWords.map(item => item.definition);
-            while (incorrectOptionsCount < 3) {
-                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
-                // Ensure random definition is not the correct one and not already added
-                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
-                    allOptionDefinitions.push(randomDefinition);
-                    incorrectOptionsCount++;
-                }
-            }
-
-            allOptionDefinitions = shuffleArray(allOptionDefinitions);
-
-            allOptionDefinitions.forEach(definition => {
-                const button = document.createElement('button');
-                button.textContent = definition;
-                button.onclick = () => selectAnswer(definition);
-                optionsContainer.appendChild(button);
-
-                if (userAnswers[index] === definition) {
-                    button.classList.add('selected');
-                }
-            });
-
-            updateNavigationButtons();
-        }
-
-        function selectAnswer(selectedDefinition) {
-            userAnswers[currentQuestionIndex] = selectedDefinition;
-            Array.from(optionsContainer.children).forEach(button => {
-                button.classList.remove('selected');
-                if (button.textContent === selectedDefinition) {
-                    button.classList.add('selected');
-                }
-            });
-        }
-
-        function updateNavigationButtons() {
-            prevButton.disabled = currentQuestionIndex === 0;
-            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block';
-            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none';
-        }
-
-        function nextQuestion() {
-            if (currentQuestionIndex < quizLength - 1) {
-                currentQuestionIndex++;
-                displayQuestion(currentQuestionIndex);
-            }
-        }
-
-        function previousQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                displayQuestion(currentQuestionIndex);
-            }
-        }
-
-        function submitQuiz() {
-            incorrectAnswers = [];
-            let correctCount = 0;
-            for (let i = 0; i < quizLength; i++) { // Loop through the 10 questions of the current quiz
-                if (userAnswers[i] !== currentQuizWords[i].definition) {
-                    incorrectAnswers.push({
-                        word: currentQuizWords[i].word,
-                        correctDefinition: currentQuizWords[i].definition,
-                        userAnswer: userAnswers[i] || "No answer provided"
-                    });
-                } else {
-                    correctCount++;
-                }
-            }
-
-            quizContent.style.display = 'none';
-            resultsContainer.style.display = 'block';
-            incorrectAnswersList.innerHTML = '';
-
-            if (incorrectAnswers.length > 0) {
-                resultsMessage.textContent = `Quiz Completed! You got ${correctCount} out of ${quizLength} correct.`;
-                incorrectAnswersHeading.style.display = 'block';
-                incorrectAnswers.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
-                    incorrectAnswersList.appendChild(listItem);
-                });
-            } else {
-                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
-                incorrectAnswersHeading.style.display = 'none';
-                const listItem = document.createElement('li');
-                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
-                listItem.style.backgroundColor = 'var(--success-color)';
-                listItem.style.color = 'white';
-                listItem.style.borderColor = 'var(--success-color)';
-                incorrectAnswersList.appendChild(listItem);
-                triggerFireworks();
-            }
-            window.onQuizComplete(correctCount); // Call onQuizComplete with the correct count
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        function triggerFireworks() {
-            fireworkDisplay.innerHTML = '';
-            const numFireworks = 8;
-            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
-
-            for (let i = 0; i < numFireworks; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework', 'multi');
-                firework.style.left = `${Math.random() * 80 + 10}%`;
-                firework.style.top = `${Math.random() * 60 + 20}%`;
-                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                firework.style.animationDelay = `${i * 0.15}s`;
-
-                fireworkDisplay.appendChild(firework);
-
-                firework.addEventListener('animationend', () => {
-                    firework.remove();
-                });
-            }
-        }
-
-        window.onload = startQuiz;
-
-    </script>
-
-    <!-- Firebase SDKs and Initialization (Modular API) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -953,12 +592,211 @@
             }
         };
 
-        // Initial update of diamond count display on page load
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                updateDiamondCountDisplay();
+
+        const vocabularyWords = [
+            { word: "To sprout", definition: "To begin to grow." },
+            { word: "To peer", definition: "To look closely or carefully." },
+            { word: "Hollow", definition: "Empty inside." },
+            { word: "To burst", definition: "To suddenly come out or break open." },
+            { word: "Aromatic", definition: "Having a strong, pleasant smell." },
+            { word: "To harvest", definition: "To collect crops or plants when they are ready." },
+            { word: "A showcase", definition: "Something that shows the best of something." },
+            { word: "A breed", definition: "A type or kind of something (often animals or plants)." },
+            { word: "To withstand", definition: "To resist or survive something." },
+            { word: "Produce (noun)", definition: "Fruits and vegetables grown for eating." },
+            { word: "-free (suffix)", definition: "Without something." },
+            { word: "Resistance", definition: "The ability to stop something or not be affected." },
+            { word: "Exhausted (soil)", definition: "Used up or worn out." },
+            { word: "Yield (noun)", definition: "The amount of food or crops produced." },
+            { word: "Disused", definition: "Not used anymore." },
+            { word: "Fraction", definition: "A small part of something." },
+            { word: "Return (in farming)", definition: "The amount of result (like crops) from something." }
+        ];
+
+        let currentQuizWords = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let incorrectAnswers = [];
+
+        const quizLength = 10; // Define quiz length
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkDisplay = document.getElementById('firework-display');
+        const modeToggleButton = document.getElementById('mode-toggle');
+
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
-        });
+            return array;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizLength).fill(null); // Initialize user answers for 10 questions
+            incorrectAnswers = [];
+
+            if (vocabularyWords.length < quizLength) {
+                console.error(`Not enough vocabulary words to create a ${quizLength}-question quiz.`);
+                // Potentially display a message to the user here
+                return;
+            }
+            
+            // Shuffle all words and then take the first 'quizLength' for the current quiz
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentQuizWords = shuffledAllWords.slice(0, quizLength);
+
+            quizContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none';
+            fireworkDisplay.innerHTML = '';
+
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function displayQuestion(index) {
+            const currentWordObject = currentQuizWords[index];
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = '';
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            let incorrectOptionsCount = 0;
+            const definitionsPool = vocabularyWords.map(item => item.definition);
+            while (incorrectOptionsCount < 3) {
+                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
+                // Ensure random definition is not the correct one and not already added
+                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
+                }
+            }
+
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
+
+            allOptionDefinitions.forEach(definition => {
+                const button = document.createElement('button');
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition);
+                optionsContainer.appendChild(button);
+
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
+                }
+            });
+
+            updateNavigationButtons();
+        }
+
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition;
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
+                }
+            });
+        }
+
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block';
+            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizLength - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitQuiz() {
+            incorrectAnswers = [];
+            let correctCount = 0;
+            for (let i = 0; i < quizLength; i++) { // Loop through the 10 questions of the current quiz
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push({
+                        word: currentQuizWords[i].word,
+                        correctDefinition: currentQuizWords[i].definition,
+                        userAnswer: userAnswers[i] || "No answer provided"
+                    });
+                } else {
+                    correctCount++;
+                }
+            }
+
+            quizContent.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            incorrectAnswersList.innerHTML = '';
+
+            if (incorrectAnswers.length > 0) {
+                resultsMessage.textContent = `Quiz Completed! You got ${quizLength - incorrectAnswers.length} out of ${quizLength} correct.`;
+                incorrectAnswersHeading.style.display = 'block';
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
+                    incorrectAnswersList.appendChild(listItem);
+                });
+            } else {
+                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
+                incorrectAnswersHeading.style.display = 'none';
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks();
+            }
+            window.onQuizComplete(correctCount); /* Call onQuizComplete with correct count */
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function triggerFireworks() {
+            fireworkDisplay.innerHTML = '';
+            const numFireworks = 8;
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi');
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = `${i * 0.15}s`;
+
+                fireworkDisplay.appendChild(firework);
+
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                });
+            }
+        }
+
+        window.onload = startQuiz;
 
     </script>
 </body>
