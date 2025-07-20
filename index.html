@@ -582,6 +582,59 @@
       }
     }
   </style>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+    // Import Firestore SDKs
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+      authDomain: "website-vocabulary.firebaseapp.com",
+      projectId: "website-vocabulary",
+      storageBucket: "website-vocabulary.firebasestorage.app",
+      messagingSenderId: "216286165163",
+      appId: "1:216286165163:web:5f502a45c9d09bb4a11fee",
+      measurementId: "G-9TNR3V6VMC"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app); // Initialize Firestore
+
+    // Example function to send score to Firestore
+    function submitScore(userName, scoreValue) {
+      // Use __app_id for collection path for public data
+      const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+      addDoc(collection(db, `artifacts/${appId}/public/data/scoreboard`), {
+        user: userName,
+        score: scoreValue,
+        timestamp: new Date()
+      })
+      .then(() => {
+        console.log("✅ Score submitted to Firestore!");
+      })
+      .catch((error) => {
+        console.error("❌ Error submitting score:", error);
+      });
+    }
+
+    // Call this function (test)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Only submit a score if the __app_id is defined (indicating a Canvas environment)
+      // and to avoid multiple submissions on page load/refresh during development
+      if (typeof __app_id !== 'undefined' && !sessionStorage.getItem('scoreSubmitted')) {
+        submitScore("Jurabek", Math.floor(Math.random() * 100));
+        sessionStorage.setItem('scoreSubmitted', 'true'); // Prevent re-submission on refresh
+      }
+    });
+
+  </script>
 </head>
 <body>
   <header>
