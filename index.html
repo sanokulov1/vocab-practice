@@ -601,6 +601,22 @@
         display: none;
       }
       
+      .hero {
+        padding: 150px 20px 80px;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .section-header h2 {
+        font-size: 2rem;
+      }
       /* MODIFIED: Ensure auth container is visible on smaller screens */
       #auth-container {
         display: flex; /* Changed from 'none' to 'flex' */
@@ -718,8 +734,8 @@
         <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey. Transform your English proficiency with our proven methods.</p>
         <div class="hero-buttons">
           <!-- Bouncy Sign Up Button -->
-          <a href="login.html" class="cta-button bouncy-button">Sign Up</a>
-          <a href="#features-section" class="cta-button outline-button-scroll-link">View Courses</a>
+          <a href="login.html" class="cta-button bouncy-button" id="signup-button">Sign Up</a>
+          <a href="#features-section" class="cta-button outline-button scroll-link">View Courses</a>
         </div>
       </div>
     </div>
@@ -868,32 +884,32 @@
         <div class="footer-col">
           <h3>Quick Links</h3>
           <ul class="footer-links">
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Courses</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Vocabulary Practice</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> About Me</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Vocabulary Practice</a></li>
+            <li><a href="#">About Me</a></li>
+            <li><a href="#">Contact</a></li>
           </ul>
         </div>
         
         <div class="footer-col">
           <h3>Resources</h3>
           <ul class="footer-links">
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Learning Materials</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Tests</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Study Guides</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Blog & Tips</a></li>
-            <li><a href="#"><i class="fas fa-chevron-right"></i> Webinars</a></li>
+            <li><a href="#">Learning Materials</a></li>
+            <li><a href="#">Practice Tests</a></li>
+            <li><a href="#">Study Guides</a></li>
+            <li><a href="#">Blog & Tips</a></li>
+            <li><a href="#">Webinars</a></li>
           </ul>
         </div>
         
         <div class="footer-col">
           <h3>Contact</h3>
           <ul class="footer-links">
-            <li><a href="#"><i class="fas fa-envelope"></i> info@sanokulov.uz</a></li>
-            <li><a href="#"><i class="fas fa-phone"></i> +998 99 123 4567</a></li>
-            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Tashkent, Uzbekistan</a></li>
-            <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</a></li>
+            <li><a href="#">info@sanokulov.uz</a></li>
+            <li><a href="#">+998 99 123 4567</a></li>
+            <li><a href="#">Tashkent, Uzbekistan</a></li>
+            <li><a href="#">Mon-Fri: 9AM - 6PM</a></li>
           </ul>
         </div>
       </div>
@@ -906,9 +922,6 @@
 
   <script>
     // Google Sign-In Client ID - REPLACE WITH YOUR ACTUAL CLIENT ID
-    // You need to create a Google Cloud Project, enable the Google People API,
-    // and create OAuth 2.0 Client IDs for Web application.
-    // More info: https://developers.google.com/identity/sign-in/web/sign-in
     const GOOGLE_CLIENT_ID = '216286165163-tdgl1mfpfmahvfej31fibiovp4ulruun.apps.googleusercontent.com'; // Your actual client ID
 
     // Function to decode JWT (for getting user info from credential response)
@@ -935,12 +948,16 @@
       const signOutButton = document.getElementById('sign-out-button');
       const googleSignInButtonDiv = document.getElementById('google-signin-button');
       const welcomeMessage = document.getElementById('welcomeMessage');
+      const signupButton = document.getElementById('signup-button'); // Get the sign-up button
 
       if (isSignedIn && userName) {
         userDisplayName.innerHTML = `Hello, ${userName}!`;
         userDisplayName.style.display = 'inline-block';
         signOutButton.style.display = 'inline-block';
         googleSignInButtonDiv.style.display = 'none'; // Hide the Google Sign-In button
+        if (signupButton) { // Hide sign-up button if it exists
+            signupButton.style.display = 'none';
+        }
         
         welcomeMessage.innerHTML = `Welcome, <span class="learn">${userName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
         sessionStorage.setItem('userName', userName); // Store user name
@@ -949,6 +966,9 @@
         userDisplayName.style.display = 'none';
         signOutButton.style.display = 'none';
         googleSignInButtonDiv.style.display = 'block'; // Show the Google Sign-In button
+        if (signupButton) { // Show sign-up button
+            signupButton.style.display = 'inline-block';
+        }
         
         welcomeMessage.innerHTML = `The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
         sessionStorage.removeItem('userName'); // Clear user name
@@ -957,10 +977,13 @@
 
     // Google Sign-Out function for GIS
     function signOut() {
-      // For GIS, signing out usually involves clearing the session or disabling auto-select
-      google.accounts.id.disableAutoSelect();
-      console.log('User signed out.');
-      updateSignInStatus(false); // Manually update status after sign-out
+      // For GIS, to revoke the token and sign out fully
+      google.accounts.id.revoke(sessionStorage.getItem('userName'), (done) => { // Use stored user name or ID for revocation
+        console.log('User signed out:', done);
+        updateSignInStatus(false); // Manually update status after sign-out
+        // Optional: Redirect to home page or refresh
+        // window.location.href = '/'; 
+      });
     }
 
     // Initialize Google Identity Services (GIS)
@@ -988,8 +1011,6 @@
         );
 
         // Check initial sign-in status (if user is already logged in via Google)
-        // GIS handles this implicitly with auto_select and the callback.
-        // We can also check if a user name is in session storage from a previous successful login
         const storedUserName = sessionStorage.getItem('userName');
         if (storedUserName) {
             updateSignInStatus(true, storedUserName);
