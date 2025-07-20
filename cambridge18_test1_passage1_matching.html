@@ -770,7 +770,8 @@
                     const docSnap = await getDoc(userRef);
                     if (docSnap.exists()) {
                         const diamonds = docSnap.data().diamonds || 0;
-                        diamondCountElement.textContent = `${diamonds} �`;
+                        // FIX: Changed '?' to '💎' for the diamond icon
+                        diamondCountElement.textContent = `${diamonds} 💎`; 
                     } else {
                         // If user document doesn't exist for a Google user, initialize diamonds to 0
                         await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
@@ -846,6 +847,34 @@
         }
     };
 
+    // NEW: Function to update user's time spent in Firestore
+    window.updateTimeSpent = async function(durationMs) {
+        const user = auth.currentUser;
+        if (!user) {
+            console.log("Time spent update skipped: No user logged in.");
+            return;
+        }
+
+        const isGoogleSignedIn = user.providerData.some(
+            (provider) => provider.providerId === 'google.com'
+        );
+
+        if (!isGoogleSignedIn) {
+            console.warn("Time spent update skipped: User is not signed in with a Google account.");
+            return;
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        try {
+            await setDoc(userRef, {
+                timeSpent: increment(durationMs)
+            }, { merge: true });
+            console.log(`Time spent updated: +${durationMs}ms for Google user: ${user.displayName || user.uid}`);
+        } catch (error) {
+            console.error("Error updating document for time spent:", error);
+        }
+    };
+
     // Initial update of diamond count display on page load
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -914,6 +943,9 @@ window.addEventListener('load', () => {
       }
   }, 2000); // Hide after 2 seconds
 });
+
+// --- NEW: Global variable to track the start time of the activity ---
+let activityStartTime;
 
 // --- NEW: Set to track groups that have already awarded diamonds ---
 const completedGroupsForDiamonds = new Set();
@@ -990,6 +1022,12 @@ function setupGame(wordPairs, groupId) {
                 window.updateDiamondCount(0.5); // Award 0.5 diamonds
                 completedGroupsForDiamonds.add(groupId); // Mark group as having awarded diamonds
             }
+            // Check if all groups are completed to trigger overall time tracking
+            const allGroupsTotal = document.querySelectorAll('.accordion').length; // Total number of accordion groups
+            if (completedGroupsForDiamonds.size === allGroupsTotal) {
+                const duration = Date.now() - activityStartTime; // Calculate total duration for all groups
+                window.updateTimeSpent(duration); // Update total time spent in Firestore
+            }
           }
         } else {
           // Incorrect match
@@ -1046,13 +1084,19 @@ function setupGame(wordPairs, groupId) {
 (function() {
   const wordPairs = [
     { word: "Exhausted (soil)", definition: "Used up or worn out." },
-    { word: "Yield (noun)", definition: "The amount of food or crops produced." },
+    { word: "Yield (noun)", "definition": "The amount of food or crops produced." },
     { word: "Disused", definition: "Not used anymore." },
     { word: "Fraction", definition: "A small part of something." },
     { word: "Return (in farming)", definition: "The amount of result (like crops) from something." }
   ];
   setupGame(wordPairs, 'group3');
 })();
+
+// NEW: Initialize activityStartTime when the window loads
+window.addEventListener('load', () => {
+    activityStartTime = Date.now();
+    console.log("Matching activity started, overall timer initiated.");
+});
 </script>
 </body>
 </html>
