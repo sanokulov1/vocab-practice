@@ -649,7 +649,231 @@
   </style>
   <!-- Google Identity Services (GIS) Library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <!-- Firebase SDKs -->
+</head>
+<body onload="initGoogleClient()"> <!-- Call GIS initialization on body load -->
+  <header>
+    <div class="logo" onclick="location.reload()">
+      <i class="fas fa-graduation-cap"></i>
+      sanokulov.uz
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <!-- Original links you had are here -->
+        <li><a href="cambridge18_test1_passage1_quiz.html">Quiz</a></li>
+        <li><a href="cambridge18_test1_passage1_typing.html">Typing Task</a></li>
+        <li><a href="cambridge18_test1_passage1_matching.html">Matching Game</a></li>
+      </ul>
+    </nav>
+    
+    <!-- This div will dynamically show user name or sign-in button -->
+    <div id="auth-container">
+      <span id="user-display" class="user-name" style="display: none;"></span>
+      <button id="sign-out-button" style="display: none;">Sign Out</button>
+      <!-- The Google Sign-In button will be rendered here by GIS -->
+      <div id="google-signin-button"></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 id="welcomeMessage">The best place to <span class="learn">learn</span> and <span class="play">grow</span></h1>
+        <p>Explore rich, interactive tools to improve vocabulary, boost skills, and track your learning journey. Transform your English proficiency with our proven methods.</p>
+        <div class="hero-buttons">
+          <!-- MODIFIED: "Sign Up" button now links to features and is dynamically hidden/shown -->
+          <a href="#features-section" class="cta-button bouncy-button scroll-link" id="signup-button">Get Started</a>
+          <a href="#features-section" class="cta-button outline-button scroll-link">View Courses</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Learning Features</h2>
+        <p>Discover our comprehensive tools designed to accelerate your language learning journey</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card" data-href="vocab-practice.html">
+          <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Vocabulary Practice</h3>
+            <p>Boost your language skills with curated vocabulary sets and review tasks. Interactive exercises tailored to your learning level.</p>
+            <a href="vocab-practice.html" class="feature-link" aria-hidden="true" tabindex="-1">
+              Start Practicing
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="feature-card" data-href="#">
+          <div class="feature-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Join My Lessons</h3>
+            <p>Enroll in private or group classes to accelerate your English learning journey with personalized guidance.</p>
+            <a href="#" class="feature-link" aria-hidden="true" tabindex="-1">
+              View Schedule
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="feature-card" data-href="donation.html">
+          <div class="feature-icon">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Support My Work</h3>
+            <p>Your contribution helps us continue providing high-quality English learning resources and expand our offerings.</p>
+            <a href="donation.html" class="feature-link" aria-hidden="true" tabindex="-1">
+              Support Now
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">1500+</div>
+          <div class="stat-label">Active Learners</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Vocabulary Sets</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2>Student Success Stories</h2>
+        <p>Hear what our students say about their learning experience</p>
+      </div>
+      
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "The vocabulary practice tools transformed my English skills. I passed my IELTS exam with flying colors thanks to this platform!"
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">SA</div>
+            <div class="author-info">
+              <h4>Sarah Ahmed</h4>
+              <p>University Student</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "The personalized lessons helped me gain confidence in business English. My career prospects have improved significantly."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">MR</div>
+            <div class="author-info">
+              <h4>Michael Rodriguez</h4>
+              <p>Marketing Professional</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            "As a busy professional, the flexible scheduling made all the difference. I can learn at my own pace without compromising my work."
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">EJ</div>
+            <div class="author-info">
+              <h4>Emma Johnson</h4>
+              <p>Software Developer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>sanokulov.uz</h3>
+          <p>Your premier destination for effective English language learning. Transform your communication skills with our proven methods.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Vocabulary Practice</a></li>
+            <li><a href="#">About Me</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul class="footer-links">
+            <li><a href="#">Learning Materials</a></li>
+            <li><a href="#">Practice Tests</a></li>
+            <li><a href="#">Study Guides</a></li>
+            <li><a href="#">Blog & Tips</a></li>
+            <li><a href="#">Webinars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Contact</h3>
+          <ul class="footer-links">
+            <li><a href="#">info@sanokulov.uz</a></li>
+            <li><a href="#">+998 99 123 4567</a></li>
+            <li><a href="#">Tashkent, Uzbekistan</a></li>
+            <li><a href="#">Mon-Fri: 9AM - 6PM</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        &copy; 2025 sanokulov.uz – All rights reserved
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase Authentication JavaScript -->
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -789,6 +1013,7 @@
         const authContainer = document.getElementById('auth-container');
         if (authContainer) {
             authContainer.innerHTML = '<p style="color: red;">Google Sign-In failed to load. Please check console for details.</p>';
+            alert("Google Sign-In failed to load. Please check console for details."); // Added alert for immediate feedback
         }
       }
     };
