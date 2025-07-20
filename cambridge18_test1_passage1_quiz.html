@@ -17,45 +17,28 @@
             --success-color: #28B463; /* Green for correct feedback */
             --error-color: #E74C3C; /* Red for incorrect feedback */
             --border-color: #CCD1D1; /* Light grey border */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --shadow-dark: 0 6px 16px rgba(0, 0, 0, 0.2);
-            --button-text: white;
-            --button-hover: #2980b9;
-            --modal-bg: #FFFFFF;
-            --modal-backdrop: rgba(0, 0, 0, 0.6);
-            --firework-color-1: #FFD700;
-            --firework-color-2: #FF6347;
-            --firework-color-3: #ADFF2F;
-            --firework-color-4: #1E90FF;
-            --firework-color-5: #FF1493;
-            --firework-color-6: #00FFFF;
-            --firework-color-7: #FF00FF;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for contrast */
+            --button-text-color: white;
+
+            /* Icon Color for Light Mode (Moon icon is visible) */
+            --day-mode-icon-color: #1A5276; /* Dark Teal for Moon Icon */
         }
 
-        /* Dark Mode Colors */
+        /* Night Mode Colors - Least Eye-Straining Dark Blue-Gray Palette */
         body.dark-mode {
-            --primary-bg: #123456; /* Darker Teal for page background (Night Mode) */
-            --secondary-bg: #2C3E50; /* Darker complementary blue-gray for quiz container (Night Mode) */
-            --text-primary: #ECF0F1; /* Light grey for main text (Night Mode) */
-            --text-secondary: #BDC3C7; /* Lighter grey for less important text (Night Mode) */
-            --accent-color: #5DADE2; /* Brighter blue accent */
-            --accent-light: #85C1E9; /* Lighter shade of accent for hover/active */
-            --success-color: #2ECC71; /* Green for correct feedback */
-            --error-color: #E74C3C; /* Red for incorrect feedback */
-            --border-color: #4A6572; /* Darker grey border */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.4);
-            --shadow-dark: 0 6px 16px rgba(0, 0, 0, 0.6);
-            --button-text: #ECF0F1;
-            --button-hover: #4299e1;
-            --modal-bg: #2C3E50;
-            --modal-backdrop: rgba(0, 0, 0, 0.8);
-            --firework-color-1: #FFEB3B;
-            --firework-color-2: #FF5722;
-            --firework-color-3: #8BC34A;
-            --firework-color-4: #2196F3;
-            --firework-color-5: #E91E63;
-            --firework-color-6: #00BCD4;
-            --firework-color-7: #9C27B0;
+            --primary-bg: #1F2937; /* Very dark blue-gray for page background (Night Mode) */
+            --secondary-bg: #2D3748; /* Slightly lighter dark blue-gray for quiz container (Night Mode) */
+            --text-primary: #E2E8F0; /* Light text for dark background (Night Mode) */
+            --text-secondary: #A0AEC0; /* Lighter grey for secondary text (Night Mode) */
+            --accent-color: #63B3ED; /* Softer blue accent for night */
+            --accent-light: #90CDF4;
+            --success-color: #48BB78; /* Softer green */
+            --error-color: #FC8181; /* Softer red */
+            --border-color: #4A5568; /* Darker border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+            /* Icon Color for Dark Mode (Sun icon is visible) */
+            --night-mode-icon-color: #FFEB3B; /* Bright Yellow for Sun Icon */
         }
 
         body {
@@ -63,7 +46,7 @@
             background-color: var(--primary-bg);
             color: var(--text-primary);
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Changed to column to stack elements */
             align-items: center;
             justify-content: center;
             min-height: 100vh;
@@ -71,940 +54,912 @@
             padding: 20px;
             box-sizing: border-box;
             transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative; /* For fireworks */
+            overflow: hidden; /* For fireworks */
         }
 
         .quiz-container {
             background-color: var(--secondary-bg);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: var(--shadow-dark);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
             width: 100%;
             max-width: 700px;
-            text-align: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             margin-top: 80px; /* Space for fixed diamond count */
             margin-bottom: 40px; /* Space for navigation */
         }
 
-        h1 {
-            color: var(--text-primary);
-            margin-bottom: 25px;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-
-        .question-section {
-            margin-bottom: 30px;
-        }
-
-        .question-counter {
-            font-size: 1.1em;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
         .question-text {
-            font-size: 1.6em;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 25px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+            font-size: 1.8em; /* Larger for words */
+            font-weight: 700;
             margin-bottom: 30px;
-            /* Removed DEBUGGING border: 2px solid red; */
+            text-align: center;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
 
-        .option-button {
-            background-color: var(--accent-color);
-            color: var(--button-text);
-            border: none; /* Removed DEBUGGING border: 2px solid blue; */
-            padding: 15px 20px;
+        .options-container button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
             border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
+            background-color: var(--secondary-bg); /* Options background same as container */
+            color: var(--text-primary);
+            font-size: 1.15em;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .option-button:hover:not(:disabled) {
-            background-color: var(--accent-light);
+        .options-container button:hover:not(.selected):not(.correct):not(.wrong) {
+            background-color: var(--border-color); /* Lighter hover */
+            border-color: var(--accent-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .option-button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
+        .options-container button.selected {
+            background-color: var(--accent-light);
+            border-color: var(--accent-color);
+            color: var(--button-text-color); /* Selected text color */
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .option-button.correct {
+        .options-container button.correct {
             background-color: var(--success-color);
             color: white;
+            border-color: var(--success-color);
+            font-weight: 600;
         }
-
-        .option-button.incorrect {
+        .options-container button.wrong {
             background-color: var(--error-color);
             color: white;
+            border-color: var(--error-color);
+            font-weight: 600;
         }
 
-        .controls {
+        .navigation-buttons {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            justify-content: space-between;
+            margin-top: 35px;
+        }
+
+        .navigation-buttons button,
+        .submit-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .navigation-buttons button:hover:not(:disabled),
+        .submit-button:hover:not(:disabled) {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .navigation-buttons button:disabled,
+        .submit-button:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .submit-button-container {
+            text-align: center;
             margin-top: 30px;
         }
 
-        .control-button {
-            background-color: var(--accent-color);
-            color: var(--button-text);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .control-button:hover:not(:disabled) {
-            background-color: var(--accent-light);
-            transform: translateY(-2px);
-        }
-
-        .control-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Results Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
+        .results-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
             width: 100%;
-            height: 100%;
-            background-color: var(--modal-backdrop);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: var(--modal-bg);
-            padding: 40px;
-            border-radius: 15px;
+            max-width: 700px;
+            box-sizing: border-box;
             text-align: center;
-            box-shadow: var(--shadow-dark);
-            max-width: 600px;
-            width: 90%;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .results-container h2 {
             color: var(--text-primary);
-            position: relative; /* For fireworks */
+            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 700;
         }
 
-        .modal-content h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: var(--accent-color);
+        .results-container h3 {
+            color: var(--error-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
         }
 
-        .modal-content p {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-
-        .results-list {
+        .results-container ul {
             list-style: none;
             padding: 0;
-            margin-bottom: 30px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--highlight-color);
-        }
-
-        .results-list li {
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border-color);
             text-align: left;
-            font-size: 1em;
         }
 
-        .results-list li:last-child {
-            border-bottom: none;
-        }
-
-        .results-list li.correct {
-            color: var(--success-color);
-        }
-
-        .results-list li.incorrect {
+        .results-container li {
+            background-color: #FEEAEA; /* Very light red background for incorrect */
             color: var(--error-color);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .modal-buttons button {
-            background-color: var(--accent-color);
-            color: var(--button-text);
-            border: none;
-            padding: 12px 25px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
             border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            border: 1px solid var(--error-color);
+            font-size: 1.1em;
+            line-height: 1.4;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
-        .modal-buttons button:hover {
-            background-color: var(--accent-light);
+        body.dark-mode .results-container li {
+            background-color: #5C2323; /* Darker red for night mode */
+            color: #FFCCCC;
+            border-color: var(--error-color); /* Use error color from dark mode */
         }
 
-        /* Fireworks container */
-        #firework-display {
+        .results-container li strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* --- Improved Mode Toggle Button --- */
+        .mode-toggle-button {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: var(--secondary-bg); /* Gives the button a solid background */
+            border: 1px solid var(--border-color); /* Defines the button edge */
+            width: 50px;  /* Explicit size for a consistent circle */
+            height: 50px; /* Explicit size for a consistent circle */
+            border-radius: 50%;
+            display: flex; /* Easiest way to center the icon inside */
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow-light); /* Adds depth, consistent with the quiz box */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .mode-toggle-button:hover {
+            transform: translateY(-2px); /* Lifts the button on hover */
+            background-color: var(--border-color); /* Consistent hover effect */
+        }
+
+        .mode-toggle-button svg {
+            width: 28px; /* Sized to fit comfortably within the button */
+            height: 28px;
+            transition: fill 0.3s ease;
+        }
+
+        /* Hide both icons by default */
+        .mode-toggle-button .sun-icon,
+        .mode-toggle-button .moon-icon {
+            display: none;
+        }
+
+        /* Show moon icon in light mode */
+        body:not(.dark-mode) .mode-toggle-button .moon-icon {
+            display: block;
+            fill: var(--day-mode-icon-color);
+        }
+
+        /* Show sun icon in dark mode */
+        body.dark-mode .mode-toggle-button .sun-icon {
+            display: block;
+            fill: var(--night-mode-icon-color);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .quiz-container, .results-container {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1.3em;
+            }
+            .options-container button {
+                padding: 15px;
+                font-size: 1em;
+            }
+            .navigation-buttons button,
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .mode-toggle-button {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+            }
+            .mode-toggle-button svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* Firework Animation */
+        .firework-container {
+            position: absolute;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allows clicks to pass through */
+            top: 0;
+            left: 0;
+            pointer-events: none;
             overflow: hidden;
-            z-index: -1; /* Behind modal content */
+            z-index: 9999;
         }
 
         .firework {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
+            background-color: #FFD700;
             border-radius: 50%;
             opacity: 0;
-            animation: explode 1s forwards;
+            animation: firework-burst 1.8s ease-out forwards;
         }
 
-        @keyframes explode {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
+        @keyframes firework-burst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(3); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
         }
 
-        .firework.multi {
-            animation: explodeMulti 1s forwards;
-        }
-
-        @keyframes explodeMulti {
-            0% {
-                transform: scale(0) translate(0, 0);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(1) translate(var(--dx1), var(--dy1));
-                opacity: 1;
-            }
-            40% {
-                transform: scale(1) translate(var(--dx2), var(--dy2));
-                opacity: 1;
-            }
-            60% {
-                transform: scale(1) translate(var(--dx3), var(--dy3));
-                opacity: 1;
-            }
-            80% {
-                transform: scale(1) translate(var(--dx4), var(--dy4));
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0) translate(var(--dx5), var(--dy5));
-                opacity: 0;
-            }
-        }
-
-        /* Theme Toggle Switch */
-        .theme-switch-wrapper {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            z-index: 10001; /* Above everything else */
-        }
-
-        .theme-switch {
-            display: inline-block;
-            height: 34px;
-            position: relative;
-            width: 60px;
-        }
-
-        .theme-switch input {
-            display: none;
-        }
-
-        .slider {
-            background-color: #ccc;
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
+        .firework::before, .firework::after {
+            content: '';
             position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-        }
-
-        .slider:before {
-            background-color: #fff;
-            bottom: 4px;
-            content: "";
-            height: 26px;
-            left: 4px;
-            position: absolute;
-            transition: .4s;
-            width: 26px;
-        }
-
-        input:checked + .slider {
-            background-color: #66bb6a;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
+            width: 5px;
+            height: 5px;
+            background-color: white;
             border-radius: 50%;
-        }
-
-        /* Diamond Count Display */
-        #diamond-count-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.2em;
-            font-weight: bold;
-            z-index: 9999; /* Ensure it's above most content but below popup */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex; /* Use flexbox for better alignment */
-            align-items: center;
-            gap: 5px; /* Space between number and diamond emoji */
-        }
-
-        body.dark-mode #diamond-count-container {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #E2E8F0;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        /* Diamond Popup Styles */
-        #diamond-popup {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: gold;
-            color: black;
-            font-weight: bold;
-            font-size: 24px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 9999;
             opacity: 0;
-            transform: translateY(0);
-            transition: transform 1s ease-out, opacity 1s ease-out;
-        }
-        #diamond-popup.show {
-            opacity: 1;
-            transform: translateY(-80px);
+            animation: firework-sparkle 1.8s ease-out forwards;
         }
 
-        /* Unified Navigation Styles */
-        .activity-nav {
-            max-width: 800px;
-            margin: 40px auto 20px;
-            padding: 0 20px;
+        .firework::before {
+            transform: translate(-18px, -18px);
+            animation-delay: 0.1s;
+        }
+        .firework::after {
+            transform: translate(18px, 18px);
+            animation-delay: 0.2s;
         }
 
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 25px;
+        .firework.multi::before {
+            box-shadow: 20px 0 #FF6347, -20px 0 #FF6347, 0 20px #FF6347, 0 -20px #FF6347,
+                                15px 15px #FF6347, -15px -15px #FF6347, 15px -15px #FF6347, -15px 15px #FF6347;
+        }
+        .firework.multi::after {
+            box-shadow: 30px 0 #ADFF2F, -30px 0 #ADFF2F, 0 30px #ADFF2F, 0 -30px #ADFF2F,
+                                22px 22px #ADFF2F, -22px -22px #ADFF2F, 22px -22px #ADFF2F, -22px 22px #ADFF2F;
         }
 
-        .nav-button {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.15em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        @keyframes firework-sparkle {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(3); }
         }
 
-        .prev-button {
-            background: #3498DB;
-            color: white;
-        }
-
-        .next-button {
-            background: #28B463;
-            color: white;
-        }
-
-        .nav-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-button:active {
-            transform: translateY(0);
-        }
-
-        .progress-indicator {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .progress-indicator::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: #E2E8F0;
-            z-index: 1;
-        }
-
-        .progress-step {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 33.33%;
-            font-weight: 600;
-            color: #A0AEC0;
-        }
-
-        .progress-step::before {
-            content: '';
-            width: 24px;
-            height: 24px;
-            background: #E2E8F0;
-            border-radius: 50%;
-            display: block;
-            margin: 0 auto 10px;
-            border: 4px solid white;
-            box-shadow: 0 0 0 2px #E2E8F0;
-        }
-        .matching-step {
-            color: #A0AEC0; /* Default color */
-        }
-        .matching-step::before {
-            background: #E2E8F0; /* Default color */
-            box-shadow: 0 0 0 2px #E2E8F0;
-        }
-        .quiz-step {
-            color: #2D3748; /* Active color for Quiz */
-        }
-        .quiz-step::before {
-            background: #3498DB; /* Active color for Quiz */
-            box-shadow: 0 0 0 2px #3498DB;
-        }
-        /* Dark mode adjustments */
-        body.dark-mode .progress-indicator::before {
-            background: #4A5568;
-        }
-
-        body.dark-mode .progress-step::before {
-            background: #4A5568;
-            border-color: #1F2937;
-            box-shadow: 0 0 0 2px #4A5568;
-        }
-
-        body.dark-mode .progress-step {
-            color: #A0AEC0;
-        }
-
-        body.dark-mode .progress-step.matching-step::before,
-        body.dark-mode .progress-step.quiz-step::before,
-        body.dark-mode .progress-step.typing-step::before {
-            background: #63B3ED;
-            box-shadow: 0 0 0 2px #63B3ED;
-        }
-
-        body.dark-mode .matching-step,
-        body.dark-mode .quiz-step,
-        body.dark-mode .typing-step {
-            color: #E2E8F0;
-        }
     </style>
 </head>
 <body>
 
-<!-- Theme Switch -->
-<div class="theme-switch-wrapper">
-    <label class="theme-switch" for="checkbox">
-        <input type="checkbox" id="checkbox" />
-        <div class="slider round"></div>
-    </label>
-</div>
+    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
+        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+        </svg>
+        <!-- Moon icon (visible in Day Mode) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+    </button>
 
-<!-- Diamond Count Display (Top-Left) -->
-<div id="diamond-count-container">
-    <span id="diamond-count">0 💎</span>
-</div>
+    <div id="quiz-app" class="quiz-container">
+        <div id="quiz-content">
+            <h2 id="question-text" class="question-text"></h2>
+            <div id="options-container" class="options-container">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-button" onclick="previousQuestion()">Previous</button>
+                <button id="next-button" onclick="nextQuestion()">Next</button>
+            </div>
+            <div class="submit-button-container">
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+        </div>
 
-<div class="quiz-container">
-    <h1>Vocabulary Quiz</h1>
-    <div class="question-section">
-        <div class="question-counter">Question <span id="current-question-number">1</span> of <span id="total-questions">10</span></div>
-        <div class="question-text" id="question-text"></div>
-    </div>
-    <div class="options-grid" id="options-grid">
-        <!-- Options will be dynamically loaded here -->
-    </div>
-    <div class="controls">
-        <button id="next-button" class="control-button">Next Question</button>
-    </div>
-</div>
-
-<!-- Results Modal -->
-<div id="results-modal" class="modal">
-    <div class="modal-content">
-        <div id="firework-display"></div>
-        <h2 id="modal-title">Quiz Results</h2>
-        <p id="modal-message"></p>
-        <ul id="incorrect-answers-list" class="results-list"></ul>
-        <div class="modal-buttons">
-            <button id="retake-quiz-button">Retake Quiz</button>
-            <button id="close-modal-button">Close</button>
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2 id="results-message"></h2>
+            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+            <ul id="incorrect-answers-list">
+                <!-- Incorrect answers will be dynamically inserted here -->
+            </ul>
+            <button class="submit-button" onclick="startQuiz()">Try Again</button>
         </div>
     </div>
-</div>
 
-<!-- Diamond Popup Styles & HTML -->
-<div id="diamond-popup">+1 💎</div>
+    <div id="firework-display" class="firework-container"></div>
 
-<!-- Navigation Buttons -->
-<div class="activity-nav">
-    <div class="nav-buttons">
-        <a href="cambridge18_test1_passage1_matching.html" class="nav-button prev-button">← Previous Activity</a>
-        <a href="cambridge18_test1_passage1_typing.html" class="nav-button next-button">Next Activity →</a>
+    <!-- Diamond Count Display (Top-Left) -->
+    <div id="diamond-count-container">
+        <span id="diamond-count">0 💎</span>
     </div>
-    <div class="progress-indicator">
-        <div class="progress-step matching-step">Matching</div>
-        <div class="progress-step quiz-step">Quiz</div>
-        <div class="progress-step typing-step">Typing</div>
+
+    <style>
+    #diamond-count-container {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.2em;
+        font-weight: bold;
+        z-index: 9999; /* Ensure it's above most content but below popup */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        display: flex; /* Use flexbox for better alignment */
+        align-items: center;
+        gap: 5px; /* Space between number and diamond emoji */
+    }
+
+    body.dark-mode #diamond-count-container { /* Adjusted for data-theme attribute */
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #E2E8F0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    </style>
+
+    <!-- Diamond Popup Styles & HTML -->
+    <style>
+      #diamond-popup {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: gold;
+        color: black;
+        font-weight: bold;
+        font-size: 24px;
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        display: none;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(0);
+        transition: transform 1s ease-out, opacity 1s ease-out;
+      }
+      #diamond-popup.show {
+        opacity: 1;
+        transform: translateY(-80px);
+      }
+    </style>
+    <div id="diamond-popup">+1 💎</div>
+
+    <!-- Navigation Buttons -->
+    <div class="activity-nav">
+        <div class="nav-buttons">
+            <a href="cambridge18_test1_passage1_matching.html" class="nav-button prev-button">← Previous Activity</a>
+            <a href="cambridge18_test1_passage1_typing.html" class="nav-button next-button">Next Activity →</a>
+        </div>
+        <div class="progress-indicator">
+            <div class="progress-step matching-step">Matching</div>
+            <div class="progress-step quiz-step">Quiz</div>
+            <div class="progress-step typing-step">Typing</div>
+        </div>
     </div>
-</div>
 
-<script>
-    // Theme toggle logic
-    const toggleSwitch = document.getElementById('checkbox');
-    const currentTheme = localStorage.getItem('theme');
-
-    if (currentTheme) {
-        document.body.classList.add(currentTheme);
-        if (currentTheme === 'dark-mode') {
-            toggleSwitch.checked = true;
-        }
+    <style>
+    /* Unified Navigation Styles */
+    .activity-nav {
+        max-width: 800px;
+        margin: 40px auto 20px;
+        padding: 0 20px;
     }
 
-    function switchTheme(e) {
-        if (e.target.checked) {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light-mode');
-        }
-    }
-    toggleSwitch.addEventListener('change', switchTheme);
-
-    const quizData = [
-        {
-            question: "What is the definition of 'Big'?",
-            options: ["Small in size.", "Large in size.", "Feeling happy.", "Moving slowly."],
-            correctAnswer: "Large in size."
-        },
-        {
-            question: "What is the definition of 'Small'?",
-            options: ["Large in size.", "Little in size.", "Feeling sad.", "Moving fast."],
-            correctAnswer: "Little in size."
-        },
-        {
-            question: "What is the definition of 'Happy'?",
-            options: ["Feeling sad.", "Feeling or showing pleasure.", "Being angry.", "Moving slowly."],
-            correctAnswer: "Feeling or showing pleasure."
-        },
-        {
-            question: "What is the definition of 'Sad'?",
-            options: ["Feeling happy.", "Feeling or showing sorrow.", "Being excited.", "Moving quickly."],
-            correctAnswer: "Feeling or showing sorrow."
-        },
-        {
-            question: "What is the definition of 'Fast'?",
-            options: ["Moving slowly.", "Moving or capable of moving at high speed.", "Standing still.", "Feeling tired."],
-            correctAnswer: "Moving or capable of moving at high speed."
-        },
-        {
-            question: "What is the definition of 'Run'?",
-            options: ["To walk slowly.", "To move quickly on foot.", "To sit down.", "To eat food."],
-            correctAnswer: "To move quickly on foot."
-        },
-        {
-            question: "What is the definition of 'Eat'?",
-            options: ["To drink water.", "To consume food.", "To sleep.", "To jump."],
-            correctAnswer: "To consume food."
-        },
-        {
-            question: "What is the definition of 'Sleep'?",
-            options: ["To stay awake.", "To rest with eyes closed.", "To run.", "To talk loudly."],
-            correctAnswer: "To rest with eyes closed."
-        },
-        {
-            question: "What is the definition of 'Drink'?",
-            options: ["To eat solid food.", "To consume liquid.", "To sing.", "To dance."],
-            correctAnswer: "To consume liquid."
-        },
-        {
-            question: "What is the definition of 'Play'?",
-            options: ["To work hard.", "To engage in activity for enjoyment.", "To study.", "To clean."],
-            correctAnswer: "To engage in activity for enjoyment."
-        }
-    ];
-
-    let currentQuestionIndex = 0;
-    let correctAnswers = 0;
-    let selectedOption = null;
-    let quizCompleted = false;
-
-    const questionTextElement = document.getElementById('question-text');
-    const optionsGrid = document.getElementById('options-grid');
-    const nextButton = document.getElementById('next-button');
-    const currentQuestionNumberSpan = document.getElementById('current-question-number');
-    const totalQuestionsSpan = document.getElementById('total-questions');
-    const resultsModal = document.getElementById('results-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMessage = document.getElementById('modal-message');
-    const incorrectAnswersList = document.getElementById('incorrect-answers-list');
-    const retakeQuizButton = document.getElementById('retake-quiz-button');
-    const closeModalButton = document.getElementById('close-modal-button');
-    const fireworkDisplay = document.getElementById('firework-display');
-
-    totalQuestionsSpan.textContent = quizData.length;
-
-    // Shuffle array function - MOVED HERE
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 25px;
     }
 
-    function loadQuestion() {
-        if (currentQuestionIndex < quizData.length) {
-            const question = quizData[currentQuestionIndex];
-            questionTextElement.textContent = question.question;
-            optionsGrid.innerHTML = '';
-            selectedOption = null;
-            nextButton.disabled = true; // Disable next until an option is selected
+    .nav-button {
+        padding: 14px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.15em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
 
-            // Shuffle options for each question
-            const shuffledOptions = shuffleArray([...question.options]);
+    .prev-button {
+        background: #3498DB;
+        color: white;
+    }
 
-            shuffledOptions.forEach(option => {
+    .next-button {
+        background: #28B463;
+        color: white;
+    }
+
+    .nav-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-button:active {
+        transform: translateY(0);
+    }
+
+    .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .progress-indicator::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #E2E8F0;
+        z-index: 1;
+    }
+
+    .progress-step {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        width: 33.33%;
+        font-weight: 600;
+        color: #A0AEC0;
+    }
+
+    .progress-step::before {
+        content: '';
+        width: 24px;
+        height: 24px;
+        background: #E2E8F0;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 10px;
+        border: 4px solid white;
+        box-shadow: 0 0 0 2px #E2E8F0;
+    }
+    .matching-step {
+        color: #A0AEC0; /* Default color */
+    }
+    .matching-step::before {
+        background: #E2E8F0; /* Default color */
+        box-shadow: 0 0 0 2px #E2E8F0;
+    }
+    .quiz-step {
+        color: #2D3748; /* Active color for Quiz */
+    }
+    .quiz-step::before {
+        background: #3498DB; /* Active color for Quiz */
+        box-shadow: 0 0 0 2px #3498DB;
+    }
+    .typing-step {
+        color: #A0AEC0; /* Default color */
+    }
+    .typing-step::before {
+        background: #E2E8F0; /* Default color */
+        box-shadow: 0 0 0 2px #E2E8F0;
+    }
+    /* Dark mode adjustments */
+    body.dark-mode .progress-indicator::before {
+        background: #4A5568;
+    }
+
+    body.dark-mode .progress-step::before {
+        background: #4A5568;
+        border-color: #1F2937;
+        box-shadow: 0 0 0 2px #4A5568;
+    }
+
+    body.dark-mode .progress-step {
+        color: #A0AEC0;
+    }
+
+    body.dark-mode .progress-step.matching-step::before,
+    body.dark-mode .progress-step.quiz-step::before,
+    body.dark-mode .progress-step.typing-step::before {
+        background: #63B3ED;
+        box-shadow: 0 0 0 2px #63B3ED;
+    }
+
+    body.dark-mode .matching-step,
+    body.dark-mode .quiz-step,
+    body.dark-mode .typing-step {
+        color: #E2E8F0;
+    }
+    </style>
+
+    <script>
+        const vocabularyWords = [
+            { word: "To sprout", definition: "To begin to grow." },
+            { word: "To peer", definition: "To look closely or carefully." },
+            { word: "Hollow", definition: "Empty inside." },
+            { word: "To burst", definition: "To suddenly come out or break open." },
+            { word: "Aromatic", definition: "Having a strong, pleasant smell." },
+            { word: "To harvest", definition: "To collect crops or plants when they are ready." },
+            { word: "A showcase", definition: "Something that shows the best of something." },
+            { word: "A breed", definition: "A type or kind of something (often animals or plants)." },
+            { word: "To withstand", definition: "To resist or survive something." },
+            { word: "Produce (noun)", definition: "Fruits and vegetables grown for eating." },
+            { word: "-free (suffix)", definition: "Without something." },
+            { word: "Resistance", definition: "The ability to stop something or not be affected." },
+            { word: "Exhausted (soil)", definition: "Used up or worn out." },
+            { word: "Yield (noun)", definition: "The amount of food or crops produced." },
+            { word: "Disused", definition: "Not used anymore." },
+            { word: "Fraction", definition: "A small part of something." },
+            { word: "Return (in farming)", definition: "The amount of result (like crops) from something." }
+        ];
+
+        let currentQuizWords = [];
+        let currentQuestionIndex = 0;
+        // userAnswers will store answers for the *current* 10-question quiz
+        let userAnswers = [];
+        let incorrectAnswers = [];
+
+        const quizLength = 10; // Define quiz length
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkDisplay = document.getElementById('firework-display');
+        const modeToggleButton = document.getElementById('mode-toggle');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizLength).fill(null); // Initialize user answers for 10 questions
+            incorrectAnswers = [];
+
+            if (vocabularyWords.length < quizLength) {
+                console.error(`Not enough vocabulary words to create a ${quizLength}-question quiz.`);
+                // Potentially display a message to the user here
+                return;
+            }
+            
+            // Shuffle all words and then take the first 'quizLength' for the current quiz
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentQuizWords = shuffledAllWords.slice(0, quizLength);
+
+            quizContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none';
+            fireworkDisplay.innerHTML = '';
+
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function displayQuestion(index) {
+            const currentWordObject = currentQuizWords[index];
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = '';
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            let incorrectOptionsCount = 0;
+            const definitionsPool = vocabularyWords.map(item => item.definition);
+            while (incorrectOptionsCount < 3) {
+                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
+                // Ensure random definition is not the correct one and not already added
+                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
+                }
+            }
+
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
+
+            allOptionDefinitions.forEach(definition => {
                 const button = document.createElement('button');
-                button.classList.add('option-button');
-                button.textContent = option;
-                button.addEventListener('click', () => selectOption(button, option, question.correctAnswer));
-                optionsGrid.appendChild(button);
-                console.log(`Appended option button: ${option}`); // DEBUGGING: Console log for each button
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition);
+                optionsContainer.appendChild(button);
+
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
+                }
             });
-            currentQuestionNumberSpan.textContent = currentQuestionIndex + 1;
-        } else {
-            showResults();
+
+            updateNavigationButtons();
         }
-    }
 
-    function selectOption(button, option, correctAnswer) {
-        // Disable all option buttons after selection
-        Array.from(optionsGrid.children).forEach(btn => btn.disabled = true);
-
-        selectedOption = option;
-
-        if (selectedOption === correctAnswer) {
-            button.classList.add('correct');
-            correctAnswers++;
-        } else {
-            button.classList.add('incorrect');
-            // Highlight the correct answer
-            Array.from(optionsGrid.children).forEach(btn => {
-                if (btn.textContent === correctAnswer) {
-                    btn.classList.add('correct');
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition;
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
                 }
             });
         }
-        nextButton.disabled = false; // Enable next button
-    }
 
-    nextButton.addEventListener('click', () => {
-        if (selectedOption !== null) {
-            currentQuestionIndex++;
-            loadQuestion();
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block';
+            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none';
         }
-    });
 
-    function showResults() {
-        resultsModal.style.display = 'flex';
-        incorrectAnswersList.innerHTML = ''; // Clear previous results
-
-        if (correctAnswers === quizData.length) {
-            modalTitle.textContent = 'Perfect Score!';
-            modalMessage.textContent = "Fantastic job! You mastered all the vocabulary words!";
-            incorrectAnswersList.innerHTML = ''; // No incorrect answers to list
-            triggerFireworks();
-        } else {
-            modalTitle.textContent = 'Quiz Complete!';
-            modalMessage.textContent = `You got ${correctAnswers} out of ${quizData.length} correct.`;
-
-            // Simpler display for incorrect answers: just list a generic message if not perfect
-            if (correctAnswers < quizData.length) {
-                modalMessage.textContent += " Review the incorrect ones to improve!";
-                incorrectAnswersList.innerHTML = ''; // Clear existing
-                const incorrectFeedback = document.createElement('li');
-                incorrectFeedback.textContent = "Please review your answers for questions you might have missed.";
-                incorrectFeedback.style.fontWeight = 'bold';
-                incorrectAnswersList.appendChild(incorrectFeedback);
+        function nextQuestion() {
+            if (currentQuestionIndex < quizLength - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
             }
         }
-        onQuizComplete(); // Trigger diamond update
-    }
 
-    function retakeQuiz() {
-        currentQuestionIndex = 0;
-        correctAnswers = 0;
-        quizCompleted = false;
-        resultsModal.style.display = 'none';
-        loadQuestion();
-    }
-
-    retakeQuizButton.addEventListener('click', retakeQuiz);
-    closeModalButton.addEventListener('click', () => {
-        resultsModal.style.display = 'none';
-        // Optionally reset quiz or navigate away
-        retakeQuiz(); // Reset for next time
-    });
-
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-    }
-
-    function triggerFireworks() {
-        fireworkDisplay.innerHTML = '';
-        const numFireworks = 8;
-        const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
-
-        for (let i = 0; i < numFireworks; i++) {
-            const firework = document.createElement('div');
-            firework.classList.add('firework', 'multi');
-            firework.style.left = `${Math.random() * 80 + 10}%`;
-            firework.style.top = `${Math.random() * 60 + 20}%`;
-            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            firework.style.setProperty('--dx1', `${(Math.random() - 0.5) * 200}px`);
-            firework.style.setProperty('--dy1', `${(Math.random() - 0.5) * 200}px`);
-            firework.style.setProperty('--dx2', `${(Math.random() - 0.5) * 300}px`);
-            firework.style.setProperty('--dy2', `${(Math.random() - 0.5) * 300}px`);
-            firework.style.setProperty('--dx3', `${(Math.random() - 0.5) * 400}px`);
-            firework.style.setProperty('--dy3', `${(Math.random() - 0.5) * 400}px`);
-            firework.style.setProperty('--dx4', `${(Math.random() - 0.5) * 500}px`);
-            firework.style.setProperty('--dy4', `${(Math.random() - 0.5) * 500}px`);
-            firework.style.setProperty('--dx5', `${(Math.random() - 0.5) * 600}px`);
-            firework.style.setProperty('--dy5', `${(Math.random() - 0.5) * 600}px`);
-            firework.style.animationDelay = `${i * 0.15}s`;
-
-            fireworkDisplay.appendChild(firework);
-
-            firework.addEventListener('animationend', () => {
-                firework.remove();
-            });
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
         }
-    }
 
-    loadQuestion(); // Initial load
+        function submitQuiz() {
+            incorrectAnswers = [];
+            let correctCount = 0;
+            for (let i = 0; i < quizLength; i++) { // Loop through the 10 questions of the current quiz
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push({
+                        word: currentQuizWords[i].word,
+                        correctDefinition: currentQuizWords[i].definition,
+                        userAnswer: userAnswers[i] || "No answer provided"
+                    });
+                } else {
+                    correctCount++;
+                }
+            }
 
-</script>
+            quizContent.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            incorrectAnswersList.innerHTML = '';
 
-<!-- Firebase SDKs and Initialization (Modular API) -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    // Firebase Configuration (from user)
-    const firebaseConfig = {
-        apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-        authDomain: "website-vocabulary.firebaseapp.com",
-        projectId: "website-vocabulary",
-        storageBucket: "website-vocabulary.firebasestorage.app",
-        messagingSenderId: "216286165163",
-        appId: "1:216286165163:web:0d45648c2b998070a11fee",
-        measurementId: "G-1RZLN9HJ65"
-    };
-
-    // Initialize Firebase App
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Expose auth and db globally for existing activity scripts to use
-    window.auth = auth;
-    window.db = db;
-
-    // Handle authentication for Canvas environment or anonymous sign-in
-    async function authenticateUser() {
-        try {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-                console.log("Authenticated with custom token.");
+            if (incorrectAnswers.length > 0) {
+                resultsMessage.textContent = `Quiz Completed! You got ${correctCount} out of ${quizLength} correct.`;
+                incorrectAnswersHeading.style.display = 'block';
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
+                    incorrectAnswersList.appendChild(listItem);
+                });
             } else {
-                await signInAnonymously(auth);
-                console.log("Signed in anonymously.");
+                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
+                incorrectAnswersHeading.style.display = 'none';
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks();
             }
-        } catch (error) {
-            console.error("Firebase authentication error:", error);
+            window.onQuizComplete(correctCount); // Call onQuizComplete with the correct count
         }
-    }
 
-    // Call authentication when the script loads
-    authenticateUser();
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
 
-    // Function to update diamond count display (top-left)
-    async function updateDiamondCountDisplay() {
-        const diamondCountElement = document.getElementById('diamond-count');
-        if (!diamondCountElement) return;
+        function triggerFireworks() {
+            fireworkDisplay.innerHTML = '';
+            const numFireworks = 8;
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
 
-        const user = auth.currentUser;
-        if (user) {
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi');
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = `${i * 0.15}s`;
+
+                fireworkDisplay.appendChild(firework);
+
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                });
+            }
+        }
+
+        window.onload = startQuiz;
+
+    </script>
+
+    <!-- Firebase SDKs and Initialization (Modular API) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration (from user)
+        const firebaseConfig = {
+            apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+            authDomain: "website-vocabulary.firebaseapp.com",
+            projectId: "website-vocabulary",
+            storageBucket: "website-vocabulary.firebasestorage.app",
+            messagingSenderId: "216286165163",
+            appId: "1:216286165163:web:0d45648c2b998070a11fee",
+            measurementId: "G-1RZLN9HJ65"
+        };
+
+        // Initialize Firebase App
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Expose auth and db globally for existing activity scripts to use
+        window.auth = auth;
+        window.db = db;
+
+        // Function to update diamond count display (top-left)
+        async function updateDiamondCountDisplay() {
+            const diamondCountElement = document.getElementById('diamond-count');
+            if (!diamondCountElement) return;
+
+            const user = auth.currentUser;
+            if (user) {
+                // Only attempt to fetch diamonds if the user is a Google-signed-in user
+                const isGoogleSignedIn = user.providerData.some(
+                    (provider) => provider.providerId === 'google.com'
+                );
+
+                if (isGoogleSignedIn) {
+                    const userRef = doc(db, "users", user.uid);
+                    try {
+                        const docSnap = await getDoc(userRef);
+                        if (docSnap.exists()) {
+                            const diamonds = docSnap.data().diamonds || 0;
+                            diamondCountElement.textContent = `${diamonds} 💎`;
+                        } else {
+                            // If user document doesn't exist for a Google user, initialize diamonds to 0
+                            await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
+                            diamondCountElement.textContent = '0 💎';
+                        }
+                    } catch (error) {
+                        console.error("Error fetching or initializing diamond count:", error);
+                        diamondCountElement.textContent = 'Error 💎';
+                    }
+                } else {
+                    // If not a Google-signed-in user, display N/A or 0
+                    diamondCountElement.textContent = 'N/A 💎'; // Or '0 💎' if you prefer
+                    console.log("Not a Google-signed-in user. Diamond count display limited.");
+                }
+            } else {
+                diamondCountElement.textContent = '0 💎'; // Display 0 if no user is signed in at all
+            }
+        }
+
+        // Listen for auth state changes to update diamond count display
+        onAuthStateChanged(auth, (user) => {
+            updateDiamondCountDisplay();
+        });
+
+        // Diamond Popup Function
+        function showDiamondPopup(amount) {
+            const popup = document.getElementById("diamond-popup");
+            if (!popup) return;
+
+            const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+            popup.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
+
+            popup.classList.remove('show');
+            void popup.offsetWidth;
+            popup.classList.add('show');
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                popup.style.display = 'none';
+            }, 1500);
+            popup.style.display = 'block';
+        }
+
+        // Function to update user's diamond count in Firestore
+        window.updateDiamondCount = async function(diamondsEarned) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.log("Diamond update skipped: No user logged in.");
+                return;
+            }
+
+            // Check if the user is signed in with Google
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (!isGoogleSignedIn) { // Only check for Google sign-in
+                console.warn("Diamond update skipped: User is not signed in with a Google account.");
+                // Optionally, display a message to the user here, e.g., using a small modal
+                // "Please sign in with Google to earn diamonds!"
+                return;
+            }
+
             const userRef = doc(db, "users", user.uid);
             try {
-                const docSnap = await getDoc(userRef);
-                if (docSnap.exists()) {
-                    const diamonds = docSnap.data().diamonds || 0;
-                    diamondCountElement.textContent = `${diamonds} 💎`;
-                } else {
-                    // If user document doesn't exist, initialize diamonds to 0
-                    await setDoc(userRef, { diamonds: 0 }, { merge: true });
-                    diamondCountElement.textContent = '0 💎';
-                }
+                await setDoc(userRef, {
+                    diamonds: increment(diamondsEarned),
+                    // Store user's display name for the scoreboard
+                    displayName: user.displayName || 'Google User' // Use displayName from Google, fallback if null
+                }, { merge: true });
+                console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
+                showDiamondPopup(diamondsEarned);
+                updateDiamondCountDisplay();
             } catch (error) {
-                console.error("Error fetching or initializing diamond count:", error);
-                diamondCountElement.textContent = 'Error 💎';
+                console.error("Error updating document for diamonds:", error);
             }
-        } else {
-            diamondCountElement.textContent = '0 💎'; // Or a login prompt for logged-out users
-        }
-    }
+        };
 
-    // Listen for auth state changes to update diamond count display
-    onAuthStateChanged(auth, (user) => {
-        updateDiamondCountDisplay();
-    });
+        // Quiz completion logic
+        window.onQuizComplete = function(correctCount) {
+            let diamondEarned = 0;
+            const totalQuestions = quizLength; // Use the defined quizLength
 
-    // Diamond Popup Function
-    function showDiamondPopup(amount) {
-        const popup = document.getElementById("diamond-popup");
-        if (!popup) return;
+            if (correctCount === totalQuestions) { // 10/10 correct
+                diamondEarned = 1.5;
+            } else if (correctCount >= 7) { // 7 or more correct
+                diamondEarned = 1;
+            }
+            
+            if (diamondEarned > 0) {
+                window.updateDiamondCount(diamondEarned);
+            } else {
+                console.log("Not enough correct answers to earn diamonds.");
+            }
+        };
 
-        const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
-        popup.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
+        // Initial update of diamond count display on page load
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                updateDiamondCountDisplay();
+            }
+        });
 
-        popup.classList.remove('show');
-        void popup.offsetWidth;
-        popup.classList.add('show');
-
-        setTimeout(() => {
-            popup.classList.remove('show');
-            popup.style.display = 'none';
-        }, 1500);
-        popup.style.display = 'block';
-    }
-
-    // Function to update user's diamond count in Firestore
-    window.updateDiamondCount = async function(diamondsEarned) {
-        const user = auth.currentUser;
-        if (!user) {
-            console.log("No user logged in to record diamond update.");
-            return;
-        }
-
-        const userRef = doc(db, "users", user.uid);
-        try {
-            await setDoc(userRef, {
-                diamonds: increment(diamondsEarned)
-            }, { merge: true });
-            console.log(`Diamonds updated: +${diamondsEarned}`);
-            showDiamondPopup(diamondsEarned);
-            updateDiamondCountDisplay();
-        } catch (error) {
-            console.error("Error updating document for diamonds:", error);
-        }
-    };
-
-    // Quiz completion logic
-    window.onQuizComplete = function() {
-        let diamondEarned = 0;
-        if (correctAnswers === quizData.length) { // 10/10 correct
-            diamondEarned = 1.5;
-        } else if (correctAnswers >= 7) { // 7 or more correct
-            diamondEarned = 1;
-        }
-        
-        if (diamondEarned > 0) {
-            window.updateDiamondCount(diamondEarned);
-        } else {
-            console.log("Not enough correct answers to earn diamonds.");
-        }
-    };
-
-    // Initial update of diamond count display on page load
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            updateDiamondCountDisplay();
-        }
-    });
-
-</script>
-
+    </script>
 </body>
 </html>
