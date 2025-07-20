@@ -114,12 +114,13 @@
             grid-template-columns: 1fr;
             gap: 15px;
             margin-bottom: 30px;
+            border: 2px solid red; /* DEBUGGING: Added border */
         }
 
         .option-button {
             background-color: var(--accent-color);
             color: var(--button-text);
-            border: none;
+            border: 2px solid blue; /* DEBUGGING: Added border */
             padding: 15px 20px;
             border-radius: 10px;
             font-size: 1.1em;
@@ -739,6 +740,7 @@
                 button.textContent = option;
                 button.addEventListener('click', () => selectOption(button, option, question.correctAnswer));
                 optionsGrid.appendChild(button);
+                console.log(`Appended option button: ${option}`); // DEBUGGING: Console log for each button
             });
             currentQuestionNumberSpan.textContent = currentQuestionIndex + 1;
         } else {
@@ -787,54 +789,14 @@
             modalTitle.textContent = 'Quiz Complete!';
             modalMessage.textContent = `You got ${correctAnswers} out of ${quizData.length} correct.`;
 
-            quizData.forEach((q, index) => {
-                const listItem = document.createElement('li');
-                const userAnswer = optionsGrid.children[index] ? optionsGrid.children[index].textContent : 'Not answered'; // This logic is flawed, need to store user answers
-                // For now, just list all questions and their correct answers
-                listItem.textContent = `Q${index + 1}: "${q.question}" - Correct Answer: "${q.correctAnswer}"`;
-                // Add class based on whether it was correct or not (this requires storing user's choice)
-                // For simplicity, let's just mark correct/incorrect based on the final count for now
-                if (q.correctAnswer === quizData[index].correctAnswer) { // This is always true, needs user answer
-                    // This part needs to be refined if we want to show specific incorrect answers
-                }
-            });
-
-            // Simpler display: just list incorrect questions if any
-            let hasIncorrect = false;
-            quizData.forEach((q, index) => {
-                // This requires tracking user's answer for each question, which is not currently implemented.
-                // For now, if not perfect, just show general message.
-            });
-
+            // Simpler display for incorrect answers: just list a generic message if not perfect
             if (correctAnswers < quizData.length) {
                 modalMessage.textContent += " Review the incorrect ones to improve!";
-                const incorrectQuestions = quizData.filter(q => {
-                    // This is a placeholder; actual comparison needs stored user answers
-                    // For now, if not 10/10, assume some are incorrect.
-                    return true; // This will list all if not perfect
-                });
-
-                if (correctAnswers < quizData.length) {
-                    modalTitle.textContent = 'Quiz Complete!';
-                    modalMessage.textContent = `You got ${correctAnswers} out of ${quizData.length} correct.`;
-                    
-                    incorrectAnswersList.innerHTML = ''; // Clear existing
-                    const incorrectFeedback = document.createElement('li');
-                    incorrectFeedback.textContent = "Review the questions you missed:";
-                    incorrectFeedback.style.fontWeight = 'bold';
-                    incorrectAnswersList.appendChild(incorrectFeedback);
-
-                    // This part needs to be improved to actually show *which* questions were incorrect.
-                    // For now, if not 10/10, just show a generic message.
-                    if (correctAnswers < quizData.length) {
-                        const genericIncorrect = document.createElement('li');
-                        genericIncorrect.textContent = "Please review your answers for questions you might have missed.";
-                        genericIncorrect.style.backgroundColor = 'var(--error-color)';
-                        genericIncorrect.style.color = 'white';
-                        genericIncorrect.style.borderColor = 'var(--error-color)';
-                        incorrectAnswersList.appendChild(genericIncorrect);
-                    }
-                }
+                incorrectAnswersList.innerHTML = ''; // Clear existing
+                const incorrectFeedback = document.createElement('li');
+                incorrectFeedback.textContent = "Please review your answers for questions you might have missed.";
+                incorrectFeedback.style.fontWeight = 'bold';
+                incorrectAnswersList.appendChild(incorrectFeedback);
             }
         }
         onQuizComplete(); // Trigger diamond update
@@ -954,7 +916,7 @@
                 } else {
                     // If user document doesn't exist, initialize diamonds to 0
                     await setDoc(userRef, { diamonds: 0 }, { merge: true });
-                    diamondCountElement.textContent = '0 �';
+                    diamondCountElement.textContent = '0 💎';
                 }
             } catch (error) {
                 console.error("Error fetching or initializing diamond count:", error);
@@ -1037,4 +999,3 @@
 
 </body>
 </html>
-�
