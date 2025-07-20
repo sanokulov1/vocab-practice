@@ -360,12 +360,6 @@
       color: var(--primary);
     }
 
-    .passage-link i {
-      margin-left: auto;
-      color: var(--accent);
-      transition: var(--transition);
-    }
-
     .passage-link:hover i {
       transform: translateX(5px);
     }
@@ -423,6 +417,63 @@
     /* Hide toggle icon for coming soon */
     .collection-header.coming-soon-header .toggle-icon {
         display: none;
+    }
+
+    /* Welcome Modal Styling */
+    .welcome-modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+    }
+
+    .close-button {
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-content h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+    }
+
+    .modal-content p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 20px;
     }
 
     /* Keyframes for glowing effect */
@@ -1412,6 +1463,15 @@
     </div>
   </div>
 
+  <!-- Welcome Pop-up Modal -->
+  <div id="welcomeModal" class="welcome-modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeWelcomeModal()">&times;</span>
+      <h2 id="welcomeUserName">Welcome!</h2>
+      <p>Welcome to sanokulov.uz!<br>Make your IELTS journey much easier with us:)</p>
+    </div>
+  </div>
+
   <script>
     function toggleCollection(element) {
       const card = element.closest('.collection-card');
@@ -1433,6 +1493,46 @@
     function toggleTest(element) {
       element.classList.toggle('active');
     }
+
+    // Welcome Modal Logic (Copied from login.html)
+    const welcomeModal = document.getElementById('welcomeModal');
+    const welcomeUserName = document.getElementById('welcomeUserName');
+
+    function showWelcomeModal(name) {
+        welcomeUserName.textContent = `Welcome, ${name}!`;
+        welcomeModal.style.display = 'flex';
+    }
+
+    function closeWelcomeModal() {
+        welcomeModal.style.display = 'none';
+    }
+
+    // Check if coming from a redirect and display welcome message
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showWelcome = urlParams.get('welcome');
+        const storedUserName = sessionStorage.getItem('userName');
+
+        if (showWelcome === 'true' && storedUserName) {
+            showWelcomeModal(storedUserName);
+            // Clear the welcome parameter and stored name from URL and session storage
+            history.replaceState({}, document.title, window.location.pathname);
+            sessionStorage.removeItem('userName');
+        }
+
+        // Display user's name on the page if available
+        const userNameDisplay = document.getElementById('welcomeMessage'); // Assuming this is where the name should go
+        if (storedUserName) {
+          // You might need to add an element with id="welcomeMessage" in your vocab-practice.html header
+          // For now, I'll just log it to console or you can choose a suitable place to display it.
+          console.log(`Welcome back, ${storedUserName}!`);
+          // Example: If you have an h1 or div in your header to show a welcome message:
+          // const headerWelcome = document.querySelector('header h1'); 
+          // if (headerWelcome) {
+          //   headerWelcome.textContent = `Welcome, ${storedUserName}!`;
+          // }
+        }
+    };
   </script>
 </body>
 </html>
