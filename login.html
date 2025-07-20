@@ -311,9 +311,10 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs and Auth Logic -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    // Import Firebase modules from version 12.0.0
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import {
       getAuth,
       createUserWithEmailAndPassword,
@@ -322,22 +323,27 @@
       GoogleAuthProvider,
       signOut,
       onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
- const firebaseConfig = {
-  apiKey: "AIzaSyChct6kCeqD1gbAuAJw3wP_tHOYN6gV-n4",
-  authDomain: "website-vocabulary.firebaseapp.com",
-  projectId: "website-vocabulary",
-  storageBucket: "website-vocabulary.appspot.com",
-  messagingSenderId: "216286165163",
-  appId: "1:216286165163:web:0d45648c2b998870a11fee",
-  measurementId: "G-9TNR3V6VMC"
-};
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    // Your actual Firebase config from the screenshot
+    const firebaseConfig = {
+      apiKey: "AIzaSyChct6kCeqD1gbAuAJw3wP_tHOYN6gV-n4",
+      authDomain: "website-vocabulary.firebaseapp.com",
+      projectId: "website-vocabulary",
+      storageBucket: "website-vocabulary.appspot.com",
+      messagingSenderId: "216286165163",
+      appId: "1:216286165163:web:0d45648c2b998870a11fee",
+      measurementId: "G-9TNR3V6VMC"
+    };
+
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     const statusMessage = document.getElementById('status-message');
     const userInfo = document.getElementById('user-info');
 
+    // Function to display messages to the user
     function showMessage(message, isSuccess) {
       statusMessage.textContent = message;
       statusMessage.className = isSuccess ? 'status-message success' : 'status-message error';
@@ -345,30 +351,33 @@
       
       setTimeout(() => {
         statusMessage.style.display = 'none';
-      }, 5000);
+      }, 5000); // Hide message after 5 seconds
     }
 
+    // Function to update user information display
     function updateUserInfo(user) {
       if (user) {
         document.getElementById('user-name').textContent = user.displayName || 'User';
         document.getElementById('user-email').textContent = user.email;
         
+        // Use user's photoURL if available, otherwise generate an avatar
         if (user.photoURL) {
           document.getElementById('user-avatar').src = user.photoURL;
         } else {
+          // Generate a placeholder avatar using ui-avatars.com
           document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=' + 
             encodeURIComponent(user.displayName || 'User') + '&background=random';
         }
         
-        userInfo.style.display = 'block';
+        userInfo.style.display = 'block'; // Show user info section
       } else {
-        userInfo.style.display = 'none';
+        userInfo.style.display = 'none'; // Hide user info section
       }
     }
 
-    // Sign up
+    // Event listener for the authentication form submission (Sign Up)
     document.getElementById("auth-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
+      e.preventDefault(); // Prevent default form submission
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       
@@ -380,7 +389,7 @@
       }
     });
 
-    // Log in
+    // Event listener for the Log In button
     document.getElementById("login-btn").addEventListener("click", async () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -393,7 +402,7 @@
       }
     });
 
-    // Google login
+    // Event listener for the Google login button
     document.getElementById("google-btn").addEventListener("click", async () => {
       try {
         await signInWithPopup(auth, provider);
@@ -403,7 +412,7 @@
       }
     });
 
-    // Logout
+    // Event listener for the Logout button
     document.getElementById("logout-btn").addEventListener("click", async () => {
       try {
         await signOut(auth);
@@ -413,7 +422,7 @@
       }
     });
 
-    // Track auth state
+    // Listen for authentication state changes (user login/logout)
     onAuthStateChanged(auth, user => {
       if (user) {
         console.log("User logged in:", user.email);
