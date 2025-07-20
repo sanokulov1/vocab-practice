@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Auth | Login/Signup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      max-width: 1000px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .left-panel h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .left-panel p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .right-panel {
+      flex: 1;
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right-panel h2 {
+      color: #333;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #777;
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 15px 15px 50px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2575fc;
+      box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-btn {
+      background: #2575fc;
+      color: white;
+    }
+
+    .secondary-btn {
+      background: #f0f5ff;
+      color: #2575fc;
+    }
+
+    .primary-btn:hover {
+      background: #1a65e0;
+    }
+
+    .secondary-btn:hover {
+      background: #e1ebff;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+    }
+
+    .divider .line {
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .divider span {
+      padding: 0 15px;
+      color: #777;
+    }
+
+    .social-btn {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn.google {
+      color: #DB4437;
+      border-color: #ddd;
+    }
+
+    .social-btn:hover {
+      background: #f8f9ff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .logout-btn {
+      background: #f8f9ff;
+      color: #ff4d4f;
+      border: 1px solid #ffcccc;
+      margin-top: 20px;
+    }
+
+    .logout-btn:hover {
+      background: #ffeded;
+    }
+
+    .status-message {
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .success {
+      background: #e6ffed;
+      color: #237804;
+      border: 1px solid #b7eb8f;
+    }
+
+    .error {
+      background: #fff1f0;
+      color: #cf1322;
+      border: 1px solid #ffa39e;
+    }
+
+    .user-info {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f0f5ff;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .user-info img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .left-panel {
+        padding: 40px 20px;
+      }
+      
+      .right-panel {
+        padding: 40px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome Back</h1>
+      <p>Sign in to access your account and continue your journey with us. Securely manage your profile and preferences.</p>
+      <div style="font-size: 6rem; opacity: 0.8;">
+        <i class="fas fa-lock"></i>
+      </div>
+    </div>
+    
+    <div class="right-panel">
+      <h2>Login or Sign Up</h2>
+      <p class="subtitle">Secure access to your account</p>
+      
+      <form id="auth-form">
+        <div class="form-group">
+          <div class="input-with-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-with-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" required>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" id="signup-btn" class="primary-btn">Sign Up</button>
+          <button type="button" id="login-btn" class="secondary-btn">Log In</button>
+        </div>
+      </form>
+      
+      <div class="divider">
+        <div class="line"></div>
+        <span>or continue with</span>
+        <div class="line"></div>
+      </div>
+      
+      <button id="google-btn" class="social-btn google">
+        <i class="fab fa-google"></i> Sign in with Google
+      </button>
+      
+      <button id="logout-btn" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+      
+      <div id="status-message" class="status-message"></div>
+      
+      <div id="user-info" class="user-info">
+        <img id="user-avatar" src="" alt="User Avatar">
+        <h3 id="user-name"></h3>
+        <p id="user-email"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // Replace with your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyC5Z6v1aTQ8l5yH1xK1ZzQ2XZQ9XZQ9XZQ",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const statusMessage = document.getElementById('status-message');
+    const userInfo = document.getElementById('user-info');
+
+    function showMessage(message, isSuccess) {
+      statusMessage.textContent = message;
+      statusMessage.className = isSuccess ? 'status-message success' : 'status-message error';
+      statusMessage.style.display = 'block';
+      
+      setTimeout(() => {
+        statusMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    function updateUserInfo(user) {
+      if (user) {
+        document.getElementById('user-name').textContent = user.displayName || 'User';
+        document.getElementById('user-email').textContent = user.email;
+        
+        if (user.photoURL) {
+          document.getElementById('user-avatar').src = user.photoURL;
+        } else {
+          document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=' + 
+            encodeURIComponent(user.displayName || 'User') + '&background=random';
+        }
+        
+        userInfo.style.display = 'block';
+      } else {
+        userInfo.style.display = 'none';
+      }
+    }
+
+    // Sign up
+    document.getElementById("auth-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        showMessage("✅ Account created successfully!", true);
+      } catch (error) {
+        showMessage(`⚠️ ${error.message}`, false);
+      }
+    });
+
+    // Log in
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showMessage("✅ Logged in successfully!", true);
+      } catch (error) {
+        showMessage(`⚠️ ${error.message}`, false);
+      }
+    });
+
+    // Google login
+    document.getElementById("google-btn").addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+        showMessage("✅ Logged in with Google!", true);
+      } catch (error) {
+        showMessage(`⚠️ ${error.message}`, false);
+      }
+    });
+
+    // Logout
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        showMessage("🔒 You have been logged out.", true);
+      } catch (error) {
+        showMessage(`⚠️ ${error.message}`, false);
+      }
+    });
+
+    // Track auth state
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        console.log("User logged in:", user.email);
+        updateUserInfo(user);
+      } else {
+        console.log("No user is logged in.");
+        updateUserInfo(null);
+      }
+    });
+  </script>
+</body>
+</html>
