@@ -744,7 +744,8 @@ body.dark-mode .typing-step {
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    // FIX: Added setDoc to the import list
+    import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     // Firebase Configuration (from user)
     const firebaseConfig = {
@@ -796,12 +797,14 @@ body.dark-mode .typing-step {
                 const docSnap = await getDoc(userRef);
                 if (docSnap.exists()) {
                     const diamonds = docSnap.data().diamonds || 0;
-                    diamondCountElement.textContent = `${diamonds} �`;
+                    diamondCountElement.textContent = `${diamonds} 💎`;
                 } else {
-                    diamondCountElement.textContent = '0 💎';
+                    // If user document doesn't exist, initialize diamonds to 0
+                    await setDoc(userRef, { diamonds: 0 }, { merge: true });
+                    diamondCountElement.textContent = '0 �';
                 }
             } catch (error) {
-                console.error("Error fetching diamond count:", error);
+                console.error("Error fetching or initializing diamond count:", error);
                 diamondCountElement.textContent = 'Error 💎';
             }
         } else {
