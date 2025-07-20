@@ -533,7 +533,7 @@
         height: 100%; /* Full height */
         overflow: auto; /* Enable scroll if needed */
         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        display: flex;
+        /* Removed display: flex; from here as it was conflicting */
         align-items: center;
         justify-content: center;
     }
@@ -906,7 +906,7 @@
   </footer>
 
   <!-- Welcome Pop-up Modal -->
-  <div id="welcomeModal" class="welcome-modal" style="display: none;">
+  <div id="welcomeModal" class="welcome-modal">
     <div class="modal-content">
       <span class="close-button" onclick="closeWelcomeModal()">&times;</span>
       <h2 id="welcomeUserName">Welcome!</h2>
@@ -1001,11 +1001,15 @@
       const showWelcome = urlParams.get('welcome');
       const storedUserName = sessionStorage.getItem('userName');
 
+      // Only show the modal if 'welcome=true' is in the URL and user name is stored
       if (showWelcome === 'true' && storedUserName) {
           showWelcomeModal(storedUserName);
           // Clear the welcome parameter and stored name from URL and session storage
           history.replaceState({}, document.title, window.location.pathname);
           sessionStorage.removeItem('userName');
+      } else {
+          // Ensure modal is hidden if not triggered by welcome parameter
+          welcomeModal.style.display = 'none';
       }
 
       // Display user's name on the page if available
