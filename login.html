@@ -467,7 +467,8 @@
           // Redirect to index.html after successful sign-in
           // Store user info in session storage to retrieve on index.html
           sessionStorage.setItem('userName', user.displayName || 'User');
-          window.location.href = 'index.html'; // Redirect to index.html
+          // Add 'welcome=true' to the URL to trigger the modal on the redirected page
+          window.location.href = 'index.html?welcome=true'; 
         })
         .catch((error) => {
           statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${error.message}`;
