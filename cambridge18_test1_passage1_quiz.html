@@ -360,20 +360,17 @@
 <body>
 
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
-        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
         </svg>
-        <!-- Moon icon (visible in Day Mode) -->
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 0 0 0 9 9 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
     </button>
 
     <div id="quiz-app" class="quiz-container">
         <div id="quiz-content">
             <h2 id="question-text" class="question-text"></h2>
             <div id="options-container" class="options-container">
-                <!-- Options will be dynamically inserted here -->
-            </div>
+                </div>
             <div class="navigation-buttons">
                 <button id="prev-button" onclick="previousQuestion()">Previous</button>
                 <button id="next-button" onclick="nextQuestion()">Next</button>
@@ -387,15 +384,13 @@
             <h2 id="results-message"></h2>
             <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
             <ul id="incorrect-answers-list">
-                <!-- Incorrect answers will be dynamically inserted here -->
-            </ul>
+                </ul>
             <button class="submit-button" onclick="startQuiz()">Try Again</button>
         </div>
     </div>
 
     <div id="firework-display" class="firework-container"></div>
 
-    <!-- Diamond Count Display (Top-Left) -->
     <div id="diamond-count-container">
         <span id="diamond-count">0 💎</span>
     </div>
@@ -426,7 +421,6 @@
     }
     </style>
 
-    <!-- Diamond Popup Styles & HTML -->
     <style>
       #diamond-popup {
         position: fixed;
