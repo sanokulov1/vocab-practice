@@ -770,7 +770,7 @@
                     const docSnap = await getDoc(userRef);
                     if (docSnap.exists()) {
                         const diamonds = docSnap.data().diamonds || 0;
-                        diamondCountElement.textContent = `${diamonds} 💎`;
+                        diamondCountElement.textContent = `${diamonds} �`;
                     } else {
                         // If user document doesn't exist for a Google user, initialize diamonds to 0
                         await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
@@ -786,7 +786,7 @@
                 console.log("Not a Google-signed-in user. Diamond count display limited.");
             }
         } else {
-            diamondCountElement.textContent = '0 �';
+            diamondCountElement.textContent = '0 💎';
         }
     }
 
@@ -844,13 +844,6 @@
         } catch (error) {
             console.error("Error updating document for diamonds:", error);
         }
-    };
-
-    // --- Activity Completion Hooks ---
-    // This will be called when ALL matching groups are completed.
-    window.onMatchingComplete = function() {
-        // In matching, they should get 1 diamond if they complete all the groups
-        window.updateDiamondCount(1);
     };
 
     // Initial update of diamond count display on page load
@@ -922,9 +915,8 @@ window.addEventListener('load', () => {
   }, 2000); // Hide after 2 seconds
 });
 
-// --- NEW: Global variable to track overall completion of matching groups ---
-let allGroupsCompletedCount = 0;
-const totalMatchingGroups = 3; // There are 3 groups in this matching game
+// --- NEW: Set to track groups that have already awarded diamonds ---
+const completedGroupsForDiamonds = new Set();
 
 // Shared game setup function: Initializes a matching game for a given group of word pairs.
 function setupGame(wordPairs, groupId) {
@@ -993,10 +985,10 @@ function setupGame(wordPairs, groupId) {
           // Check if all pairs are matched in this group
           if (score === wordPairs.length) {
             resultContainer.innerHTML = "<b>🎉 Group completed! Well done!</b>";
-            // NEW: Check if all groups are completed to award diamond
-            allGroupsCompletedCount++;
-            if (allGroupsCompletedCount === totalMatchingGroups) {
-                window.onMatchingComplete(); // Call the Firebase completion hook
+            // NEW: Award 0.5 diamonds for this group if not already awarded
+            if (!completedGroupsForDiamonds.has(groupId)) {
+                window.updateDiamondCount(0.5); // Award 0.5 diamonds
+                completedGroupsForDiamonds.add(groupId); // Mark group as having awarded diamonds
             }
           }
         } else {
@@ -1064,4 +1056,3 @@ function setupGame(wordPairs, groupId) {
 </script>
 </body>
 </html>
-�
