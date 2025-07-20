@@ -707,7 +707,9 @@
     
     <!-- This div will dynamically show user name or sign-in button -->
     <div id="auth-container">
-      <!-- Content will be rendered by JavaScript -->
+      <span id="user-display" class="user-name" style="display: none;"></span>
+      <button id="sign-out-button" style="display: none;" onclick="signOut()">Sign Out</button>
+      <div id="google-signin-button" class="g-signin2" data-onsuccess="onSignIn" data-width="150" data-height="40" data-longtitle="true" data-theme="dark"></div>
     </div>
   </header>
 
@@ -928,7 +930,9 @@
     }
 
     function updateSignInStatus(isSignedIn) {
-      const authContainer = document.getElementById('auth-container');
+      const userDisplayName = document.getElementById('user-display');
+      const signOutButton = document.getElementById('sign-out-button');
+      const googleSignInButton = document.getElementById('google-signin-button');
       const welcomeMessage = document.getElementById('welcomeMessage');
 
       if (isSignedIn) {
@@ -936,24 +940,19 @@
         const profile = auth2.currentUser.get().getBasicProfile();
         const userName = profile.getName();
         
-        // Display user's name and sign out button
-        authContainer.innerHTML = `
-          <span class="user-name">Hello, ${userName}!</span>
-          <button onclick="signOut()">Sign Out</button>
-        `;
+        userDisplayName.innerHTML = `Hello, ${userName}!`;
+        userDisplayName.style.display = 'inline-block';
+        signOutButton.style.display = 'inline-block';
+        googleSignInButton.style.display = 'none'; // Hide the Google Sign-In button
         
-        // Update welcome message
         welcomeMessage.innerHTML = `Welcome, <span class="learn">${userName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
-
-        // Store user name in session storage (optional, for simple persistence across refreshes)
         sessionStorage.setItem('userName', userName);
 
       } else {
-        // Display sign-in button
-        authContainer.innerHTML = `
-          <button class="g-signin2" data-onsuccess="onSignIn" data-width="150" data-height="40" data-longtitle="true" data-theme="dark"></button>
-        `;
-        // Reset welcome message if no user is signed in
+        userDisplayName.style.display = 'none';
+        signOutButton.style.display = 'none';
+        googleSignInButton.style.display = 'block'; // Show the Google Sign-In button
+        
         welcomeMessage.innerHTML = `The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
         sessionStorage.removeItem('userName');
       }
@@ -1046,13 +1045,6 @@
       }, { threshold: 0.5 });
       
       observer.observe(document.querySelector('.stats'));
-
-      // The welcome message update logic is now handled by Google Sign-In callbacks
-      // const storedUserName = sessionStorage.getItem('userName');
-      // const userNameDisplay = document.getElementById('welcomeMessage');
-      // if (storedUserName) {
-      //   userNameDisplay.innerHTML = `Welcome, <span class="learn">${storedUserName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
-      // }
     });
   </script>
 </body>
