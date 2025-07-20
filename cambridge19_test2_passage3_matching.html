@@ -534,13 +534,6 @@
     <div class="game-area" id="group5-defs"></div>
     <div id="group5-result" class="result-message"></div>
   </div>
-
-  <button class="accordion">Group 6</button>
-  <div class="panel">
-    <div class="game-area" id="group6-words"></div>
-    <div class="game-area" id="group6-defs"></div>
-    <div id="group6-result" class="result-message"></div>
-  </div>
 </div>
 
 <audio id="correctSound" preload="auto">
@@ -702,17 +695,17 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (31 words total) ---
+// --- Word Data for Each Group (28 words total, 4 groups of 6, 1 group of 4) ---
 
 // Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "adept", "def": "Very skilled or good at something."},
-    {"word": "forage", "def": "To search widely for food or supplies."},
-    {"word": "to disperse", "def": "To spread over a wide area."},
-    {"word": "archipelago", "def": "A group of many islands."},
-    {"word": "stepping stones", "def": "A series of things that help you reach a goal."},
-    {"word": "remote", "def": "Far away from other places or people."}
+    {"word": "gifted", "def": "Having a special natural ability or talent."},
+    {"word": "extraordinary", "def": "Very unusual, special, or surprising."},
+    {"word": "to emerge", "def": "To appear or come out from somewhere."},
+    {"word": "selective", "def": "Choosing carefully; not including everyone."},
+    {"word": "to be hooked", "def": "To be addicted to something or very enthusiastic about it."},
+    {"word": "resolute", "def": "Determined not to change your mind or give up."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -720,12 +713,12 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "fragments", "def": "Small broken pieces of something."},
-    {"word": "impenetrable", "def": "Impossible to get through or into."},
-    {"word": "encompass", "def": "To include a wide range of things."},
-    {"word": "coincidence", "def": "Two or more things happening at the same time by chance."},
-    {"word": "to grind", "def": "To break something into small pieces or powder."},
-    {"word": "to unearth", "def": "To find something hidden in the ground or discover something secret."}
+    {"word": "in the face of", "def": "Despite difficulties or dangers."},
+    {"word": "setbacks", "def": "Problems that delay or stop progress."},
+    {"word": "rewarding", "def": "Giving you satisfaction or a good feeling."},
+    {"word": "in sight", "def": "Able to be seen; likely to happen soon."},
+    {"word": "unexceptional", "def": "Not special or unusual; ordinary."},
+    {"word": "to plug away", "def": "To continue working hard at something difficult."}
   ];
   setupGame(wordPairs, 'group2');
 })();
@@ -733,12 +726,12 @@ function setupGame(wordPairs, groupId) {
 // Group 3 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "routinely", "def": "As a normal or regular practice."},
-    {"word": "to abandon", "def": "To leave a place, thing, or person forever."},
-    {"word": "departure", "def": "The act of leaving a place."},
-    {"word": "to be rich in", "def": "To contain a lot of something valuable or useful."},
-    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
-    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."}
+    {"word": "contemporaries", "def": "People who live or lived at the same time."},
+    {"word": "the jury is out on something", "def": "A decision has not yet been made or is not clear."},
+    {"word": "innate", "def": "A quality or ability you are born with."},
+    {"word": "to make a difference", "def": "To have an effect on a situation or person."},
+    {"word": "replicable", "def": "Able to be copied or repeated exactly."},
+    {"word": "attributes", "def": "Qualities or characteristics of a person or thing."}
   ];
   setupGame(wordPairs, 'group3');
 })();
@@ -746,35 +739,25 @@ function setupGame(wordPairs, groupId) {
 // Group 4 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "livelihood", "def": "The way you earn money to live."},
-    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
-    {"word": "implement", "def": "To put a plan or decision into effect."},
-    {"word": "in-demand", "def": "Wanted by many people."},
-    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
-    {"word": "logging", "def": "The activity of cutting down trees for wood."}
+    {"word": "eminent", "def": "Famous and respected, especially in a particular field."},
+    {"word": "at the heart of", "def": "The most important or central part of something."},
+    {"word": "Deliberate", "def": "Done on purpose; intentional."},
+    {"word": "Outperform", "def": "To perform better than someone or something else."},
+    {"word": "Distinguished", "def": "Very successful and respected; having a special quality."},
+    {"word": "Disciplines", "def": "Areas of study or knowledge; rules of behavior."}
   ];
   setupGame(wordPairs, 'group4');
 })();
 
-// Group 5 (6 words)
+// Group 5 (4 words)
 (function() {
   const wordPairs = [
-    {"word": "comprise", "def": "To consist of or be made up of."},
-    {"word": "alarming", "def": "Worrying or frightening."},
-    {"word": "to document", "def": "To record information about something."},
-    {"word": "devastating", "def": "Causing a lot of damage or destruction."},
-    {"word": "run-off", "def": "Water that flows over the ground rather than soaking into it."},
-    {"word": "place a high priority", "def": "To consider something very important."}
+    {"word": "To become hooked on something", "def": "To start to like something so much that you want to do it or have it all the time."},
+    {"word": "spin-off (as in spin-off research/spin-off technology)", "def": "A new product, company, or idea that develops from an existing one."},
+    {"word": "disadvantaged", "def": "Not having as much money, opportunities, or education as others."},
+    {"word": "undeterred", "def": "Still continuing to do something despite difficulties or opposition."}
   ];
   setupGame(wordPairs, 'group5');
-})();
-
-// Group 6 (1 word)
-(function() {
-  const wordPairs = [
-    {"word": "degradation", "def": "The process of something being damaged or made worse."}
-  ];
-  setupGame(wordPairs, 'group6');
 })();
 </script>
 
@@ -874,7 +857,7 @@ body.dark-mode .diamond-popup {
 
     <div class="activity-nav">
         <div class="nav-buttons">
-    <a href="cambridge19_test3_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
+    <a href="cambridge19_test2_passage3_quiz.html" class="nav-button next-button">Next Activity →</a>
         </div>
         <div class="progress-indicator">
             <div class="progress-step matching-step">Matching</div>

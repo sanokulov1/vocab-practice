@@ -702,17 +702,17 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (31 words total) ---
+// --- Word Data for Each Group (37 words total, 5 groups of 6, 1 group of 7) ---
 
 // Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "adept", "def": "Very skilled or good at something."},
-    {"word": "forage", "def": "To search widely for food or supplies."},
-    {"word": "to disperse", "def": "To spread over a wide area."},
-    {"word": "archipelago", "def": "A group of many islands."},
-    {"word": "stepping stones", "def": "A series of things that help you reach a goal."},
-    {"word": "remote", "def": "Far away from other places or people."}
+    {"word": "to be ranked as", "def": "To be placed in a certain position or group based on quality or importance."},
+    {"word": "the likes of", "def": "People or things similar to someone or something mentioned."},
+    {"word": "to name just a few", "def": "Used to say that there are many more examples, but you are only mentioning a small number."},
+    {"word": "to be regarded as", "def": "To be thought of or considered to be something."},
+    {"word": "outsider", "def": "A person or team not expected to win a competition."},
+    {"word": "to account for", "def": "To explain why something happened, or to be the reason for something."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -720,12 +720,12 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "fragments", "def": "Small broken pieces of something."},
-    {"word": "impenetrable", "def": "Impossible to get through or into."},
-    {"word": "encompass", "def": "To include a wide range of things."},
-    {"word": "coincidence", "def": "Two or more things happening at the same time by chance."},
-    {"word": "to grind", "def": "To break something into small pieces or powder."},
-    {"word": "to unearth", "def": "To find something hidden in the ground or discover something secret."}
+    {"word": "widely publicized", "def": "Made known to many people through media."},
+    {"word": "former", "def": "Happening or existing before, but not now."},
+    {"word": "subtle", "def": "Not obvious or easy to notice."},
+    {"word": "pass unnoticed", "def": "To happen without being seen or recognized."},
+    {"word": "synthetic", "def": "Made by humans, not natural."},
+    {"word": "underestimated", "def": "Thought to be smaller, less important, or less capable than it really is."}
   ];
   setupGame(wordPairs, 'group2');
 })();
@@ -733,12 +733,12 @@ function setupGame(wordPairs, groupId) {
 // Group 3 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "routinely", "def": "As a normal or regular practice."},
-    {"word": "to abandon", "def": "To leave a place, thing, or person forever."},
-    {"word": "departure", "def": "The act of leaving a place."},
-    {"word": "to be rich in", "def": "To contain a lot of something valuable or useful."},
-    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
-    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."}
+    {"word": "modification", "def": "A small change made to something."},
+    {"word": "tweak", "def": "A small adjustment or change to improve something."},
+    {"word": "customized", "def": "Made or changed to suit the needs of a particular person or group."},
+    {"word": "elite", "def": "A small group of people who are the best or most powerful."},
+    {"word": "readily available", "def": "Easy to get or find."},
+    {"word": "specifications", "def": "Detailed descriptions of how something should be made or done."}
   ];
   setupGame(wordPairs, 'group3');
 })();
@@ -746,12 +746,12 @@ function setupGame(wordPairs, groupId) {
 // Group 4 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "livelihood", "def": "The way you earn money to live."},
-    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
-    {"word": "implement", "def": "To put a plan or decision into effect."},
-    {"word": "in-demand", "def": "Wanted by many people."},
-    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
-    {"word": "logging", "def": "The activity of cutting down trees for wood."}
+    {"word": "customization", "def": "The act of making something to suit individual needs."},
+    {"word": "to adjust", "def": "To change something slightly to make it more suitable or effective."},
+    {"word": "to weigh", "def": "To consider something carefully before making a decision."},
+    {"word": "the line between X and Y becomes thinner and thinner", "def": "It becomes harder to tell the difference between two things."},
+    {"word": "to date back to", "def": "To have existed since a particular time in the past."},
+    {"word": "equal in significance", "def": "Having the same importance."}
   ];
   setupGame(wordPairs, 'group4');
 })();
@@ -759,20 +759,26 @@ function setupGame(wordPairs, groupId) {
 // Group 5 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "comprise", "def": "To consist of or be made up of."},
-    {"word": "alarming", "def": "Worrying or frightening."},
-    {"word": "to document", "def": "To record information about something."},
-    {"word": "devastating", "def": "Causing a lot of damage or destruction."},
-    {"word": "run-off", "def": "Water that flows over the ground rather than soaking into it."},
-    {"word": "place a high priority", "def": "To consider something very important."}
+    {"word": "the former/the latter", "def": "The first of two things mentioned / the second of two things mentioned."},
+    {"word": "climatic conditions", "def": "The usual weather conditions in a place over a long period."},
+    {"word": "gut/intestines", "def": "The long tube in the body that food passes through after the stomach."},
+    {"word": "durable", "def": "Able to last a long time without breaking or wearing out."},
+    {"word": "stiff", "def": "Difficult to bend or move."},
+    {"word": "by far", "def": "By a great amount; very much."}
   ];
   setupGame(wordPairs, 'group5');
 })();
 
-// Group 6 (1 word)
+// Group 6 (7 words)
 (function() {
   const wordPairs = [
-    {"word": "degradation", "def": "The process of something being damaged or made worse."}
+    {"word": "revolutionise", "def": "To completely change the way something is done or thought about."},
+    {"word": "go beyond X", "def": "To exceed a limit or expectation."},
+    {"word": "X was attributed to Y", "def": "X was believed to be caused by Y."},
+    {"word": "lead (noun)", "def": "A heavy, soft, grey metal."},
+    {"word": "grips", "def": "A firm hold or control over something."},
+    {"word": "to anticipate", "def": "To expect something to happen and prepare for it."},
+    {"word": "light (adjective)", "def": "Not heavy; having a lot of light; pale in color."}
   ];
   setupGame(wordPairs, 'group6');
 })();
@@ -874,7 +880,7 @@ body.dark-mode .diamond-popup {
 
     <div class="activity-nav">
         <div class="nav-buttons">
-    <a href="cambridge19_test3_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
+    <a href="cambridge19_test1_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
         </div>
         <div class="progress-indicator">
             <div class="progress-step matching-step">Matching</div>

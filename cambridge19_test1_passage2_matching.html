@@ -541,6 +541,27 @@
     <div class="game-area" id="group6-defs"></div>
     <div id="group6-result" class="result-message"></div>
   </div>
+
+  <button class="accordion">Group 7</button>
+  <div class="panel">
+    <div class="game-area" id="group7-words"></div>
+    <div class="game-area" id="group7-defs"></div>
+    <div id="group7-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 8</button>
+  <div class="panel">
+    <div class="game-area" id="group8-words"></div>
+    <div class="game-area" id="group8-defs"></div>
+    <div id="group8-result" class="result-message"></div>
+  </div>
+
+  <button class="accordion">Group 9</button>
+  <div class="panel">
+    <div class="game-area" id="group9-words"></div>
+    <div class="game-area" id="group9-defs"></div>
+    <div id="group9-result" class="result-message"></div>
+  </div>
 </div>
 
 <audio id="correctSound" preload="auto">
@@ -702,17 +723,17 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (31 words total) ---
+// --- Word Data for Each Group (50 words total, 8 groups of 6, 1 group of 2) ---
 
 // Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "adept", "def": "Very skilled or good at something."},
-    {"word": "forage", "def": "To search widely for food or supplies."},
-    {"word": "to disperse", "def": "To spread over a wide area."},
-    {"word": "archipelago", "def": "A group of many islands."},
-    {"word": "stepping stones", "def": "A series of things that help you reach a goal."},
-    {"word": "remote", "def": "Far away from other places or people."}
+    {"word": "Spring to (as in spring to mind)", "def": "To suddenly come into your thoughts."},
+    {"word": "Misfits", "def": "People who don't fit in with others."},
+    {"word": "Daredevils", "def": "People who like to do dangerous things."},
+    {"word": "In command of", "def": "Having control or authority over something."},
+    {"word": "Millennium", "def": "A period of one thousand years."},
+    {"word": "Prowl", "def": "To move around quietly, often when hunting or looking for trouble."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -720,12 +741,12 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "fragments", "def": "Small broken pieces of something."},
-    {"word": "impenetrable", "def": "Impossible to get through or into."},
-    {"word": "encompass", "def": "To include a wide range of things."},
-    {"word": "coincidence", "def": "Two or more things happening at the same time by chance."},
-    {"word": "to grind", "def": "To break something into small pieces or powder."},
-    {"word": "to unearth", "def": "To find something hidden in the ground or discover something secret."}
+    {"word": "To raid", "def": "To make a sudden attack on a place."},
+    {"word": "trade routes", "def": "Paths used for buying and selling goods."},
+    {"word": "might", "def": "Strength, power, or influence."},
+    {"word": "fleet", "def": "A group of ships or vehicles working together."},
+    {"word": "eliminate", "def": "To completely remove or get rid of something."},
+    {"word": "eradicate", "def": "To destroy or get rid of something completely."}
   ];
   setupGame(wordPairs, 'group2');
 })();
@@ -733,12 +754,12 @@ function setupGame(wordPairs, groupId) {
 // Group 3 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "routinely", "def": "As a normal or regular practice."},
-    {"word": "to abandon", "def": "To leave a place, thing, or person forever."},
-    {"word": "departure", "def": "The act of leaving a place."},
-    {"word": "to be rich in", "def": "To contain a lot of something valuable or useful."},
-    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
-    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."}
+    {"word": "reign", "def": "The period when a king, queen, or emperor rules."},
+    {"word": "predate", "def": "To happen or exist before something else."},
+    {"word": "fertile", "def": "Able to produce many plants or crops; able to have babies."},
+    {"word": "rugged", "def": "Strong and rough, often describing land or a person."},
+    {"word": "marine resources", "def": "Natural things from the sea that are useful to people."},
+    {"word": "seafaring skills", "def": "Abilities related to traveling or working on the sea."}
   ];
   setupGame(wordPairs, 'group3');
 })();
@@ -746,12 +767,12 @@ function setupGame(wordPairs, groupId) {
 // Group 4 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "livelihood", "def": "The way you earn money to live."},
-    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
-    {"word": "implement", "def": "To put a plan or decision into effect."},
-    {"word": "in-demand", "def": "Wanted by many people."},
-    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
-    {"word": "logging", "def": "The activity of cutting down trees for wood."}
+    {"word": "unsurpassed knowledge", "def": "Knowledge that is better than anyone else's."},
+    {"word": "laden with", "def": "Carrying a heavy load of something."},
+    {"word": "surrender", "def": "To give up control of something or yourself to an enemy."},
+    {"word": "retaliation", "def": "Action taken to hurt someone because they hurt you."},
+    {"word": "resort to", "def": "To use a method or action, often a bad one, because no other choices are left."},
+    {"word": "correspondence", "def": "Letters or emails between people."}
   ];
   setupGame(wordPairs, 'group4');
 })();
@@ -759,22 +780,62 @@ function setupGame(wordPairs, groupId) {
 // Group 5 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "comprise", "def": "To consist of or be made up of."},
-    {"word": "alarming", "def": "Worrying or frightening."},
-    {"word": "to document", "def": "To record information about something."},
-    {"word": "devastating", "def": "Causing a lot of damage or destruction."},
-    {"word": "run-off", "def": "Water that flows over the ground rather than soaking into it."},
-    {"word": "place a high priority", "def": "To consider something very important."}
+    {"word": "to be troubled by", "def": "To be worried or bothered by something."},
+    {"word": "pressing issues", "def": "Important problems that need immediate attention."},
+    {"word": "commerce", "def": "The activity of buying and selling goods and services."},
+    {"word": "to assure", "def": "To tell someone confidently that something is true or will happen."},
+    {"word": "subjects", "def": "People who live in a country ruled by a king or queen."},
+    {"word": "condone", "def": "To accept or allow behavior that is considered wrong."}
   ];
   setupGame(wordPairs, 'group5');
 })();
 
-// Group 6 (1 word)
+// Group 6 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "degradation", "def": "The process of something being damaged or made worse."}
+    {"word": "praise", "def": "To express approval or admiration for someone or something."},
+    {"word": "glorify", "def": "To make something seem better or more important than it is."},
+    {"word": "to make a detour", "def": "To take a longer, different route to avoid something."},
+    {"word": "to tolerate", "def": "To allow something to exist or happen, even if you don't like it."},
+    {"word": "to curtail", "def": "To reduce or limit something."},
+    {"word": "hamper", "def": "To make it difficult for someone to do something."}
   ];
   setupGame(wordPairs, 'group6');
+})();
+
+// Group 7 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "culprit", "def": "The person or thing responsible for a problem or crime."},
+    {"word": "emboldened", "def": "Made brave or more confident."},
+    {"word": "kidnapped", "def": "Taken illegally by force, usually to demand money."},
+    {"word": "prominent", "def": "Important or easily seen."},
+    {"word": "ransom", "def": "Money demanded for the release of a kidnapped person."},
+    {"word": "hostage", "def": "A person taken by an attacker to force others to do something."}
+  ];
+  setupGame(wordPairs, 'group7');
+})();
+
+// Group 8 (6 words)
+(function() {
+  const wordPairs = [
+    {"word": "outlive", "def": "To live longer than someone or something else."},
+    {"word": "concerted action", "def": "Action done together by several people or groups."},
+    {"word": "to grant", "def": "To give or allow something, often officially."},
+    {"word": "combat", "def": "Fighting between armed forces; to fight against something."},
+    {"word": "menace", "def": "A person or thing that is likely to cause harm; a threat."},
+    {"word": "cleansing", "def": "The act of making something clean or pure."}
+  ];
+  setupGame(wordPairs, 'group8');
+})();
+
+// Group 9 (2 words)
+(function() {
+  const wordPairs = [
+    {"word": "maritime", "def": "Related to the sea or ships."},
+    {"word": "denial", "def": "A statement saying that something is not true."}
+  ];
+  setupGame(wordPairs, 'group9');
 })();
 </script>
 
@@ -874,7 +935,7 @@ body.dark-mode .diamond-popup {
 
     <div class="activity-nav">
         <div class="nav-buttons">
-    <a href="cambridge19_test3_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
+    <a href="cambridge19_test1_passage2_quiz.html" class="nav-button next-button">Next Activity →</a>
         </div>
         <div class="progress-indicator">
             <div class="progress-step matching-step">Matching</div>

@@ -527,20 +527,6 @@
     <div class="game-area" id="group4-defs"></div>
     <div id="group4-result" class="result-message"></div>
   </div>
-
-  <button class="accordion">Group 5</button>
-  <div class="panel">
-    <div class="game-area" id="group5-words"></div>
-    <div class="game-area" id="group5-defs"></div>
-    <div id="group5-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 6</button>
-  <div class="panel">
-    <div class="game-area" id="group6-words"></div>
-    <div class="game-area" id="group6-defs"></div>
-    <div id="group6-result" class="result-message"></div>
-  </div>
 </div>
 
 <audio id="correctSound" preload="auto">
@@ -702,17 +688,17 @@ function setupGame(wordPairs, groupId) {
   render(); // Initial render of the game
 }
 
-// --- Word Data for Each Group (31 words total) ---
+// --- Word Data for Each Group (23 words total, 4 groups) ---
 
 // Group 1 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "adept", "def": "Very skilled or good at something."},
-    {"word": "forage", "def": "To search widely for food or supplies."},
-    {"word": "to disperse", "def": "To spread over a wide area."},
-    {"word": "archipelago", "def": "A group of many islands."},
-    {"word": "stepping stones", "def": "A series of things that help you reach a goal."},
-    {"word": "remote", "def": "Far away from other places or people."}
+    {"word": "To craft", "def": "To make something with skill, often by hand."},
+    {"word": "Motion", "def": "A proposal or idea that is discussed and voted on in a meeting."},
+    {"word": "Prior to", "def": "Before a particular time or event."},
+    {"word": "Labour", "def": "Work, especially physical work."},
+    {"word": "Meet someone’s demand", "def": "To provide what someone needs or asks for."},
+    {"word": "To adopt", "def": "To start to use or follow a new method or idea."}
   ];
   setupGame(wordPairs, 'group1');
 })();
@@ -720,12 +706,12 @@ function setupGame(wordPairs, groupId) {
 // Group 2 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "fragments", "def": "Small broken pieces of something."},
-    {"word": "impenetrable", "def": "Impossible to get through or into."},
-    {"word": "encompass", "def": "To include a wide range of things."},
-    {"word": "coincidence", "def": "Two or more things happening at the same time by chance."},
-    {"word": "to grind", "def": "To break something into small pieces or powder."},
-    {"word": "to unearth", "def": "To find something hidden in the ground or discover something secret."}
+    {"word": "In response to", "def": "As a reaction to something that has happened or been said."},
+    {"word": "Expand", "def": "To increase in size, number, or importance."},
+    {"word": "To patent", "def": "To obtain the official right to be the only one to make, use, or sell an invention."},
+    {"word": "Collision", "def": "An accident in which two or more things hit each other."},
+    {"word": "Immense", "def": "Extremely large or great."},
+    {"word": "To accelerate", "def": "To happen or make something happen faster."}
   ];
   setupGame(wordPairs, 'group2');
 })();
@@ -733,48 +719,26 @@ function setupGame(wordPairs, groupId) {
 // Group 3 (6 words)
 (function() {
   const wordPairs = [
-    {"word": "routinely", "def": "As a normal or regular practice."},
-    {"word": "to abandon", "def": "To leave a place, thing, or person forever."},
-    {"word": "departure", "def": "The act of leaving a place."},
-    {"word": "to be rich in", "def": "To contain a lot of something valuable or useful."},
-    {"word": "pollutants", "def": "Harmful substances that make air, water, or soil dirty."},
-    {"word": "pesticides", "def": "Chemicals used to kill insects that harm plants."}
+    {"word": "Inadequate sanitation", "def": "Not enough or poor quality systems for dealing with human waste."},
+    {"word": "Economic output", "def": "The total value of goods and services produced in a country or area."},
+    {"word": "To fuel", "def": "To provide something with what it needs to continue or grow."},
+    {"word": "To object", "def": "To express disapproval of or disagreement with something."},
+    {"word": "To rob someone of their livelihood", "def": "To take away someone's ability to earn money to live."},
+    {"word": "Desperate", "def": "Feeling or showing a hopeless sense that a situation is so bad as to be impossible to deal with."}
   ];
   setupGame(wordPairs, 'group3');
 })();
 
-// Group 4 (6 words)
+// Group 4 (5 words)
 (function() {
   const wordPairs = [
-    {"word": "livelihood", "def": "The way you earn money to live."},
-    {"word": "mitigate", "def": "To make something less severe, serious, or painful."},
-    {"word": "implement", "def": "To put a plan or decision into effect."},
-    {"word": "in-demand", "def": "Wanted by many people."},
-    {"word": "commodity", "def": "A raw material or primary agricultural product that can be bought and sold."},
-    {"word": "logging", "def": "The activity of cutting down trees for wood."}
+    {"word": "To wreck", "def": "To severely damage or destroy something."},
+    {"word": "Uprising", "def": "An act of resistance or rebellion against authority."},
+    {"word": "Unrest", "def": "A state of dissatisfaction, disturbance, and agitation among a group of people."},
+    {"word": "All but", "def": "Almost entirely; nearly."},
+    {"word": "Vanish", "def": "To disappear suddenly and completely."}
   ];
   setupGame(wordPairs, 'group4');
-})();
-
-// Group 5 (6 words)
-(function() {
-  const wordPairs = [
-    {"word": "comprise", "def": "To consist of or be made up of."},
-    {"word": "alarming", "def": "Worrying or frightening."},
-    {"word": "to document", "def": "To record information about something."},
-    {"word": "devastating", "def": "Causing a lot of damage or destruction."},
-    {"word": "run-off", "def": "Water that flows over the ground rather than soaking into it."},
-    {"word": "place a high priority", "def": "To consider something very important."}
-  ];
-  setupGame(wordPairs, 'group5');
-})();
-
-// Group 6 (1 word)
-(function() {
-  const wordPairs = [
-    {"word": "degradation", "def": "The process of something being damaged or made worse."}
-  ];
-  setupGame(wordPairs, 'group6');
 })();
 </script>
 
@@ -874,7 +838,7 @@ body.dark-mode .diamond-popup {
 
     <div class="activity-nav">
         <div class="nav-buttons">
-    <a href="cambridge19_test3_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
+    <a href="cambridge19_test2_passage1_quiz.html" class="nav-button next-button">Next Activity →</a>
         </div>
         <div class="progress-indicator">
             <div class="progress-step matching-step">Matching</div>

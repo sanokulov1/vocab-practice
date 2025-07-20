@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Typing Task</title>
+    <title>Vocabulary Quiz</title>
+    <!-- Google Fonts - Inter for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Define CSS variables for colors, allowing easy switching between light and dark modes */
@@ -77,34 +78,53 @@
             line-height: 1.4;
         }
 
-        /* Input field styling */
-        .typing-input {
-            width: calc(100% - 40px); /* Full width minus padding */
-            padding: 15px 20px;
-            margin-bottom: 20px;
+        /* Options buttons styling */
+        .options-container button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 12px;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            font-size: 1.15em;
+            background-color: var(--secondary-bg); /* Options background same as container */
             color: var(--text-primary);
-            background-color: var(--secondary-bg);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1.15em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for buttons */
         }
 
-        .typing-input:focus {
+        /* Hover effect for options buttons */
+        .options-container button:hover:not(.selected):not(.correct):not(.wrong) {
+            background-color: var(--border-color); /* Lighter background on hover */
+            border-color: var(--accent-light);
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Styling for selected option */
+        .options-container button.selected {
+            background-color: var(--accent-light);
             border-color: var(--accent-color);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(52, 152, 219, 0.3); /* Focus ring */
-            outline: none;
+            color: var(--button-text-color);
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Feedback message styling (now only for visual spacing) */
-        .feedback-message {
-            font-size: 1.2em;
+        /* Styling for correct answer */
+        .options-container button.correct {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
             font-weight: 600;
-            text-align: center;
-            margin-top: 15px;
-            min-height: 1.5em; /* Reserve space to prevent layout shift */
-            color: transparent; /* Make text invisible as feedback is removed */
+        }
+
+        /* Styling for wrong answer */
+        .options-container button.wrong {
+            background-color: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+            font-weight: 600;
         }
 
         /* Navigation buttons container */
@@ -186,12 +206,6 @@
             list-style: none;
             padding: 0;
             text-align: left;
-            max-height: 250px; /* Adjusted max height for scrollability */
-            overflow-y: auto; /* Enable vertical scrolling */
-            border: 1px solid var(--border-color); /* Optional: Add a border to the scrollable area */
-            border-radius: 8px;
-            padding-right: 10px; /* Space for scrollbar */
-            margin-top: 20px; /* Added margin-top for spacing from heading */
         }
 
         /* Individual incorrect answer list item */
@@ -276,8 +290,8 @@
             .question-text {
                 font-size: 1.3em;
             }
-            .typing-input {
-                padding: 12px 15px;
+            .options-container button {
+                padding: 15px;
                 font-size: 1em;
             }
             .navigation-buttons button,
@@ -299,180 +313,155 @@
 
         /* Firework Animation Styling */
         .firework-container {
-            position: fixed; /* Use fixed to cover entire viewport */
+            position: absolute;
+            width: 100%;
+            height: 100%;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
+            pointer-events: none; /* Allows clicks to pass through */
             overflow: hidden;
-            z-index: 9999;
-        }
-
-        /* New overlay for fireworks */
-        .firework-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.85); /* Darker overlay for more contrast */
-            z-index: 9998; /* Below fireworks, above quiz content */
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none; /* Allow clicks to pass through */
-        }
-
-        .firework-overlay.show {
-            opacity: 1;
+            z-index: 9999; /* Ensures fireworks are on top */
         }
 
         .firework {
             position: absolute;
-            width: 20px; /* Significantly larger initial size */
-            height: 20px;
-            background-color: #FFD700; /* Initial flash color */
+            width: 12px;
+            height: 12px;
+            background-color: #FFD700; /* Default firework color */
             border-radius: 50%;
             opacity: 0;
-            animation: firework-burst 2.5s ease-out forwards; /* Longer burst animation */
-            animation-delay: var(--delay, 0s); /* Allow delay for multiple fireworks */
-            transform: scale(0.1) translateY(80px); /* Start smaller and slightly lower */
-            filter: brightness(1.5); /* Make the initial burst brighter */
+            animation: firework-burst 1.8s ease-out forwards; /* Firework burst animation */
         }
 
         @keyframes firework-burst {
-            0% { transform: scale(0.1) translateY(80px); opacity: 0; } /* Start invisible, lower */
-            5% { opacity: 1; transform: scale(0.5) translateY(0px); filter: brightness(2); } /* Quick fade in, move up, very bright */
-            30% { transform: scale(2) translateY(-100px); opacity: 1; filter: brightness(1.5); } /* Expand, move further up */
-            100% { transform: scale(0) translateY(-200px); opacity: 0; filter: brightness(0.5); } /* Fade out, move off screen */
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(3); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
         }
 
         .firework::before, .firework::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0; /* No intrinsic size, only box-shadow */
-            height: 0;
+            width: 5px;
+            height: 5px;
+            background-color: white; /* Sparkle color */
             border-radius: 50%;
-            background-color: transparent; /* No background, only shadows */
             opacity: 0;
-            animation: firework-sparkle-spread 2.8s ease-out forwards; /* Longer for spread */
-            animation-delay: var(--delay, 0s); /* Inherit delay */
-            transform: translate(-50%, -50%); /* Center the pseudo-elements */
-            filter: brightness(1.2); /* Make sparks brighter */
+            animation: firework-sparkle 1.8s ease-out forwards; /* Sparkle animation */
         }
 
-        /* Animation for the scattering sparks */
-        @keyframes firework-sparkle-spread {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(4); } /* Much larger spread */
+        .firework::before {
+            transform: translate(-18px, -18px); /* Position of first set of sparks */
+            animation-delay: 0.1s;
+        }
+        .firework::after {
+            transform: translate(18px, 18px); /* Position of second set of sparks */
+            animation-delay: 0.2s;
         }
 
+        /* Multi-color firework effects */
         .firework.multi::before {
-            box-shadow: var(--firework-before-shadow);
+            box-shadow: 20px 0 #FF6347, -20px 0 #FF6347, 0 20px #FF6347, 0 -20px #FF6347,
+                        15px 15px #FF6347, -15px -15px #FF6347, 15px -15px #FF6347, -15px 15px #FF6347;
         }
         .firework.multi::after {
-            box-shadow: var(--firework-after-shadow);
+            box-shadow: 30px 0 #ADFF2F, -30px 0 #ADFF2F, 0 30px #ADFF2F, 0 -30px #ADFF2F,
+                        22px 22px #ADFF2F, -22px -22px #ADFF2F, 22px -22px #ADFF2F, -22px 22px #ADFF2F;
         }
 
+        @keyframes firework-sparkle {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(3); }
+        }
     </style>
 </head>
 <body>
-    <div id="firework-overlay" class="firework-overlay"></div>
 
+    <!-- Mode Toggle Button (Sun/Moon icon) -->
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
-        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
-        </svg>
+        <!-- Sun icon (visible in Night Mode) -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
         <!-- Moon icon (visible in Day Mode) -->
         <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
     </button>
 
-    <div id="typing-app" class="quiz-container">
-        <div id="typing-content">
-            <h2 id="definition-text" class="question-text"></h2>
-            <input type="text" id="word-input" class="typing-input" placeholder="Type the word here..." onkeyup="handleInput(event)">
-            <div id="feedback-message" class="feedback-message"></div>
+    <!-- Main Quiz Application Container -->
+    <div id="quiz-app" class="quiz-container">
+        <!-- Quiz Content Section -->
+        <div id="quiz-content">
+            <h2 id="question-text" class="question-text"></h2>
+            <div id="options-container" class="options-container">
+                <!-- Options will be dynamically inserted here by JavaScript -->
+            </div>
             <div class="navigation-buttons">
                 <button id="prev-button" onclick="previousQuestion()">Previous</button>
                 <button id="next-button" onclick="nextQuestion()">Next</button>
             </div>
             <div class="submit-button-container">
-                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitTask()">Submit Task</button>
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
             </div>
         </div>
 
+        <!-- Quiz Results Section -->
         <div id="results-container" class="results-container" style="display: none;">
             <h2 id="results-message"></h2>
             <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
             <ul id="incorrect-answers-list">
-                <!-- Incorrect answers will be dynamically inserted here -->
+                <!-- Incorrect answers will be dynamically inserted here by JavaScript -->
             </ul>
-            <button class="submit-button" onclick="startTask()">Try Again</button>
+            <button class="submit-button" onclick="startQuiz()">Try Again</button>
         </div>
     </div>
 
-    <div class="firework-container">
-        <!-- CSS fireworks will be rendered here -->
-    </div>
+    <!-- Firework Display Container -->
+    <div id="firework-display" class="firework-container"></div>
 
     <script>
-        // Array of vocabulary words and their definitions, with acceptable answers for smart typing
+        // Array of vocabulary words and their definitions
         const vocabularyWords = [
-            { word: "Aligned with", definition: "In agreement with; matching values or goals.", acceptableAnswers: ["aligned with"] },
-            { word: "To police", definition: "To control or enforce rules and behaviors.", acceptableAnswers: ["to police", "police", "polices", "policed", "policing"] },
-            { word: "Feat", definition: "An impressive achievement.", acceptableAnswers: ["feat", "feats"] },
-            { word: "Prodigious", definition: "Extremely impressive in size, ability, or amount.", acceptableAnswers: ["prodigious"] },
-            { word: "Temporary", definition: "Lasting for a short time.", acceptableAnswers: ["temporary"] },
-            { word: "Constraints", definition: "Limits or restrictions.", acceptableAnswers: ["constraints", "constraint"] },
-            { word: "Handicap", definition: "A disadvantage or limitation.", acceptableAnswers: ["handicap", "handicaps"] },
-            { word: "Accelerate", definition: "To speed up or increase in progress.", acceptableAnswers: ["accelerate", "accelerates", "accelerated", "accelerating"] },
-            { word: "Coexistence", definition: "Living or existing together in peace.", acceptableAnswers: ["coexistence"] },
-            { word: "Far from", definition: "Not at all; the opposite of.", acceptableAnswers: ["far from"] },
-            { word: "Superintendent", definition: "A person or system responsible for managing or overseeing something.", acceptableAnswers: ["superintendent", "superintendents"] },
-            { word: "Amplify", definition: "To make stronger or more intense.", acceptableAnswers: ["amplify", "amplifies", "amplified", "amplifying"] },
-            { word: "Fallible", definition: "Capable of making mistakes.", acceptableAnswers: ["fallible"] },
-            { word: "Moral high ground", definition: "A position of moral superiority.", acceptableAnswers: ["moral high ground"] },
-            { word: "Trough", definition: "A low or bad point in a situation.", acceptableAnswers: ["trough", "troughs"] },
-            { word: "Utopian vision", definition: "An ideal but unrealistic idea of a perfect world.", acceptableAnswers: ["utopian vision", "utopian visions"] },
-            { word: "Gatekeeper", definition: "A person or thing that controls access to something.", acceptableAnswers: ["gatekeeper", "gatekeepers"] },
-            { word: "Sacrifice", definition: "To give up something important for a greater purpose.", acceptableAnswers: ["sacrifice", "sacrifices", "sacrificed", "sacrificing"] },
-            { word: "Lapses", definition: "Temporary failures in behavior or attention.", acceptableAnswers: ["lapses", "lapse"] },
-            { word: "Take for granted", definition: "To fail to appreciate something fully.", acceptableAnswers: ["take for granted", "takes for granted", "took for granted", "taking for granted"] },
-            { word: "Discriminate", definition: "To treat someone unfairly based on differences.", acceptableAnswers: ["discriminate", "discriminates", "discriminated", "discriminating"] },
-            { word: "In favor of", definition: "Supporting or preferring something.", acceptableAnswers: ["in favor of"] },
-            { word: "Far-fetched", definition: "Difficult to believe; unlikely.", acceptableAnswers: ["far-fetched"] },
-            { word: "Act in the interests of someone", definition: "To do something for someone’s benefit.", acceptableAnswers: ["act in the interests of someone", "acts in the interests of someone", "acted in the interests of someone", "acting in the interests of someone"] },
-            { word: "Depriving someone of something", definition: "Taking something away that someone needs or enjoys.", acceptableAnswers: ["depriving someone of something", "deprive someone of something", "deprives someone of something", "deprived someone of something"] },
-            { word: "Set aside", definition: "To ignore or leave something out, usually for a greater goal.", acceptableAnswers: ["set aside", "sets aside", "setting aside"] },
-            { word: "Reasoning", definition: "The process of thinking through something logically.", acceptableAnswers: ["reasoning"] }
+            { word: "To handle", definition: "To deal with or manage a situation or problem." },
+            { word: "Withdrawal", definition: "The act of stopping participation in an event or activity." }, // Updated definition
+            { word: "To regulate", definition: "To control or supervise something by rules or laws." },
+            { word: "To attribute", definition: "To say or think that something is caused by or belongs to someone/something." },
+            { word: "To dictate", definition: "To tell someone what to do, often in a forceful way." },
+            { word: "To cope with", definition: "To deal effectively with something difficult." },
+            { word: "Outcome", definition: "The result or consequence of an action or event." },
+            { word: "To tackle", definition: "To deal with a problem or challenge." },
+            { word: "Superior", definition: "Better than average or better than others of the same type." },
+            { word: "Inhibit", definition: "To prevent or slow down a process or action." },
+            { word: "Perspiration", definition: "Sweat; the act of sweating." },
+            { word: "Nausea", definition: "The feeling that you are about to vomit." },
+            { word: "Manifest", definition: "To show something clearly, especially an emotion or quality." },
+            { word: "Coupled with", definition: "Combined with; together with." },
+            { word: "Mental picture of something", definition: "An image or idea that you have in your mind." },
+            { word: "To picture", definition: "To form a mental image of something; to imagine." },
+            { word: "Compound (as in chemical compound)", definition: "A substance formed when two or more elements are chemically combined." }
         ];
 
-        let currentQuizWords = [];
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let incorrectAnswers = [];
+        let currentQuizWords = []; // Stores the 10 words for the current quiz session
+        let currentQuestionIndex = 0; // Tracks the current question being displayed
+        let userAnswers = []; // Stores the user's selected definition for each question
+        let incorrectAnswers = []; // Stores words the user got wrong
 
-        const quizLength = 10; // The number of questions in each quiz session
-
-        const definitionTextElement = document.getElementById('definition-text');
-        const wordInput = document.getElementById('word-input');
-        const feedbackMessage = document.getElementById('feedback-message');
+        // Get references to DOM elements
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
         const prevButton = document.getElementById('prev-button');
         const nextButton = document.getElementById('next-button');
         const submitButton = document.getElementById('submit-button');
-        const typingContent = document.getElementById('typing-content');
+        const quizContent = document.getElementById('quiz-content');
         const resultsContainer = document.getElementById('results-container');
         const incorrectAnswersList = document.getElementById('incorrect-answers-list');
         const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
         const resultsMessage = document.getElementById('results-message');
-        const fireworkOverlay = document.getElementById('firework-overlay');
+        const fireworkDisplay = document.getElementById('firework-display');
         const modeToggleButton = document.getElementById('mode-toggle');
-        const fireworkContainer = document.querySelector('.firework-container');
 
-        // Shuffles an array randomly
+        /**
+         * Shuffles an array randomly.
+         * @param {Array} array - The array to shuffle.
+         * @returns {Array} The shuffled array.
+         */
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -481,87 +470,123 @@
             return array;
         }
 
-        // Starts a new typing task session
-        function startTask() {
+        /**
+         * Initializes or restarts the quiz.
+         * Selects 10 random words, resets user answers and incorrect answers,
+         * and displays the first question.
+         */
+        function startQuiz() {
             currentQuestionIndex = 0;
-            userAnswers = new Array(quizLength).fill(null); // Initialize user answers for 10 questions
+            userAnswers = [];
             incorrectAnswers = [];
 
-            if (vocabularyWords.length < quizLength) {
-                console.error(`Not enough vocabulary words to create a ${quizLength}-question task.`);
-                // In a real application, you might display a user-friendly error message here
-                alert(`Error: Not enough vocabulary words to create a ${quizLength}-question task.`); // Use alert for critical error
+            // Ensure there are enough words for a 10-question quiz
+            if (vocabularyWords.length < 10) {
+                console.error("Not enough vocabulary words to create a 10-question quiz.");
+                // Optionally display an error message to the user
+                quizContent.innerHTML = "<p>Error: Not enough vocabulary words available to start the quiz.</p>";
                 return;
             }
-            
-            // Shuffle all words and then take the first 'quizLength' for the current task
-            const shuffledAllWords = shuffleArray([...vocabularyWords]);
-            currentQuizWords = shuffledAllWords.slice(0, quizLength);
 
-            typingContent.style.display = 'block';
+            // Shuffle all words and select the first 10 for the current quiz
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentQuizWords = shuffledAllWords.slice(0, 10);
+
+            // Show quiz content and hide results
+            quizContent.style.display = 'block';
             resultsContainer.style.display = 'none';
-            submitButton.style.display = 'none';
-            fireworkOverlay.classList.remove('show'); // Ensure overlay is hidden
-            fireworkContainer.innerHTML = ''; // Clear any residual fireworks
+            submitButton.style.display = 'none'; // Hide submit button until last question
+            fireworkDisplay.innerHTML = ''; // Clear any previous fireworks
 
             displayQuestion(currentQuestionIndex);
         }
 
-        // Displays the current question (definition) and clears input/feedback
+        /**
+         * Displays the question and its options for the given index.
+         * @param {number} index - The index of the question to display.
+         */
         function displayQuestion(index) {
             const currentWordObject = currentQuizWords[index];
-            definitionTextElement.textContent = currentWordObject.definition; // Show definition
-            wordInput.value = userAnswers[index] || ''; // Populate input if already answered
-            feedbackMessage.textContent = ''; // Clear feedback message
-            wordInput.focus(); // Focus on the input field
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            let incorrectOptionsCount = 0;
+            // Create a pool of all definitions to pick incorrect options from
+            const definitionsPool = vocabularyWords.map(item => item.definition);
+
+            // Add 3 unique incorrect definitions
+            while (incorrectOptionsCount < 3) {
+                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
+                // Ensure the random definition is not already in the options and is not the correct answer
+                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
+                }
+            }
+
+            // Shuffle the options to randomize their order
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
+
+            // Create and append buttons for each option
+            allOptionDefinitions.forEach(definition => {
+                const button = document.createElement('button');
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition); // Attach click handler
+                optionsContainer.appendChild(button);
+
+                // If the user has already answered this question, mark their selection
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
+                }
+            });
 
             updateNavigationButtons();
         }
 
-        // Handles user input in the typing field
-        function handleInput(event) {
-            // Store the current input value as the user's answer for this question
-            userAnswers[currentQuestionIndex] = wordInput.value;
-
-            // Optional: Provide real-time feedback (can be removed if not desired)
-            const typedValue = wordInput.value.trim().toLowerCase();
-            const correctWordObject = currentQuizWords[currentQuestionIndex];
-            const isCorrect = correctWordObject.acceptableAnswers.some(answer => answer.toLowerCase() === typedValue);
-
-            if (typedValue === '') {
-                feedbackMessage.textContent = '';
-            } else if (isCorrect) {
-                // feedbackMessage.textContent = 'Correct!';
-                // feedbackMessage.style.color = 'var(--success-color)';
-                feedbackMessage.textContent = ''; // Keep feedback hidden for typing task
-            } else {
-                // feedbackMessage.textContent = 'Keep trying...';
-                // feedbackMessage.style.color = 'var(--error-color)';
-                feedbackMessage.textContent = ''; // Keep feedback hidden for typing task
-            }
-
-            // If Enter key is pressed, move to the next question
-            if (event.key === 'Enter') {
-                nextQuestion();
-            }
+        /**
+         * Handles the selection of an answer by the user.
+         * Marks the selected button and stores the answer.
+         * @param {string} selectedDefinition - The definition chosen by the user.
+         */
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition; // Store the user's answer
+            // Remove 'selected' class from all buttons and add to the newly selected one
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
+                }
+            });
         }
 
-        // Updates the state of navigation and submit buttons
+        /**
+         * Updates the state of the 'Previous', 'Next', and 'Submit' buttons
+         * based on the current question index.
+         */
         function updateNavigationButtons() {
-            prevButton.disabled = currentQuestionIndex === 0;
-            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block';
-            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none';
+            prevButton.disabled = currentQuestionIndex === 0; // Disable 'Previous' on the first question
+            // Show 'Next' button unless it's the last question
+            nextButton.style.display = (currentQuestionIndex === currentQuizWords.length - 1) ? 'none' : 'inline-block';
+            // Show 'Submit' button only on the last question
+            submitButton.style.display = (currentQuestionIndex === currentQuizWords.length - 1) ? 'inline-block' : 'none';
         }
 
-        // Moves to the next question
+        /**
+         * Moves to the next question if available.
+         */
         function nextQuestion() {
-            if (currentQuestionIndex < quizLength - 1) {
+            if (currentQuestionIndex < currentQuizWords.length - 1) {
                 currentQuestionIndex++;
                 displayQuestion(currentQuestionIndex);
             }
         }
 
-        // Moves to the previous question
+        /**
+         * Moves to the previous question if available.
+         */
         function previousQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
@@ -569,104 +594,87 @@
             }
         }
 
-        // Submits the typing task and displays results
-        function submitTask() {
-            incorrectAnswers = [];
-            for (let i = 0; i < quizLength; i++) {
-                const userAnswer = (userAnswers[i] || '').trim().toLowerCase();
-                const correctWordObject = currentQuizWords[i];
-                // Get the primary correct answer (first in the acceptableAnswers array)
-                const primaryCorrectAnswer = correctWordObject.acceptableAnswers[0]; 
-                const isCorrect = correctWordObject.acceptableAnswers.some(answer => answer.toLowerCase() === userAnswer);
-
-                if (!isCorrect) {
-                    incorrectAnswers.push({
-                        word: correctWordObject.word, // This is the original word, not needed for the requested output format
-                        correctDefinition: correctWordObject.definition,
-                        userAnswer: userAnswers[i] || "No answer provided",
-                        correctAnswer: primaryCorrectAnswer // Store the primary correct answer
-                    });
+        /**
+         * Submits the quiz, calculates the score, and displays results.
+         * Also triggers fireworks if all answers are correct.
+         */
+        function submitQuiz() {
+            incorrectAnswers = []; // Reset incorrect answers list
+            // Check each answer
+            for (let i = 0; i < currentQuizWords.length; i++) {
+                // If the user's answer does not match the correct definition
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push(currentQuizWords[i]); // Add to incorrect list
                 }
             }
 
-            typingContent.style.display = 'none';
+            // Hide quiz content and show results container
+            quizContent.style.display = 'none';
             resultsContainer.style.display = 'block';
-            incorrectAnswersList.innerHTML = '';
+            incorrectAnswersList.innerHTML = ''; // Clear previous incorrect answers display
 
             if (incorrectAnswers.length > 0) {
-                resultsMessage.textContent = `Task Completed! You got ${quizLength - incorrectAnswers.length} out of ${quizLength} correct.`;
-                incorrectAnswersHeading.style.display = 'block';
+                // If there are incorrect answers
+                resultsMessage.textContent = "Quiz Completed!";
+                incorrectAnswersHeading.style.display = 'block'; // Show "Words you got wrong" heading
+                // Populate the list of incorrect answers
                 incorrectAnswers.forEach(item => {
                     const listItem = document.createElement('li');
-                    // Updated to show "Your answer X, Correct answer Y, Definition Z"
-                    listItem.innerHTML = `Your answer: "${item.userAnswer}"<br>Correct answer: "${item.correctAnswer}"<br>Definition: "${item.correctDefinition}"`;
+                    listItem.innerHTML = `<strong>${item.word}</strong>: ${item.definition}`;
                     incorrectAnswersList.appendChild(listItem);
                 });
             } else {
-                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
-                incorrectAnswersHeading.style.display = 'none';
+                // If all answers are correct
+                resultsMessage.textContent = "Congratulations! You got all 10 words correct!";
+                incorrectAnswersHeading.style.display = 'none'; // Hide "Words you got wrong" heading
                 const listItem = document.createElement('li');
                 listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                // Apply success styling to the message
                 listItem.style.backgroundColor = 'var(--success-color)';
                 listItem.style.color = 'white';
                 listItem.style.borderColor = 'var(--success-color)';
                 incorrectAnswersList.appendChild(listItem);
-                triggerFireworks(); // Trigger fireworks for perfect score
+                triggerFireworks(); // Celebrate with fireworks!
             }
         }
 
-        // Toggles between light and dark mode
+        /**
+         * Toggles between light and dark mode by adding/removing a class on the body.
+         */
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
         }
 
-        // Triggers a firework animation for a perfect score
+        /**
+         * Triggers a fireworks animation on the screen.
+         */
         function triggerFireworks() {
-            fireworkOverlay.classList.add('show'); // Show the shadowy overlay
-            fireworkContainer.innerHTML = ''; // Clear previous fireworks
-
-            const numFireworks = 15; // Increased number of fireworks for more impact
-            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF', '#FFA500', '#BA55D3']; // Added more colors
+            fireworkDisplay.innerHTML = ''; // Clear existing fireworks
+            const numFireworks = 8; // Number of fireworks to display
+            // Array of colors for fireworks
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF'];
 
             for (let i = 0; i < numFireworks; i++) {
                 const firework = document.createElement('div');
-                firework.classList.add('firework', 'multi');
+                firework.classList.add('firework', 'multi'); // Add 'multi' class for multi-color effect
+                // Randomly position fireworks on the screen
                 firework.style.left = `${Math.random() * 80 + 10}%`;
                 firework.style.top = `${Math.random() * 60 + 20}%`;
-                firework.style.setProperty('--delay', `${i * 0.15}s`); // Adjusted delay for more sequential bursts
+                // Assign a random color
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = `${i * 0.15}s`; // Stagger animation start times
 
-                // Set the base color of the firework (which will be used for its initial flash if any)
-                // and for the primary color of the sparks.
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                // Set CSS variables for dynamic box-shadow colors
-                firework.style.setProperty('--firework-before-shadow', `
-                    0 0 0 5px ${randomColor},
-                    0 0 0 10px ${colors[Math.floor(Math.random() * colors.length)]},
-                    0 0 0 15px ${colors[Math.floor(Math.random() * colors.length)]},
-                    0 0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}
-                `);
-                firework.style.setProperty('--firework-after-shadow', `
-                    0 0 0 5px ${colors[Math.floor(Math.random() * colors.length)]},
-                    0 0 0 10px ${colors[Math.floor(Math.random() * colors.length)]},
-                    0 0 0 15px ${colors[Math.floor(Math.random() * colors.length)]},
-                    0 0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}
-                `);
-                
-                fireworkContainer.appendChild(firework);
+                fireworkDisplay.appendChild(firework);
 
-                // Remove firework and hide overlay after animation
+                // Remove the firework element after its animation ends to clean up DOM
                 firework.addEventListener('animationend', () => {
                     firework.remove();
-                    // Only hide overlay if all fireworks have finished
-                    if (fireworkContainer.children.length === 0) {
-                        fireworkOverlay.classList.remove('show');
-                    }
                 });
             }
         }
 
-        // Start the task when the page loads
-        window.onload = startTask;
+        // Start the quiz when the window loads
+        window.onload = startQuiz;
     </script>
 
 <div id="diamond-count-container">
@@ -765,7 +773,10 @@ body.dark-mode .diamond-popup {
 
     <div class="activity-nav">
         <div class="nav-buttons">
-    <a href="cambridge18_test2_passage2_quiz.html" class="nav-button prev-button">← Previous Activity</a>
+    
+            <a href="cambridge19_test2_passage2_matching.html" class="nav-button prev-button">← Previous Activity</a>
+            <a href="cambridge19_test2_passage2_typing.html" class="nav-button next-button">Next Activity →</a>
+        
         </div>
         <div class="progress-indicator">
             <div class="progress-step matching-step">Matching</div>
@@ -861,10 +872,10 @@ body.dark-mode .diamond-popup {
         box-shadow: 0 0 0 2px #E2E8F0;
     }
     
-        .typing-step {
+        .quiz-step {
             color: #2D3748;
         }
-        .typing-step::before {
+        .quiz-step::before {
             background: #3498DB;
             box-shadow: 0 0 0 2px #3498DB;
         }
@@ -955,11 +966,11 @@ onAuthStateChanged(auth, (user) => {
     // You might want to re-run your activity-specific logic or enable/disable features based on user here
 });
 
-function onTypingComplete(correctAnswers) {
+function onQuizComplete(correctAnswers) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const userRef = doc(db, "users", user.uid);
-      let diamondEarned = correctAnswers === 10 ? 1.5 : (correctAnswers >= 6 ? 1 : 0);
+      let diamondEarned = correctAnswers === 10 ? 1.5 : (correctAnswers >= 7 ? 1 : 0);
       updateDoc(userRef, {
         diamonds: increment(diamondEarned),
         activitiesCompleted: increment(diamondEarned > 0 ? 1 : 0)

@@ -683,5 +683,339 @@
         // Start the quiz when the page loads
         window.onload = startQuiz;
     </script>
+
+<div id="diamond-count-container">
+    <span id="diamond-count">0 💎</span>
+</div>
+
+<style>
+#diamond-count-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 9999; /* Ensure it's above most content but below popup */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode #diamond-count-container {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #E2E8F0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+</style>
+
+<div id="diamond-popup" class="diamond-popup">
+    <div class="diamond-icon">💎</div>
+    <div class="diamond-text">+1 Diamond!</div>
+</div>
+
+<style>
+/* Diamond Popup Animation */
+.diamond-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 25px 45px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease-out; /* Optimized transition */
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.diamond-popup.show {
+    opacity: 1;
+    animation: diamondBounce 1s ease-out forwards; /* Changed to ease-out and forwards */
+}
+
+.diamond-icon {
+    font-size: 5rem;
+    margin-bottom: 15px;
+    animation: diamondSpin 1s ease-out;
+}
+
+.diamond-text {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+@keyframes diamondBounce {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    30% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    70% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } /* Fade out at the end */
+}
+
+@keyframes diamondSpin {
+    0% { transform: rotate(0deg) scale(0.5); }
+    50% { transform: rotate(360deg) scale(1.3); }
+    100% { transform: rotate(720deg) scale(1); }
+}
+
+/* Dark mode adjustment */
+body.dark-mode .diamond-popup {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+</style>
+
+    <div class="activity-nav">
+        <div class="nav-buttons">
+    
+            <a href="cambridge18_test2_passage2_matching.html" class="nav-button prev-button">← Previous Activity</a>
+            <a href="cambridge18_test2_passage2_typing.html" class="nav-button next-button">Next Activity →</a>
+        
+        </div>
+        <div class="progress-indicator">
+            <div class="progress-step matching-step">Matching</div>
+            <div class="progress-step quiz-step">Quiz</div>
+            <div class="progress-step typing-step">Typing</div>
+        </div>
+    </div>
+    
+    <style>
+    /* Unified Navigation Styles */
+    .activity-nav {
+        max-width: 800px;
+        margin: 40px auto 20px;
+        padding: 0 20px;
+    }
+    
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .nav-button {
+        padding: 14px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.15em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .prev-button {
+        background: #3498DB;
+        color: white;
+    }
+    
+    .next-button {
+        background: #28B463;
+        color: white;
+    }
+    
+    .nav-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .nav-button:active {
+        transform: translateY(0);
+    }
+    
+    .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 10px;
+    }
+    
+    .progress-indicator::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #E2E8F0;
+        z-index: 1;
+    }
+    
+    .progress-step {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        width: 33.33%;
+        font-weight: 600;
+        color: #A0AEC0;
+    }
+    
+    .progress-step::before {
+        content: '';
+        width: 24px;
+        height: 24px;
+        background: #E2E8F0;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 10px;
+        border: 4px solid white;
+        box-shadow: 0 0 0 2px #E2E8F0;
+    }
+    
+        .quiz-step {
+            color: #2D3748;
+        }
+        .quiz-step::before {
+            background: #3498DB;
+            box-shadow: 0 0 0 2px #3498DB;
+        }
+        
+    /* Dark mode adjustments */
+    body.dark-mode .progress-indicator::before {
+        background: #4A5568;
+    }
+    
+    body.dark-mode .progress-step::before {
+        background: #4A5568;
+        border-color: #1F2937;
+        box-shadow: 0 0 0 2px #4A5568;
+    }
+    
+    body.dark-mode .progress-step {
+        color: #A0AEC0;
+    }
+    
+    body.dark-mode .progress-step.matching-step::before,
+    body.dark-mode .progress-step.quiz-step::before,
+    body.dark-mode .progress-step.typing-step::before {
+        background: #63B3ED;
+        box-shadow: 0 0 0 2px #63B3ED;
+    }
+    
+    body.dark-mode .matching-step,
+    body.dark-mode .quiz-step,
+    body.dark-mode .typing-step {
+        color: #E2E8F0;
+    }
+    </style>
+    
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+  authDomain: "website-vocabulary.firebaseapp.com",
+  projectId: "website-vocabulary",
+  storageBucket: "website-vocabulary.firebasestorage.app",
+  messagingSenderId: "216286165163",
+  appId: "1:216286165163:web:0d45648c2b998070a11fee",
+  measurementId: "G-1RZLN9HJ65"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+let startTime = Date.now();
+window.addEventListener("beforeunload", () => {
+  const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+  const user = auth.currentUser;
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    updateDoc(userRef, {
+      timeSpent: increment(timeSpent),
+      diamonds: increment(Math.floor(timeSpent / 3600) * 10)
+    });
+  }
+});
+
+// Function to update diamond count display
+async function updateDiamondCountDisplay(user) {
+    const diamondCountElement = document.getElementById('diamond-count');
+    if (diamondCountElement) {
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) {
+                const diamonds = docSnap.data().diamonds || 0;
+                diamondCountElement.textContent = `${diamonds} 💎`;
+            } else {
+                diamondCountElement.textContent = '0 💎';
+            }
+        } else {
+            diamondCountElement.textContent = '0 💎'; // Or a login prompt
+        }
+    }
+}
+
+// Listen for auth state changes to update diamond count
+onAuthStateChanged(auth, (user) => {
+    updateDiamondCountDisplay(user);
+    // You might want to re-run your activity-specific logic or enable/disable features based on user here
+});
+
+function onQuizComplete(correctAnswers) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      let diamondEarned = correctAnswers === 10 ? 1.5 : (correctAnswers >= 7 ? 1 : 0);
+      updateDoc(userRef, {
+        diamonds: increment(diamondEarned),
+        activitiesCompleted: increment(diamondEarned > 0 ? 1 : 0)
+      }).then(() => {
+        if (diamondEarned > 0) {
+          showDiamondPopup(diamondEarned);
+        }
+      }).catch(error => {
+        console.error("Error updating document:", error);
+      });
+    }
+  });
+}
+
+
+function showDiamondPopup(amount) {
+    const popup = document.getElementById('diamond-popup');
+    const diamondText = popup.querySelector('.diamond-text');
+    
+    // Format amount to show at most one decimal place
+    const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+    diamondText.textContent = `+${formattedAmount} Diamond${amount !== 1 ? 's' : ''}!`;
+    
+    // Reset animation by removing and re-adding the class
+    popup.classList.remove('show');
+    void popup.offsetWidth; // Trigger reflow
+    popup.classList.add('show');
+    
+    // Update diamond count display immediately after showing popup
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            updateDiamondCountDisplay(user);
+        }
+    });
+
+    // The animation itself handles the fading out, no need for explicit setTimeout for removal
+}
+
+</script>
 </body>
 </html>
