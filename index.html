@@ -721,7 +721,7 @@
         <div class="hero-buttons">
           <!-- Bouncy Sign Up Button -->
           <a href="login.html" class="cta-button bouncy-button">Sign Up</a>
-          <a href="#features-section" class="cta-button outline-button scroll-link">View Courses</a>
+          <a href="#features-section" class="cta-button outline-button-scroll-link">View Courses</a>
         </div>
       </div>
     </div>
@@ -911,10 +911,11 @@
     // You need to create a Google Cloud Project, enable the Google People API,
     // and create OAuth 2.0 Client IDs for Web application.
     // More info: https://developers.google.com/identity/sign-in/web/sign-in
-    const GOOGLE_CLIENT_ID = '216286165163-tdgl1mfpfmahvfej31fibiovp4ulruun.apps.googleusercontent.com';
+    const GOOGLE_CLIENT_ID = '216286165163-tdgl1mfpfmahvfej31fibiovp4ulruun.apps.googleusercontent.com'; // <<< IMPORTANT: Replace this with your actual client ID
 
     // Initialize Google Sign-In
     function initGoogleSignIn() {
+      console.log("Initializing Google Sign-In with Client ID:", GOOGLE_CLIENT_ID); // Added for debugging
       gapi.load('auth2', function() {
         gapi.auth2.init({
           client_id: GOOGLE_CLIENT_ID,
@@ -925,6 +926,11 @@
           auth2.isSignedIn.listen(updateSignInStatus);
           // Initial render of the sign-in button.
           updateSignInStatus(auth2.isSignedIn.get());
+        }).catch(function(error) { // Catch initialization errors
+          console.error("Error initializing Google Sign-In:", error);
+          // Display a user-friendly message or fallback
+          const authContainer = document.getElementById('auth-container');
+          authContainer.innerHTML = '<p style="color: red;">Google Sign-In failed to load. Please check console for details.</p>';
         });
       });
     }
