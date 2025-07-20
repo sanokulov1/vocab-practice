@@ -1,429 +1,535 @@
-You're right, removing the main heading and paragraph does make that side of the page look emptier. That visual change is a direct result of removing those specific text elements from the left-hand column.
-
-The code below implements only the exact changes you asked for:
-
-1.  The `<h1>Expand Your Vocabulary...</h1>` is removed.
-2.  The `<p>Sign in to save...</p>` is removed.
-3.  The "Save words from any website" feature is removed.
-4.  The `<h2>` text is changed to "Sign in to use unlock special features".
-
-No other layout or style code has been altered. Here is the corrected code.
-
------
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 40px;
-    }
-    
-    .hero-text {
-      flex: 1;
-      color: white;
-      text-align: left;
-      padding: 20px;
-    }
-    
-    .hero-text h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .hero-text p {
-      font-size: 1.2rem;
-      max-width: 500px;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
-    
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 30px;
-    }
-    
-    .feature {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 12px 20px;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-    }
-    
-    .feature i {
-      color: #ffd700;
-    }
-    
-    .login-card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-      padding: 40px;
-      width: 100%;
-      max-width: 450px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .login-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(118, 75, 162, 0.1) 0%, rgba(102, 126, 234, 0.05) 70%, transparent 100%);
-      z-index: 0;
-    }
-    
-    .card-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .logo {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
-    }
-    
-    .logo i {
-      color: white;
-      font-size: 40px;
-    }
-    
-    .login-card h2 {
-      color: #2d3748;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-    
-    .login-card p {
-      color: #718096;
-      margin-bottom: 30px;
-    }
-    
-    .google-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      padding: 14px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      background: #fff;
-      color: #5f6368;
-      border: 1px solid #dadce0;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-    
-    .google-btn:hover {
-      background: #f8f9fa;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
-    }
-    
-    .google-btn:active {
-      transform: translateY(0);
-    }
-    
-    .google-icon {
-      width: 24px;
-      height: 24px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center;
-      background-size: contain;
-    }
-    
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 25px 0;
-      color: #a0aec0;
-    }
-    
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #e2e8f0;
-    }
-    
-    .divider span {
-      padding: 0 15px;
-      font-size: 0.9rem;
-    }
-    
-    .user-info {
-      margin-top: 25px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      text-align: left;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    .user-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    
-    .avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-    
-    .user-details {
-      flex: 1;
-    }
-    
-    .user-details h3 {
-      color: #2d3748;
-      margin-bottom: 5px;
-    }
-    
-    .user-details p {
-      color: #718096;
-      margin: 0;
-      font-size: 0.95rem;
-    }
-    
-    .status-message {
-      padding: 15px;
-      border-radius: 12px;
-      background: #edf2f7;
-      margin-top: 20px;
-      color: #4a5568;
-      font-weight: 500;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(118, 75, 162, 0.3);
-      border-radius: 50%;
-      border-top-color: #764ba2;
-      animation: spin 1s linear infinite;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .hero-text {
-        text-align: center;
-      }
-      
-      .hero-text p {
-        margin: 0 auto 30px;
-      }
-      
-      .features {
-        justify-content: center;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .login-card {
-        padding: 30px 20px;
-      }
-      
-      .hero-text h1 {
-        font-size: 2.5rem;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login with Google</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Universal box-sizing and font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Body styling for full height and gradient background */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    /* Main container for hero text and login card */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    
+    /* Styling for the hero text section */
+    .hero-text {
+      flex: 1;
+      color: white;
+      text-align: left;
+      padding: 20px;
+    }
+    
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Styling for the features section - now in one line */
+    .features {
+      display: flex;
+      flex-wrap: wrap; /* Allows wrapping on smaller screens */
+      gap: 15px;
+      margin-top: 30px;
+      justify-content: flex-start; /* Align items to the start */
+    }
+    
+    .feature {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      white-space: nowrap; /* Prevent text from wrapping within a feature */
+    }
+    
+    .feature i {
+      color: #ffd700;
+    }
+    
+    /* Styling for the login card */
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(118, 75, 162, 0.1) 0%, rgba(102, 126, 234, 0.05) 70%, transparent 100%);
+      z-index: 0;
+    }
+    
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+    }
+    
+    .logo i {
+      color: white;
+      font-size: 40px;
+    }
+    
+    .login-card h2 {
+      color: #2d3748;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .login-card p {
+      color: #718096;
+      margin-bottom: 30px;
+    }
+    
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: #fff;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .google-btn:hover {
+      background: #f8f9fa;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .google-btn:active {
+      transform: translateY(0);
+    }
+    
+    .google-icon {
+      width: 24px;
+      height: 24px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center;
+      background-size: contain;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: #a0aec0;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+    
+    .divider span {
+      padding: 0 15px;
+      font-size: 0.9rem;
+    }
+    
+    .user-info {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      text-align: left;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .user-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .user-details {
+      flex: 1;
+    }
+    
+    .user-details h3 {
+      color: #2d3748;
+      margin-bottom: 5px;
+    }
+    
+    .user-details p {
+      color: #718096;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+    
+    .status-message {
+      padding: 15px;
+      border-radius: 12px;
+      background: #edf2f7;
+      margin-top: 20px;
+      color: #4a5568;
+      font-weight: 500;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(118, 75, 162, 0.3);
+      border-radius: 50%;
+      border-top-color: #764ba2;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    /* Welcome Modal Styling */
+    .welcome-modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+    }
+
+    .close-button {
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-content h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+    }
+
+    .modal-content p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-text {
+        text-align: center;
+      }
+      
+      .hero-text p {
+        margin: 0 auto 30px;
+      }
+      
+      .features {
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 30px 20px;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+
+      /* Mobile-specific: Hide hero text and show only login card */
+      .hero-text {
+        display: none; 
+      }
+      .container {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="hero-text">
-      
-      <div class="features">
-        <div class="feature">
-          <i class="fas fa-sync-alt"></i>
-          <span>Sync across all devices</span>
-        </div>
-        <div class="feature">
-          <i class="fas fa-bell"></i>
-          <span>Daily word reminders</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="login-card">
-      <div class="card-content">
-        <div class="logo">
-          <i class="fas fa-book-open"></i>
-        </div>
-        <h2>Sign in to use unlock special features</h2>
-        <p>Access your saved words and learning progress</p>
-        
-        <button class="google-btn" onclick="signInWithGoogle()">
-          <div class="google-icon"></div>
-          Sign in with Google
-        </button>
-        
-        <div class="divider">
-          <span>or</span>
-        </div>
-        
-        <div id="status-message" class="status-message">
-          <i class="fas fa-info-circle"></i> No user is logged in.
-        </div>
-        
-        <div id="user-info" class="user-info" style="display: none;">
-          <div class="user-header">
-            <div class="avatar" id="user-avatar">U</div>
-            <div class="user-details">
-              <h3 id="user-name">User Name</h3>
-              <p id="user-email">user@example.com</p>
-            </div>
-          </div>
-          <div class="status-message">
-            <i class="fas fa-check-circle"></i> You're successfully signed in!
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="container">
+    <div class="hero-text">
+      <h1>You are a click away from special features</h1>
+      <!-- Removed: <p>Sign in to save and review new words you discover while browsing the web. Your personal vocabulary assistant.</p> -->
+      
+      <div class="features">
+        <div class="feature">
+          <i class="fas fa-chart-line"></i> <!-- Changed icon for "Track your progress" -->
+          <span>Track your progress</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-sync-alt"></i>
+          <span>Sync across all devices</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-bell"></i>
+          <span>Daily word reminders</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="login-card">
+      <div class="card-content">
+        <div class="logo">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <!-- Removed: <h2>Sign in to Website Vocabulary</h2> -->
+        <p>Access your saved words and learning progress</p>
+        
+        <button class="google-btn" onclick="signInWithGoogle()">
+          <div class="google-icon"></div>
+          Sign in with Google
+        </button>
+        
+        <div class="divider">
+          <span>or</span>
+        </div>
+        
+        <div id="status-message" class="status-message">
+          <i class="fas fa-info-circle"></i> No user is logged in.
+        </div>
+        
+        <div id="user-info" class="user-info" style="display: none;">
+          <div class="user-header">
+            <div class="avatar" id="user-avatar">U</div>
+            <div class="user-details">
+              <h3 id="user-name">User Name</h3>
+              <p id="user-email">user@example.com</p>
+            </div>
+          </div>
+          <div class="status-message">
+            <i class="fas fa-check-circle"></i> You're successfully signed in!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-      authDomain: "website-vocabulary.firebaseapp.com",
-      projectId: "website-vocabulary",
-      storageBucket: "website-vocabulary.appspot.com",
-      messagingSenderId: "216286165163",
-      appId: "1:216286165163:web:0d45648c2b998870a11fee",
-      measurementId: "G-1RZLN9HJ65"
-    };
+  <!-- Welcome Pop-up Modal -->
+  <div id="welcomeModal" class="welcome-modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeWelcomeModal()">&times;</span>
+      <h2 id="welcomeUserName">Welcome!</h2>
+      <p>Welcome to sanokulov.uz!<br>Make your IELTS journey much easier with us:)</p>
+    </div>
+  </div>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const provider = new firebase.auth.GoogleAuthProvider();
+  <script>
+    // Firebase configuration (replace with your actual config if different)
+    const firebaseConfig = {
+      apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+      authDomain: "website-vocabulary.firebaseapp.com",
+      projectId: "website-vocabulary",
+      storageBucket: "website-vocabulary.appspot.com",
+      messagingSenderId: "216286165163",
+      appId: "1:216286165163:web:0d45648c2b998870a11fee",
+      measurementId: "G-1RZLN9HJ65"
+    };
 
-    const statusMessage = document.getElementById('status-message');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
-    const userEmail = document.getElementById('user-email');
-    const userAvatar = document.getElementById('user-avatar');
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-    function signInWithGoogle() {
-      // Show loading state
-      statusMessage.innerHTML = '<span class="loading"></span> Signing in...';
-      
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          updateUserInfo(user);
-        })
-        .catch((error) => {
-          statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${error.message}`;
-        });
-    }
+    const statusMessage = document.getElementById('status-message');
+    const userInfo = document.getElementById('user-info');
+    const userNameElement = document.getElementById('user-name'); // Renamed to avoid conflict
+    const userEmailElement = document.getElementById('user-email'); // Renamed to avoid conflict
+    const userAvatar = document.getElementById('user-avatar');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const welcomeUserName = document.getElementById('welcomeUserName');
 
-    function updateUserInfo(user) {
-      if (user) {
-        userName.textContent = user.displayName || "User Name";
-        userEmail.textContent = user.email || "user@example.com";
-        
-        // Set avatar initial
-        if (user.displayName) {
-          userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
-        }
-        
-        // Show user info section
-        userInfo.style.display = 'block';
-      } else {
-        userInfo.style.display = 'none';
-      }
-    }
+    // Function to handle Google Sign-in
+    function signInWithGoogle() {
+      // Show loading state
+      statusMessage.innerHTML = '<span class="loading"></span> Signing in...';
+      
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          updateUserInfo(user);
+          // Redirect to index.html after successful sign-in
+          // Store user info in session storage to retrieve on index.html
+          sessionStorage.setItem('userName', user.displayName || 'User');
+          window.location.href = 'index.html'; // Redirect to index.html
+        })
+        .catch((error) => {
+          statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${error.message}`;
+        });
+    }
 
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Already signed in';
-        updateUserInfo(user);
-      } else {
-        statusMessage.innerHTML = '<i class="fas fa-info-circle"></i> No user is logged in.';
-        userInfo.style.display = 'none';
-      }
-    });
-  </script>
+    // Function to update user information on the page
+    function updateUserInfo(user) {
+      if (user) {
+        userNameElement.textContent = user.displayName || "User Name";
+        userEmailElement.textContent = user.email || "user@example.com";
+        
+        // Set avatar initial
+        if (user.displayName) {
+          userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
+        }
+        
+        // Show user info section
+        userInfo.style.display = 'block';
+      } else {
+        userInfo.style.display = 'none';
+      }
+    }
+
+    // Function to display the welcome modal
+    function showWelcomeModal(name) {
+        welcomeUserName.textContent = `Welcome, ${name}!`;
+        welcomeModal.style.display = 'flex'; // Use flex to center the modal
+    }
+
+    // Function to close the welcome modal
+    function closeWelcomeModal() {
+        welcomeModal.style.display = 'none';
+    }
+
+    // Firebase authentication state observer
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Already signed in';
+        updateUserInfo(user);
+        // If already signed in on this page, and coming from a redirect, show modal
+        // This part is more relevant for index.html or vocab-practice.html
+        // For this login page, the redirect handles the welcome message.
+      } else {
+        statusMessage.innerHTML = '<i class="fas fa-info-circle"></i> No user is logged in.';
+        userInfo.style.display = 'none';
+      }
+    });
+
+    // Check if coming from a redirect and display welcome message
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showWelcome = urlParams.get('welcome');
+        const storedUserName = sessionStorage.getItem('userName');
+
+        if (showWelcome === 'true' && storedUserName) {
+            showWelcomeModal(storedUserName);
+            // Clear the welcome parameter and stored name from URL and session storage
+            history.replaceState({}, document.title, window.location.pathname);
+            sessionStorage.removeItem('userName');
+        }
+    };
+  </script>
 </body>
 </html>
