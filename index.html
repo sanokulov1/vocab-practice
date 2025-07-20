@@ -522,63 +522,6 @@
       opacity: 0.7;
     }
 
-    /* Welcome Modal Styling */
-    .welcome-modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1000; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        /* Removed display: flex; from here as it was conflicting */
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        width: 90%;
-        max-width: 400px;
-        text-align: center;
-        position: relative;
-    }
-
-    .close-button {
-        color: #aaa;
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close-button:hover,
-    .close-button:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .modal-content h2 {
-        color: #667eea;
-        margin-bottom: 15px;
-        font-size: 1.8rem;
-    }
-
-    .modal-content p {
-        font-size: 1.1rem;
-        color: #555;
-        margin-bottom: 20px;
-    }
-
     /* Animations */
     @keyframes fadeInUp {
       from {
@@ -905,15 +848,6 @@
     </div>
   </footer>
 
-  <!-- Welcome Pop-up Modal -->
-  <div id="welcomeModal" class="welcome-modal">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeWelcomeModal()">&times;</span>
-      <h2 id="welcomeUserName">Welcome!</h2>
-      <p>Welcome to sanokulov.uz!<br>Make your IELTS journey much easier with us:)</p>
-    </div>
-  </div>
-
   <script>
     // Simple animations and interactions
     document.addEventListener('DOMContentLoaded', function() {
@@ -983,37 +917,9 @@
       
       observer.observe(document.querySelector('.stats'));
 
-      // Welcome Modal Logic (Copied from login.html)
-      const welcomeModal = document.getElementById('welcomeModal');
-      const welcomeUserName = document.getElementById('welcomeUserName');
-
-      function showWelcomeModal(name) {
-          welcomeUserName.textContent = `Welcome, ${name}!`;
-          welcomeModal.style.display = 'flex';
-      }
-
-      function closeWelcomeModal() {
-          welcomeModal.style.display = 'none';
-      }
-
-      // Check if coming from a redirect and display welcome message
-      const urlParams = new URLSearchParams(window.location.search);
-      const showWelcome = urlParams.get('welcome');
-      const storedUserName = sessionStorage.getItem('userName');
-
-      // Only show the modal if 'welcome=true' is in the URL and user name is stored
-      if (showWelcome === 'true' && storedUserName) {
-          showWelcomeModal(storedUserName);
-          // Clear the welcome parameter and stored name from URL and session storage
-          history.replaceState({}, document.title, window.location.pathname);
-          sessionStorage.removeItem('userName');
-      } else {
-          // Ensure modal is hidden if not triggered by welcome parameter
-          welcomeModal.style.display = 'none';
-      }
-
       // Display user's name on the page if available
-      const userNameDisplay = document.getElementById('welcomeMessage'); // Assuming this is where the name should go
+      const storedUserName = sessionStorage.getItem('userName');
+      const userNameDisplay = document.getElementById('welcomeMessage');
       if (storedUserName) {
         userNameDisplay.innerHTML = `Welcome, <span class="learn">${storedUserName}</span>! The best place to <span class="learn">learn</span> and <span class="play">grow</span>`;
       }
