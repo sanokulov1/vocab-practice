@@ -10,7 +10,7 @@
         import { getAuth, onAuthStateChanged } = "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, increment, getDoc } = "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Configuration (from user)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
             authDomain: "website-vocabulary.firebaseapp.com",
@@ -159,6 +159,9 @@
         });
 
     </script>
+    
+
+    
     
 <style>
     /* Global reset and box-sizing */
@@ -638,6 +641,63 @@
         }
     }
 
+    
+
+    body[data-theme="dark"] 
+    
+
+    
+
+    
+
+    .diamond-icon {
+        font-size: 8em; /* Large diamond icon */
+        line-height: 1;
+        color: #ADD8E6; /* Light blue for diamond */
+        text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6, 0 0 30px #ADD8E6, 0 0 40px #ADD8E6; /* Initial glow */
+        animation: pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards;
+        position: relative;
+        transform: scale(0.5); /* Start smaller */
+        opacity: 0; /* Start invisible */
+    }
+
+    /* Animation for the diamond icon */
+    
+        20% {
+            transform: scale(1.2) translateY(-20px);
+            opacity: 1;
+            filter: brightness(1.5);
+        }
+        50% {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            filter: brightness(1);
+        }
+        80% {
+            opacity: 0.8;
+            transform: scale(0.9) translateY(-10px);
+        }
+        100% {
+            transform: scale(0.8) translateY(-50px);
+            opacity: 0;
+            filter: brightness(0);
+        }
+    }
+
+    /* Continuous subtle pulse glow */
+    
+        50% { text-shadow: 0 0 15px #ADD8E6, 0 0 25px #ADD8E6, 0 0 35px #ADD8E6; }
+        100% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+    }
+
+    
+
+    
+        50% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-30px); }
+    }
+    
+
     #diamond-count-container {
         position: fixed;
         top: 20px;
@@ -661,7 +721,6 @@
         color: #E2E8F0;
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    
 
     .diamond-popup-container {
         position: fixed;
@@ -796,6 +855,8 @@
 </audio>
 
 <script>
+
+
 
 let activityStartTime;
 const completedGroupsForDiamonds = new Set();
@@ -1005,11 +1066,23 @@ function setupGame(wordPairs, groupId) {
 })();
 
 // Initialize activityStartTime when the window loads
+
+// Initialize activityStartTime when the window loads
 window.addEventListener('load', () => {
     activityStartTime = Date.now();
     console.log("Matching activity started, overall timer initiated.");
 });
 </script>
+
+    
+    
+
+    <!-- Diamond Popup Animation -->
+    <div id="diamondPopupAnimation" class="diamond-popup-container">
+        <span class="diamond-icon">💎</span>
+        <span class="plus-one-text">+1</span>
+    </div>
+    
 
     <!-- Diamond Count Display (Top-Left) -->
     <div id="diamond-count-container">
