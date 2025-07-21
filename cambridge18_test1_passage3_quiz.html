@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Default (Light) Mode Colors - Dark Teal for Page, Complementary for Quiz Box */
+        :root {
+            --primary-bg: #1A5276; /* Dark Teal for page background (Day Mode) */
+            --secondary-bg: #EAF2F8; /* Light, complementary blue-gray for quiz container (Day Mode) */
+            --text-primary: #333333; /* Dark grey for main text (Day Mode) */
+            --text-secondary: #666666; /* Medium grey for less important text (Day Mode) */
+            --accent-color: #3498DB; /* Brighter blue accent */
+            --accent-light: #5DADE2; /* Lighter shade of accent for hover/active */
+            --success-color: #28B463; /* Green for correct feedback */
+            --error-color: #E74C3C; /* Red for incorrect feedback */
+            --border-color: #CCD1D1; /* Light grey border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for contrast */
+            --button-text-color: white;
+
+            /* Icon Color for Light Mode (Moon icon is visible) */
+            --day-mode-icon-color: #1A5276; /* Dark Teal for Moon Icon */
+        }
+
+        /* Night Mode Colors - Least Eye-Straining Dark Blue-Gray Palette */
+        body.dark-mode {
+            --primary-bg: #1F2937; /* Very dark blue-gray for page background (Night Mode) */
+            --secondary-bg: #2D3748; /* Slightly lighter dark blue-gray for quiz container (Night Mode) */
+            --text-primary: #E2E8F0; /* Light text for dark background (Night Mode) */
+            --text-secondary: #A0AEC0; /* Lighter grey for secondary text (Night Mode) */
+            --accent-color: #63B3ED; /* Softer blue accent for night */
+            --accent-light: #90CDF4;
+            --success-color: #48BB78; /* Softer green */
+            --error-color: #FC8181; /* Softer red */
+            --border-color: #4A5568; /* Darker border */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+            /* Icon Color for Dark Mode (Sun icon is visible) */
+            --night-mode-icon-color: #FFEB3B; /* Bright Yellow for Sun Icon */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative; /* For fireworks */
+            overflow: hidden; /* For fireworks */
+        }
+
+        .quiz-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-text {
+            font-size: 1.8em; /* Larger for words */
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .options-container button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: var(--secondary-bg); /* Options background same as container */
+            color: var(--text-primary);
+            font-size: 1.15em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .options-container button:hover:not(.selected):not(.correct):not(.wrong) {
+            background-color: var(--border-color); /* Lighter hover */
+            border-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .options-container button.selected {
+            background-color: var(--accent-light);
+            border-color: var(--accent-color);
+            color: var(--button-text-color); /* Selected text color */
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .options-container button.correct {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+            font-weight: 600;
+        }
+        .options-container button.wrong {
+            background-color: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+            font-weight: 600;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+        }
+
+        .navigation-buttons button,
+        .submit-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .navigation-buttons button:hover:not(:disabled),
+        .submit-button:hover:not(:disabled) {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .navigation-buttons button:disabled,
+        .submit-button:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .submit-button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .results-container {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .results-container h2 {
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .results-container h3 {
+            color: var(--error-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .results-container ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .results-container li {
+            background-color: #FEEAEA; /* Very light red background for incorrect */
+            color: var(--error-color);
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--error-color);
+            font-size: 1.1em;
+            line-height: 1.4;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode .results-container li {
+            background-color: #5C2323; /* Darker red for night mode */
+            color: #FFCCCC;
+            border-color: var(--error-color); /* Use error color from dark mode */
+        }
+
+        .results-container li strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* --- Improved Mode Toggle Button --- */
+        .mode-toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: var(--secondary-bg); /* Gives the button a solid background */
+            border: 1px solid var(--border-color); /* Defines the button edge */
+            width: 50px;  /* Explicit size for a consistent circle */
+            height: 50px; /* Explicit size for a consistent circle */
+            border-radius: 50%;
+            display: flex; /* Easiest way to center the icon inside */
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow-light); /* Adds depth, consistent with the quiz box */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .mode-toggle-button:hover {
+            transform: translateY(-2px); /* Lifts the button on hover */
+            background-color: var(--border-color); /* Consistent hover effect */
+        }
+
+        .mode-toggle-button svg {
+            width: 28px; /* Sized to fit comfortably within the button */
+            height: 28px;
+            transition: fill 0.3s ease;
+        }
+
+        /* Hide both icons by default */
+        .mode-toggle-button .sun-icon,
+        .mode-toggle-button .moon-icon {
+            display: none;
+        }
+
+        /* Show moon icon in light mode */
+        body:not(.dark-mode) .mode-toggle-button .moon-icon {
+            display: block;
+            fill: var(--day-mode-icon-color);
+        }
+
+        /* Show sun icon in dark mode */
+        body.dark-mode .mode-toggle-button .sun-icon {
+            display: block;
+            fill: var(--night-mode-icon-color);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .quiz-container, .results-container {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1.3em;
+            }
+            .options-container button {
+                padding: 15px;
+                font-size: 1em;
+            }
+            .navigation-buttons button,
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .mode-toggle-button {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+            }
+            .mode-toggle-button svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* Firework Animation */
+        .firework-container {
+            position: fixed; /* Use fixed to cover entire viewport */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        /* New overlay for fireworks */
+        .firework-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85); /* Darker overlay for more contrast */
+            z-index: 9998; /* Below fireworks, above quiz content */
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+
+        .firework-overlay.show {
+            opacity: 1;
+        }
+
+        .firework {
+            position: absolute;
+            width: 20px; /* Significantly larger initial size */
+            height: 20px;
+            background-color: #FFD700; /* Initial flash color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-burst 2.5s ease-out forwards; /* Longer burst animation */
+            animation-delay: var(--delay, 0s); /* Allow delay for multiple fireworks */
+            transform: scale(0.1) translateY(80px); /* Start smaller and slightly lower */
+            filter: brightness(1.5); /* Make the initial burst brighter */
+        }
+
+        @keyframes firework-burst {
+            0% { transform: scale(0.1) translateY(80px); opacity: 0; } /* Start invisible, lower */
+            5% { opacity: 1; transform: scale(0.5) translateY(0px); filter: brightness(2); } /* Quick fade in, move up, very bright */
+            30% { transform: scale(2) translateY(-100px); opacity: 1; filter: brightness(1.5); } /* Expand, move further up */
+            100% { transform: scale(0) translateY(-200px); opacity: 0; filter: brightness(0.5); } /* Fade out, move off screen */
+        }
+
+        .firework::before, .firework::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0; /* No intrinsic size, only box-shadow */
+            height: 0;
+            border-radius: 50%;
+            background-color: transparent; /* No background, only shadows */
+            opacity: 0;
+            animation: firework-sparkle-spread 2.8s ease-out forwards; /* Longer for spread */
+            animation-delay: var(--delay, 0s); /* Inherit delay */
+            transform: translate(-50%, -50%); /* Center the pseudo-elements */
+            filter: brightness(1.2); /* Make sparks brighter */
+        }
+
+        /* Animation for the scattering sparks */
+        @keyframes firework-sparkle-spread {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(4); } /* Much larger spread */
+        }
+
+        .firework.multi::before {
+            box-shadow: var(--firework-before-shadow);
+        }
+        .firework.multi::after {
+            box-shadow: var(--firework-after-shadow);
+        }
+
+    </style>
+
+    <style id="diamond-css-styles">
+        /* Diamond Count Display (Top-Left) */
+        #diamond-count-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 9999; /* Ensure it's above most content but below popup */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex; /* Use flexbox for better alignment */
+            align-items: center;
+            gap: 5px; /* Space between number and diamond emoji */
+        }
+
+        body[data-theme="dark"] #diamond-count-container { /* Adjusted for data-theme attribute */
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Diamond Popup Animation */
+        .diamond-popup-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10000; /* Higher z-index to be on top */
+        }
+
+        .diamond-popup-container.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .diamond-icon {
+            font-size: 8em; /* Large diamond icon */
+            line-height: 1;
+            color: #ADD8E6; /* Light blue for diamond */
+            text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6, 0 0 30px #ADD8E6, 0 0 40px #ADD8E6; /* Initial glow */
+            animation: pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards;
+            position: relative;
+            transform: scale(0.5); /* Start smaller */
+            opacity: 0; /* Start invisible */
+        }
+
+        /* Animation for the diamond icon */
+        @keyframes pop-and-fade {
+            0% {
+                transform: scale(0.5) translateY(50px);
+                opacity: 0;
+                filter: brightness(0.5);
+            }
+            20% {
+                transform: scale(1.2) translateY(-20px);
+                opacity: 1;
+                filter: brightness(1.5);
+            }
+            50% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+                filter: brightness(1);
+            }
+            80% {
+                opacity: 0.8;
+                transform: scale(0.9) translateY(-10px);
+            }
+            100% {
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0;
+                filter: brightness(0);
+            }
+        }
+
+        /* Continuous subtle pulse glow */
+        @keyframes pulse-glow {
+            0% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+            50% { text-shadow: 0 0 15px #ADD8E6, 0 0 25px #ADD8E6, 0 0 35px #ADD8E6; }
+            100% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+        }
+
+        .plus-one-text {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: gold;
+            text-shadow: 0 0 5px gold, 0 0 10px gold;
+            margin-top: 10px;
+            animation: fade-up 1.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fade-up {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+    </style>
+    </head>
+<body>
+    <div id="firework-overlay" class="firework-overlay"></div>
+
+    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
+        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+        </svg>
+        <!-- Moon icon (visible in Day Mode) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
+    </button>
+
+    <div id="quiz-app" class="quiz-container">
+        <div id="quiz-content">
+            <h2 id="question-text" class="question-text"></h2>
+            <div id="options-container" class="options-container">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-button" onclick="previousQuestion()">Previous</button>
+                <button id="next-button" onclick="nextQuestion()">Next</button>
+            </div>
+            <div class="submit-button-container">
+                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+        </div>
+
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2 id="results-message"></h2>
+            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+            <ul id="incorrect-answers-list">
+                <!-- Incorrect answers will be dynamically inserted here -->
+            </ul>
+            <button class="submit-button" onclick="startQuiz()">Try Again</button>
+        </div>
+    </div>
+
+    <div class="firework-container">
+        <!-- CSS fireworks will be rendered here -->
+    </div>
+
+    <script>
+        const vocabularyWords = [
+            { word: "To conquer", definition: "To solve or take control of a big problem." },
+            { word: "Debris", definition: "Broken or leftover pieces from something destroyed." },
+            { word: "Civil", definition: "Related to normal people and society, not military." },
+            { word: "Deploy", definition: "To send out or use something for a purpose." },
+            { word: "Constellations", definition: "Groups of satellites working together in space." },
+            { word: "To stretch", definition: "To spread over a distance." },
+            { word: "Steer away", definition: "To move in a different direction to avoid something." },
+            { word: "Compile", definition: "To collect and put information together." },
+            { word: "Properties", definition: "Qualities or features of something." },
+            { word: "Cascade", definition: "A fast, chain reaction of falling or spreading." },
+            { word: "Render", definition: "To cause something to become a certain way." },
+            { word: "To vent", definition: "To release gas or air." },
+            { word: "Leftover", definition: "What is remaining or unused." },
+            { word: "Disintegrate", definition: "To fall apart into small pieces." },
+            { word: "To abide", definition: "To follow a rule or law." },
+            { word: "Given", definition: "Considering or based on a certain fact." },
+            { word: "Vastness", definition: "The very large size of something." },
+            { word: "Alleviate", definition: "To make something less bad or less painful." },
+            { word: "Devolve", definition: "To become worse or fall into a bad state." }
+        ];
+
+        let currentQuizWords = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let incorrectAnswers = [];
+
+        const quizLength = 10;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const submitButton = document.getElementById('submit-button');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const incorrectAnswersList = document.getElementById('incorrect-answers-list');
+        const incorrectAnswersHeading = document.getElementById('incorrect-answers-heading');
+        const resultsMessage = document.getElementById('results-message');
+        const fireworkOverlay = document.getElementById('firework-overlay');
+        const modeToggleButton = document.getElementById('mode-toggle');
+        const fireworkContainer = document.querySelector('.firework-container'); // Get the container for CSS fireworks
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizLength).fill(null);
+            incorrectAnswers = [];
+
+            if (vocabularyWords.length < quizLength) {
+                console.error(`Not enough vocabulary words to create a ${quizLength}-question quiz.`);
+                return;
+            }
+            
+            const shuffledAllWords = shuffleArray([...vocabularyWords]);
+            currentQuizWords = shuffledAllWords.slice(0, quizLength);
+
+            quizContent.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            submitButton.style.display = 'none';
+            fireworkOverlay.classList.remove('show'); // Ensure overlay is hidden
+            fireworkContainer.innerHTML = ''; // Clear any residual fireworks
+
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function displayQuestion(index) {
+            const currentWordObject = currentQuizWords[index];
+            questionTextElement.textContent = currentWordObject.word;
+            optionsContainer.innerHTML = '';
+
+            const correctOptionDefinition = currentWordObject.definition;
+            let allOptionDefinitions = [correctOptionDefinition];
+
+            let incorrectOptionsCount = 0;
+            const definitionsPool = vocabularyWords.map(item => item.definition);
+            while (incorrectOptionsCount < 3) {
+                const randomDefinition = definitionsPool[Math.floor(Math.random() * definitionsPool.length)];
+                if (!allOptionDefinitions.includes(randomDefinition) && randomDefinition !== correctOptionDefinition) {
+                    allOptionDefinitions.push(randomDefinition);
+                    incorrectOptionsCount++;
+                }
+            }
+
+            allOptionDefinitions = shuffleArray(allOptionDefinitions);
+
+            allOptionDefinitions.forEach(definition => {
+                const button = document.createElement('button');
+                button.textContent = definition;
+                button.onclick = () => selectAnswer(definition);
+                optionsContainer.appendChild(button);
+
+                if (userAnswers[index] === definition) {
+                    button.classList.add('selected');
+                }
+            });
+
+            updateNavigationButtons();
+        }
+
+        function selectAnswer(selectedDefinition) {
+            userAnswers[currentQuestionIndex] = selectedDefinition;
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('selected');
+                if (button.textContent === selectedDefinition) {
+                    button.classList.add('selected');
+                }
+            });
+        }
+
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'none' : 'inline-block';
+            submitButton.style.display = (currentQuestionIndex === quizLength - 1) ? 'inline-block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizLength - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitQuiz() {
+            incorrectAnswers = [];
+            for (let i = 0; i < quizLength; i++) {
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push({
+                        word: currentQuizWords[i].word,
+                        correctDefinition: currentQuizWords[i].definition,
+                        userAnswer: userAnswers[i] || "No answer provided"
+                    });
+                }
+            }
+
+            quizContent.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            incorrectAnswersList.innerHTML = '';
+
+            if (incorrectAnswers.length > 0) {
+                resultsMessage.textContent = `Quiz Completed! You got ${quizLength - incorrectAnswers.length} out of ${quizLength} correct.`;
+                incorrectAnswersHeading.style.display = 'block';
+                incorrectAnswers.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
+                    incorrectAnswersList.appendChild(listItem);
+                });
+            } else {
+                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct!`;
+                incorrectAnswersHeading.style.display = 'none';
+                const listItem = document.createElement('li');
+                listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
+                listItem.style.backgroundColor = 'var(--success-color)';
+                listItem.style.color = 'white';
+                listItem.style.borderColor = 'var(--success-color)';
+                incorrectAnswersList.appendChild(listItem);
+                triggerFireworks();
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function triggerFireworks() {
+            fireworkOverlay.classList.add('show'); // Show the shadowy overlay
+            fireworkContainer.innerHTML = ''; // Clear previous fireworks
+
+            const numFireworks = 15; // Increased number of fireworks for more impact
+            const colors = ['#FFD700', '#FF6347', '#ADFF2F', '#1E90FF', '#FF1493', '#00FFFF', '#FF00FF', '#FFA500', '#BA55D3']; // Added more colors
+
+            for (let i = 0; i < numFireworks; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework', 'multi');
+                firework.style.left = `${Math.random() * 80 + 10}%`;
+                firework.style.top = `${Math.random() * 60 + 20}%`;
+                firework.style.setProperty('--delay', `${i * 0.15}s`); // Adjusted delay for more sequential bursts
+
+                // Set the base color of the firework (which will be used for its initial flash if any)
+                // and for the primary color of the sparks.
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.dataset.color = randomColor; 
+                
+                fireworkContainer.appendChild(firework);
+
+                // Remove firework and hide overlay after animation
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                    // Only hide overlay if all fireworks have finished
+                    if (fireworkContainer.children.length === 0) {
+                        fireworkOverlay.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // Dynamically create a style tag for firework colors to allow for more varied sparks
+        // This is a more advanced technique to allow CSS to pick up colors from JS
+        function createFireworkColorStyles() {
+            const style = document.createElement('style');
+            style.id = 'firework-dynamic-styles';
+            document.head.appendChild(style);
+
+            // Update styles when fireworks are triggered
+            const originalTriggerFireworks = triggerFireworks;
+            window.triggerFireworks = function() { // Re-assign to window.triggerFireworks
+                originalTriggerFireworks(); // Call the original function first
+                const fireworks = document.querySelectorAll('.firework');
+                fireworks.forEach(firework => {
+                    const color = firework.dataset.color;
+                    if (color) {
+                        // Generate a more complex box-shadow for each firework based on its color
+                        // This allows for individual firework color schemes
+                        let boxShadowBefore = '';
+                        let boxShadowAfter = '';
+                        const sparkCount = 20; // Number of sparks for each pseudo-element
+                        const maxSpread = 150; // Max spread in pixels
+
+                        for (let i = 0; i < sparkCount; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const distance = Math.random() * maxSpread;
+                            const x = Math.cos(angle) * distance;
+                            const y = Math.sin(angle) * distance;
+                            const sparkColor = `hsla(${Math.random() * 360}, 100%, 70%, ${Math.random() * 0.8 + 0.2})`; // Random hue, high saturation, high lightness, varied opacity
+                            
+                            boxShadowBefore += `${x}px ${y}px 0 1px ${sparkColor},`;
+                            boxShadowAfter += `${-x}px ${-y}px 0 1px ${sparkColor},`; // Opposite direction for 'after'
+                        }
+                        // Remove trailing comma and add a base glow
+                        boxShadowBefore = `0 0 0 5px ${color}, ` + boxShadowBefore.slice(0, -1);
+                        boxShadowAfter = `0 0 0 8px ${color}, ` + boxShadowAfter.slice(0, -1);
+
+                        firework.style.setProperty('--firework-before-shadow', boxShadowBefore);
+                        firework.style.setProperty('--firework-after-shadow', boxShadowAfter);
+                    }
+                });
+                style.textContent = `
+                    .firework.multi::before {
+                        box-shadow: var(--firework-before-shadow);
+                    }
+                    .firework.multi::after {
+                        box-shadow: var(--firework-after-shadow);
+                    }
+                `;
+            };
+        }
+
+        window.onload = () => {
+            createFireworkColorStyles(); // Initialize dynamic styles
+            startQuiz();
+        };
+
+    </script>
+
+    <script type="module" id="firebase-logic-script">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration (IMPORTANT: REPLACE WITH YOUR ACTUAL CONFIG IF DIFFERENT)
+        const firebaseConfig = {
+            apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+            authDomain: "website-vocabulary.firebaseapp.com",
+            projectId: "website-vocabulary",
+            storageBucket: "website-vocabulary.firebasestorage.app",
+            messagingSenderId: "216286165163",
+            appId: "1:216286165163:web:0d45648c2b998070a11fee",
+            measurementId: "G-1RZLN9HJ65"
+        };
+
+        // Initialize Firebase App
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Expose auth and db globally for existing activity scripts to use
+        window.auth = auth;
+        window.db = db;
+
+        // --- Diamond Count Display Logic (Top-Left) ---
+        async function updateDiamondCountDisplay() {
+            const diamondCountElement = document.getElementById('diamond-count');
+            if (!diamondCountElement) return;
+
+            const user = auth.currentUser;
+            if (user) {
+                const isGoogleSignedIn = user.providerData.some(
+                    (provider) => provider.providerId === 'google.com'
+                );
+
+                if (isGoogleSignedIn) {
+                    const userRef = doc(db, "users", user.uid);
+                    try {
+                        const docSnap = await getDoc(userRef);
+                        if (docSnap.exists()) {
+                            const diamonds = docSnap.data().diamonds || 0;
+                            diamondCountElement.textContent = `${diamonds} 💎`;
+                        } else {
+                            // If user document doesn't exist for a Google user, initialize diamonds to 0
+                            await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
+                            diamondCountElement.textContent = '0 💎';
+                        }
+                    } catch (error) {
+                        console.error("Error fetching or initializing diamond count:", error);
+                        diamondCountElement.textContent = 'Error 💎';
+                    }
+                } else {
+                    // If not a Google-signed-in user, display N/A or 0
+                    diamondCountElement.textContent = 'N/A 💎';
+                    console.log("Not a Google-signed-in user. Diamond count display limited.");
+                }
+            } else {
+                diamondCountElement.textContent = '0 💎';
+            }
+        }
+
+        // --- Diamond Popup Animation Logic ---
+        function showDiamondPopup(amount) {
+            const popup = document.getElementById('diamondPopupAnimation');
+            if (!popup) return;
+
+            const diamondIcon = popup.querySelector('.diamond-icon');
+            const plusOneText = popup.querySelector('.plus-one-text');
+
+            const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+            plusOneText.textContent = `+${formattedAmount}`;
+
+            popup.classList.remove('show');
+            diamondIcon.style.animation = 'none';
+            plusOneText.style.animation = 'none';
+            void popup.offsetWidth; // Trigger reflow to restart animation
+            
+            popup.classList.add('show');
+            diamondIcon.style.animation = 'pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards';
+            plusOneText.style.animation = 'fade-up 1.5s forwards';
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 1500); // Match the duration of pop-and-fade animation
+        }
+
+        // --- Firestore Update Functions ---
+        window.updateDiamondCount = async function(diamondsEarned) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.log("Diamond update skipped: No user logged in.");
+                return;
+            }
+
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (!isGoogleSignedIn) {
+                console.warn("Diamond update skipped: User is not signed in with a Google account.");
+                return;
+            }
+
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await setDoc(userRef, {
+                    diamonds: increment(diamondsEarned),
+                    displayName: user.displayName || 'Google User'
+                }, { merge: true });
+                console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
+                showDiamondPopup(diamondsEarned);
+                updateDiamondCountDisplay();
+            } catch (error) {
+                console.error("Error updating document for diamonds:", error);
+            }
+        };
+
+        // Function to update user's time spent in Firestore
+        window.updateTimeSpent = async function(durationMs) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.log("Time spent update skipped: No user logged in.");
+                return;
+            }
+
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (!isGoogleSignedIn) {
+                console.warn("Time spent update skipped: User is not signed in with a Google account.");
+                return;
+            }
+
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await setDoc(userRef, {
+                    timeSpent: increment(durationMs)
+                }, { merge: true });
+                console.log(`Time spent updated: +${durationMs}ms for Google user: ${user.displayName || user.uid}`);
+            } catch (error) {
+                console.error("Error updating document for time spent:", error);
+            }
+        };
+
+        // Initial update of diamond count display on page load
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                updateDiamondCountDisplay();
+            }
+        });
+
+    </script>
+    
+    <!-- Diamond Popup Animation -->
+    <div id="diamondPopupAnimation" class="diamond-popup-container">
+        <span class="diamond-icon">💎</span>
+        <span class="plus-one-text">+1</span>
+    </div>
+    <!-- Diamond Count Display (Top-Left) -->
+    <div id="diamond-count-container">
+        <span id="diamond-count">0 💎</span>
+    </div>
+    </body>
+</html>
