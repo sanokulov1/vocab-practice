@@ -683,36 +683,26 @@
 
         // Array of vocabulary words and their definitions
         const vocabularyWords = [
-            { word: "Breakthrough", definition: "A very important discovery or development." },
-            { word: "Antibiotic-resistant", definition: "Not affected by antibiotics (medicines that kill bacteria)." },
-            { word: "Responsible for", definition: "Having the duty of dealing with or taking care of something." },
-            { word: "Undocumented", definition: "Not officially recorded or proved." },
-            { word: "Prospecting", definition: "Searching for valuable minerals, especially gold." },
-            { word: "To exploit", definition: "To use something in a way that helps you; to treat someone unfairly to benefit from their work." },
-            { word: "To weigh up the pros and cons", definition: "To consider the advantages and disadvantages of something." },
-            { word: "Abyss", definition: "A very deep hole or a difficult situation that seems to have no end." },
-            { word: "To yield", definition: "To produce or provide something; to give way to pressure." },
-            { word: "Terrestrial", definition: "Relating to the Earth rather than to other planets; living on land." },
-            { word: "Caution", definition: "Care taken to avoid danger or mistakes." },
-            { word: "Ramifications", definition: "Possible results or effects of an action or decision." },
-            { word: "Regulatory framework", definition: "A system of rules and laws that control how something is done." },
-            { word: "To draft", definition: "To write the first version of a document." },
-            { word: "Marginalisation", definition: "The process of making a group of people feel unimportant or powerless." },
-            { word: "Indigenous peoples", definition: "The original inhabitants of a country or region." },
-            { word: "Poses a grave threat to", definition: "Creates a serious danger for." },
-            { word: "Untapped potential", definition: "Ability or resources that are not yet used or developed." },
-            { word: "To deplete", definition: "To use up a supply or resource." },
-            { word: "Assault", definition: "A strong attack." },
-            { word: "To inflict", definition: "To cause someone to suffer something unpleasant or painful." },
-            { word: "To be off-limits", definition: "Not allowed to be entered or used." },
-            { word: "Spin-offs", definition: "New products or ideas that come from an existing one." }
+            { word: "Knock-on effects", definition: "Indirect results or consequences of an action." },
+            { word: "Prey", definition: "An animal hunted or caught for food by another animal." },
+            { word: "To arm", definition: "To provide with weapons." },
+            { word: "To halt", definition: "To stop moving or progressing." },
+            { word: "To reverse", definition: "To change to the opposite direction, order, or condition." },
+            { word: "To reproduce", definition: "To produce offspring; to make a copy of something." },
+            { word: "To keep in line with", definition: "To make sure something follows or agrees with something else." },
+            { word: "To be equipped", definition: "To have the necessary tools, skills, or clothing for a particular purpose." },
+            { word: "Abundance", definition: "A very large quantity of something." },
+            { word: "Emergence", definition: "The process of coming into existence or prominence." },
+            { word: "Restricted to", definition: "Limited to a particular person, group, or area." },
+            { word: "Sole", definition: "Only one; single." },
+            { word: "To spot", definition: "To see or notice someone or something." }
         ];
 
         let currentQuizWords = []; // Stores the 10 words for the current quiz session
         let currentQuestionIndex = 0; // Tracks the current question being displayed
         let userAnswers = []; // Stores the user's selected definition for each question
-        let incorrectAnswers = []; // Stores words the user got wrong
         const quizLength = 10; // Define quiz length
+        let incorrectAnswers = []; // Stores words the user got wrong
 
         // Get references to DOM elements
         const questionTextElement = document.getElementById('question-text');
