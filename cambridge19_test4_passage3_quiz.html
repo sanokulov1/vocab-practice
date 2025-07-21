@@ -373,118 +373,277 @@
             0% { opacity: 1; transform: scale(0.5); }
             100% { opacity: 0; transform: scale(3); }
         }
-    
-    #diamond-count-container {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-family: 'Inter', sans-serif;
-        font-size: 1.2em;
-        font-weight: bold;
-        z-index: 9999; /* Ensure it's above most content but below popup */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        display: flex; /* Use flexbox for better alignment */
-        align-items: center;
-        gap: 5px; /* Space between number and diamond emoji */
-    }
+    </style>
 
-    body.dark-mode #diamond-count-container {
-        background-color: rgba(255, 255, 255, 0.2);
-        color: #E2E8F0;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
+    <style id="diamond-css-styles">
+        /* Diamond Count Display (Top-Left) */
+        #diamond-count-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 9999; /* Ensure it's above most content but below popup */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex; /* Use flexbox for better alignment */
+            align-items: center;
+            gap: 5px; /* Space between number and diamond emoji */
+        }
 
-    .diamond-popup-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 10000; /* Higher z-index to be on top */
-    }
+        body[data-theme="dark"] #diamond-count-container { /* Adjusted for data-theme attribute */
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-    .diamond-popup-container.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .diamond-icon {
-        font-size: 8em; /* Large diamond icon */
-        line-height: 1;
-        color: #ADD8E6; /* Light blue for diamond */
-        text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6, 0 0 30px #ADD8E6, 0 0 40px #ADD8E6; /* Initial glow */
-        animation: pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards;
-        position: relative;
-        transform: scale(0.5); /* Start smaller */
-        opacity: 0; /* Start invisible */
-    }
-
-    /* Animation for the diamond icon */
-    @keyframes pop-and-fade {
-        0% {
-            transform: scale(0.5) translateY(50px);
+        /* Diamond Popup Animation */
+        .diamond-popup-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             opacity: 0;
-            filter: brightness(0.5);
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10000; /* Higher z-index to be on top */
         }
-        20% {
-            transform: scale(1.2) translateY(-20px);
+
+        .diamond-popup-container.show {
             opacity: 1;
-            filter: brightness(1.5);
+            visibility: visible;
         }
-        50% {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-            filter: brightness(1);
+
+        .diamond-icon {
+            font-size: 8em; /* Large diamond icon */
+            line-height: 1;
+            color: #ADD8E6; /* Light blue for diamond */
+            text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6, 0 0 30px #ADD8E6, 0 0 40px #ADD8E6; /* Initial glow */
+            animation: pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards;
+            position: relative;
+            transform: scale(0.5); /* Start smaller */
+            opacity: 0; /* Start invisible */
         }
-        80% {
-            opacity: 0.8;
-            transform: scale(0.9) translateY(-10px);
+
+        /* Animation for the diamond icon */
+        @keyframes pop-and-fade {
+            0% {
+                transform: scale(0.5) translateY(50px);
+                opacity: 0;
+                filter: brightness(0.5);
+            }
+            20% {
+                transform: scale(1.2) translateY(-20px);
+                opacity: 1;
+                filter: brightness(1.5);
+            }
+            50% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+                filter: brightness(1);
+            }
+            80% {
+                opacity: 0.8;
+                transform: scale(0.9) translateY(-10px);
+            }
+            100% {
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0;
+                filter: brightness(0);
+            }
         }
-        100% {
-            transform: scale(0.8) translateY(-50px);
+
+        /* Continuous subtle pulse glow */
+        @keyframes pulse-glow {
+            0% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+            50% { text-shadow: 0 0 15px #ADD8E6, 0 0 25px #ADD8E6, 0 0 35px #ADD8E6; }
+            100% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+        }
+
+        .plus-one-text {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: gold;
+            text-shadow: 0 0 5px gold, 0 0 10px gold;
+            margin-top: 10px;
+            animation: fade-up 1.5s forwards;
             opacity: 0;
-            filter: brightness(0);
+            transform: translateY(20px);
         }
-    }
 
-    /* Continuous subtle pulse glow */
-    @keyframes pulse-glow {
-        0% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
-        50% { text-shadow: 0 0 15px #ADD8E6, 0 0 25px #ADD8E6, 0 0 35px #ADD8E6; }
-        100% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
-    }
+        @keyframes fade-up {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+    </style>
 
-    .plus-one-text {
-        font-size: 2.5em;
-        font-weight: 700;
-        color: gold;
-        text-shadow: 0 0 5px gold, 0 0 10px gold;
-        margin-top: 10px;
-        animation: fade-up 1.5s forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    @keyframes fade-up {
-        0% { opacity: 0; transform: translateY(20px); }
-        50% { opacity: 1; transform: translateY(0); }
-        100% { opacity: 0; transform: translateY(-30px); }
-    }
-    
-</style>
 </head>
 <body>
+
+    <script type="module" id="firebase-logic-script">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration (IMPORTANT: REPLACE WITH YOUR ACTUAL CONFIG IF DIFFERENT)
+        const firebaseConfig = {
+            apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
+            authDomain: "website-vocabulary.firebaseapp.com",
+            projectId: "website-vocabulary",
+            storageBucket: "website-vocabulary.firebasestorage.app",
+            messagingSenderId: "216286165163",
+            appId: "1:216286165163:web:0d45648c2b998070a11fee",
+            measurementId: "G-1RZLN9HJ65"
+        };
+
+        // Initialize Firebase App
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Expose auth and db globally for existing activity scripts to use
+        window.auth = auth;
+        window.db = db;
+
+        // --- Diamond Count Display Logic (Top-Left) ---
+        async function updateDiamondCountDisplay() {
+            const diamondCountElement = document.getElementById('diamond-count');
+            if (!diamondCountElement) return;
+
+            const user = auth.currentUser;
+            if (user) {
+                const isGoogleSignedIn = user.providerData.some(
+                    (provider) => provider.providerId === 'google.com'
+                );
+
+                if (isGoogleSignedIn) {
+                    const userRef = doc(db, "users", user.uid);
+                    try {
+                        const docSnap = await getDoc(userRef);
+                        if (docSnap.exists()) {
+                            const diamonds = docSnap.data().diamonds || 0;
+                            diamondCountElement.textContent = `${diamonds} 💎`;
+                        } else {
+                            // If user document doesn't exist for a Google user, initialize diamonds to 0
+                            await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
+                            diamondCountElement.textContent = '0 💎';
+                        }
+                    } catch (error) {
+                        console.error("Error fetching or initializing diamond count:", error);
+                        diamondCountElement.textContent = 'Error 💎';
+                    }
+                } else {
+                    // If not a Google-signed-in user, display N/A or 0
+                    diamondCountElement.textContent = 'N/A 💎';
+                    console.log("Not a Google-signed-in user. Diamond count display limited.");
+                }
+            } else {
+                diamondCountElement.textContent = '0 💎';
+            }
+        }
+
+        // --- Diamond Popup Animation Logic ---
+        function showDiamondPopup(amount) {
+            const popup = document.getElementById('diamondPopupAnimation');
+            if (!popup) return;
+
+            const diamondIcon = popup.querySelector('.diamond-icon');
+            const plusOneText = popup.querySelector('.plus-one-text');
+
+            const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
+            plusOneText.textContent = `+${formattedAmount}`;
+
+            popup.classList.remove('show');
+            diamondIcon.style.animation = 'none';
+            plusOneText.style.animation = 'none';
+            void popup.offsetWidth; // Trigger reflow to restart animation
+            
+            popup.classList.add('show');
+            diamondIcon.style.animation = 'pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards';
+            plusOneText.style.animation = 'fade-up 1.5s forwards';
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 1500); // Match the duration of pop-and-fade animation
+        }
+
+        // --- Firestore Update Functions ---
+        window.updateDiamondCount = async function(diamondsEarned) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.log("Diamond update skipped: No user logged in.");
+                return;
+            }
+
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (!isGoogleSignedIn) {
+                console.warn("Diamond update skipped: User is not signed in with a Google account.");
+                return;
+            }
+
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await setDoc(userRef, {
+                    diamonds: increment(diamondsEarned),
+                    displayName: user.displayName || 'Google User'
+                }, { merge: true });
+                console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
+                showDiamondPopup(diamondsEarned);
+                updateDiamondCountDisplay();
+            } catch (error) {
+                console.error("Error updating document for diamonds:", error);
+            }
+        };
+
+        // Function to update user's time spent in Firestore
+        window.updateTimeSpent = async function(durationMs) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.log("Time spent update skipped: No user logged in.");
+                return;
+            }
+
+            const isGoogleSignedIn = user.providerData.some(
+                (provider) => provider.providerId === 'google.com'
+            );
+
+            if (!isGoogleSignedIn) {
+                console.warn("Time spent update skipped: User is not signed in with a Google account.");
+                return;
+            }
+
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await setDoc(userRef, {
+                    timeSpent: increment(durationMs)
+                }, { merge: true });
+                console.log(`Time spent updated: +${durationMs}ms for Google user: ${user.displayName || user.uid}`);
+            } catch (error) {
+                console.error("Error updating document for time spent:", error);
+            }
+        };
+
+        // Initial update of diamond count display on page load
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                updateDiamondCountDisplay();
+            }
+        });
+
+    </script>
+
 
     <!-- Mode Toggle Button (Sun/Moon icon) -->
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
@@ -527,6 +686,10 @@
 
     <script>
         // Array of vocabulary words and their definitions
+
+        // Global variable for tracking activity start time
+        let activityStartTime;
+
         const vocabularyWords = [
             { word: "Ruthless", definition: "Cruel and showing no pity for others." },
             { word: "Impulse", definition: "A sudden strong desire to do something without thinking." },
@@ -792,214 +955,15 @@
         window.onload = startQuiz;
     </script>
 
-    <!-- Diamond Count Display (Top-Left) -->
-    <div id="diamond-count-container">
-        <span id="diamond-count">0 💎</span>
-    </div>
-    
-
     <!-- Diamond Popup Animation -->
     <div id="diamondPopupAnimation" class="diamond-popup-container">
         <span class="diamond-icon">💎</span>
         <span class="plus-one-text">+1</span>
     </div>
-    
+    <!-- Diamond Count Display (Top-Left) -->
+    <div id="diamond-count-container">
+        <span id="diamond-count">0 💎</span>
+    </div>
 
-    <script type="module">
-        import { initializeApp } = "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } = "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, increment, getDoc } = "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // Firebase Configuration (from user)
-        const firebaseConfig = {
-            apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
-            authDomain: "website-vocabulary.firebaseapp.com",
-            projectId: "website-vocabulary",
-            storageBucket: "website-vocabulary.firebasestorage.app",
-            messagingSenderId: "216286165163",
-            appId: "1:216286165163:web:0d45648c2b998070a11fee",
-            measurementId: "G-1RZLN9HJ65"
-        };
-
-        // Initialize Firebase App
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Expose auth and db globally for existing activity scripts to use
-        window.auth = auth;
-        window.db = db;
-
-        // Function to update diamond count display (top-left)
-        async function updateDiamondCountDisplay() {
-            const diamondCountElement = document.getElementById('diamond-count');
-            if (!diamondCountElement) return;
-
-            const user = auth.currentUser;
-            if (user) {
-                // Only attempt to fetch diamonds if the user is a Google-signed-in user
-                const isGoogleSignedIn = user.providerData.some(
-                    (provider) => provider.providerId === 'google.com'
-                );
-
-                if (isGoogleSignedIn) {
-                    const userRef = doc(db, "users", user.uid);
-                    try {
-                        const docSnap = await getDoc(userRef);
-                        if (docSnap.exists()) {
-                            const diamonds = docSnap.data().diamonds || 0;
-                            diamondCountElement.textContent = `${diamonds} 💎`;
-                        } else {
-                            // If user document doesn't exist for a Google user, initialize diamonds to 0
-                            await setDoc(userRef, { diamonds: 0, displayName: user.displayName || 'Anonymous User' }, { merge: true });
-                            diamondCountElement.textContent = '0 💎';
-                        }
-                    } catch (error) {
-                        console.error("Error fetching or initializing diamond count:", error);
-                        diamondCountElement.textContent = 'Error 💎';
-                    }
-                } else {
-                    // If not a Google-signed-in user, display N/A or 0
-                    diamondCountElement.textContent = 'N/A 💎'; // Or '0 💎' if you prefer
-                    console.log("Not a Google-signed-in user. Diamond count display limited.");
-                }
-            } else {
-                diamondCountElement.textContent = '0 💎'; // Display 0 if no user is signed in at all
-            }
-        }
-
-        // Listen for auth state changes to update diamond count display
-        onAuthStateChanged(auth, (user) => {
-            updateDiamondCountDisplay();
-        });
-
-        // Diamond Popup Function (new animation)
-        function showDiamondPopup(amount) {
-            const popup = document.getElementById('diamondPopupAnimation'); // Use new ID
-            if (!popup) return;
-
-            const diamondIcon = popup.querySelector('.diamond-icon');
-            const plusOneText = popup.querySelector('.plus-one-text');
-
-            // Set amount text
-            const formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(1);
-            plusOneText.textContent = `+${formattedAmount}`;
-
-            // Reset animations by removing and re-adding the class
-            popup.classList.remove('show');
-            diamondIcon.style.animation = 'none';
-            plusOneText.style.animation = 'none';
-            void popup.offsetWidth; // Trigger reflow to restart animation
-
-            popup.classList.add('show');
-            diamondIcon.style.animation = 'pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards';
-            plusOneText.style.animation = 'fade-up 1.5s forwards';
-
-            // Hide the popup after the animation completes
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 1500); // Match the duration of pop-and-fade animation
-        }
-
-
-        // Function to update user's diamond count in Firestore
-        window.updateDiamondCount = async function(diamondsEarned) {
-            const user = auth.currentUser;
-            if (!user) {
-                console.log("Diamond update skipped: No user logged in.");
-                return;
-            }
-
-            // Check if the user is signed in with Google
-            const isGoogleSignedIn = user.providerData.some(
-                (provider) => provider.providerId === 'google.com'
-            );
-
-            if (!isGoogleSignedIn) { // Only check for Google sign-in
-                console.warn("Diamond update skipped: User is not signed in with a Google account.");
-                // Optionally, display a message to the user here, e.g., using a small modal
-                // "Please sign in with Google to earn diamonds!"
-                return;
-            }
-
-            const userRef = doc(db, "users", user.uid);
-            try {
-                await setDoc(userRef, {
-                    diamonds: increment(diamondsEarned),
-                    // Store user's display name for the scoreboard
-                    displayName: user.displayName || 'Google User' // Use displayName from Google, fallback if null
-                }, { merge: true });
-                console.log(`Diamonds updated: +${diamondsEarned} for Google user: ${user.displayName || user.uid}`);
-                showDiamondPopup(diamondsEarned); // Use the new showDiamondPopup
-                updateDiamondCountDisplay();
-            } catch (error) {
-                console.error("Error updating document for diamonds:", error);
-            }
-        };
-
-        // Activity completion hooks (will be called by existing game logic)
-        // These global functions must be defined to be called by the existing game logic.
-        // If a file is a quiz, it will call onQuizComplete.
-        // If a file is a typing task, it will call onTypingComplete.
-        // If a file is a matching game, it will call onMatchingComplete.
-
-        // Default implementation for onQuizComplete (if not already defined in the file)
-        if (typeof window.onQuizComplete === 'undefined') {
-            window.onQuizComplete = function(correctCount) {
-                let diamondEarned = 0;
-                // Assuming quizLength is a global variable in the original file
-                const totalQuestions = typeof quizLength !== 'undefined' ? quizLength : 10; // Default to 10 if not found
-
-                if (correctCount === totalQuestions) { // 10/10 correct
-                    diamondEarned = 1.5;
-                } else if (correctCount >= 7) { // 7 or more correct
-                    diamondEarned = 1;
-                }
-                
-                if (diamondEarned > 0) {
-                    window.updateDiamondCount(diamondEarned);
-                } else {
-                    console.log("Not enough correct answers to earn diamonds.");
-                }
-            };
-        }
-
-        // Default implementation for onTypingComplete (if not already defined in the file)
-        if (typeof window.onTypingComplete === 'undefined') {
-            window.onTypingComplete = function(correctCount) {
-                let diamondEarned = 0;
-                // Assuming quizLength is a global variable in the original file
-                const totalQuestions = typeof quizLength !== 'undefined' ? quizLength : 10; // Default to 10 if not found
-
-                if (correctCount === totalQuestions) { // 10/10 correct
-                    diamondEarned = 1.5;
-                } else if (correctCount >= 6) { // 6 or more correct
-                    diamondEarned = 1;
-                }
-                
-                if (diamondEarned > 0) {
-                    window.updateDiamondCount(diamondEarned);
-                } else {
-                    console.log("Not enough correct answers to earn diamonds.");
-                }
-            };
-        }
-
-        // Default implementation for onMatchingComplete (if not already defined in the file)
-        if (typeof window.onMatchingComplete === 'undefined') {
-            window.onMatchingComplete = function() { // Matching games usually give 1 diamond for completion
-                window.updateDiamondCount(1);
-            };
-        }
-
-        // Initial update of diamond count display on page load
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                updateDiamondCountDisplay();
-            }
-        });
-
-    </script>
-    
 </body>
 </html>
