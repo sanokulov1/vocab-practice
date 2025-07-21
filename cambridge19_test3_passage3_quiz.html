@@ -645,6 +645,7 @@
     </script>
 
 
+
     <!-- Mode Toggle Button (Sun/Moon icon) -->
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
         <!-- Sun icon (visible in Night Mode) -->
@@ -685,11 +686,9 @@
     <div id="firework-display" class="firework-container"></div>
 
     <script>
-        // Array of vocabulary words and their definitions
-
-        // Global variable for tracking activity start time
         let activityStartTime;
 
+        // Array of vocabulary words and their definitions
         const vocabularyWords = [
             { word: "Obstacle", definition: "A thing that blocks one's way or prevents progress." },
             { word: "To feature", definition: "To include someone or something as an important part." },
@@ -885,17 +884,51 @@
          * Also triggers fireworks if all answers are correct.
          */
         function submitQuiz() {
+
+            incorrectAnswers = [];
+            let correctAnswersCount = 0;
+
+            // --- Time Spent Tracking ---
+            const duration = Date.now() - activityStartTime;
+            if (typeof window.updateTimeSpent === 'function') {
+                window.updateTimeSpent(duration);
+            }
+
             incorrectAnswers = []; // Reset incorrect answers list
             // Check each answer
             for (let i = 0; i < currentQuizWords.length; i++) {
                 // If the user's answer does not match the correct definition
                 if (userAnswers[i] !== currentQuizWords[i].definition) {
+                correctAnswersCount++;
                     incorrectAnswers.push(currentQuizWords[i]); // Add to incorrect list
                 }
             }
 
             // Hide quiz content and show results container
-            quizContent.style.display = 'none';
+            
+            // --- Diamond Awarding Logic ---
+            const totalQuestions = currentQuizWords ? currentQuizWords.length : 10;
+            let diamondsToAward = 0;
+            
+            if (correctAnswersCount === totalQuestions) {
+                diamondsToAward = 1.5;
+                resultsMessage.textContent = `Congratulations! You got all ${totalQuestions} words correct! You earned ${diamondsToAward} 💎!`;
+                if (typeof triggerFireworks === 'function') {
+                    triggerFireworks();
+                }
+            } else if (correctAnswersCount >= 7) {
+                diamondsToAward = 1;
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${totalQuestions} correct. You earned ${diamondsToAward} 💎!`;
+            } else {
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${totalQuestions} correct. Keep practicing!`;
+            }
+
+            if (diamondsToAward > 0 && typeof window.updateDiamondCount === 'function') {
+                window.updateDiamondCount(diamondsToAward);
+            }
+
+
+quizContent.style.display = 'none';
             resultsContainer.style.display = 'block';
             incorrectAnswersList.innerHTML = ''; // Clear previous incorrect answers display
 
@@ -961,6 +994,16 @@
 
         // Start the quiz when the window loads
         window.onload = startQuiz;
+    
+        // Initialize activityStartTime when the window loads
+        window.addEventListener('load', () => {
+            activityStartTime = Date.now();
+            console.log("Quiz activity started, timer initiated.");
+            if (typeof startQuiz === 'function') {
+                startQuiz();
+            }
+        });
+
     </script>
 
     <!-- Diamond Popup Animation -->

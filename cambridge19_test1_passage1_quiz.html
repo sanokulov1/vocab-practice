@@ -627,6 +627,7 @@
     </script>
 
 
+
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
         <!-- Sun icon (visible in Night Mode) -->
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
@@ -662,8 +663,6 @@
     <div id="firework-display" class="firework-container"></div>
 
     <script>
-
-        // Global variable for tracking activity start time
         let activityStartTime;
 
         const vocabularyWords = [
@@ -817,14 +816,48 @@
         }
 
         function submitQuiz() {
+
+            incorrectAnswers = [];
+            let correctAnswersCount = 0;
+
+            // --- Time Spent Tracking ---
+            const duration = Date.now() - activityStartTime;
+            if (typeof window.updateTimeSpent === 'function') {
+                window.updateTimeSpent(duration);
+            }
+
             incorrectAnswers = [];
             for (let i = 0; i < currentQuizWords.length; i++) {
                 if (userAnswers[i] !== currentQuizWords[i].definition) {
+                correctAnswersCount++;
                     incorrectAnswers.push(currentQuizWords[i]);
                 }
             }
 
-            quizContent.style.display = 'none';
+            
+            // --- Diamond Awarding Logic ---
+            const totalQuestions = currentQuizWords ? currentQuizWords.length : 10;
+            let diamondsToAward = 0;
+            
+            if (correctAnswersCount === totalQuestions) {
+                diamondsToAward = 1.5;
+                resultsMessage.textContent = `Congratulations! You got all ${totalQuestions} words correct! You earned ${diamondsToAward} 💎!`;
+                if (typeof triggerFireworks === 'function') {
+                    triggerFireworks();
+                }
+            } else if (correctAnswersCount >= 7) {
+                diamondsToAward = 1;
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${totalQuestions} correct. You earned ${diamondsToAward} 💎!`;
+            } else {
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${totalQuestions} correct. Keep practicing!`;
+            }
+
+            if (diamondsToAward > 0 && typeof window.updateDiamondCount === 'function') {
+                window.updateDiamondCount(diamondsToAward);
+            }
+
+
+quizContent.style.display = 'none';
             resultsContainer.style.display = 'block';
             incorrectAnswersList.innerHTML = '';
 
@@ -875,6 +908,16 @@
         }
 
         window.onload = startQuiz;
+
+    
+        // Initialize activityStartTime when the window loads
+        window.addEventListener('load', () => {
+            activityStartTime = Date.now();
+            console.log("Quiz activity started, timer initiated.");
+            if (typeof startQuiz === 'function') {
+                startQuiz();
+            }
+        });
 
     </script>
 
