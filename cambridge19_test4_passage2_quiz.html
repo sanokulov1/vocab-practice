@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Quiz</title>
-    <!-- Google Fonts - Inter for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Define CSS variables for colors, allowing easy switching between light and dark modes */
@@ -374,7 +373,6 @@
             100% { opacity: 0; transform: scale(3); }
         }
     </style>
-
     <style id="diamond-css-styles">
         /* Diamond Count Display (Top-Left) */
         #diamond-count-container {
@@ -485,10 +483,8 @@
             100% { opacity: 0; transform: translateY(-30px); }
         }
     </style>
-
 </head>
 <body>
-
     <script type="module" id="firebase-logic-script">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -643,25 +639,16 @@
         });
 
     </script>
-
-
-
-    <!-- Mode Toggle Button (Sun/Moon icon) -->
     <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
-        <!-- Sun icon (visible in Night Mode) -->
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 12 2.25ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm12.45 2.62a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 0 0 .97 1.29l1.93-.99ZM12 19.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V20.25a.75.75 0 0 1 .75-.75ZM4.03 13.29a.75.75 0 0 0-.97-1.29l-1.93.99a.75.75 0 1 0 .97 1.29l1.93-.99ZM17.97 4.03a.75.75 0 0 0 1.29-.97l-.99-1.93a.75.75 0 0 0-1.29.97l.99 1.93ZM6.38 4.03a.75.75 0 0 0 .97-1.29l-1.93-.99a.75.75 0 0 0-.97 1.29l1.93.99ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 4.5 12ZM19.62 17.97a.75.75 0 0 0-1.29.97l.99 1.93a.75.75 0 1 0 1.29-.97l-.99-1.93ZM7.62 19.62a.75.75 0 0 0-.97 1.29l1.93.99a.75.75 0 0 0 .97-1.29l-1.93-.99Z"/></svg>
-        <!-- Moon icon (visible in Day Mode) -->
         <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
     </button>
 
-    <!-- Main Quiz Application Container -->
     <div id="quiz-app" class="quiz-container">
-        <!-- Quiz Content Section -->
         <div id="quiz-content">
             <h2 id="question-text" class="question-text"></h2>
             <div id="options-container" class="options-container">
-                <!-- Options will be dynamically inserted here by JavaScript -->
-            </div>
+                </div>
             <div class="navigation-buttons">
                 <button id="prev-button" onclick="previousQuestion()">Previous</button>
                 <button id="next-button" onclick="nextQuestion()">Next</button>
@@ -671,21 +658,27 @@
             </div>
         </div>
 
-        <!-- Quiz Results Section -->
         <div id="results-container" class="results-container" style="display: none;">
             <h2 id="results-message"></h2>
             <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
             <ul id="incorrect-answers-list">
-                <!-- Incorrect answers will be dynamically inserted here by JavaScript -->
-            </ul>
+                </ul>
             <button class="submit-button" onclick="startQuiz()">Try Again</button>
         </div>
     </div>
 
-    <!-- Firework Display Container -->
     <div id="firework-display" class="firework-container"></div>
+    
+    <div id="diamondPopupAnimation" class="diamond-popup-container">
+        <span class="diamond-icon">💎</span>
+        <span class="plus-one-text">+1</span>
+    </div>
+    <div id="diamond-count-container">
+        <span id="diamond-count">0 💎</span>
+    </div>
 
     <script>
+        // Global variable for tracking activity start time
         let activityStartTime;
 
         // Array of vocabulary words and their definitions
@@ -719,6 +712,7 @@
         let currentQuestionIndex = 0; // Tracks the current question being displayed
         let userAnswers = []; // Stores the user's selected definition for each question
         let incorrectAnswers = []; // Stores words the user got wrong
+        const quizLength = 10; // Define quiz length
 
         // Get references to DOM elements
         const questionTextElement = document.getElementById('question-text');
@@ -754,7 +748,7 @@
          */
         function startQuiz() {
             currentQuestionIndex = 0;
-            userAnswers = [];
+            userAnswers = new Array(quizLength).fill(null);
             incorrectAnswers = [];
 
             // Ensure there are enough words for a 10-question quiz
@@ -876,23 +870,49 @@
          * Also triggers fireworks if all answers are correct.
          */
         function submitQuiz() {
+            incorrectAnswers = [];
+            let correctAnswersCount = 0; // Track correct answers for diamond logic
+
+            for (let i = 0; i < quizLength; i++) { // Loop through the 10 questions of the current quiz
+                if (userAnswers[i] !== currentQuizWords[i].definition) {
+                    incorrectAnswers.push({
+                        word: currentQuizWords[i].word,
+                        correctDefinition: currentQuizWords[i].definition,
+                        userAnswer: userAnswers[i] || "No answer provided"
+                    });
+                } else {
+                    correctAnswersCount++; // Increment correct answers count
+                }
+            }
+
+            // --- Diamond Awarding Logic for Quiz ---
+            let diamondsToAward = 0;
+            if (correctAnswersCount === 10) {
+                diamondsToAward = 1.5;
+                resultsMessage.textContent = `Congratulations! You got all ${quizLength} words correct! You earned ${diamondsToAward} 💎!`;
+                triggerFireworks(); // Trigger fireworks for perfect score
+            } else if (correctAnswersCount >= 7) {
+                diamondsToAward = 1;
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${quizLength} correct. You earned ${diamondsToAward} 💎!`;
+            } else {
+                resultsMessage.textContent = `Quiz Completed! You got ${correctAnswersCount} out of ${quizLength} correct. Keep practicing!`;
+            }
+
+            if (diamondsToAward > 0) {
+                // Check if window.updateDiamondCount is available (from Firebase script)
+                if (typeof window.updateDiamondCount === 'function') {
+                    window.updateDiamondCount(diamondsToAward);
+                } else {
+                    console.warn("window.updateDiamondCount is not defined. Firebase script might not be loaded.");
+                }
+            }
 
             // --- Time Spent Tracking ---
-            const duration = Date.now() - activityStartTime;
+            const duration = Date.now() - activityStartTime; // Calculate total duration for the quiz
             if (typeof window.updateTimeSpent === 'function') {
                 window.updateTimeSpent(duration);
-            }
-            
-            // Initialize score tracking
-            let correctAnswersCount = 0;
-
-            incorrectAnswers = []; // Reset incorrect answers list
-            // Check each answer
-            for (let i = 0; i < currentQuizWords.length; i++) {
-                // If the user's answer does not match the correct definition
-                if (userAnswers[i] !== currentQuizWords[i].definition) {
-                    incorrectAnswers.push(currentQuizWords[i]); // Add to incorrect list
-                }
+            } else {
+                console.warn("window.updateTimeSpent is not defined. Firebase script might not be loaded.");
             }
 
             // Hide quiz content and show results container
@@ -902,17 +922,15 @@
 
             if (incorrectAnswers.length > 0) {
                 // If there are incorrect answers
-                resultsMessage.textContent = "Quiz Completed!";
                 incorrectAnswersHeading.style.display = 'block'; // Show "Words you got wrong" heading
                 // Populate the list of incorrect answers
                 incorrectAnswers.forEach(item => {
                     const listItem = document.createElement('li');
-                    listItem.innerHTML = `<strong>${item.word}</strong>: ${item.definition}`;
+                    listItem.innerHTML = `<strong>${item.word}</strong>: Your answer: "${item.userAnswer}", Correct: "${item.correctDefinition}"`;
                     incorrectAnswersList.appendChild(listItem);
                 });
             } else {
                 // If all answers are correct
-                resultsMessage.textContent = "Congratulations! You got all 10 words correct!";
                 incorrectAnswersHeading.style.display = 'none'; // Hide "Words you got wrong" heading
                 const listItem = document.createElement('li');
                 listItem.textContent = "Fantastic job! You mastered all the vocabulary words!";
@@ -921,7 +939,6 @@
                 listItem.style.color = 'white';
                 listItem.style.borderColor = 'var(--success-color)';
                 incorrectAnswersList.appendChild(listItem);
-                triggerFireworks(); // Celebrate with fireworks!
             }
         }
 
@@ -960,26 +977,12 @@
             }
         }
 
-        // Start the quiz when the window loads
-        window.onload = startQuiz;
-    
         // Initialize activityStartTime when the window loads
         window.addEventListener('load', () => {
             activityStartTime = Date.now();
-            console.log("Quiz activity started");
+            console.log("Quiz activity started, overall timer initiated.");
+            startQuiz(); // Start the quiz when the page loads
         });
-
     </script>
-
-    <!-- Diamond Popup Animation -->
-    <div id="diamondPopupAnimation" class="diamond-popup-container">
-        <span class="diamond-icon">💎</span>
-        <span class="plus-one-text">+1</span>
-    </div>
-    <!-- Diamond Count Display (Top-Left) -->
-    <div id="diamond-count-container">
-        <span id="diamond-count">0 💎</span>
-    </div>
-
 </body>
 </html>
