@@ -481,6 +481,63 @@
         }
     }
 
+    
+
+    body[data-theme="dark"] 
+    
+
+    
+
+    
+
+    .diamond-icon {
+        font-size: 8em; /* Large diamond icon */
+        line-height: 1;
+        color: #ADD8E6; /* Light blue for diamond */
+        text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6, 0 0 30px #ADD8E6, 0 0 40px #ADD8E6; /* Initial glow */
+        animation: pulse-glow 2s infinite alternate, pop-and-fade 1.5s forwards;
+        position: relative;
+        transform: scale(0.5); /* Start smaller */
+        opacity: 0; /* Start invisible */
+    }
+
+    /* Animation for the diamond icon */
+    
+        20% {
+            transform: scale(1.2) translateY(-20px);
+            opacity: 1;
+            filter: brightness(1.5);
+        }
+        50% {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            filter: brightness(1);
+        }
+        80% {
+            opacity: 0.8;
+            transform: scale(0.9) translateY(-10px);
+        }
+        100% {
+            transform: scale(0.8) translateY(-50px);
+            opacity: 0;
+            filter: brightness(0);
+        }
+    }
+
+    /* Continuous subtle pulse glow */
+    
+        50% { text-shadow: 0 0 15px #ADD8E6, 0 0 25px #ADD8E6, 0 0 35px #ADD8E6; }
+        100% { text-shadow: 0 0 10px #ADD8E6, 0 0 20px #ADD8E6; }
+    }
+
+    
+
+    
+        50% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-30px); }
+    }
+    
+
     #diamond-count-container {
         position: fixed;
         top: 20px;
@@ -648,6 +705,7 @@
 
 <script>
 
+
 let activityStartTime;
 const completedGroupsForDiamonds = new Set();
 // Sound functions: plays a sound for correct and wrong matches.
@@ -778,7 +836,19 @@ function setupGame(wordPairs, groupId) {
           if (score === wordPairs.length) {
             resultContainer.innerHTML = "<b>🎉 Group completed! Well done!</b>";
           
+            
             // NEW: Award 0.5 diamonds for this group if not already awarded
+            if (!completedGroupsForDiamonds.has(groupId)) {
+                window.updateDiamondCount(0.5); // Award 0.5 diamonds
+                completedGroupsForDiamonds.add(groupId); // Mark group as having awarded diamonds
+            }
+            // Check if all groups are completed to trigger overall time tracking
+            const allGroupsTotal = document.querySelectorAll('.accordion').length; // Total number of accordion groups
+            if (completedGroupsForDiamonds.size === allGroupsTotal) {
+                const duration = Date.now() - activityStartTime; // Calculate total duration for all groups
+                window.updateTimeSpent(duration); // Update total time spent in Firestore
+            }
+                // NEW: Award 0.5 diamonds for this group if not already awarded
             if (!completedGroupsForDiamonds.has(groupId)) {
                 window.updateDiamondCount(0.5); // Award 0.5 diamonds
                 completedGroupsForDiamonds.add(groupId); // Mark group as having awarded diamonds
@@ -854,6 +924,19 @@ const allWords = [
   }
 })();
 </script>
+
+    
+    
+
+    <!-- Diamond Popup Animation -->
+    <div id="diamondPopupAnimation" class="diamond-popup-container">
+        <span class="diamond-icon">💎</span>
+        <span class="plus-one-text">+1</span>
+    </div>
+    
+
+    
+    
 
     <!-- Diamond Count Display (Top-Left) -->
     <div id="diamond-count-container">
