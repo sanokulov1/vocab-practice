@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listening & Reading Practice – sanokulov.uz</title>
+  <link rel="icon" type="image/png" href="sanokulov_favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Inheriting styles from the main page for consistency */
+    :root {
+      --primary: #6C63FF;
+      --primary-dark: #5a52e0;
+      --secondary: #fbb03b;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --gradient: linear-gradient(135deg, var(--primary) 0%, #8e6bff 100%);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9ff; /* A light background for the content page */
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px; /* Adjusted max-width for content page */
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header styles - copied from index.html for consistency */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow);
+      position: sticky;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .logo i {
+      color: var(--secondary);
+    }
+    
+    .logo:hover {
+      transform: translateY(-2px);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 16px;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Main content styling */
+    .main-content {
+        padding: 140px 20px 80px; /* Added padding top to account for sticky header */
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 15px;
+    }
+    
+    .section-header h1 span {
+        color: var(--primary);
+    }
+
+    .section-header p {
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+    
+    /* Accordion Styles */
+    .accordion-container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .accordion-item {
+        margin-bottom: 20px;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        background: white;
+    }
+
+    .accordion-button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 25px 30px;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+    
+    .accordion-button:hover {
+        background: var(--primary-dark);
+    }
+
+    .accordion-button .icon {
+        font-size: 1.5rem;
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .accordion-button.active .icon {
+        transform: rotate(180deg);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.5s ease;
+        padding: 0 30px;
+    }
+
+    .test-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 25px 0;
+    }
+
+    .test-button {
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        background: var(--light);
+        color: var(--dark);
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        border: 2px solid #e0e0e0;
+        transition: var(--transition);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    .test-button:hover {
+        transform: translateY(-5px);
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
+    }
+    
+    .test-button i {
+        margin-right: 8px;
+    }
+
+    /* Footer styles - copied from index.html for consistency */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+      .logo {
+        font-size: 24px;
+      }
+      nav {
+        display: none;
+      }
+      .section-header h1 {
+        font-size: 2.2rem;
+      }
+      .accordion-button {
+          font-size: 1.2rem;
+          padding: 20px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      sanokulov.uz
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="vocab-practice.html">Vocabulary Practice</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="section-header">
+        <h1>Listening & Reading <span>Practice</span></h1>
+        <p>Select a category to begin your practice tests. Sharpen your skills and get ready for success.</p>
+      </div>
+
+      <div class="accordion-container">
+        <!-- Listening Section -->
+        <div class="accordion-item">
+          <button class="accordion-button">
+            <span><i class="fas fa-headphones-alt"></i> Listening</span>
+            <i class="fas fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="test-buttons">
+              <a href="#" class="test-button"><i class="fas fa-play-circle"></i> Test 1</a>
+              <a href="#" class="test-button"><i class="fas fa-play-circle"></i> Test 2</a>
+              <a href="#" class="test-button"><i class="fas fa-play-circle"></i> Test 3</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reading Section -->
+        <div class="accordion-item">
+          <button class="accordion-button">
+            <span><i class="fas fa-book-open"></i> Reading</span>
+            <i class="fas fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="test-buttons">
+              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 1</a>
+              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 2</a>
+              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 3</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+         <!-- Footer content can be copied from index.html if needed -->
+      </div>
+      <div class="copyright">&copy; 2025 sanokulov.uz – All rights reserved</div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Close other open items
+                accordionButtons.forEach(otherButton => {
+                    if (otherButton !== button && otherButton.classList.contains('active')) {
+                        otherButton.classList.remove('active');
+                        const otherContent = otherButton.nextElementSibling;
+                        otherContent.style.maxHeight = null;
+                        otherContent.style.padding = '0 30px';
+                    }
+                });
+
+                // Toggle current item
+                button.classList.toggle('active');
+                const accordionContent = button.nextElementSibling;
+
+                if (button.classList.contains('active')) {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                    accordionContent.style.padding = '0 30px';
+                } else {
+                    accordionContent.style.maxHeight = null;
+                    accordionContent.style.padding = '0 30px';
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>
