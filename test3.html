@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Listening Test 3</title>
+    <style>
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for the fixed progress bar */
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+            position: relative;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .audio-controls button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .audio-controls button:hover {
+            background-color: #2980b9;
+        }
+
+        .audio-player {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        /* Parts and Questions */
+        .part {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .part-title {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .instructions {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .question-number {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #2c3e50;
+        }
+
+        /* Multiple Choice Options */
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .option {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background-color: #f0f8ff;
+            border-color: #3498db;
+        }
+
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        /* Completion Inputs */
+        .completion-input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+            margin-left: 5px;
+        }
+
+        /* Drag and Match */
+        .drag-match-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .questions-list-wrapper, .options-list-wrapper {
+            flex: 1;
+            min-width: 300px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            min-height: 200px;
+        }
+
+        .questions-list-wrapper h4, .options-list-wrapper h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .question-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .question-item .question-text {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .question-drop-target {
+            min-width: 50px;
+            background-color: #e0f2f7;
+            border: 2px dashed #3498db;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            min-height: 40px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .question-drop-target.drag-over {
+            background-color: #d0eaf0;
+            border-color: #2980b9;
+        }
+
+        .draggable-option {
+            background-color: #e8f4f8;
+            border: 1px solid #3498db;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: grab;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+        
+        .draggable-option.dragging, .matched-option.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .draggable-option.hidden {
+            display: none;
+        }
+
+        .matched-option {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: grab;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Highlight feature styles */
+        .highlighted-text {
+            background-color: springgreen;
+        }
+
+        #highlight-popup {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #highlight-popup:hover {
+            background-color: #555;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2c3e50;
+            padding: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1001;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+        .progress-number {
+            width: 30px;
+            height: 30px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .progress-number.answered {
+            background-color: #27ae60;
+        }
+
+        /* Submit and Results */
+        .submit-section { text-align: center; margin: 30px 0; }
+        #submit-btn { background-color: #27ae60; color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; font-weight: bold; }
+        #submit-btn:hover { background-color: #219653; }
+        .results-container { display: none; margin-top: 40px; padding: 20px; background-color: #e8f4f8; border-radius: 8px; }
+        .results-title { text-align: center; margin-bottom: 20px; color: #2c3e50; }
+        #score-display { text-align: center; font-size: 1.5em; font-weight: bold; color: #27ae60; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px dashed #ccc; }
+        .results-columns { display: flex; gap: 20px; }
+        .results-column { flex: 1; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); }
+        .results-column h3 { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #3498db; color: #2c3e50; }
+        .result-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .result-question { font-weight: bold; margin-right: 10px; }
+
+        /* Night Mode Styles */
+        body.night-mode { background-color: #2c2c2c; color: #e0e0e0; }
+        body.night-mode .container { background-color: #3a3a3a; }
+        body.night-mode h1, body.night-mode .question-number, body.night-mode .results-title, body.night-mode .results-column h3, body.night-mode .score-display, body.night-mode .questions-list-wrapper h4, body.night-mode .options-list-wrapper h4 { color: #add8e6; }
+        body.night-mode header { border-bottom-color: #555; }
+        body.night-mode .instructions { background-color: #4a4a4a; }
+        body.night-mode .audio-controls { background-color: #555; }
+        body.night-mode .part { background-color: #444; border-left-color: #007bff; }
+        body.night-mode .part-title { background-color: #007bff; }
+        body.night-mode .question { background-color: #4a4a4a; }
+        body.night-mode .option { background-color: #4a4a4a; border-color: #666; }
+        body.night-mode .option:hover { background-color: #5a5a5a; border-color: #007bff; }
+        body.night-mode .option.selected { background-color: #007bff; border-color: #0056b3; }
+        body.night-mode .completion-input { background-color: #555; border-color: #777; color: #e0e0e0; }
+        body.night-mode .questions-list-wrapper, body.night-mode .options-list-wrapper { background-color: #4a4a4a; border-color: #666; }
+        body.night-mode .question-item { background-color: #555; border-color: #666; }
+        body.night-mode .question-drop-target { background-color: #333; border-color: #007bff; }
+        body.night-mode .draggable-option { background-color: #555; border-color: #007bff; }
+        body.night-mode #submit-btn { background-color: #28a745; }
+        body.night-mode .results-container { background-color: #4a4a4a; }
+        
+        #night-mode-toggle { position: absolute; top: 15px; right: 20px; background: none; border: 1px solid #ccc; color: #333; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+        body.night-mode #night-mode-toggle { color: #e0e0e0; border-color: #666; }
+        body.night-mode #night-mode-toggle .fa-sun { display: none; }
+        body.night-mode #night-mode-toggle .fa-sun { display: inline-block; }
+        body.night-mode #night-mode-toggle .fa-moon { display: none; }
+
+
+        @media (max-width: 768px) {
+            .results-columns, .drag-match-container { flex-direction: column; }
+            #night-mode-toggle { position: static; margin: 15px auto 0; }
+        }
+
+        /* Specific styles for the "Choose TWO" options to be horizontal */
+        .multi-select-two-group .options {
+            flex-direction: row; /* Ensure horizontal layout */
+            justify-content: flex-start; /* Align options to the start */
+            flex-wrap: wrap; /* Allow wrapping if space is limited */
+        }
+        .multi-select-two-group .options .option {
+            flex: none; /* Prevent options from growing to fill space */
+            width: auto; /* Allow content to determine width */
+            min-width: unset; /* Remove minimum width constraint */
+        }
+
+        /* Styles for the new table-like selection for Q12-15 */
+        .table-selection-group {
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow-x: auto; /* Enable horizontal scrolling for small screens */
+        }
+
+        .selection-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        .selection-table th, .selection-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .selection-table th {
+            background-color: #e8f4f8;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .selection-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .selection-table .question-cell {
+            text-align: left;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .selection-table .option-cell {
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .selection-table .option-cell:hover {
+            background-color: #f0f8ff;
+        }
+
+        .selection-table .option-cell.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        body.night-mode .table-selection-group {
+            background-color: #4a4a4a;
+        }
+        body.night-mode .selection-table th {
+            background-color: #444;
+            color: #add8e6;
+        }
+        body.night-mode .selection-table td {
+            border-color: #666;
+        }
+        body.night-mode .selection-table tr:nth-child(even) {
+            background-color: #555;
+        }
+        body.night-mode .selection-table .question-cell {
+            color: #e0e0e0;
+        }
+        body.night-mode .selection-table .option-cell:hover {
+            background-color: #5a5a5a;
+        }
+        body.night-mode .selection-table .option-cell.selected {
+            background-color: #007bff;
+            border-color: #0056b3;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IELTS Listening Test 3</h1>
+            <button id="night-mode-toggle" title="Toggle Night Mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+        </header>
+
+        <div class="audio-controls">
+            <button id="start-btn">Start Test</button>
+            <div class="audio-player" id="audio-player" style="display: none;">
+                <audio id="audio-source" controls>
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+
+        <form id="listening-test">
+            <!-- PART 1 -->
+            <div class="part">
+                <div class="part-title">PART 1</div>
+                <div class="instructions">
+                    <p>Questions 1–10</p>
+                    <p>Complete the form below.</p>
+                    <p>Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.</p>
+                </div>
+                <div class="question-group">
+                    <h3>Sailing Courses</h3>
+                    <div class="question">
+                        <p>Example: There will be a Taster Day on 22nd June</p>
+                        <h4>Two-day course</h4>
+                        <p>This covers basic techniques.</p>
+                        <p>Children are always accompanied by their <span class="question-number">1</span> <input type="text" class="completion-input" name="q1"></p>
+                        <p>Cost: <span class="question-number">2</span> £<input type="text" class="completion-input" name="q2"></p>
+                    </div>
+                    <div class="question">
+                        <h4>Five-day course</h4>
+                        <p>Cost: £125</p>
+                        <p>Children can sail alone from the third day onwards.</p>
+                        <p>Children learn how to sail in different kinds of weather.</p>
+                        <p>Children receive a <span class="question-number">3</span> <input type="text" class="completion-input" name="q3"> on the last day.</p>
+                    </div>
+                    <div class="question">
+                        <h4>Clothing</h4>
+                        <p>Children should wear warm clothes.</p>
+                        <p>Children must wear <span class="question-number">4</span> <input type="text" class="completion-input" name="q4"></p>
+                        <p>Children are recommended to bring extra trousers which are <span class="question-number">5</span> <input type="text" class="completion-input" name="q5"></p>
+                        <p>Children are not allowed to wear <span class="question-number">6</span> <input type="text" class="completion-input" name="q6"></p>
+                    </div>
+                    <div class="question">
+                        <h4>Additional information</h4>
+                        <p>Visitors can buy a <span class="question-number">7</span> <input type="text" class="completion-input" name="q7"> in the Marina Stores.</p>
+                        <p>There is a free car park next to the <span class="question-number">8</span> <input type="text" class="completion-input" name="q8"></p>
+                        <p>Send the registration form two weeks before the course.</p>
+                        <p>Remember to include the name of Jacob's <span class="question-number">9</span> <input type="text" class="completion-input" name="q9"></p>
+                        <p>There is an optional form giving permission to take <span class="question-number">10</span> <input type="text" class="completion-input" name="q10"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 2 -->
+            <div class="part">
+                <div class="part-title">PART 2</div>
+                <div class="instructions">
+                    <p>Questions 11–20</p>
+                    <p>Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</p>
+                </div>
+                <div class="question-group">
+                    <div class="question">
+                        <p><span class="question-number">11</span> At the present time, Stanley Island can be reached by</p>
+                        <div class="options"><div class="option" data-value="A">A hovercraft.</div><div class="option" data-value="B">B plane.</div><div class="option" data-value="C">C ferry.</div></div>
+                        <input type="hidden" name="q11" id="q11_hidden">
+                    </div>
+                </div>
+                <div class="instructions">
+                    <p>Questions 12-15</p>
+                    <p>Where can the following facilities and attractions be found?</p>
+                    <p>Write the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>, next to questions 12-15.</p>
+                    <p>A The North Coast</p>
+                    <p>B The South Coast</p>
+                    <p>C The East Coast</p>
+                </div>
+                <div class="table-selection-group">
+                    <table class="selection-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-question-id="q12">
+                                <td class="question-cell"><span class="question-number">12</span> golf courses</td>
+                                <td class="option-cell" data-value="A"></td>
+                                <td class="option-cell" data-value="B"></td>
+                                <td class="option-cell" data-value="C"></td>
+                            </tr>
+                            <tr data-question-id="q13">
+                                <td class="question-cell"><span class="question-number">13</span> family hotels</td>
+                                <td class="option-cell" data-value="A"></td>
+                                <td class="option-cell" data-value="B"></td>
+                                <td class="option-cell" data-value="C"></td>
+                            </tr>
+                            <tr data-question-id="q14">
+                                <td class="question-cell"><span class="question-number">14</span> self-catering flats</td>
+                                <td class="option-cell" data-value="A"></td>
+                                <td class="option-cell" data-value="B"></td>
+                                <td class="option-cell" data-value="C"></td>
+                            </tr>
+                            <tr data-question-id="q15">
+                                <td class="question-cell"><span class="question-number">15</span> nature walks</td>
+                                <td class="option-cell" data-value="A"></td>
+                                <td class="option-cell" data-value="B"></td>
+                                <td class="option-cell" data-value="C"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="q12" id="q12_hidden">
+                    <input type="hidden" name="q13" id="q13_hidden">
+                    <input type="hidden" name="q14" id="q14_hidden">
+                    <input type="hidden" name="q15" id="q15_hidden">
+                </div>
+                <div class="instructions">
+                    <p>Questions 16-20</p>
+                    <p>Complete the notes below.</p>
+                    <p>Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
+                </div>
+                <div class="question-group">
+                    <h3>Advice to Visitors</h3>
+                    <div class="question">
+                        <p>Bring your own <span class="question-number">16</span> <input type="text" class="completion-input" name="q16"> and insect spray</p>
+                        <p>It may not be possible to use your <span class="question-number">17</span> <input type="text" class="completion-input" name="q17"> in the western area.</p>
+                        <p>Don't drink water from <span class="question-number">18</span> <input type="text" class="completion-input" name="q18"></p>
+                        <p>Be careful of the <span class="question-number">19</span> <input type="text" class="completion-input" name="q19"> as they bite</p>
+                        <p>Try the local <span class="question-number">20</span> <input type="text" class="completion-input" name="q20"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 3 -->
+            <div class="part">
+                <div class="part-title">PART 3</div>
+                <div class="instructions">
+                    <p>Questions 21-24</p>
+                    <p>Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</p>
+                </div>
+                <div class="question-group">
+                    <h3>Research on absence from work</h3>
+                    <div class="question"><p><span class="question-number">21</span> Laura chose Burcock Engineering for her research because</p><div class="options"><div class="option" data-value="A">A she was contacted by the managing director.</div><div class="option" data-value="B">B she knew several people who worked there.</div><div class="option" data-value="C">C she had already done a work placement there.</div></div><input type="hidden" name="q21" id="q21_hidden"></div>
+                    <div class="question"><p><span class="question-number">22</span> What does Laura agree to do regarding the central theme of her research?</p><div class="options"><div class="option" data-value="A">A check it is relevant</div><div class="option" data-value="B">B broaden the focus</div><div class="option" data-value="C">C be more specific in her aims</div></div><input type="hidden" name="q22" id="q22_hidden"></div>
+                    <div class="question"><p><span class="question-number">23</span> What does Laura expect to find from her research?</p><div class="options"><div class="option" data-value="A">A Absence rates are related to the type of work done.</div><div class="option" data-value="B">B A lot of worker absence is actually unnecessary.</div><div class="option" data-value="C">C Employee absence rates are increasing.</div></div><input type="hidden" name="q23" id="q23_hidden"></div>
+                    <div class="question"><p><span class="question-number">24</span> What employee information does the tutor think Laura will be able to obtain from company records?</p><div class="options"><div class="option" data-value="A">A dates of birth</div><div class="option" data-value="B">B details of employment</div><div class="option" data-value="C">C individual records of absence</div></div><input type="hidden" name="q24" id="q24_hidden"></div>
+                </div>
+                <div class="instructions">
+                    <p>Questions 25 and 26</p>
+                    <p>Choose TWO letters, <strong>A-E</strong>.</p>
+                    <p>Which TWO recommendations does the tutor make about Laura s questionnaire?</p>
+                </div>
+                 <div class="question-group multi-select-two-group" id="q25_26_group">
+                    <div class="options">
+                        <div class="option" data-value="A">A Leave a space for contact details.</div>
+                        <div class="option" data-value="B">B Specify a completion date.</div>
+                        <div class="option" data-value="C">C Provide a mixture of question types.</div>
+                        <div class="option" data-value="D">D Keep the length to a minimum.</div>
+                        <div class="option" data-value="E">E Trial it on someone before finalising it.</div>
+                    </div>
+                    <input type="hidden" name="q25_26_selected" id="q25_26_selected_hidden">
+                 </div>
+                <div class="instructions">
+                    <p>Questions 27 and 28</p>
+                    <p>Choose TWO letters, <strong>A-E</strong>.</p>
+                    <p>Which TWO things will Laura explain in her covering letter to participants?</p>
+                </div>
+                <div class="question-group multi-select-two-group" id="q27_28_group">
+                    <div class="options">
+                        <div class="option" data-value="A">A when the questionnaire should be completed</div>
+                        <div class="option" data-value="B">B the fact that participation in the survey is voluntary</div>
+                        <div class="option" data-value="C">C how long the questionnaire is likely to take</div>
+                        <div class="option" data-value="D">D the purpose of the survey</div>
+                        <div class="option" data-value="E">E the benefits of participation in the survey</div>
+                    </div>
+                    <input type="hidden" name="q27_28_selected" id="q27_28_selected_hidden">
+                </div>
+                <div class="instructions">
+                    <p>Questions 29 and 30</p>
+                    <p>Choose TWO letters, <strong>A-E</strong>.</p>
+                    <p>Which TWO activities does Laura already have definite dates for?</p>
+                </div>
+                <div class="question-group multi-select-two-group" id="q29_30_group">
+                    <div class="options">
+                        <div class="option" data-value="A">A completion of her finished assignment</div>
+                        <div class="option" data-value="B">B questionnaire distribution</div>
+                        <div class="option" data-value="C">C collection of completed questionnaires</div>
+                        <div class="option" data-value="D">D the next meeting with her tutor</div>
+                        <div class="option" data-value="E">E analysis of figures from the company's database</div>
+                    </div>
+                    <input type="hidden" name="q29_30_selected" id="q29_30_selected_hidden">
+                </div>
+            </div>
+
+            <!-- PART 4 -->
+            <div class="part">
+                <div class="part-title">PART 4</div>
+                <div class="instructions">
+                    <p>Questions 31-40</p>
+                    <p>Complete the notes below.</p>
+                    <p>Write <strong>ONE WORD ONLY</strong> for each answer.</p>
+                </div>
+                <div class="question-group">
+                    <h3>Transhumance</h3>
+                    <h4>Two Types of Transhumance</h4>
+                    <div class="question">
+                        <p>fixed: mainly in countries with predictable seasons, e.g. Switzerland</p>
+                        <p>nomadic: in areas with unpredictable climatic conditions. e.g. Somalia</p>
+                    </div>
+                    <h4>Study on the Movement of Pastoralists</h4>
+                    <div class="question">
+                        <p>for fixed transhumance, the pattern of movement is described as</p>
+                        <p><span class="question-number">31</span> <input type="text" class="completion-input" name="q31"></p>
+                        <p>while for nomadic transhumance, the pattern is more complex and varied</p>
+                    </div>
+                    <h4>Differences in terms of Homes</h4>
+                    <div class="question">
+                        <p>fixed transhumance live in a semi-permanent shelter on high ground</p>
+                        <p>such as <span class="question-number">32</span> <input type="text" class="completion-input" name="q32"></p>
+                        <p>nomadic transhumance always stay in portable shelters, e.g. homes of</p>
+                        <p>the Gabra people carried on <span class="question-number">33</span> <input type="text" class="completion-input" name="q33"></p>
+                    </div>
+                    <h4>Number of People Involved</h4>
+                    <div class="question">
+                        <p>for fixed transhumance, only <span class="question-number">34</span> <input type="text" class="completion-input" name="q34"></p>
+                        <p>the journey</p>
+                        <p>pastoralists make</p>
+                        <p>however, all nomadic transhumance migrate with their livestock</p>
+                    </div>
+                    <h4>Diet and Goods</h4>
+                    <div class="question">
+                        <p>people who do not leave the valleys may become</p>
+                        <p><span class="question-number">35</span> <input type="text" class="completion-input" name="q35"></p>
+                        <p>exchange animals with other communities for <span class="question-number">36</span> <input type="text" class="completion-input" name="q36"></p>
+                        <p>herds provide all needs-food and <span class="question-number">37</span> <input type="text" class="completion-input" name="q37"></p>
+                    </div>
+                    <h4>Research in Algeria in North Africa</h4>
+                    <div class="question">
+                        <p>they traditionally arrive in time to help local residents with the</p>
+                        <p><span class="question-number">38</span> <input type="text" class="completion-input" name="q38"></p>
+                        <p>their homes are <span class="question-number">39</span> <input type="text" class="completion-input" name="q39"></p>
+                        <p>which are temporary shelters</p>
+                        <p>a better term to describe this type of transhumance might be</p>
+                        <p><span class="question-number">40</span> <input type="text" class="completion-input" name="q40"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="button" id="submit-btn">Submit Answers</button>
+            </div>
+        </form>
+
+        <div class="results-container" id="results-container">
+            <h2 class="results-title">Your Answers</h2>
+            <div id="score-display"></div>
+            <div class="results-columns">
+                <div class="results-column">
+                    <h3>Questions 1-20</h3>
+                    <div id="results-1-20"></div>
+                </div>
+                <div class="results-column">
+                    <h3>Questions 21-40</h3>
+                    <div id="results-21-40"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="highlight-popup">Highlight</div>
+    <div id="progress-bar"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('listening-test');
+            
+            // --- Audio Playback ---
+            const startBtn = document.getElementById('start-btn');
+            const audioPlayerDiv = document.getElementById('audio-player');
+            const audioSource = document.getElementById('audio-source');
+            
+            const audioFiles = [
+                'test3_p1.mp3',
+                'test3_p2.mp3',
+                'test3_p3.mp3',
+                'test3_p4.mp3'
+            ];
+            let currentAudioIndex = 0;
+
+            function playNextAudio() {
+                if (currentAudioIndex < audioFiles.length) {
+                    audioSource.src = audioFiles[currentAudioIndex];
+                    audioSource.play();
+                    currentAudioIndex++;
+                } else {
+                    // All audio files have been played
+                    startBtn.textContent = 'Test Completed';
+                    startBtn.disabled = true;
+                }
+            }
+
+            startBtn.addEventListener('click', function() {
+                audioPlayerDiv.style.display = 'block';
+                startBtn.textContent = 'Playing...';
+                startBtn.disabled = true;
+                playNextAudio(); // Start playing the first audio
+            });
+
+            audioSource.addEventListener('ended', function() {
+                playNextAudio(); // Play the next audio when the current one ends
+            });
+
+            // --- Table-like selection for Q12-15 ---
+            document.querySelectorAll('.selection-table .option-cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const questionId = row.dataset.questionId;
+                    const selectedValue = this.dataset.value;
+                    const hiddenInput = document.getElementById(`${questionId}_hidden`);
+
+                    // Deselect all cells in the same row
+                    row.querySelectorAll('.option-cell').forEach(c => c.classList.remove('selected'));
+
+                    // Select the clicked cell
+                    this.classList.add('selected');
+                    hiddenInput.value = selectedValue;
+                    updateProgressBar();
+                });
+            });
+
+
+            // --- Multiple Choice Selection & "Choose TWO" Logic ---
+            form.querySelectorAll('.options .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionGroup = this.closest('.question-group');
+                    const isMultiSelectTwo = questionGroup.classList.contains('multi-select-two-group');
+
+                    if (isMultiSelectTwo) {
+                        const clickedOptionValue = this.dataset.value;
+                        const hiddenInput = questionGroup.querySelector('input[type="hidden"]');
+                        let currentSelections = hiddenInput.value ? hiddenInput.value.split(',').filter(Boolean) : []; // Filter Boolean to remove empty strings
+
+                        if (this.classList.contains('selected')) {
+                            // Deselect if already selected
+                            this.classList.remove('selected');
+                            currentSelections = currentSelections.filter(val => val !== clickedOptionValue);
+                        } else {
+                            // Select if not selected
+                            if (currentSelections.length < 2) {
+                                this.classList.add('selected');
+                                currentSelections.push(clickedOptionValue);
+                            } else {
+                                // If already two selected, deselect the oldest and select the new one
+                                const firstSelectedValue = currentSelections.shift(); // Remove the first (oldest)
+                                const firstSelectedOption = questionGroup.querySelector(`.option[data-value="${firstSelectedValue}"]`);
+                                if (firstSelectedOption) {
+                                    firstSelectedOption.classList.remove('selected');
+                                }
+                                this.classList.add('selected');
+                                currentSelections.push(clickedOptionValue);
+                            }
+                        }
+                        hiddenInput.value = currentSelections.join(',');
+                    } else {
+                        // Standard single-choice logic
+                        const siblings = this.parentElement.querySelectorAll('.option');
+                        siblings.forEach(sib => sib.classList.remove('selected'));
+                        this.classList.add('selected');
+                        const questionInput = this.closest('.question').querySelector('input[type="hidden"]');
+                        questionInput.value = this.dataset.value;
+                    }
+                    updateProgressBar();
+                });
+            });
+
+            // --- Night Mode Toggle ---
+            const nightModeToggle = document.getElementById('night-mode-toggle');
+            const body = document.body;
+            const isNightMode = localStorage.getItem('nightMode') === 'enabled';
+            if (isNightMode) { body.classList.add('night-mode'); }
+            nightModeToggle.addEventListener('click', () => {
+                body.classList.toggle('night-mode');
+                localStorage.setItem('nightMode', body.classList.contains('night-mode') ? 'enabled' : 'disabled');
+            });
+
+            // --- Drag and Drop Logic (Not used in this test, but kept for consistency) ---
+            function setupDragDrop(containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                let draggedItem = null;
+
+                container.addEventListener('dragstart', e => {
+                    if (e.target.classList.contains('draggable-option') || e.target.classList.contains('matched-option')) {
+                        draggedItem = e.target;
+                        setTimeout(() => e.target.style.display = 'none', 0);
+                        e.dataTransfer.setData('text/plain', e.target.dataset.optionId);
+                    }
+                });
+
+                container.addEventListener('dragend', () => {
+                    if (draggedItem) {
+                        draggedItem.style.display = 'block';
+                        draggedItem = null;
+                    }
+                });
+                
+                container.addEventListener('dragover', e => e.preventDefault());
+
+                container.querySelectorAll('.question-drop-target, .options-list-wrapper').forEach(zone => {
+                    zone.addEventListener('dragenter', e => {
+                        e.preventDefault();
+                        if (zone.classList.contains('question-drop-target') || zone.classList.contains('options-list-wrapper')) {
+                           zone.classList.add('drag-over');
+                        }
+                    });
+                    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+                    zone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        zone.classList.remove('drag-over');
+                        if (!draggedItem) return;
+
+                        const optionId = draggedItem.dataset.optionId;
+                        const originalOption = container.querySelector(`.draggable-option[data-option-id="${optionId}"]`);
+                        const sourceQuestionId = draggedItem.parentElement.dataset.questionId;
+
+                        // If dropping back into the options list
+                        if (zone.classList.contains('options-list-wrapper')) {
+                            if (originalOption) originalOption.classList.remove('hidden');
+                            if(draggedItem.classList.contains('matched-option')) {
+                                document.getElementById(`${sourceQuestionId}_hidden`).value = '';
+                                draggedItem.remove();
+                            }
+                        } 
+                        // If dropping into a question target
+                        else if (zone.classList.contains('question-drop-target')) {
+                            // If target has an item, return it
+                            if (zone.children.length > 0) {
+                                const oldOptionId = zone.children[0].dataset.optionId;
+                                const oldOriginalOption = container.querySelector(`.draggable-option[data-option-id="${oldOptionId}"]`);
+                                if (oldOriginalOption) oldOriginalOption.classList.remove('hidden');
+                            }
+                            
+                            // Add new item
+                            if (originalOption) originalOption.classList.add('hidden');
+                             if(draggedItem.classList.contains('matched-option')) {
+                                document.getElementById(`${sourceQuestionId}_hidden`).value = '';
+                            }
+                            
+                            const newMatchedOption = document.createElement('div');
+                            newMatchedOption.className = 'matched-option';
+                            newMatchedOption.draggable = true;
+                            newMatchedOption.dataset.optionId = optionId;
+                            newMatchedOption.textContent = optionId;
+                            zone.innerHTML = '';
+                            zone.appendChild(newMatchedOption);
+                            document.getElementById(`${zone.dataset.questionId}_hidden`).value = optionId;
+                        }
+                        
+                        draggedItem.style.display = 'block';
+                        draggedItem = null;
+                        updateProgressBar();
+                    });
+                });
+            }
+
+            // No drag-match sections in this test currently. If added, uncomment and configure.
+            // setupDragDrop('drag-match-XXX'); 
+
+            // --- Progress Bar ---
+            const progressBar = document.getElementById('progress-bar');
+            for (let i = 1; i <= 40; i++) {
+                const numDiv = document.createElement('div');
+                numDiv.className = 'progress-number';
+                numDiv.id = `progress-${i}`;
+                numDiv.textContent = i;
+                progressBar.appendChild(numDiv);
+            }
+
+            function updateProgressBar() {
+                for (let i = 1; i <= 40; i++) {
+                    const input = form.querySelector(`[name="q${i}"]`);
+                    const progressNum = document.getElementById(`progress-${i}`);
+                    
+                    if (input) {
+                        if (input.type === 'text' && input.value.trim() !== '') {
+                            progressNum.classList.add('answered');
+                        } else if (input.type === 'hidden' && input.value.trim() !== '') {
+                            // For single-choice MCQs and table selections
+                            progressNum.classList.add('answered');
+                        } else {
+                            progressNum.classList.remove('answered');
+                        }
+                    } else {
+                         // Special handling for multi-select hidden inputs that cover two questions
+                        if ((i === 25 || i === 26) && form.querySelector('[name="q25_26_selected"]') && form.querySelector('[name="q25_26_selected"]').value.split(',').filter(Boolean).length > 0) {
+                            document.getElementById('progress-25').classList.add('answered');
+                            document.getElementById('progress-26').classList.add('answered');
+                        } else if ((i === 27 || i === 28) && form.querySelector('[name="q27_28_selected"]') && form.querySelector('[name="q27_28_selected"]').value.split(',').filter(Boolean).length > 0) {
+                            document.getElementById('progress-27').classList.add('answered');
+                            document.getElementById('progress-28').classList.add('answered');
+                        } else if ((i === 29 || i === 30) && form.querySelector('[name="q29_30_selected"]') && form.querySelector('[name="q29_30_selected"]').value.split(',').filter(Boolean).length > 0) {
+                            document.getElementById('progress-29').classList.add('answered');
+                            document.getElementById('progress-30').classList.add('answered');
+                        } else {
+                            // Ensure they are removed if no selection
+                            if (i === 25 || i === 26) document.getElementById('progress-25').classList.remove('answered');
+                            if (i === 26) document.getElementById('progress-26').classList.remove('answered');
+                            if (i === 27 || i === 28) document.getElementById('progress-27').classList.remove('answered');
+                            if (i === 28) document.getElementById('progress-28').classList.remove('answered');
+                            if (i === 29 || i === 30) document.getElementById('progress-29').classList.remove('answered');
+                            if (i === 30) document.getElementById('progress-30').classList.remove('answered');
+                        }
+                    }
+                }
+            }
+            form.addEventListener('input', updateProgressBar);
+            form.addEventListener('click', (e) => {
+                if(e.target.classList.contains('option') || e.target.classList.contains('option-cell')) {
+                    setTimeout(updateProgressBar, 50);
+                }
+            });
+            updateProgressBar();
+
+            // --- Correct Answers & Submission ---
+            const correctAnswers = {
+                q1: "instructor",
+                q2: ["65", "sixty five"], // Handles number or word form
+                q3: "certificate",
+                q4: "shoes",
+                q5: "waterproof",
+                q6: "jeans",
+                q7: "snack",
+                q8: "bridge",
+                q9: "doctor",
+                q10: "photographs",
+                q11: "c",
+                q12: "c", // golf courses (C The East Coast)
+                q13: "b", // family hotels (B The South Coast)
+                q14: "c", // self-catering flats (C The East Coast)
+                q15: "a", // nature walks (A The North Coast)
+                q16: "medication",
+                q17: "mobile phone",
+                q18: "rivers",
+                q19: "monkeys",
+                q20: "seafood",
+                q21: "a",
+                q22: "b",
+                q23: "a",
+                q24: "b",
+                q25_26_selected: ['c', 'e'], // For the "Choose TWO" group Q25-26
+                q27_28_selected: ['c', 'd'], // For the "Choose TWO" group Q27-28
+                q29_30_selected: ['a', 'd'], // For the "Choose TWO" group Q29-30
+                q31: "vertical",
+                q32: "cabin",
+                q33: "camel",
+                q34: "young", // Changed to lowercase as per instruction
+                q35: ["farmer", "farmers"], // Added plural form
+                q36: "grain",
+                q37: "clothing",
+                q38: "harvest",
+                q39: "tents",
+                q40: "intermediate"
+            };
+
+            document.getElementById('submit-btn').addEventListener('click', function() {
+                const userAnswers = {};
+                let correctCount = 0;
+
+                // Collect answers for standard inputs and table selections
+                for (let i = 1; i <= 40; i++) {
+                    const qName = `q${i}`;
+                    const input = form.querySelector(`[name="${qName}"]`);
+                    if (input) {
+                        userAnswers[qName] = input.value.trim().toLowerCase();
+                    }
+                }
+
+                // Collect answers for multi-select-two groups
+                const q25_26_input = form.querySelector('[name="q25_26_selected"]');
+                if (q25_26_input) {
+                    userAnswers['q25_26_selected'] = q25_26_input.value.trim().toLowerCase();
+                }
+                const q27_28_input = form.querySelector('[name="q27_28_selected"]');
+                if (q27_28_input) {
+                    userAnswers['q27_28_selected'] = q27_28_input.value.trim().toLowerCase();
+                }
+                const q29_30_input = form.querySelector('[name="q29_30_selected"]');
+                if (q29_30_input) {
+                    userAnswers['q29_30_selected'] = q29_30_input.value.trim().toLowerCase();
+                }
+
+
+                for (const qName in correctAnswers) {
+                    if (!userAnswers.hasOwnProperty(qName)) continue;
+
+                    const correctAnswer = correctAnswers[qName];
+                    const userAnswer = userAnswers[qName];
+
+                    if (qName.includes('_selected')) { // Logic for "Choose TWO" questions
+                        const userSelectedArray = userAnswer.split(',').filter(Boolean); // Filter out empty strings
+                        const correctSet = correctAnswer; // Already lowercase in correctAnswers object
+
+                        let matches = 0;
+                        userSelectedArray.forEach(userVal => {
+                            if (correctSet.includes(userVal)) {
+                                matches++;
+                            }
+                        });
+                        correctCount += matches; // Add 0, 1, or 2 points
+                    } else if (Array.isArray(correctAnswer)) {
+                        // Logic for answers that can be in multiple forms (e.g., numbers, or synonyms)
+                        if (correctAnswer.includes(userAnswer)) {
+                            correctCount++;
+                        }
+                    } else {
+                        // Logic for single-word/single-letter answers
+                        if (userAnswer === correctAnswer) {
+                            correctCount++;
+                        }
+                    }
+                }
+                
+                let results1to20 = '';
+                let results21to40 = '';
+
+                for (let i = 1; i <= 40; i++) {
+                    const qName = `q${i}`;
+                    let userAns = userAnswers[qName] || 'No answer';
+                    let correctAns = '';
+
+                    // Special handling for "Choose TWO" questions for display
+                    if (i === 25 || i === 26) {
+                        userAns = userAnswers['q25_26_selected'] || 'No answer';
+                        correctAns = correctAnswers['q25_26_selected'].join(' / ').toUpperCase();
+                    } else if (i === 27 || i === 28) {
+                        userAns = userAnswers['q27_28_selected'] || 'No answer';
+                        correctAns = correctAnswers['q27_28_selected'].join(' / ').toUpperCase();
+                    } else if (i === 29 || i === 30) {
+                        userAns = userAnswers['q29_30_selected'] || 'No answer';
+                        correctAns = correctAnswers['q29_30_selected'].join(' / ').toUpperCase();
+                    }
+                    else {
+                        correctAns = Array.isArray(correctAnswers[qName]) ? correctAnswers[qName].join(' / ') : correctAnswers[qName];
+                    }
+                    
+                    const resultItem = `<div class="result-item">
+                        <span class="result-question">${i}.</span> User: ${userAns} | Correct: ${correctAns.toUpperCase()}
+                    </div>`;
+                    if (i <= 20) {
+                        results1to20 += resultItem;
+                    } else {
+                        results21to40 += resultItem;
+                    }
+                }
+
+                document.getElementById('results-1-20').innerHTML = results1to20;
+                document.getElementById('results-21-40').innerHTML = results21to40;
+                document.getElementById('score-display').textContent = `You got ${correctCount} out of 40 correct!`;
+                document.getElementById('results-container').style.display = 'block';
+                document.getElementById('results-container').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
