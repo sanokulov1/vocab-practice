@@ -851,19 +851,9 @@
   </footer>
 
   <script type="module">
-    async function createLeaderboardEntry(user) {
-  const db = getFirestore(); // or use your existing db variable
-  const leaderboardRef = doc(db, "leaderboard", user.uid);
-  await setDoc(leaderboardRef, {
-    uid: user.uid,
-    username: user.displayName || "Anonymous",
-    diamonds: 0,
-    timeSpent: 0
-  }, { merge: true });
-}
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithCredential, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-    import { getFirestore, collection, query, orderBy, limit, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
@@ -929,14 +919,9 @@
           { theme: "outline", size: "large", width: "150", text: "signin_with", shape: "pill", logo_alignment: "left" }
         );
 
-        onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await createLeaderboardEntry(user);  // ✅ creates leaderboard entry if missing
-  }
-
-  updateUI(user);
-});
-
+        onAuthStateChanged(auth, (user) => {
+            updateUI(user);
+        });
 
       } catch (error) {
         console.error("Error during Google Identity Services initialization:", error);
