@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Your original CSS from index.html */
     :root {
       --primary: #6C63FF;
       --primary-dark: #5a52e0;
@@ -44,7 +43,6 @@
       padding: 0 20px;
     }
 
-    /* Header Styles */
     header {
       display: flex;
       justify-content: space-between;
@@ -125,8 +123,8 @@
       cursor: pointer;
       transition: var(--transition);
       box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
-      text-decoration: none; /* Added for anchor tags */
-      display: inline-block; /* Added for anchor tags */
+      text-decoration: none;
+      display: inline-block;
     }
 
     .cta-button:hover {
@@ -179,7 +177,6 @@
         transform: translateY(-2px);
     }
 
-    /* --- SCOREBOARD STYLES --- */
     .scoreboard-section {
         padding: 160px 20px 80px;
         background: linear-gradient(135deg, rgba(108, 99, 255, 0.05) 0%, rgba(251, 176, 59, 0.05) 100%);
@@ -287,7 +284,6 @@
         font-weight: 500;
     }
 
-    /* --- CTA & SUBTITLE STYLES --- */
     .scoreboard-cta {
         text-align: center;
         margin-top: 40px;
@@ -320,7 +316,6 @@
     .scoreboard-subtitle i {
         color: var(--primary);
     }
-    /* --- END OF NEW STYLES --- */
 
     .features {
       padding: 100px 0;
@@ -668,9 +663,8 @@
       }
     }
   </style>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body onload="initGoogleClient()">
+<body>
   <header>
     <div class="logo" onclick="location.reload()">
       <i class="fas fa-graduation-cap"></i>
@@ -686,7 +680,6 @@
     <div id="auth-container">
       <span id="user-display" class="user-name" style="display: none;"></span>
       <button id="sign-out-button" style="display: none;" onclick="signOut()">Sign Out</button>
-      <div id="google-signin-button"></div>
     </div>
   </header>
 
@@ -705,7 +698,7 @@
                 </tr>
             </thead>
             <tbody id="scoreboard-body">
-                </tbody>
+            </tbody>
         </table>
         <p id="loading-indicator">
             <i class="fas fa-spinner fa-spin"></i> Loading Top Players...
@@ -852,9 +845,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithCredential, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-    import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
+    import { getAuth, signInAnonymously, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+  
     const firebaseConfig = {
       apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",
       authDomain: "website-vocabulary.firebaseapp.com",
@@ -864,153 +857,154 @@
       appId: "1:216286165163:web:0d45648c2b998070a11fee",
       measurementId: "G-1RZLN9HJ65"
     };
-
+  
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    const GOOGLE_CLIENT_ID = '216286165163-tdgl1mfpfmahvfej31fibiovp4ulruun.apps.googleusercontent.com';
-
-    async function handleCredentialResponse(response) {
-      try {
-        const credential = GoogleAuthProvider.credential(response.credential);
-        await setPersistence(auth, browserLocalPersistence);
-        await signInWithCredential(auth, credential);
-      } catch (error) {
-        console.error("Error during Firebase sign-in with GIS credential:", error);
+  
+    async function checkAndPromptForUsername(user) {
+      if (!user) return;
+  
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+  
+      if (!userDoc.exists() || !userDoc.data().username) {
+        alert("Welcome! Your progress is saved to this browser only. Clearing your browser data will reset your account.");
+        
+        let username = "";
+        let isUsernameUnique = false;
+  
+        while (!isUsernameUnique) {
+          username = prompt("Please create a unique username to join the leaderboard:");
+  
+          if (!username || username.length < 3) {
+            alert("Username must be at least 3 characters long.");
+            continue;
+          }
+  
+          const usersRef = collection(db, "users");
+          const q = query(usersRef, where("username", "==", username));
+          const querySnapshot = await getDocs(q);
+  
+          if (querySnapshot.empty) {
+            isUsernameUnique = true;
+          } else {
+            alert("That username is already taken. Please choose another one.");
+          }
+        }
+  
+        try {
+          await setDoc(userRef, {
+            username: username,
+            uid: user.uid,
+            diamonds: 0,
+            timeSpent: 0
+          });
+          updateUI({ ...user, displayName: username });
+        } catch (error) {
+          console.error("Error saving username:", error);
+        }
+      } else {
+        updateUI({ ...user, displayName: userDoc.data().username });
       }
     }
-
+  
     function updateUI(user) {
       const userDisplayName = document.getElementById('user-display');
       const signOutButton = document.getElementById('sign-out-button');
-      const googleSignInButtonDiv = document.getElementById('google-signin-button');
-
-      if (user) {
-        userDisplayName.innerHTML = `Hello, ${user.displayName || user.email}!`;
+  
+      if (user && user.displayName) {
+        userDisplayName.innerHTML = `Welcome, ${user.displayName}!`;
         userDisplayName.style.display = 'inline-block';
         signOutButton.style.display = 'inline-block';
-        googleSignInButtonDiv.style.display = 'none';
       } else {
         userDisplayName.style.display = 'none';
         signOutButton.style.display = 'none';
-        googleSignInButtonDiv.style.display = 'block';
       }
     }
-
-    window.signOut = async function() {
-      try {
-        await firebaseSignOut(auth);
-      } catch (error) {
-        console.error("Error signing out from Firebase Auth:", error);
-      }
-    }
-
-    window.initGoogleClient = function() {
-      try {
-        google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleCredentialResponse,
-          auto_select: true,
-        });
-
-        google.accounts.id.renderButton(
-          document.getElementById("google-signin-button"),
-          { theme: "outline", size: "large", width: "150", text: "signin_with", shape: "pill", logo_alignment: "left" }
-        );
-
-        onAuthStateChanged(auth, (user) => {
-            updateUI(user);
-        });
-
-      } catch (error) {
-        console.error("Error during Google Identity Services initialization:", error);
-      }
-    };
     
+    window.signOut = async function() {
+      if (confirm("Signing out will permanently delete your anonymous account and all progress. Are you sure?")) {
+          try {
+              await auth.currentUser.delete();
+              await firebaseSignOut(auth);
+              location.reload();
+          } catch(error) {
+              console.error("Error deleting anonymous user:", error);
+              alert("Could not sign out. Please try again.");
+          }
+      }
+    }
+  
     function formatTime(totalSeconds) {
-        if (isNaN(totalSeconds) || totalSeconds < 0) {
-            return "0s";
-        }
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = Math.floor(totalSeconds % 60);
-        let timeString = '';
-        if (hours > 0) timeString += `${hours}h `;
-        if (minutes > 0) timeString += `${minutes}m `;
-        if (seconds >= 0) timeString += `${seconds}s`;
-        return timeString.trim() || "0s";
+      if (isNaN(totalSeconds) || totalSeconds < 0) return "0s";
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+      let timeString = '';
+      if (hours > 0) timeString += `${hours}h `;
+      if (minutes > 0) timeString += `${minutes}m `;
+      if (seconds >= 0) timeString += `${seconds}s`;
+      return timeString.trim() || "0s";
     }
-
+  
     async function fetchAndDisplayScoreboard() {
-        const scoreboardBody = document.getElementById('scoreboard-body');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        
-        try {
-            const leaderboardRef = collection(db, "leaderboard");
-            const q = query(leaderboardRef, orderBy("diamonds", "desc"), limit(10));
-
-            const querySnapshot = await getDocs(q);
-
-            let rank = 1;
-            let tableHtml = '';
-
-            querySnapshot.forEach(doc => {
-                const userData = doc.data();
-                const playerName = userData.username || 'Anonymous Player';
-                const diamonds = userData.diamonds || 0;
-                const timeSpent = formatTime(userData.timeSpent || 0);
-
-                tableHtml += `
-                    <tr>
-                        <td class="rank">${rank}</td>
-                        <td class="player-name">${playerName}</td>
-                        <td class="diamonds">${diamonds} 💎</td>
-                        <td class="time-spent">${timeSpent}</td>
-                    </tr>
-                `;
-                rank++;
-            });
-            
-            if (querySnapshot.empty) {
-                loadingIndicator.textContent = "No players on the leaderboard yet. Be the first!";
-            } else {
-                scoreboardBody.innerHTML = tableHtml;
-                loadingIndicator.style.display = 'none';
-            }
-
-        } catch (error) {
-            console.error("Error fetching scoreboard data: ", error);
-            loadingIndicator.innerHTML = `Could not load leaderboard. <br><small>Please check the console for an index creation link.</small>`;
-        }
+      const scoreboardBody = document.getElementById('scoreboard-body');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      try {
+          const leaderboardRef = collection(db, "leaderboard");
+          const q = query(leaderboardRef, orderBy("diamonds", "desc"), limit(10));
+          const querySnapshot = await getDocs(q);
+          let rank = 1;
+          let tableHtml = '';
+          querySnapshot.forEach(doc => {
+              const userData = doc.data();
+              const playerName = userData.username || 'Anonymous Player';
+              const diamonds = userData.diamonds || 0;
+              const timeSpent = formatTime(userData.timeSpent || 0);
+              tableHtml += `
+                  <tr>
+                      <td class="rank">${rank++}</td>
+                      <td class="player-name">${playerName}</td>
+                      <td class="diamonds">${diamonds} 💎</td>
+                      <td class="time-spent">${timeSpent}</td>
+                  </tr>
+              `;
+          });
+          if (querySnapshot.empty) {
+              loadingIndicator.textContent = "No players on the leaderboard yet. Be the first!";
+          } else {
+              scoreboardBody.innerHTML = tableHtml;
+              loadingIndicator.style.display = 'none';
+          }
+      } catch (error) {
+          console.error("Error fetching scoreboard data: ", error);
+          loadingIndicator.innerHTML = `Could not load leaderboard. <br><small>Please check the console for an index creation link.</small>`;
+      }
     }
-
+  
     document.addEventListener('DOMContentLoaded', function() {
-        fetchAndDisplayScoreboard();
-
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('click', function() {
-                if (this.dataset.href && this.dataset.href !== '#') {
-                    window.location.href = this.dataset.href;
-                }
-            });
+      fetchAndDisplayScoreboard();
+  
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          console.log("Anonymous user found:", user.uid);
+          checkAndPromptForUsername(user);
+        } else {
+          console.log("No user found. Signing in anonymously...");
+          signInAnonymously(auth).catch(error => {
+            console.error("Anonymous sign-in failed:", error);
+          });
+        }
+      });
+  
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('click', function() {
+            if (this.dataset.href && this.dataset.href !== '#') {
+                window.location.href = this.dataset.href;
+            }
         });
-
-        document.querySelectorAll('nav a, .scroll-link').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                if (targetId.startsWith('#')) {
-                    e.preventDefault();
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-            });
-        });
+      });
     });
   </script>
 </body>
