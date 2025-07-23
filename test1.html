@@ -338,7 +338,7 @@
         
         #night-mode-toggle { position: absolute; top: 15px; right: 20px; background: none; border: 1px solid #ccc; color: #333; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
         body.night-mode #night-mode-toggle { color: #e0e0e0; border-color: #666; }
-        #night-mode-toggle .fa-sun { display: none; }
+        body.night-mode #night-mode-toggle .fa-sun { display: none; }
         body.night-mode #night-mode-toggle .fa-sun { display: inline-block; }
         body.night-mode #night-mode-toggle .fa-moon { display: none; }
 
@@ -383,7 +383,7 @@
                     <div class="question">
                         <h4>Customer's personal details</h4>
                         <p>Customer's name: Anna Woods</p>
-                        <p><span class="question-number">1</span> Current address: 118 <input type="text" class="completion-input" name="q1"> Park, Ballysillan</p>
+                        <p><span class="question-number">1</span> Current address: 118 <input type="text" class="completion-input" name="q1"></p>
                         <p>Postcode: BT149BJ</p>
                         <p><span class="question-number">2</span> Phone No: <input type="text" class="completion-input" name="q2"> (Mobile)</p>
                     </div>
@@ -589,12 +589,35 @@
             const audioPlayerDiv = document.getElementById('audio-player');
             const audioSource = document.getElementById('audio-source');
             
+            const audioFiles = [
+                'test1_p1.mp3',
+                'test1_p2.mp3',
+                'test1_p3.mp3',
+                'test1_p4.mp3'
+            ];
+            let currentAudioIndex = 0;
+
+            function playNextAudio() {
+                if (currentAudioIndex < audioFiles.length) {
+                    audioSource.src = audioFiles[currentAudioIndex];
+                    audioSource.play();
+                    currentAudioIndex++;
+                } else {
+                    // All audio files have been played
+                    startBtn.textContent = 'Test Completed';
+                    startBtn.disabled = true;
+                }
+            }
+
             startBtn.addEventListener('click', function() {
                 audioPlayerDiv.style.display = 'block';
-                audioSource.src = 'test1.mp3'; // Correct audio file
-                audioSource.play();
                 startBtn.textContent = 'Playing...';
                 startBtn.disabled = true;
+                playNextAudio(); // Start playing the first audio
+            });
+
+            audioSource.addEventListener('ended', function() {
+                playNextAudio(); // Play the next audio when the current one ends
             });
 
             // --- Multiple Choice Selection ---
