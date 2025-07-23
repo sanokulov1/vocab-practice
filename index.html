@@ -135,36 +135,26 @@
     /* --- HERO SECTION STYLES --- */
     .hero {
         display: flex;
+        flex-direction: column; /* Changed to column to stack title and grid */
         align-items: center;
         justify-content: center;
         text-align: center;
         min-height: 80vh;
-        padding: 180px 20px 80px;
+        padding: 120px 20px 80px; /* Adjusted padding for header */
         background: linear-gradient(135deg, rgba(108, 99, 255, 0.05) 0%, rgba(251, 176, 59, 0.05) 100%);
     }
 
-    .hero-content {
-        max-width: 800px;
-        animation: fadeInUp 1s ease-out;
-    }
-
-    .hero h1 {
+    .hero-title { /* Added a class for the new title */
         font-size: 3.5rem;
         font-weight: 700;
         color: var(--dark);
-        margin-bottom: 20px;
+        margin-bottom: 50px; /* Increased margin for separation */
         line-height: 1.2;
+        animation: fadeInUp 1s ease-out;
     }
     
-    .hero h1 span {
+    .hero-title span {
         color: var(--primary);
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-        color: var(--gray);
-        max-width: 600px;
-        margin: 0 auto 30px;
     }
 
     .features {
@@ -195,6 +185,9 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
+      width: 100%; /* Ensure grid takes full width in hero */
+      max-width: 1000px; /* Limit width for aesthetics */
+      margin: 0 auto; /* Center the grid */
     }
 
     .feature-card {
@@ -206,6 +199,23 @@
       position: relative;
       z-index: 1;
       cursor: pointer;
+    }
+
+    /* New "New" badge style */
+    .feature-card .new-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: var(--secondary);
+        color: white;
+        padding: 5px 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        border-bottom-left-radius: 10px;
+        z-index: 10;
+        transform: translate(0px, 0px); /* Adjust position slightly */
+        box-shadow: 0 2px 5px rgba(251, 176, 59, 0.3);
+        animation: pulse 1.5s infinite ease-in-out; /* Bouncy effect */
     }
 
     .feature-card::before {
@@ -475,6 +485,16 @@
       }
     }
 
+    /* New Keyframes for Bouncy/Pulse Effect */
+    @keyframes pulse {
+        0% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(1.05) rotate(2deg); }
+        50% { transform: scale(1) rotate(0deg); }
+        75% { transform: scale(1.05) rotate(-2deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+
     @media (max-width: 768px) {
       header {
         padding: 15px 20px;
@@ -485,8 +505,11 @@
       nav {
         display: none; /* Consider a hamburger menu for mobile */
       }
-      .hero h1 {
+      .hero-title {
         font-size: 2.5rem;
+      }
+      .features-grid {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
       }
     }
   </style>
@@ -507,19 +530,8 @@
     </header>
 
   <section class="hero">
-    <div class="hero-content">
-        <h1>Master English with <span>Effective</span> Learning Tools</h1>
-        <p>Your journey to fluent English starts here. Explore our interactive features and personalized lessons to achieve your language goals.</p>
-        <a href="#features-section" class="cta-button">Explore Features</a>
-    </div>
-  </section>
-
-  <section class="features" id="features-section">
     <div class="container">
-      <div class="section-header">
-        <h2>Learning Features</h2>
-        <p>Discover our comprehensive tools designed to accelerate your language learning journey</p>
-      </div>
+      <h1 class="hero-title">Master English with <span>Effective</span> Learning Tools</h1>
       <div class="features-grid">
         <div class="feature-card" data-href="vocab-practice.html">
           <div class="feature-icon"><i class="fas fa-brain"></i></div>
@@ -530,6 +542,7 @@
           </div>
         </div>
         <div class="feature-card" data-href="listeningreading.html">
+          <span class="new-badge">NEW</span>
           <div class="feature-icon"><i class="fas fa-book-reader"></i></div>
           <div class="feature-content">
             <h3>Listening and Reading Practice Tests</h3>
@@ -656,20 +669,8 @@
             });
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80, // Adjust for fixed header
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+        // Removed smooth scroll for anchor links as the "Explore Features" button is gone.
+        // If other anchor links are added later, this script might need re-evaluation.
     });
   </script>
 </body>
