@@ -339,8 +339,8 @@
         #night-mode-toggle { position: absolute; top: 15px; right: 20px; background: none; border: 1px solid #ccc; color: #333; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
         body.night-mode #night-mode-toggle { color: #e0e0e0; border-color: #666; }
         body.night-mode #night-mode-toggle .fa-sun { display: none; }
-        body.night-mode #night-mode-toggle .fa-sun { display: inline-block; }
-        body.night-mode #night-mode-toggle .fa-moon { display: none; }
+        body.night-mode #night-mode-toggle .fa-moon { display: inline-block; } /* Corrected for night mode */
+        body.night-mode #night-mode-toggle .fa-sun { display: none; } /* Corrected for night mode */
 
 
         @media (max-width: 768px) {
@@ -370,7 +370,6 @@
         </div>
 
         <form id="listening-test">
-            <!-- PART 1 -->
             <div class="part">
                 <div class="part-title">PART 1</div>
                 <div class="instructions">
@@ -407,7 +406,6 @@
                 </div>
             </div>
 
-            <!-- PART 2 -->
             <div class="part">
                 <div class="part-title">PART 2</div>
                 <div class="instructions">
@@ -471,7 +469,6 @@
                 </div>
             </div>
 
-            <!-- PART 3 -->
             <div class="part">
                 <div class="part-title">PART 3</div>
                 <div class="instructions">
@@ -516,7 +513,6 @@
                 </div>
             </div>
 
-            <!-- PART 4 -->
             <div class="part">
                 <div class="part-title">PART 4</div>
                 <div class="instructions">
@@ -599,7 +595,7 @@
 
             function playNextAudio() {
                 if (currentAudioIndex < audioFiles.length) {
-                    audioSource.src = audioFiles[currentAudioIndex];
+                    audioSource.src = audioFiles[currentAudioIndex]; // Set the source first
                     audioSource.play();
                     currentAudioIndex++;
                 } else {
