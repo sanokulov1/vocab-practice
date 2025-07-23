@@ -668,7 +668,6 @@
       }
     }
   </style>
-  <!-- Google Identity Services (GIS) Library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body onload="initGoogleClient()">
@@ -691,7 +690,6 @@
     </div>
   </header>
 
-  <!-- HERO SECTION REPLACED WITH SCOREBOARD -->
   <section class="scoreboard-section">
     <div class="scoreboard-container">
         <div class="scoreboard-header">
@@ -707,8 +705,7 @@
                 </tr>
             </thead>
             <tbody id="scoreboard-body">
-                <!-- User data will be inserted here by JavaScript -->
-            </tbody>
+                </tbody>
         </table>
         <p id="loading-indicator">
             <i class="fas fa-spinner fa-spin"></i> Loading Top Players...
@@ -853,7 +850,6 @@
     </div>
   </footer>
 
-  <!-- Firebase Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithCredential, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
@@ -951,8 +947,8 @@
         const loadingIndicator = document.getElementById('loading-indicator');
         
         try {
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, orderBy("diamonds", "desc"), limit(10));
+            const leaderboardRef = collection(db, "leaderboard");
+            const q = query(leaderboardRef, orderBy("diamonds", "desc"), limit(10));
 
             const querySnapshot = await getDocs(q);
 
@@ -961,7 +957,7 @@
 
             querySnapshot.forEach(doc => {
                 const userData = doc.data();
-                const playerName = userData.displayName || 'Anonymous Player';
+                const playerName = userData.username || 'Anonymous Player';
                 const diamonds = userData.diamonds || 0;
                 const timeSpent = formatTime(userData.timeSpent || 0);
 
