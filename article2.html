@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media: Interactive Article</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+        }
+
+        /* Light Theme (Default) - Azure Blue inspired */
+        body.light-theme {
+            background-color: #F0F8FF; /* AliceBlue - a very light azure */
+            color: #343a40; /* Dark gray for text */
+        }
+        body.light-theme .container {
+            background-color: #ffffff; /* White container */
+            color: #343a40;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        body.light-theme h1,
+        body.light-theme .header-text {
+            color: #1a202c; /* Darker text for headings */
+        }
+        body.light-theme .vocab-word {
+            color: #2563eb; /* Blue for vocab words */
+            background-color: #ffff00; /* Yellow highlight in light mode */
+        }
+        body.light-theme .vocab-popup {
+             background-color: #ffffff;
+        }
+        body.light-theme .vocab-popup h4 {
+            color: #1e40af;
+        }
+        body.light-theme .vocab-popup p {
+            color: #4b5563;
+        }
+        body.light-theme .vocab-popup .pronunciation {
+            color: #2563eb;
+        }
+        body.light-theme .vocab-popup .example {
+            color: #6b7280;
+        }
+        body.light-theme .close-button {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        body.light-theme .close-button:hover {
+            background-color: #d1d5db;
+        }
+
+
+        /* Dark Theme - Azure Blue inspired */
+        body.dark-theme {
+            background-color: #1a2b3c; /* Darker bluish-gray */
+            color: #e2e8f0; /* Light gray for text */
+        }
+        body.dark-theme .container {
+            background-color: #2d3e50; /* Slightly lighter dark container */
+            color: #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.2); /* Darker shadow */
+        }
+        body.dark-theme h1,
+        body.dark-theme .header-text {
+            color: #e2e8f0; /* Light text for headings */
+        }
+        body.dark-theme .vocab-word {
+            color: #90cdf4; /* Lighter blue for vocab words in dark mode */
+            background-color: #A49C3D; /* Night-friendly highlighted yellow */
+        }
+        body.dark-theme .vocab-popup {
+            background-color: #3a4a5c; /* Darker background for popup */
+            color: #e2e8f0;
+        }
+        body.dark-theme .vocab-popup h4 {
+            color: #90cdf4; /* Lighter blue for popup heading */
+        }
+        body.dark-theme .vocab-popup p {
+            color: #cbd5e0; /* Lighter gray for popup text */
+        }
+        body.dark-theme .vocab-popup .pronunciation {
+            color: #90cdf4; /* Lighter blue for pronunciation */
+        }
+        body.dark-theme .vocab-popup .example {
+            color: #a0aec0; /* Medium gray for example text */
+        }
+        body.dark-theme .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .close-button:hover {
+            background-color: #64748b;
+        }
+
+
+        /* Common styles for vocab words (not theme specific colors) */
+        .vocab-word {
+            text-decoration: underline;
+            text-decoration-color: #a0c4ff;
+            text-underline-offset: 2px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Modal Overlay for Vocab Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Vocab Popup Box */
+        .vocab-popup {
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            min-width: 300px;
+            max-width: 90%;
+            width: 400px;
+        }
+        .modal-overlay.active .vocab-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .vocab-popup h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .vocab-popup p {
+            margin-bottom: 4px;
+        }
+        .vocab-popup .pronunciation {
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+        .vocab-popup .example {
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border-radius: 9999px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 700;
+            line-height: 1;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Theme Toggle Button Specific Styles (Emojis) */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it's above the modal overlay */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+            font-size: 24px; /* Size for emojis */
+            line-height: 1; /* Center emoji vertically */
+        }
+        #theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Icon display based on theme */
+        body.light-theme #moon-icon { display: none; }
+        body.light-theme #sun-icon { display: block; }
+
+        body.dark-theme #moon-icon { display: block; }
+        body.dark-theme #sun-icon { display: none; }
+        body.dark-theme #theme-toggle {
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        body.dark-theme #theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- Welcome Modal Styles --- */
+        .welcome-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85); /* Slightly darker overlay for welcome */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1002; /* Higher z-index than vocab modal */
+        }
+
+        .welcome-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .welcome-popup {
+            background-color: #ffffff;
+            padding: 30px; /* Slightly more padding */
+            border-radius: 10px; /* Slightly more rounded */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            position: relative;
+            transform: scale(0.8); /* Starts smaller */
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy transition */
+            min-width: 320px;
+            max-width: 90%;
+            width: 450px; /* Slightly wider */
+            text-align: center;
+        }
+
+        .welcome-modal-overlay.active .welcome-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .welcome-popup .animated-reminder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Space between GIF and fallback text */
+        }
+
+        .welcome-popup .reminder-gif {
+            max-width: 100%; /* Ensure GIF fits within popup */
+            height: auto;
+            border-radius: 5px; /* Optional: subtle rounding for the GIF */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Optional: subtle shadow for the GIF */
+        }
+
+        .welcome-popup .gif-fallback-text {
+            font-size: 1.1rem; /* Adjust size */
+            color: var(--dark); /* Keep consistent */
+            text-align: center;
+            margin-bottom: 0; /* Remove extra margin */
+        }
+
+        /* Dark theme specific for welcome popup */
+        body.dark-theme .welcome-popup {
+            background-color: #3a4a5c;
+            color: #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        body.dark-theme .welcome-popup .gif-fallback-text {
+            color: #cbd5e0;
+        }
+        body.dark-theme .welcome-popup .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .welcome-popup .close-button:hover {
+            background-color: #64748b;
+        }
+    </style>
+</head>
+<body class="p-4 light-theme">
+    <div id="theme-toggle">
+        <span id="sun-icon">☀️</span>
+        <span id="moon-icon" style="display: none;">🌙</span>
+    </div>
+
+    <div class="container mx-auto rounded-lg p-8 my-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 header-text">Social media brings benefits as well as risks to young people</h1>
+            <p class="text-lg header-text">A recent US surgeon general's report on social media use and youth mental health warns of a "profound risk of harm". But it also highlights the <span class="vocab-word" data-word="upside">upsides</span>.</p>
+        </header>
+
+        <article class="text-base leading-relaxed">
+            <p class="mb-4">THERE is a scene in the 2020 documentary The Social Dilemma that has stayed with me. A tear <span class="vocab-word" data-word="rolls down">rolls down</span> a girl's face as she <span class="vocab-word" data-word="appraise yourself">appraises herself</span> in the mirror, her sadness a result of harmful body image comparisons <span class="vocab-word" data-word="rife">rife</span> on social media. The dramatic recreation <span class="vocab-word" data-word="depicts">depicts</span> just one of the potential harms highlighted in a recent US Surgeon General's Advisory on social media use and youth mental health.</p>
+            <p class="mb-4">The advisory, a report "reserved for significant public health challenges that require the nation's immediate awareness and action", summarises some of the "ample indicators" that social media can <span class="vocab-word" data-word="pose a profound risk">pose a profound risk</span> of harm to the mental health and well-being of children and <span class="vocab-word" data-word="adolescent">adolescents</span>. It cites a study of more than 6000 US adolescents published in JAMA Psychiatry. The study found that those who spent more than 3 hours per day on social media platforms were <span class="vocab-word" data-word="at heightened risk of">at heightened risk of</span> mental health problems, including symptoms of depression and anxiety.</p>
+            <p class="mb-4">That amount of use isn't unusual, research has shown. In 2021, 13 to 14-year-olds and 15 to 16-year-olds in the US spent an average of 3.5 hours on social media per day, according to the University of Michigan's Monitoring the Future survey. As I reported last month in JAMA, doctors are certainly concerned about social media's effects on kids. Six major US medical groups endorsed the new advisory. When I spoke with Jeremy Veenstra-VanderWeele, a child and adolescent psychiatrist at Columbia University Irving Medical Center in New York, he discussed the staggering amount of time young people spend on social media and said the platforms can be <span class="vocab-word" data-word="all-consuming">all-consuming</span>.</p>
+            <p class="mb-4">"From a <span class="vocab-word" data-word="circumstantial">circumstantial</span> evidence perspective," he said, "we are seeing a marked rise in youth anxiety and depression over the same period of time when social media has become so widely used". Matthew Davis, chair of the paediatrics department at the Ann & Robert H. Lurie Children's Hospital of Chicago, told me that, among healthcare providers, "there is a strong sense that the harms outweigh the benefits for our patients".</p>
+            <p class="mb-4">But what's this about benefits? The potential harms seem clear, yet what we may not recognise is that social media can also have <span class="vocab-word" data-word="upside">upsides</span> for many young people, something the advisory not only <span class="vocab-word" data-word="acknowledge">acknowledges</span> but emphasises. Yes, young people may be harmed by <span class="vocab-word" data-word="cyberbullying">cyberbullying</span>, <span class="vocab-word" data-word="explicit content">explicit content</span> and other serious <span class="vocab-word" data-word="pitfall">pitfalls</span>. But they can also find positive connections and social support that they may not have, as the young folks say, in IRL (in real life).</p>
+            <p class="mb-4">Veenstra-VanderWeele said patients have told him how <span class="vocab-word" data-word="vital">vital</span> their online community is, "particularly for teens who may not <span class="vocab-word" data-word="fit in">fit in</span> easily with peers". The advisory <span class="vocab-word" data-word="underscore">underscores</span> <span class="vocab-word" data-word="gap in one’s knowledge">gaps in our knowledge</span> around social media's effects on youth well-being and calls on society to take action now. It will be important to understand the <span class="vocab-word" data-word="two-way nature">two-way nature</span> of associations between social media use and mental health issues, for example. The ultimate goal should be to <span class="vocab-word" data-word="harness">harness</span> the potential benefits of online social connections, while decreasing the potential harms.</p>
+            <p class="mb-4">To achieve this, young people must be involved, says Tammy Chang at the University of Michigan, who directs the MyVoice national youth poll in the US. "When youth have input and <span class="vocab-word" data-word="buy-in">buy-in</span> on <span class="vocab-word" data-word="initiative">initiatives</span> meant to change their behaviours, those initiatives are more likely to succeed," she told me. My three teenage nephews say that at least some of the kids are alright. They know that whether social media is helpful or harmful depends on how it is used. Social networks are communities, <span class="vocab-word" data-word="after all">after all</span>, with both positive and negative elements - whether virtual or IRL.</p>
+        </article>
+    </div>
+
+    <div id="vocab-modal-overlay" class="modal-overlay">
+        <div id="vocab-popup" class="vocab-popup">
+            <button id="close-popup" class="close-button">X</button>
+            <h4 id="display-word"></h4>
+            <p id="display-pronunciation" class="pronunciation"></p>
+            <p id="display-definition"></p>
+            <p id="display-example" class="example"></p>
+        </div>
+    </div>
+
+    <div id="welcome-modal-overlay" class="welcome-modal-overlay">
+        <div id="welcome-popup" class="welcome-popup">
+            <button id="welcome-popup-close" class="close-button">X</button>
+            <div class="animated-reminder">
+                <img src="vocab_demo.gif" alt="Animated reminder: Click highlighted words for definitions" class="reminder-gif">
+                <p class="gif-fallback-text">Click on the highlighted words to see their definition, pronunciation, and examples!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vocabWords = document.querySelectorAll('.vocab-word');
+            const vocabModalOverlay = document.getElementById('vocab-modal-overlay');
+            const vocabPopup = document.getElementById('vocab-popup');
+            const closePopupButton = document.getElementById('close-popup');
+            const displayWord = document.getElementById('display-word');
+            const displayPronunciation = document.getElementById('display-pronunciation');
+            const displayDefinition = document.getElementById('display-definition');
+            const displayExample = document.getElementById('display-example');
+
+            // Theme Toggle Elements
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const body = document.body;
+
+            // Welcome Popup Elements
+            const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
+            const welcomePopupCloseButton = document.getElementById('welcome-popup-close');
+
+            const vocabData = {
+                "upside": {
+                    definition: "The positive aspect or advantage of something.",
+                    pronunciation: "/ˈʌpsaɪd/",
+                    example: "The upside of working from home is that I save time on commuting."
+                },
+                "rolls down": {
+                    definition: "To move down smoothly or gently.",
+                    pronunciation: "/roʊlz daʊn/",
+                    example: "The window slowly rolled down as the car came to a stop."
+                },
+                "appraise yourself": {
+                    definition: "To judge or evaluate your own appearance, actions, or abilities.",
+                    pronunciation: "/əˈpreɪz jʊərˌsɛlf/",
+                    example: "She took a moment to appraise herself in the mirror before heading out to the interview."
+                },
+                "rife": {
+                    definition: "Full of or widespread, usually referring to something negative.",
+                    pronunciation: "/raɪf/",
+                    example: "Corruption was rife in the organization, making it difficult to trust anyone."
+                },
+                "depicts": {
+                    definition: "To show or represent something in a visual or written form.",
+                    pronunciation: "/dɪˈpɪkts/",
+                    example: "The painting depicted a peaceful countryside scene."
+                },
+                "pose a profound risk": {
+                    definition: "To create or present a serious and significant danger.",
+                    pronunciation: "/poʊz ə prəˈfaʊnd rɪsk/",
+                    example: "Smoking poses a profound risk to your health, especially in the long term."
+                },
+                "adolescent": {
+                    definition: "A young person who is in the process of developing from a child into an adult.",
+                    pronunciation: "/ˌædəˈlɛsənt/",
+                    example: "Many adolescents struggle with finding their identity during high school."
+                },
+                "at heightened risk of": {
+                    definition: "More likely to experience or suffer from something harmful.",
+                    pronunciation: "/æt ˈhaɪtənd rɪsk ɒv/",
+                    example: "People with weak immune systems are at heightened risk of catching infections."
+                },
+                "all-consuming": {
+                    definition: "Taking up all of one’s time and attention.",
+                    pronunciation: "/ɔːl kənˈsuːmɪŋ/",
+                    example: "Her new project became all-consuming, leaving her little time for anything else."
+                },
+                "circumstantial": {
+                    definition: "Based on information or evidence that suggests something but doesn’t prove it directly.",
+                    pronunciation: "/ˌsɜːrkəmˈstænʃəl/",
+                    example: "The police had only circumstantial evidence to connect him to the crime."
+                },
+                "acknowledge": {
+                    definition: "To recognize or admit the existence or truth of something.",
+                    pronunciation: "/əkˈnɒlɪdʒ/",
+                    example: "He finally acknowledged that he had made a mistake in the report."
+                },
+                "cyberbullying": {
+                    definition: "The use of electronic communication to bully or harass someone.",
+                    pronunciation: "/ˈsaɪbərˌbʊliɪŋ/",
+                    example: "Cyberbullying can cause serious emotional damage, especially for young people."
+                },
+                "explicit content": {
+                    definition: "Material that is very clear and often includes inappropriate or offensive themes.",
+                    pronunciation: "/ɪkˈsplɪsɪt ˈkɒntɛnt/",
+                    example: "The movie was rated for adults due to its explicit content."
+                },
+                "pitfall": {
+                    definition: "A hidden or unexpected difficulty or danger.",
+                    pronunciation: "/ˈpɪtˌfɔːl/",
+                    example: "One pitfall of starting your own business is the lack of steady income at the beginning."
+                },
+                "vital": {
+                    definition: "Extremely important or necessary.",
+                    pronunciation: "/ˈvaɪtəl/",
+                    example: "It’s vital to drink enough water when exercising to stay hydrated."
+                },
+                "fit in": {
+                    definition: "To feel that you belong to a group or a situation.",
+                    pronunciation: "/fɪt ɪn/",
+                    example: "She always struggled to fit in at her new school."
+                },
+                "underscore": {
+                    definition: "To emphasize the importance of something.",
+                    pronunciation: "/ˌʌndərˈskɔːr/",
+                    example: "The manager underscored the need for teamwork to meet the deadline."
+                },
+                "gap in one’s knowledge": {
+                    definition: "A lack of understanding or information in a particular area.",
+                    pronunciation: "/ɡæp ɪn wʌnz ˈnɒlɪdʒ/",
+                    example: "He realized he had a gap in his knowledge of history when asked about World War II."
+                },
+                "two-way nature": {
+                    definition: "Involving both sides or working in two directions.",
+                    pronunciation: "/tuː weɪ ˈneɪtʃər/",
+                    example: "Effective communication is always a two-way process between listening and speaking."
+                },
+                "harness": {
+                    definition: "To use something effectively or control it to achieve a result.",
+                    pronunciation: "/ˈhɑːrnɪs/",
+                    example: "We need to harness the power of technology to improve education."
+                },
+                "buy-in": {
+                    definition: "Agreement or support from people for a plan or idea.",
+                    pronunciation: "/ˈbaɪ ɪn/",
+                    example: "It’s important to get employee buy-in before introducing major changes at work."
+                },
+                "initiative": {
+                    definition: "A plan or action designed to solve a problem or improve a situation.",
+                    pronunciation: "/ɪˈnɪʃətɪv/",
+                    example: "The city launched a new initiative to reduce traffic congestion."
+                },
+                "after all": {
+                    definition: "Used to indicate a reason or explanation for something.",
+                    pronunciation: "/ˈæftər ɔːl/",
+                    example: "I decided to take a break because, after all, I’ve been working nonstop all week."
+                }
+            };
+
+            // --- Theme Toggle Logic ---
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-theme');
+                    body.classList.remove('light-theme');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    body.classList.add('light-theme');
+                    body.classList.remove('dark-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // Load theme from localStorage or set default
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                // Check user's system preference if no theme is saved
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    applyTheme('dark');
+                } else {
+                    applyTheme('light');
+                }
+            }
+
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark-theme')) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+
+            // --- Vocab Popup Logic (Existing) ---
+            function showPopup(word, data) {
+                displayWord.textContent = word;
+                displayPronunciation.textContent = data.pronunciation;
+                displayDefinition.textContent = data.definition;
+                displayExample.textContent = data.example;
+                vocabModalOverlay.classList.add('active');
+            }
+
+            function hidePopup() {
+                vocabModalOverlay.classList.remove('active');
+            }
+
+            vocabWords.forEach(wordSpan => {
+                wordSpan.addEventListener('click', (e) => {
+                    const word = wordSpan.dataset.word;
+                    const data = vocabData[word];
+                    if (data) {
+                        showPopup(word, data);
+                    } else {
+                        showPopup(word, {
+                            definition: "Definition not found for this word.",
+                            pronunciation: "",
+                            example: ""
+                        });
+                    }
+                });
+            });
+
+            closePopupButton.addEventListener('click', hidePopup);
+
+            vocabModalOverlay.addEventListener('click', (e) => {
+                if (e.target === vocabModalOverlay) {
+                    hidePopup();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && vocabModalOverlay.classList.contains('active')) {
+                    hidePopup();
+                }
+            });
+
+            // --- Welcome Popup Logic ---
+            function showWelcomePopup() {
+                // console.log("Attempting to show welcome popup..."); // Debugging
+                // Only show if it hasn't been seen before for this specific article
+                if (!localStorage.getItem('welcomeMessageSeen_article2')) { // Changed to article2
+                    if (welcomeModalOverlay) {
+                        welcomeModalOverlay.classList.add('active');
+                        // console.log("Welcome popup activated. Check 'welcome-modal-overlay' for class 'active' in Elements tab."); // Debugging
+                    } else {
+                        // console.error("Error: welcomeModalOverlay element not found!"); // Debugging
+                    }
+                } else {
+                    // console.log("Welcome popup already seen (localStorage flag is set)."); // Debugging
+                }
+            }
+
+            function hideWelcomePopup() {
+                // console.log("Hiding welcome popup."); // Debugging
+                if (welcomeModalOverlay) {
+                    welcomeModalOverlay.classList.remove('active');
+                }
+                localStorage.setItem('welcomeMessageSeen_article2', 'true'); // Changed to article2
+            }
+
+            // Ensure elements exist before adding listeners
+            if (welcomePopupCloseButton) {
+                welcomePopupCloseButton.addEventListener('click', hideWelcomePopup);
+            } else {
+                // console.error("Error: welcomePopupCloseButton element not found!"); // Debugging
+            }
+
+            if (welcomeModalOverlay) {
+                welcomeModalOverlay.addEventListener('click', (e) => {
+                    // Only close if clicking the overlay itself, not the popup content
+                    if (e.target === welcomeModalOverlay || e.target.classList.contains('animated-reminder') || e.target.classList.contains('reminder-gif') || e.target.classList.contains('gif-fallback-text')) {
+                        hideWelcomePopup();
+                    }
+                });
+            }
+
+            // Show welcome popup on page load
+            showWelcomePopup();
+        });
+    </script>
+</body>
+</html>

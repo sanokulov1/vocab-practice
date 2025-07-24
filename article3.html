@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Renewal: Interactive Article</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+        }
+
+        /* Light Theme (Default) - Azure Blue inspired */
+        body.light-theme {
+            background-color: #F0F8FF; /* AliceBlue - a very light azure */
+            color: #343a40; /* Dark gray for text */
+        }
+        body.light-theme .container {
+            background-color: #ffffff; /* White container */
+            color: #343a40;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        body.light-theme h1,
+        body.light-theme .header-text {
+            color: #1a202c; /* Darker text for headings */
+        }
+        body.light-theme .vocab-word {
+            color: #2563eb; /* Blue for vocab words */
+            background-color: #ffff00; /* Yellow highlight in light mode */
+        }
+        body.light-theme .vocab-popup {
+             background-color: #ffffff;
+        }
+        body.light-theme .vocab-popup h4 {
+            color: #1e40af;
+        }
+        body.light-theme .vocab-popup p {
+            color: #4b5563;
+        }
+        body.light-theme .vocab-popup .pronunciation {
+            color: #2563eb;
+        }
+        body.light-theme .vocab-popup .example {
+            color: #6b7280;
+        }
+        body.light-theme .close-button {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        body.light-theme .close-button:hover {
+            background-color: #d1d5db;
+        }
+
+
+        /* Dark Theme - Azure Blue inspired */
+        body.dark-theme {
+            background-color: #1a2b3c; /* Darker bluish-gray */
+            color: #e2e8f0; /* Light gray for text */
+        }
+        body.dark-theme .container {
+            background-color: #2d3e50; /* Slightly lighter dark container */
+            color: #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.2); /* Darker shadow */
+        }
+        body.dark-theme h1,
+        body.dark-theme .header-text {
+            color: #e2e8f0; /* Light text for headings */
+        }
+        body.dark-theme .vocab-word {
+            color: #90cdf4; /* Lighter blue for vocab words in dark mode */
+            background-color: #A49C3D; /* Night-friendly highlighted yellow */
+        }
+        body.dark-theme .vocab-popup {
+            background-color: #3a4a5c; /* Darker background for popup */
+            color: #e2e8f0;
+        }
+        body.dark-theme .vocab-popup h4 {
+            color: #90cdf4; /* Lighter blue for popup heading */
+        }
+        body.dark-theme .vocab-popup p {
+            color: #cbd5e0; /* Lighter gray for popup text */
+        }
+        body.dark-theme .vocab-popup .pronunciation {
+            color: #90cdf4; /* Lighter blue for pronunciation */
+        }
+        body.dark-theme .vocab-popup .example {
+            color: #a0aec0; /* Medium gray for example text */
+        }
+        body.dark-theme .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .close-button:hover {
+            background-color: #64748b;
+        }
+
+
+        /* Common styles for vocab words (not theme specific colors) */
+        .vocab-word {
+            text-decoration: underline;
+            text-decoration-color: #a0c4ff;
+            text-underline-offset: 2px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Popup Box */
+        .vocab-popup {
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            min-width: 300px;
+            max-width: 90%;
+            width: 400px;
+        }
+        .modal-overlay.active .vocab-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .vocab-popup h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .vocab-popup p {
+            margin-bottom: 4px;
+        }
+        .vocab-popup .pronunciation {
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+        .vocab-popup .example {
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border-radius: 9999px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 700;
+            line-height: 1;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Theme Toggle Button Specific Styles (Emojis) */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it's above the modal overlay */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+            font-size: 24px; /* Size for emojis */
+            line-height: 1; /* Center emoji vertically */
+        }
+        #theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Icon display based on theme */
+        body.light-theme #moon-icon { display: none; }
+        body.light-theme #sun-icon { display: block; }
+
+        body.dark-theme #moon-icon { display: block; }
+        body.dark-theme #sun-icon { display: none; }
+        body.dark-theme #theme-toggle {
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        body.dark-theme #theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- Welcome Modal Styles --- */
+        .welcome-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85); /* Slightly darker overlay for welcome */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1002; /* Higher z-index than vocab modal */
+        }
+
+        .welcome-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .welcome-popup {
+            background-color: #ffffff;
+            padding: 30px; /* Slightly more padding */
+            border-radius: 10px; /* Slightly more rounded */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            position: relative;
+            transform: scale(0.8); /* Starts smaller */
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy transition */
+            min-width: 320px;
+            max-width: 90%;
+            width: 450px; /* Slightly wider */
+            text-align: center;
+        }
+
+        .welcome-modal-overlay.active .welcome-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .welcome-popup .animated-reminder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Space between GIF and fallback text */
+        }
+
+        .welcome-popup .reminder-gif {
+            max-width: 100%; /* Ensure GIF fits within popup */
+            height: auto;
+            border-radius: 5px; /* Optional: subtle rounding for the GIF */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Optional: subtle shadow for the GIF */
+        }
+
+        .welcome-popup .gif-fallback-text {
+            font-size: 1.1rem; /* Adjust size */
+            color: var(--dark); /* Keep consistent */
+            text-align: center;
+            margin-bottom: 0; /* Remove extra margin */
+        }
+
+        /* Dark theme specific for welcome popup */
+        body.dark-theme .welcome-popup {
+            background-color: #3a4a5c;
+            color: #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        body.dark-theme .welcome-popup .gif-fallback-text {
+            color: #cbd5e0;
+        }
+        body.dark-theme .welcome-popup .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .welcome-popup .close-button:hover {
+            background-color: #64748b;
+        }
+
+        /* Footer styles - copied from index.html */
+        footer {
+          background: var(--dark);
+          color: white;
+          padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 40px;
+          margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+          font-size: 1.3rem;
+          margin-bottom: 20px;
+          position: relative;
+          padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 50px;
+          height: 3px;
+          background: var(--primary);
+          border-radius: 3px;
+        }
+
+        .footer-col p {
+          margin-bottom: 20px;
+          opacity: 0.8;
+        }
+
+        .social-links {
+          display: flex;
+          gap: 15px;
+          margin-top: 20px;
+        }
+
+        .social-links a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          transition: var(--transition);
+        }
+
+        .social-links a:hover {
+          background: var(--primary);
+          transform: translateY(-3px);
+        }
+
+        .footer-links {
+          list-style: none;
+        }
+
+        .footer-links li {
+          margin-bottom: 12px;
+        }
+
+        .footer-links a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .footer-links a:hover {
+          color: var(--primary);
+          transform: translateX(5px);
+        }
+
+        .copyright {
+          text-align: center;
+          padding-top: 30px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 0.9rem;
+          opacity: 0.7;
+        }
+
+        /* Mobile adjustments for header/logo */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .logo {
+                font-size: 24px;
+            }
+            nav {
+                display: none; /* Hide nav for mobile, assume hamburger menu would be added elsewhere if needed */
+            }
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+            }
+            .container {
+                padding-top: 80px; /* Adjust for smaller mobile header */
+            }
+        }
+    </style>
+</head>
+<body class="p-4 light-theme">
+    <div id="theme-toggle">
+        <span id="sun-icon"☀️</span>
+        <span id="moon-icon" style="display: none;">🌙</span>
+    </div>
+
+    <div class="container mx-auto rounded-lg p-8 my-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 header-text">We must reinvent urban spaces to improve the health of <span class="vocab-word" data-word="City dwellers">city dwellers</span></h1>
+            <p class="text-lg header-text">IN 2007, <span class="vocab-word" data-word="Give or take">give or take</span>, came a <span class="vocab-word" data-word="Watershed moment">watershed moment</span> in the 300,000-<span class="vocab-word" data-word="-odd">-odd</span>-year history of Homo sapiens. For the first time, more of us were living in <span class="vocab-word" data-word="Urban setting">urban settings</span> than in small communities <span class="vocab-word" data-word="Embed">embedded</span> in largely natural environments.</p>
+        </header>
+
+        <article class="text-base leading-relaxed">
+            <p class="mb-4">Urbanisation has been a driver of human cultural and material development since the first cities <span class="vocab-word" data-word="Arise">arose</span> some 6000 years ago. Yet it is becoming clear that city life brings with it <span class="vocab-word" data-word="Burden">burdens</span> on our <span class="vocab-word" data-word="Psyche">evolved psyches</span>. Indeed, green spaces have been shown to be <span class="vocab-word" data-word="Vital">vital</span> not just to our physical health, but also to our mental health, including in <span class="vocab-word" data-word="Alleviate">alleviating</span> <span class="vocab-word" data-word="Condition">conditions</span> such as depression, anxiety and mood <span class="vocab-word" data-word="Disorder">disorders</span>. They also help with creativity, positive social interactions, healthy <span class="vocab-word" data-word="Sleep pattern">sleep patterns</span> and much more.</p>
+            <p class="mb-4">The covid-19 pandemic has <span class="vocab-word" data-word="Highlight">driven home the reality</span> of those connections for many <span class="vocab-word" data-word="City dwellers">city dwellers</span>. It has also highlighted the inequalities between socioeconomic groups, both in terms of access to green space and in the degree to which they are <span class="vocab-word" data-word="Exposed">exposed</span> to pollution, for example.</p>
+            <p class="mb-4">Yet all too often urban planning <span class="vocab-word" data-word="Pay lip service">pays only lip service</span> to matters of human health - and still less to creating environments in which the biodiversity we depend on can <span class="vocab-word" data-word="Thrive">thrive</span>. The rapidly <span class="vocab-word" data-word="Expand">expanding</span> cities of Asia and Africa are repeating the mistakes made in the West, <span class="vocab-word" data-word="Subjugate">subjugating</span> <span class="vocab-word" data-word="Livable">liveability</span> for all beneath sprawl and the demands of a motorised few.</p>
+            <p class="mb-4">Attempts to reimagine cities for a greener, more sustainable, post-covid future have been <span class="vocab-word" data-word="Piecemeal">piecemeal</span> and <span class="vocab-word" data-word="Disjointed">disjointed</span>, and often <span class="vocab-word" data-word="Shout down">shouted down</span> by vocal minorities with an interest in the <span class="vocab-word" data-word="Status quo">status quo</span>.</p>
+            <p class="mb-4">We are <span class="vocab-word" data-word="Store up trouble">storing up trouble</span> for ourselves. If there is one general lesson the pandemic has taught us, it is that investment up front prevents far greater costs <span class="vocab-word" data-word="Down the line">down the line</span>. How we plan our cities affects not just the health of those living in them now, but the health of billions who will live in them in the future.</p>
+            <p class="mb-4">A <span class="vocab-word" data-word="Livable">liveable</span> environment must be seen as a fundamental human right. That requires <span class="vocab-word" data-word="Consequential">consequential</span> decisions to be taken across the world to reinvent cities as spaces in which all <span class="vocab-word" data-word="Inhabitant">inhabitants</span> can <span class="vocab-word" data-word="Thrive">thrive</span>.</p>
+        </article>
+    </div>
+
+    <div id="vocab-modal-overlay" class="modal-overlay">
+        <div id="vocab-popup" class="vocab-popup">
+            <button id="close-popup" class="close-button">X</button>
+            <h4 id="display-word"></h4>
+            <p id="display-pronunciation" class="pronunciation"></p>
+            <p id="display-definition"></p>
+            <p id="display-example" class="example"></p>
+        </div>
+    </div>
+
+    <div id="welcome-modal-overlay" class="welcome-modal-overlay">
+        <div id="welcome-popup" class="welcome-popup">
+            <button id="welcome-popup-close" class="close-button">X</button>
+            <div class="animated-reminder">
+                <img src="vocab_demo.gif" alt="Animated reminder: Click highlighted words for definitions" class="reminder-gif">
+                <p class="gif-fallback-text">Click on the highlighted words to see their definition, pronunciation, and examples!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vocabWords = document.querySelectorAll('.vocab-word');
+            const vocabModalOverlay = document.getElementById('vocab-modal-overlay');
+            const vocabPopup = document.getElementById('vocab-popup');
+            const closePopupButton = document.getElementById('close-popup');
+            const displayWord = document.getElementById('display-word');
+            const displayPronunciation = document.getElementById('display-pronunciation');
+            const displayDefinition = document.getElementById('display-definition');
+            const displayExample = document.getElementById('display-example');
+
+            // Theme Toggle Elements
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const body = document.body;
+
+            // Welcome Popup Elements
+            const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
+            const welcomePopupCloseButton = document.getElementById('welcome-popup-close');
+
+            const vocabData = {
+                "City dwellers": {
+                    definition: "People who live in cities.",
+                    pronunciation: "/ˈsɪti ˈdwɛlərz/",
+                    example: "City dwellers often miss the peace and quiet of the countryside."
+                },
+                "Give or take": {
+                    definition: "Approximately, more or less.",
+                    pronunciation: "/ɡɪv ɔːr teɪk/",
+                    example: "The concert will last two hours, give or take a few minutes."
+                },
+                "Watershed moment": {
+                    definition: "A crucial turning point or event that changes things significantly.",
+                    pronunciation: "/ˈwɑːtərˌʃɛd ˈmoʊmənt/",
+                    example: "The launch of the first iPhone was a watershed moment in the tech industry."
+                },
+                "Embed": {
+                    definition: "To place something deeply or firmly in a particular environment or system.",
+                    pronunciation: "/ɪmˈbɛd/",
+                    example: "The journalist embedded herself with the team to understand their work better."
+                },
+                "Urban setting": {
+                    definition: "An environment in or related to a city.",
+                    pronunciation: "/ˈɜːrbən ˈsɛtɪŋ/",
+                    example: "He preferred the quiet of the countryside over an urban setting."
+                },
+                "-odd": {
+                    definition: "A suffix used to indicate an approximate number.",
+                    pronunciation: "/ɒd/",
+                    example: "We’ve invited 30-odd people to the party, so it should be a fun crowd."
+                },
+                "Arise": {
+                    definition: "To come into being or to happen.",
+                    pronunciation: "/əˈraɪz/",
+                    example: "Unexpected issues can arise when planning large events."
+                },
+                "Burden": {
+                    definition: "A heavy load or responsibility, often difficult to deal with.",
+                    pronunciation: "/ˈbɜːrdən/",
+                    example: "Managing both work and family responsibilities can feel like a burden."
+                },
+                "Psyche": {
+                    definition: "The human mind or spirit, especially in relation to mental health.",
+                    pronunciation: "/ˈsaɪki/",
+                    example: "Her difficult childhood left deep marks on her psyche."
+                },
+                "Evolve": {
+                    definition: "To develop gradually over time.",
+                    pronunciation: "/ɪˈvɒlv/",
+                    example: "His taste in music has evolved since he was a teenager."
+                },
+                "Alleviate": {
+                    definition: "To make something less severe or easier to deal with.",
+                    pronunciation: "/əˈliːvieɪt/",
+                    example: "Taking a walk helped alleviate her stress after a long day."
+                },
+                "Condition": {
+                    definition: "A particular state of health, often referring to mental or physical illnesses.",
+                    pronunciation: "/kənˈdɪʃən/",
+                    example: "Regular exercise can help improve heart conditions."
+                },
+                "Disorder": {
+                    definition: "A health problem or illness that affects the mind or body.",
+                    pronunciation: "/dɪsˈɔːrdər/",
+                    example: "Anxiety is a common mental disorder that affects many people."
+                },
+                "Sleep pattern": {
+                    definition: "The regular cycle of sleep, including when and how long you sleep.",
+                    pronunciation: "/sliːp ˈpætərn/",
+                    example: "After working late nights, his sleep pattern became irregular."
+                },
+                "Highlight": {
+                    definition: "To bring attention to something important.",
+                    pronunciation: "/ˈhaɪˌlaɪt/",
+                    example: "The teacher used the presentation to highlight the key points of the lesson."
+                },
+                "Exposed": {
+                    definition: "To be put in a situation where you are unprotected or vulnerable to harm.",
+                    pronunciation: "/ɪkˈspoʊzd/",
+                    example: "The plants were exposed to cold temperatures and didn’t survive the winter."
+                },
+                "Pay lip service": {
+                    definition: "To claim to support something without really meaning it or taking action.",
+                    pronunciation: "/peɪ lɪp ˈsɜːrvɪs/",
+                    example: "The politician paid lip service to environmental issues but didn’t pass any real reforms."
+                },
+                "Expand": {
+                    definition: "To grow or increase in size.",
+                    pronunciation: "/ɪkˈspænd/",
+                    example: "The company plans to expand its operations into new markets next year."
+                },
+                "Subjugate": {
+                    definition: "To bring under control or dominate.",
+                    pronunciation: "/ˈsʌbdʒʊˌɡeɪt/",
+                    example: "The invaders sought to subjugate the local population."
+                },
+                "Piecemeal": {
+                    definition: "Done in small parts or stages, rather than as a whole plan.",
+                    pronunciation: "/ˈpiːsˌmiːl/",
+                    example: "They are renovating the house in a piecemeal fashion, tackling one room at a time."
+                },
+                "Disjointed": {
+                    definition: "Lacking connection or organization.",
+                    pronunciation: "/dɪsˈdʒɔɪntɪd/",
+                    example: "The movie’s plot felt disjointed, with too many unrelated scenes."
+                },
+                "Shout down": {
+                    definition: "To silence or stop someone from speaking, usually by yelling or protesting.",
+                    pronunciation: "/ʃaʊt daʊn/",
+                    example: "The speaker was shouted down by protesters during the event."
+                },
+                "Status quo": {
+                    definition: "The current situation or state of affairs, especially when it is resistant to change.",
+                    pronunciation: "/ˌstætəs ˈkwoʊ/",
+                    example: "The company was content with maintaining the status quo rather than innovating."
+                },
+                "Store up trouble": {
+                    definition: "To create problems for the future by ignoring issues now.",
+                    pronunciation: "/stɔːr ʌp ˈtrʌbəl/",
+                    example: "Ignoring safety guidelines will only store up trouble for the project later."
+                },
+                "Down the line": {
+                    definition: "In the future.",
+                    pronunciation: "/daʊn ðə laɪn/",
+                    example: "The decisions we make today will have consequences down the line."
+                },
+                "Livable": {
+                    definition: "A place where living conditions are good and comfortable.",
+                    pronunciation: "/ˈlɪvəbəl/",
+                    example: "They moved to a more livable neighborhood with better schools and parks."
+                },
+                "Consequential": {
+                    definition: "Important, with serious effects or results.",
+                    pronunciation: "/ˌkɒnsɪˈkwɛnʃəl/",
+                    example: "Her decision to quit her job was a consequential moment in her career."
+                },
+                "Inhabitant": {
+                    definition: "A person who lives in a particular place.",
+                    pronunciation: "/ɪnˈhæbɪtənt/",
+                    example: "The island’s inhabitants depend on fishing for their livelihood."
+                },
+                "Thrive": {
+                    definition: "To grow and succeed in a healthy way.",
+                    pronunciation: "/θraɪv/",
+                    example: "The plants will thrive if they receive enough sunlight and water."
+                }
+            };
+
+            // --- Theme Toggle Logic ---
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-theme');
+                    body.classList.remove('light-theme');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    body.classList.add('light-theme');
+                    body.classList.remove('dark-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // Load theme from localStorage or set default
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                // Check user's system preference if no theme is saved
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    applyTheme('dark');
+                } else {
+                    applyTheme('light');
+                }
+            }
+
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark-theme')) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+
+            // --- Vocab Popup Logic (Existing) ---
+            function showPopup(word, data) {
+                displayWord.textContent = word;
+                displayPronunciation.textContent = data.pronunciation;
+                displayDefinition.textContent = data.definition;
+                displayExample.textContent = data.example;
+                vocabModalOverlay.classList.add('active');
+            }
+
+            function hidePopup() {
+                vocabModalOverlay.classList.remove('active');
+            }
+
+            vocabWords.forEach(wordSpan => {
+                wordSpan.addEventListener('click', (e) => {
+                    const word = wordSpan.dataset.word;
+                    const data = vocabData[word];
+                    if (data) {
+                        showPopup(word, data);
+                    } else {
+                        showPopup(word, {
+                            definition: "Definition not found for this word.",
+                            pronunciation: "",
+                            example: ""
+                        });
+                    }
+                });
+            });
+
+            closePopupButton.addEventListener('click', hidePopup);
+
+            vocabModalOverlay.addEventListener('click', (e) => {
+                if (e.target === vocabModalOverlay) {
+                    hidePopup();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && vocabModalOverlay.classList.contains('active')) {
+                    hidePopup();
+                }
+            });
+
+            // --- Welcome Popup Logic ---
+            function showWelcomePopup() {
+                // Only show if it hasn't been seen before for this specific article
+                if (!localStorage.getItem('welcomeMessageSeen_article3')) { // Changed to article3
+                    if (welcomeModalOverlay) {
+                        welcomeModalOverlay.classList.add('active');
+                    }
+                }
+            }
+
+            function hideWelcomePopup() {
+                if (welcomeModalOverlay) {
+                    welcomeModalOverlay.classList.remove('active');
+                }
+                localStorage.setItem('welcomeMessageSeen_article3', 'true'); // Changed to article3
+            }
+
+            // Ensure elements exist before adding listeners
+            if (welcomePopupCloseButton) {
+                welcomePopupCloseButton.addEventListener('click', hideWelcomePopup);
+            }
+
+            if (welcomeModalOverlay) {
+                welcomeModalOverlay.addEventListener('click', (e) => {
+                    // Only close if clicking the overlay itself, not the popup content
+                    if (e.target === welcomeModalOverlay || e.target.classList.contains('animated-reminder') || e.target.classList.contains('reminder-gif') || e.target.classList.contains('gif-fallback-text')) {
+                        hideWelcomePopup();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && welcomeModalOverlay.classList.contains('active')) {
+                    hideWelcomePopup();
+                }
+            });
+
+            // Show welcome popup on page load
+            showWelcomePopup();
+        });
+    </script>
+</body>
+</html>
