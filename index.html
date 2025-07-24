@@ -221,8 +221,8 @@
         border-bottom-left-radius: 10px;
         z-index: 10;
         transform: translate(0px, 0px); /* Adjust position slightly */
-        box-shadow: 0 2px 5px rgba(251, 176, 59, 0.3);
-        animation: pulse 1.5s infinite ease-in-out; /* Bouncy effect */
+        box-shadow: 0 4px 15px rgba(251, 176, 59, 0.3);
+        animation: superBounce 1.5s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55); /* SUPER bouncy effect */
     }
 
     .feature-card::before {
@@ -492,12 +492,12 @@
       }
     }
 
-    /* New Keyframes for Bouncy/Pulse Effect */
-    @keyframes pulse {
+    /* New Keyframes for SUPER Bouncy/Pulse Effect */
+    @keyframes superBounce {
         0% { transform: scale(1) rotate(0deg); }
-        25% { transform: scale(1.05) rotate(2deg); }
+        25% { transform: scale(1.15) rotate(5deg); } /* More exaggerated scale and rotation */
         50% { transform: scale(1) rotate(0deg); }
-        75% { transform: scale(1.05) rotate(-2deg); }
+        75% { transform: scale(1.15) rotate(-5deg); } /* More exaggerated scale and rotation */
         100% { transform: scale(1) rotate(0deg); }
     }
 
