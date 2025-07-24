@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice - Dyes and Fabric Dyeing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --highlight-color: #87CEEB; /* Azure Blue for highlight */
+            
+            /* Header & Controls Colors (Azure themed) */
+            --header-bg: #F0F8FF; /* Very light azure for header background */
+            --header-text: #333333; /* Dark text for light header */
+
+            /* Button Colors (Azure themed) */
+            --button-bg: #007FFF; /* Primary button azure */
+            --button-hover: #005fbe; /* Darker azure on hover */
+            
+            --correct-color: #28a745; /* Standard green */
+            --incorrect-color: #dc3545; /* Standard red */
+            --progress-complete: #007FFF; /* Azure for completed progress */
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Azure themed) */
+            --timer-bg: #e0f2f7; /* Very light azure/cyan */
+            --timer-text: #0288d1; /* Darker azure/cyan */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0047AB; /* Darker Azure for night mode */
+            
+            /* Night Mode Header & Controls Colors */
+            --header-bg: #1a1a1a; /* Dark gray for header background */
+            --header-text: #ffffff; /* White text for dark header */
+
+            /* Night Mode Button Colors */
+            --button-bg: #0047AB; /* Darker primary button azure */
+            --button-hover: #002e70; /* Even darker azure on hover */
+            
+            --correct-color: #218838; /* Darker green */
+            --incorrect-color: #c82333; /* Darker red */
+            --progress-complete: #0047AB; /* Darker azure for completed progress */
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #002b4d; /* Dark azure */
+            --timer-text: #81d4fa; /* Lighter azure */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-end; /* Align to the right since logo area is gone */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light timer */
+        }
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light header */
+        }
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+        
+        .question-text {
+             font-size: 17px;
+             line-height: 1.8; /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline; /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        /* Adjusted options for vertical display */
+        .options {
+            display: flex;
+            flex-direction: column; /* Force vertical stacking */
+            gap: 8px; /* Space between options */
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em; /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px; /* Add some padding */
+            margin: 0 3px; /* Add some margin */
+            vertical-align: baseline; /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Styles for Matching questions (A-H) */
+        .matching-options-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            background-color: var(--questions-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .matching-options-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .matching-options-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Table styles for new matching questions */
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .matching-table th, .matching-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .matching-table th {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table td {
+            background-color: var(--passage-bg);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+        .matching-table .question-cell {
+            text-align: left;
+            font-weight: 500;
+            background-color: var(--questions-bg); /* Keep question cells distinct */
+        }
+        .matching-table .header-cell {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table .selected {
+            background-color: var(--highlight-color);
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg); /* Use primary button color for border */
+            color: var(--button-bg); /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg); /* Use primary button color for explanation border */
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .progress-container {
+                max-width: 50%;
+            }
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-controls">
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <span id="timer">20:00</span>
+                <div class="timer-controls">
+                    <button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+                    <button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+                    <button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+            <button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="passage-container" id="passage-container">
+            <div class="passage-content">
+                <div class="passage-title">Dyes and fabric dyeing</div>
+                <div class="passage-text" id="passage-text">
+                    <p>Putting color into clothes</p>
+                    <p>When primitive people began using their hands to be creative, they began to add color to their lives. They used natural materials like ochre to stain animal hides, decorate shells and feathers, and paint on the walls of caves. Ochre is a naturally occurring brownish yellow earth containing iron oxide. Scientists have been able to date the black, white, yellow and reddish pigments made from ochre, used in cave paintings, to over 15,000 BCE. With the development of fixed settlements and agriculture, around 7,000 to 2,000 BCE, people began to produce fabrics, and used natural substances such as ochre to color them.</p>
+                    <p>Natural dyes, or dyes made from substances found in nature, can be broken down into two categories: substantive and adjective. Substantive, or direct dyes, become fixed to fibers to without the aid of any other chemicals or additives. Adjective dyes require a mordant (usually a metal salt) which acts as a fixative and prevents the color from washing out or being bleached by sunlight. Most natural dyes are adjective dyes, and require the application of a mordant solution to the fibers at some point in the dyeing process.</p>
+                    <p>Historically, three natural fibers were used in making fabrics: wool, silk and cotton. Wool fabric remains have been found in Europe dating back to 2,000 BCE. It was a common medieval fabric worn in both dyed and natural colors and was processed by both professional manufacturers and by people in their own homes. Silk was imported from China to Europe, and in the 14th to 16th centuries major silk manufacturing centers were set up in France, Spain and Italy. These silk production centers also became centers of dye technology, as most silk was dyed and required the highest quality dyes available. Cotton was considered a luxury fabric in Europe, as it was imported all the way from India and was dyed before it was shipped. Cotton was also valued because of the brightness and colorfastness of the dyes used to color it.</p>
+                    <p>Dyes that gave fabrics a good bright color and were able to withstand washing and exposure to sunlight without losing their color were highly prized. The names of some of these valued and traded colors are still familiar today. The color known as Tyrian purple, for example, originated in the Mediterranean 2,000 years ago, and cochineal is the name given to the red dye from Latin America. Both of these colors came from animals; the mucus found in certain species of shellfish produced the deep rich Tyrian purple and cochineal was extracted from insects. Two other natural sources of color were saffron and indigo. Saffron, the base of yellow dyes, comes from the flowers of a particular kind of crocus which is thought to have first been cultivated on Crete in the eastern Mediterranean. The leaves of a plant native to India were used to produce indigo, which was the main source of the color blue.</p>
+                    <p>As societies developed over the centuries the demand for dyes and dyed fabric grew, and by the 17th century a world-wide shipping and trading network was in place, allowing dyestuffs from all parts of the world to be brought to Europe. This meant that numerous dyestuffs could be blended to create a variety of colors for the rich and powerful. Fiber dyeing in the lower classes was a bit more restrictive. Without the money to buy exotic imported dyes, clothing in the countryside tended to be black, brown, grey and tan. Country people had some resources they could use to get a wider range of colors. They had always used local plants as food, and many of these plants were also used as medicines and in some cases as sources of dyes. Home dyers used any plants they could find that would give a good color. People who picked blackberries to make jam soon recognized this wild fruit as a source for a blue dye. Washing beehives in preparation for making mead (a popular drink containing honey) yielded a liquid that could be used as a yellow dye. The mosses which grow in many parts of Europe were used to produce green dye.</p>
+                    <p>With the tremendous rise of interest in chemistry in the mid-19th century, several important innovations in dyeing came about. WH Perkin, a student of celebrated European scientist Wilhelm von Hofmann, accidentally discovered the first synthetic dye, later called mauve. The color was so popular that Perkin was able to open a factory of his own and went on to develop more synthetic dye colors. Synthetic dye production grew in Europe, and hardly a year passed until the end of the century without a new synthetic dye being patented.</p>
+                    <p>Eventually, the old natural dyes lost popularity in favor of the newer synthetic ones and now the use of natural dyes on a commercial scale only exists in a few remote areas where people have either little access to synthetic dyes or a vested interest in retaining their ancient dyeing customs.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <div class="section-title">Questions 1–8</div>
+            <div class="instructions">Do the following statements agree with the information given in Reading Passage 1?<br>In boxes 1-8 on your answer sheet, write<br>TRUE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement agrees with the information<br>FALSE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement contradicts the information<br>NOT GIVEN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if there is no information on this</div>
+            
+            <div class="question-group">
+                <div class="question" id="q1">
+                    <div class="question-title">
+                        <div class="question-number">1</div>
+                        <div class="question-text">Ochre was used in paintings before it was used in fabric dyes.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q2">
+                    <div class="question-title">
+                        <div class="question-number">2</div>
+                        <div class="question-text">Natural dyes that need a mordant are rare.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q3">
+                    <div class="question-title">
+                        <div class="question-number">3</div>
+                        <div class="question-text">In medieval times people sometimes wore fabric made of undyed wool.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q4">
+                    <div class="question-title">
+                        <div class="question-number">4</div>
+                        <div class="question-text">Silk has always been more expensive than cotton and wool.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q5">
+                    <div class="question-title">
+                        <div class="question-number">5</div>
+                        <div class="question-text">Cotton imported from India was dyed upon arrival in Europe.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q6">
+                    <div class="question-title">
+                        <div class="question-number">6</div>
+                        <div class="question-text">Perkin became more famous than his teacher, von Hofmann.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q6" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q6" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q7">
+                    <div class="question-title">
+                        <div class="question-number">7</div>
+                        <div class="question-text">Very few synthetic dyes were produced in Europe in the second half of the 19th century.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q7" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q7" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q7" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q8">
+                    <div class="question-title">
+                        <div class="question-number">8</div>
+                        <div class="question-text">Today the commercial production of natural dyes is limited to a small number of isolated communities.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q8" value="TRUE"> TRUE</label>
+                        <label class="option"><input type="radio" name="q8" value="FALSE"> FALSE</label>
+                        <label class="option"><input type="radio" name="q8" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">Questions 9–13</div>
+            <div class="instructions">Complete the notes below.<br>Choose ONE WORD ONLY from the passage for each answer.<br>Write your answers in boxes 9-13 on your answer sheet.</div>
+            
+            <div class="question-group">
+                <div class="question" id="q9">
+                    <div class="question-title">
+                        <div class="question-number">9</div>
+                        <div class="question-text">The history of some dyes<br>Highly valued dyes<br>Tyrian purple - mucus from <input type="text" name="q9" class="fill-in-the-blank"> found in the Mediterranean</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="q10">
+                    <div class="question-title">
+                        <div class="question-number">10</div>
+                        <div class="question-text">cochineal (a red dye) - made from <input type="text" name="q10" class="fill-in-the-blank"> found in Latin America</div>
+                    </div>
+                </div>
+
+                <div class="question" id="q11">
+                    <div class="question-title">
+                        <div class="question-number">11</div>
+                        <div class="question-text">17th century Europe<br>dyes made by country people:<br> <input type="text" name="q11" class="fill-in-the-blank"> had two uses - jam - blue dye</div>
+                    </div>
+                </div>
+
+                <div class="question" id="q12">
+                    <div class="question-title">
+                        <div class="question-number">12</div>
+                        <div class="question-text"> liquid from cleaning <input type="text" name="q12" class="fill-in-the-blank"> had two uses - making mead - yellow dye</div>
+                    </div>
+                </div>
+
+                <div class="question" id="q13">
+                    <div class="question-title">
+                        <div class="question-number">13</div>
+                        <div class="question-text">19th century Europe<br> progress in study of <input type="text" name="q13" class="fill-in-the-blank"> led to synthetic dyes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="progress-container" id="progress-container">
+            </div>
+        <div class="action-buttons">
+            <button class="btn-secondary" id="reset-btn">Reset Answers</button>
+            <button class="btn-primary" id="submit-btn">Submit Answers</button>
+        </div>
+    </footer>
+
+    <div class="feedback-overlay" id="feedback-overlay">
+        <div class="feedback-container" id="feedback-container">
+            <div class="feedback-header">
+                <div class="feedback-title">
+                    <i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/13</span>
+                </div>
+                <button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="feedback-body" id="feedback-body">
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let seconds = 1200; // 20 minutes
+        let timerRunning = false;
+        
+        const timerDisplay = document.getElementById('timer');
+        const startTimer = document.getElementById('start-timer');
+        const pauseTimer = document.getElementById('pause-timer');
+        const resetTimer = document.getElementById('reset-timer');
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+        
+        function updateTimer() {
+            timerDisplay.textContent = formatTime(seconds);
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                document.getElementById('submit-btn').click();
+            }
+        }
+        
+        startTimer.addEventListener('click', () => {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimer();
+                }, 1000);
+            }
+        });
+        
+        pauseTimer.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            }
+        });
+        
+        resetTimer.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            seconds = 1200;
+            updateTimer();
+        });
+        
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        nightModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            const icon = nightModeToggle.querySelector('i');
+            if (document.body.classList.contains('night-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Create progress indicators for questions 1-13
+        const progressContainer = document.getElementById('progress-container');
+        for (let i = 1; i <= 13; i++) { 
+            const progressItem = document.createElement('div');
+            progressItem.className = 'progress-item';
+            progressItem.textContent = i;
+            progressItem.dataset.question = i;
+            progressContainer.appendChild(progressItem);
+            
+            progressItem.addEventListener('click', () => {
+                const questionElement = document.getElementById(`q${i}`);
+                if (questionElement) {
+                    questionElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+        
+        // Text highlighting functionality
+        let highlightTooltip = null;
+
+        function handleMouseUp(e) {
+            const container = e.currentTarget;
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '' && container.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+
+                if (highlightTooltip) {
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                }
+
+                highlightTooltip = document.createElement('div');
+                highlightTooltip.className = 'highlight-tooltip';
+                highlightTooltip.innerHTML = '<i class="fas fa-highlighter"></i> Highlight';
+                highlightTooltip.style.position = 'fixed';
+                highlightTooltip.style.top = `${rect.top - 40}px`;
+                highlightTooltip.style.left = `${rect.left}px`;
+                document.body.appendChild(highlightTooltip);
+
+                highlightTooltip.addEventListener('click', () => {
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    selection.removeAllRanges();
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                });
+            }
+        }
+
+        document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+        document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+        
+        document.addEventListener('mousedown', (e) => {
+            if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+                highlightTooltip.remove();
+                highlightTooltip = null;
+                window.getSelection().removeAllRanges();
+            }
+        });
+        
+        // Store user answers for all questions
+        const userAnswers = {}; 
+
+        // Track answered questions and update progress bar
+        const progressItems = document.querySelectorAll('.progress-item');
+        
+        function updateProgress() {
+            let answeredCount = 0;
+            
+            for (let i = 1; i <= 13; i++) {
+                const questionNumber = i;
+                let answered = false;
+
+                if (questionNumber >= 1 && questionNumber <= 8) { // True/False/Not Given
+                    const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+                    answered = selectedOption !== null;
+                    if (answered) {
+                        userAnswers[questionNumber] = selectedOption.value; // Store radio button answer
+                    } else {
+                        delete userAnswers[questionNumber]; // Clear if unchecked
+                    }
+                } else if (questionNumber >= 9 && questionNumber <= 13) { // Fill-in-the-blank
+                    const input = document.querySelector(`input[name="q${questionNumber}"]`);
+                    answered = input.value.trim() !== '';
+                    if (answered) {
+                        userAnswers[questionNumber] = input.value.trim(); // Store fill-in-the-blank answer
+                    } else {
+                        delete userAnswers[questionNumber]; // Clear if empty
+                    }
+                }
+                
+                // Update the visual progress item
+                const progressItem = progressItems[questionNumber - 1]; // Adjust index for 1-13 range
+                if (answered) {
+                    progressItem.classList.add('completed');
+                    answeredCount++;
+                } else {
+                    progressItem.classList.remove('completed');
+                }
+            }
+            return answeredCount;
+        }
+        
+        // Listen for changes on radio button inputs
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', updateProgress);
+        });
+
+        // Listen for input on fill-in-the-blank fields
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+        
+        // Reset button
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            // Reset radio button answers
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Reset fill-in-the-blank inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Clear all stored answers
+            for (let key in userAnswers) {
+                delete userAnswers[key];
+            }
+
+            // Reset highlights
+            document.querySelectorAll('.highlight').forEach(highlight => {
+                const parent = highlight.parentNode;
+                while (highlight.firstChild) {
+                    parent.insertBefore(highlight.firstChild, highlight);
+                }
+                parent.removeChild(highlight);
+                parent.normalize();
+            });
+            
+            updateProgress();
+            document.getElementById('feedback-overlay').style.display = 'none';
+        });
+        
+        // Submit and Feedback functionality
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const closeFeedbackBtn = document.getElementById('close-feedback');
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            console.log("Submit button clicked!"); // Debugging log
+            pauseTimer.click();
+            
+            // Define the correct answers and explanations for "Dyes and Fabric Dyeing"
+            const answers = {
+                1: 'TRUE', 2: 'FALSE', 3: 'TRUE', 4: 'NOT GIVEN', 5: 'FALSE', 
+                6: 'NOT GIVEN', 7: 'FALSE', 8: 'TRUE',
+                9: 'shellfish', 10: 'insects', 11: 'blackberries', 12: 'beehives', 13: 'chemistry'
+            };
+            
+            const explanations = {
+                1: "The passage states, 'Scientists have been able to date the black, white, yellow and reddish pigments made from ochre, used in cave paintings, to over 15,000 BCE. With the development of fixed settlements and agriculture, around 7,000 to 2,000 BCE, people began to produce fabrics, and used natural substances such as ochre to color them.' This indicates paintings came first.",
+                2: "The passage states, 'Most natural dyes are adjective dyes, and require the application of a mordant solution'. This implies they are common, not rare.",
+                3: "The passage mentions wool 'was a common medieval fabric worn in both dyed and natural colors'.",
+                4: "The passage states cotton 'was considered a luxury fabric in Europe' because it was imported 'all the way from India', implying it was expensive, but does not compare its cost directly to silk.",
+                5: "The passage states that cotton 'was imported all the way from India and was dyed before it was shipped'.",
+                6: "The passage states Perkin 'accidentally discovered the first synthetic dye' and 'was able to open a factory of his own', but it does not compare his fame to von Hofmann's.",
+                7: "The passage states, 'Synthetic dye production grew in Europe, and hardly a year passed until the end of the century without a new synthetic dye being patented.' This contradicts the idea that very few were produced.",
+                8: "The passage states, 'now the use of natural dyes on a commercial scale only exists in a few remote areas where people have either little access to synthetic dyes or a vested interest in retaining their ancient dyeing customs.'",
+                9: "The passage mentions Tyrian purple came from 'the mucus found in certain species of shellfish'.",
+                10: "The passage states cochineal 'was extracted from insects'.",
+                11: "The passage notes, 'People who picked blackberries to make jam soon recognized this wild fruit as a source for a blue dye.'",
+                12: "The passage states, 'Washing beehives in preparation for making mead... yielded a liquid that could be used as a yellow dye.'",
+                13: "The passage states, 'With the tremendous rise of interest in chemistry in the mid-19th century, several important innovations in dyeing came about.'"
+            };
+            
+            let correctCount = 0;
+            const feedbackBody = document.getElementById('feedback-body');
+            feedbackBody.innerHTML = ''; 
+            
+            for (let i = 1; i <= 13; i++) {
+                let userAnswer, isCorrect, questionHTML, actualQuestionText;
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+                
+                if (i >= 1 && i <= 8) { // True/False/Not Given
+                    const questionDiv = document.getElementById(`q${i}`);
+                    actualQuestionText = questionDiv.querySelector('.question-text').textContent;
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer === answers[i];
+                    
+                    let optionsHTML = '';
+                    questionDiv.querySelectorAll('.options label').forEach(label => {
+                        const value = label.querySelector('input').value;
+                        const optionText = label.textContent.trim();
+                        let optionClass = '';
+                        if (value === userAnswer && !isCorrect) {
+                            optionClass = 'incorrect';
+                        } else if (value === answers[i]) {
+                            optionClass = 'correct';
+                        }
+                        optionsHTML += `<span class="${optionClass}">${optionText}</span><br>`;
+                    });
+                    
+                    questionHTML = `<div class="question-title-text">${actualQuestionText}</div><div class="options-feedback">${optionsHTML}</div>`;
+
+                } else if (i >= 9 && i <= 13) { // Fill-in-the-blank
+                    const questionDiv = document.getElementById(`q${i}`);
+                    actualQuestionText = questionDiv.querySelector('.question-text').textContent.replace(/<input[^>]*>/, '_______'); // Display blank for context
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer.toLowerCase() === answers[i].toLowerCase();
+
+                    questionHTML = `<div class="question-title-text">${actualQuestionText.replace('_______', `<strong><em>${userAnswer}</em></strong>`)}</div>`; // Show user's answer in context
+                }
+                
+                if (isCorrect) correctCount++;
+                
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">
+                        <span class="${isCorrect ? 'correct' : 'incorrect'}">Question ${i}:</span>
+                        ${isCorrect ? `<i class="fas fa-check correct" style="margin-left: 5px;"></i>` : `<i class="fas fa-times incorrect" style="margin-left: 5px;"></i>`}
+                    </div>
+                    <p>${questionHTML}</p>
+                    <div class="feedback-answer">
+                        <strong>Your answer:</strong> ${userAnswer || 'Not answered'}<br>
+                        ${!isCorrect ? `<strong>Correct answer:</strong> ${answers[i]}` : ''}
+                    </div>
+                    <div class="feedback-explanation">
+                        <strong>Explanation:</strong> ${explanations[i]}
+                    </div>
+                    <div class="feedback-passage">
+                        <strong>Relevant passage:</strong> "${passageReferences[i]}"
+                    </div>
+                `;
+                
+                feedbackBody.appendChild(feedbackItem);
+            }
+            
+            document.getElementById('score-display').textContent = `${correctCount}/13`; 
+            feedbackOverlay.style.display = 'flex';
+        });
+
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackOverlay.style.display = 'none';
+        });
+
+        feedbackOverlay.addEventListener('click', (e) => {
+            if (e.target === feedbackOverlay) {
+                feedbackOverlay.style.display = 'none';
+            }
+        });
+
+        // Initialize timer display and progress
+        updateTimer();
+        updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice - Multi-purpose meeting spaces</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --highlight-color: #87CEEB; /* Azure Blue for highlight */
+            
+            /* Header & Controls Colors (Azure themed) */
+            --header-bg: #F0F8FF; /* Very light azure for header background */
+            --header-text: #333333; /* Dark text for light header */
+
+            /* Button Colors (Azure themed) */
+            --button-bg: #007FFF; /* Primary button azure */
+            --button-hover: #005fbe; /* Darker azure on hover */
+            
+            --correct-color: #28a745; /* Standard green */
+            --incorrect-color: #dc3545; /* Standard red */
+            --progress-complete: #007FFF; /* Azure for completed progress */
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Azure themed) */
+            --timer-bg: #e0f2f7; /* Very light azure/cyan */
+            --timer-text: #0288d1; /* Darker azure/cyan */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0047AB; /* Darker Azure for night mode */
+            
+            /* Night Mode Header & Controls Colors */
+            --header-bg: #1a1a1a; /* Dark gray for header background */
+            --header-text: #ffffff; /* White text for dark header */
+
+            /* Night Mode Button Colors */
+            --button-bg: #0047AB; /* Darker primary button azure */
+            --button-hover: #002e70; /* Even darker azure on hover */
+            
+            --correct-color: #218838; /* Darker green */
+            --incorrect-color: #c82333; /* Darker red */
+            --progress-complete: #0047AB; /* Darker azure for completed progress */
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #002b4d; /* Dark azure */
+            --timer-text: #81d4fa; /* Lighter azure */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-end; /* Align to the right since logo area is gone */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light timer */
+        }
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light header */
+        }
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+        
+        .question-text {
+             font-size: 17px;
+             line-height: 1.8; /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline; /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column; /* Ensure vertical display for multiple choice options */
+            gap: 8px; /* Reduce gap slightly for a tighter vertical list */
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em; /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px; /* Add some padding */
+            margin: 0 3px; /* Add some margin */
+            vertical-align: baseline; /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Styles for Matching options list (A-H) */
+        .matching-options-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            background-color: var(--questions-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .matching-options-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .matching-options-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Table styles for new matching questions */
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .matching-table th, .matching-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .matching-table th {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table td {
+            background-color: var(--passage-bg);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+        .matching-table .question-cell {
+            text-align: left;
+            font-weight: 500;
+            background-color: var(--questions-bg); /* Keep question cells distinct */
+        }
+        .matching-table .header-cell {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table .selected {
+            background-color: var(--highlight-color);
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg); /* Use primary button color for border */
+            color: var(--button-bg); /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg); /* Use primary button color for explanation border */
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .progress-container {
+                max-width: 50%;
+            }
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-controls">
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <span id="timer">20:00</span>
+                <div class="timer-controls">
+                    <button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+                    <button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+                    <button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+            <button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="passage-container" id="passage-container">
+            <div class="passage-content">
+                <div class="passage-title">Multi-purpose meeting spaces</div>
+                <div class="passage-text" id="passage-text">
+                    <p>Trends in 21st-century architecture</p>
+                    <p>At the Nomad Café in California, Katrina Canlas, a law student at a nearby university, places her espresso next to her mobile phone, opens her laptop, logs on to the internet and begins preparing for her next class. She's a regular here but doesn't usually bring cash, so her credit-card statement each month reads 'Nomad, Nomad, Nomad'. That says it all, she thinks. She's one of today's 'urban nomads', permanently connected and constantly moving from place to place. She communicates all day by text, photo, video or voice with friends and family, and amazingly does her 'work stuff' at the same time. She roams around town, but alights at oases that cater to her and her fellow nomads.</p>
+                    <p>Christopher Waters opened the Nomad Café in 2003 to provide a watering-hole for 'techno-Bedouins' such as himself. Since Bedouins, whether in Arabian deserts or American suburbs, are tribal creatures, Waters understood from the outset that a good urban oasis has to do more than provide internet access; it must above all be a new — or very old — kind of gathering place. Urban nomads and their lifestyles are causing architects and planners to rethink how they design buildings and public spaces and even entire cities.</p>
+                    <p>A prime example of this new architecture can be found in the Stata Center at the Massachusetts Institute of Technology, designed by architect Frank Gehry. Gehry likes to cause a bit of controversy, and the Stata Center certainly did the trick. Opened in 2004, its façade of bizarre angles and windows became a Boston landmark. But the building's most radical innovation is on the inside. The entire structure was conceived as a kind of 'hybrid space', with the nomadic lifestyles of modern students and academic staff in mind. This is best seen in the building's 'student street', an interior passage, dotted with nooks and crannies, that twists and meanders through the complex and is open 24 hours a day. Cafés and lounges are interspersed with work desks and whiteboards, and there is free internet access everywhere. Students, teachers and visitors are studying, chatting, napping, emailing, researching, and reading. Every bit of this space can instantaneously become the venue for a seminar, a snack or a friendship.</p>
+                    <p>The fact that people are no longer tied to specific places for functions such as studying or learning means that since the turn of the 21st century there has been a huge drop in demand for traditional, private, enclosed spaces such as offices or classrooms. Simultaneously there has been a tremendous rise in demand for semi-public spaces that can be informally appropriated as ad-hoc work-spaces. This shift marks the biggest change in architecture in the 21st century. In the previous century, architecture was about specialised structures — offices for working, cafeterias for eating and so forth. This was necessary because workers needed to be near landline phones, fax machines and filing cabinets, and because the economics of building materials favoured repetitive and simple structures, such as grid patterns and cubicles.</p>
+                    <p>With spaces made intentionally multi-functional, 21st-century aesthetics will probably be the exact opposite of the sci-fi chic that 20th-century futurists once imagined. For example, buildings will have much more varied shapes than before. People working on laptops find it comforting to have their backs to a wall, so hybrid spaces will become curvier and snake-like in order to make best use of the surface area of their inner walls. This is more affordable today because computer-aided design and new materials make non-repetitive forms cheaper to build.</p>
+                    <p>Flexibility is what separates today's successful spaces from unsuccessful ones. For example, a not-for-profit organisation in New York turned Bryant Park, a once-derelict but charming garden in front of the city's public library, into a hybrid-space park popular with office workers. The park's manager noticed that a lot of visitors were using mobile phones and laptops there, so they installed Wi-Fi and added some chairs and desks. The idea was not to distract people from the flowers but to let them use their little bit of park as they saw fit.</p>
+                    <p>The academic name for such spaces is 'third places', a term coined by the sociologist Ray Oldenburg in 1989. Oldenburg wanted to distinguish between the sociological functions of people's first places where they live, their second places where they work and the other public spaces that serve them as safe, neutral and informal meeting points which would encourage conversation. As Oldenburg saw it, a good third place makes admission free or cheap—the price of a cup of coffee, say—offers creature comforts, and draws a group of regulars. He felt that most people, especially in suburban areas, were moving only between first and second places. Society, Oldenburg feared, was at risk of coming unstuck in these areas without third place venues for spreading ideas and forming bonds.</p>
+                    <p>But, do the oasis-like internet cafés for urban nomads play the role that Oldenburg envisioned? James Katz of Rutgers University warns that these cafés are often full of people with headphones on, speaking on their mobile phones and hacking away at their laptop keyboards. They are more engaged with their email inbox than with the people touching their elbows. These places are 'physically inhabited but psychologically evacuated', says Katz, which leaves people feeling 'more isolated than they would be if the café were merely empty'. Many cafés are trying to deal with this problem by, for example, hosting special events such as live jazz and poetry readings and actually turning off their internet connections at this time so that people mingle more. Clearly the new oases and the urban nomads who spawned them are still evolving.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <div class="section-title">Questions 27–30</div>
+            <div class="instructions">Choose the correct letter, A, B, C or D.<br>Write the correct letter in boxes 27-30 on your answer sheet.</div>
+            
+            <div class="question-group">
+                <div class="question" id="q27">
+                    <div class="question-title">
+                        <div class="question-number">27</div>
+                        <div class="question-text">According to Katrina Canlas, her monthly credit card bill</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q27" value="A"> A. typifies her way of life.</label>
+                        <label class="option"><input type="radio" name="q27" value="B"> B. makes her conscious of her overspending.</label>
+                        <label class="option"><input type="radio" name="q27" value="C"> C. helps her to budget her expenses.</label>
+                        <label class="option"><input type="radio" name="q27" value="D"> D. reminds her not to carry cash.</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q28">
+                    <div class="question-title">
+                        <div class="question-number">28</div>
+                        <div class="question-text">Christopher Waters believes that the most important ingredient of a successful urban oasis is</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q28" value="A"> A. its inclusion of the latest technology.</label>
+                        <label class="option"><input type="radio" name="q28" value="B"> B. its creation of a pleasant social atmosphere.</label>
+                        <label class="option"><input type="radio" name="q28" value="C"> C. its provision of excellent food and drink.</label>
+                        <label class="option"><input type="radio" name="q28" value="D"> D. its location in the city.</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q29">
+                    <div class="question-title">
+                        <div class="question-number">29</div>
+                        <div class="question-text">According to the writer, the design for the interior of the Stata Center was</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q29" value="A"> A. the most controversial feature.</label>
+                        <label class="option"><input type="radio" name="q29" value="B"> B. the most difficult part to construct.</label>
+                        <label class="option"><input type="radio" name="q29" value="C"> C. its most revolutionary aspect.</label>
+                        <label class="option"><input type="radio" name="q29" value="D"> D. its most visually pleasing quality.</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q30">
+                    <div class="question-title">
+                        <div class="question-number">30</div>
+                        <div class="question-text">The individual parts of ‘student street’ at the Stata Center were planned</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q30" value="A"> A. to serve specific well-defined functions.</label>
+                        <label class="option"><input type="radio" name="q30" value="B"> B. to incorporate traditional building designs.</label>
+                        <label class="option"><input type="radio" name="q30" value="C"> C. to provide separate areas for guests.</label>
+                        <label class="option"><input type="radio" name="q30" value="D"> D. to be interchangeable in their uses.</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">Questions 31–35</div>
+            <div class="instructions">Do the following statements agree with the views of the writer in Reading Passage 3?<br>In boxes 31-35 on your answer sheet, write<br>YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement agrees with the views of the writer<br>NO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement contradicts the views of the writer<br>NOT GIVEN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if it is impossible to say what the writer thinks about this</div>
+            
+            <div class="question-group">
+                <div class="question" id="q31">
+                    <div class="question-title">
+                        <div class="question-number">31</div>
+                        <div class="question-text">Today there are fewer single-purpose buildings and spaces being built.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q31" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q31" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q31" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q32">
+                    <div class="question-title">
+                        <div class="question-number">32</div>
+                        <div class="question-text">The job of 21st-century architects is more difficult and complex than in the past.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q32" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q32" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q32" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q33">
+                    <div class="question-title">
+                        <div class="question-number">33</div>
+                        <div class="question-text">Specialised structures in offices were necessary when most communications and data storage facilities could not be moved.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q33" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q33" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q33" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q34">
+                    <div class="question-title">
+                        <div class="question-number">34</div>
+                        <div class="question-text">In the 21st century, buildings will tend to be in a limited number of styles.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q34" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q34" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q34" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q35">
+                    <div class="question-title">
+                        <div class="question-number">35</div>
+                        <div class="question-text">Computer-aided design has increased the speed of construction.</div>
+                    </div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q35" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q35" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Questions 36–40</div>
+            <div class="instructions">Complete each sentence with the correct ending, A-H, below.<br>Write the correct letter, A-H, in boxes 36-40 on your answer sheet.</div>
+            
+            <div class="matching-options-list">
+                <strong>List of Endings</strong>
+                <ul>
+                    <li>A. are more popular in areas of urban concentration.</li>
+                    <li>B. encourage users to temporarily give up their mobile electronics.</li>
+                    <li>C. should be inexpensive, relaxing and secure.</li>
+                    <li>D. are found among virtually all levels of society.</li>
+                    <li>E. are based on people's previously observed patterns of activity.</li>
+                    <li>F. are locations that are neither workplaces nor homes.</li>
+                    <li>G. are a common sight in internet cafés.</li>
+                    <li>H. are in danger of losing their social cohesion.</li>
+                </ul>
+            </div>
+
+            <div class="question-group" id="q-group-36-40">
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th class="header-cell"></th> <th class="header-cell">A</th>
+                            <th class="header-cell">B</th>
+                            <th class="header-cell">C</th>
+                            <th class="header-cell">D</th>
+                            <th class="header-cell">E</th>
+                            <th class="header-cell">F</th>
+                            <th class="header-cell">G</th>
+                            <th class="header-cell">H</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-question-id="36">
+                            <td class="question-cell">36. The features found in the remodelled Bryant Park in New York</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                            <td data-answer="H"></td>
+                        </tr>
+                        <tr data-question-id="37">
+                            <td class="question-cell">37. As originally defined by Oldenburg, third places</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                            <td data-answer="H"></td>
+                        </tr>
+                        <tr data-question-id="38">
+                            <td class="question-cell">38. Oldenburg believes that suburbs lacking third places</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                            <td data-answer="H"></td>
+                        </tr>
+                        <tr data-question-id="39">
+                            <td class="question-cell">39. Katz believes that people interacting only with inanimate objects</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                            <td data-answer="H"></td>
+                        </tr>
+                        <tr data-question-id="40">
+                            <td class="question-cell">40. The special events which some cafés sponsor</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                            <td data-answer="H"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="progress-container" id="progress-container">
+            </div>
+        <div class="action-buttons">
+            <button class="btn-secondary" id="reset-btn">Reset Answers</button>
+            <button class="btn-primary" id="submit-btn">Submit Answers</button>
+        </div>
+    </footer>
+
+    <div class="feedback-overlay" id="feedback-overlay">
+        <div class="feedback-container" id="feedback-container">
+            <div class="feedback-header">
+                <div class="feedback-title">
+                    <i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/14</span>
+                </div>
+                <button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="feedback-body" id="feedback-body">
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let seconds = 1200; // 20 minutes
+        let timerRunning = false;
+        
+        const timerDisplay = document.getElementById('timer');
+        const startTimer = document.getElementById('start-timer');
+        const pauseTimer = document.getElementById('pause-timer');
+        const resetTimer = document.getElementById('reset-timer');
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+        
+        function updateTimer() {
+            timerDisplay.textContent = formatTime(seconds);
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                document.getElementById('submit-btn').click();
+            }
+        }
+        
+        startTimer.addEventListener('click', () => {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimer();
+                }, 1000);
+            }
+        });
+        
+        pauseTimer.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            }
+        });
+        
+        resetTimer.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            seconds = 1200;
+            updateTimer();
+        });
+        
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        nightModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            const icon = nightModeToggle.querySelector('i');
+            if (document.body.classList.contains('night-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Create progress indicators for questions 27-40
+        const progressContainer = document.getElementById('progress-container');
+        for (let i = 27; i <= 40; i++) { 
+            const progressItem = document.createElement('div');
+            progressItem.className = 'progress-item';
+            progressItem.textContent = i;
+            progressItem.dataset.question = i;
+            progressContainer.appendChild(progressItem);
+            
+            progressItem.addEventListener('click', () => {
+                const questionElement = document.getElementById(`q${i}`);
+                if (questionElement) {
+                    questionElement.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // For table-based questions, find the row and scroll to it
+                    const tableRow = document.querySelector(`[data-question-id="${i}"]`);
+                    if (tableRow) {
+                        tableRow.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+        
+        // Text highlighting functionality
+        let highlightTooltip = null;
+
+        function handleMouseUp(e) {
+            const container = e.currentTarget;
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '' && container.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+
+                if (highlightTooltip) {
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                }
+
+                highlightTooltip = document.createElement('div');
+                highlightTooltip.className = 'highlight-tooltip';
+                highlightTooltip.innerHTML = '<i class="fas fa-highlighter"></i> Highlight';
+                highlightTooltip.style.position = 'fixed';
+                highlightTooltip.style.top = `${rect.top - 40}px`;
+                highlightTooltip.style.left = `${rect.left}px`;
+                document.body.appendChild(highlightTooltip);
+
+                highlightTooltip.addEventListener('click', () => {
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    selection.removeAllRanges();
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                });
+            }
+        }
+
+        document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+        document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+        
+        document.addEventListener('mousedown', (e) => {
+            if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+                highlightTooltip.remove();
+                highlightTooltip = null;
+                window.getSelection().removeAllRanges();
+            }
+        });
+        
+        // Store user answers for all questions
+        const userAnswers = {}; 
+
+        // Handle table cell clicks for questions 36-40
+        document.querySelectorAll('.matching-table td:not(.question-cell):not(.header-cell)').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const questionId = parseInt(row.dataset.questionId);
+                const answer = this.dataset.answer;
+
+                // Remove 'selected' class from all selectable cells in the same row
+                row.querySelectorAll('td:not(.question-cell):not(.header-cell)').forEach(td => td.classList.remove('selected'));
+
+                // Add 'selected' class to the clicked cell
+                this.classList.add('selected');
+
+                // Store the answer
+                userAnswers[questionId] = answer;
+                updateProgress();
+            });
+        });
+
+        // Track answered questions and update progress bar
+        const progressItems = document.querySelectorAll('.progress-item');
+        
+        function updateProgress() {
+            let answeredCount = 0;
+            
+            for (let i = 27; i <= 40; i++) {
+                const questionNumber = i;
+                let answered = false;
+
+                if (questionNumber >= 27 && questionNumber <= 35) { // Multiple Choice & True/False/Not Given
+                    const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+                    answered = selectedOption !== null;
+                    if (answered) {
+                        userAnswers[questionNumber] = selectedOption.value; // Store radio button answer
+                    } else {
+                        delete userAnswers[questionNumber]; // Clear if unchecked
+                    }
+                } else if (questionNumber >= 36 && questionNumber <= 40) { // Table-based matching
+                    answered = userAnswers[questionNumber] !== undefined;
+                }
+                
+                // Update the visual progress item
+                const progressItem = progressItems[questionNumber - 27]; // Adjust index for 27-40 range
+                if (answered) {
+                    progressItem.classList.add('completed');
+                    answeredCount++;
+                } else {
+                    progressItem.classList.remove('completed');
+                }
+            }
+            return answeredCount;
+        }
+        
+        // Listen for changes on radio button inputs
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', updateProgress);
+        });
+        
+        // Reset button
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            // Reset radio button answers
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Reset table answers
+            document.querySelectorAll('.matching-table td').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            
+            // Clear all stored answers
+            for (let key in userAnswers) {
+                delete userAnswers[key];
+            }
+
+            // Reset highlights
+            document.querySelectorAll('.highlight').forEach(highlight => {
+                const parent = highlight.parentNode;
+                while (highlight.firstChild) {
+                    parent.insertBefore(highlight.firstChild, highlight);
+                }
+                parent.removeChild(highlight);
+                parent.normalize();
+            });
+            
+            updateProgress();
+            document.getElementById('feedback-overlay').style.display = 'none';
+        });
+        
+        // Submit and Feedback functionality
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const closeFeedbackBtn = document.getElementById('close-feedback');
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            console.log("Submit button clicked!"); // Debugging log
+            pauseTimer.click();
+            
+            // Define the correct answers and explanations for "Multi-purpose meeting spaces"
+            const answers = {
+                27: 'A', 28: 'B', 29: 'C', 30: 'D',
+                31: 'YES', 32: 'NOT GIVEN', 33: 'YES', 34: 'NO', 35: 'NOT GIVEN',
+                36: 'E', 37: 'C', 38: 'H', 39: 'G', 40: 'B'
+            };
+            
+            const explanations = {
+                27: "The passage states, 'Her credit-card statement each month reads 'Nomad, Nomad, Nomad'. That says it all, she thinks.' This implies the bill reflects her nomadic way of life.",
+                28: "Christopher Waters 'understood from the outset that a good urban oasis has to do more than provide internet access; it must above all be a new — or very old — kind of gathering place.' A gathering place implies a pleasant social atmosphere.",
+                29: "The passage highlights the Stata Center's interior, stating, 'But the building's most radical innovation is on the inside.'",
+                30: "The text says, 'Every bit of this space can instantaneously become the venue for a seminar, a snack or a friendship,' indicating interchangeable uses.",
+                31: "The passage states there has been 'a huge drop in demand for traditional, private, enclosed spaces' and a rise in demand for 'semi-public spaces' since the 21st century, indicating a move away from single-purpose buildings.",
+                32: "The passage discusses changes in architectural design and materials but does not explicitly state that the job of 21st-century architects is more difficult or complex.",
+                33: "The passage explains that specialized structures were necessary because 'workers needed to be near landline phones, fax machines and filing cabinets,' which are immobile communication and data storage facilities.",
+                34: "The passage clearly states, 'buildings will have much more varied shapes than before' in the 21st century.",
+                35: "The passage mentions 'computer-aided design and new materials make non-repetitive forms cheaper to build,' but does not refer to increased speed of construction.",
+                36: "The manager of Bryant Park 'noticed that a lot of visitors were using mobile phones and laptops there, so they installed Wi-Fi and added some chairs and desks,' which shows features were based on observed activity patterns.",
+                37: "Oldenburg defined good third places as making 'admission free or cheap', offering 'creature comforts', and serving as 'safe, neutral and informal meeting points'.",
+                38: "Oldenburg 'feared' that society in suburban areas was 'at risk of coming unstuck... without third place venues for spreading ideas and forming bonds,' which relates to losing social cohesion.",
+                39: "James Katz describes internet cafés as 'often full of people with headphones on, speaking on their mobile phones and hacking away at their laptop keyboards,' which is a common sight of people interacting primarily with inanimate objects.",
+                40: "Cafés are 'turning off their internet connections at this time so that people mingle more,' which directly encourages users to temporarily give up their mobile electronics."
+            };
+            
+            const passageReferences = {
+                27: "Passage A: 'Her credit-card statement each month reads 'Nomad, Nomad, Nomad'. That says it all, she thinks.'",
+                28: "Passage B: 'Waters understood from the outset that a good urban oasis has to do more than provide internet access; it must above all be a new — or very old — kind of gathering place.'",
+                29: "Passage C: 'But the building's most radical innovation is on the inside.'",
+                30: "Passage C: 'Every bit of this space can instantaneously become the venue for a seminar, a snack or a friendship.'",
+                31: "Passage D: '...since the turn of the 21st century there has been a huge drop in demand for traditional, private, enclosed spaces... This shift marks the biggest change in architecture in the 21st century. In the previous century, architecture was about specialised structures...'",
+                32: "No direct statement in the passage implies this.",
+                33: "Passage D: 'This was necessary because workers needed to be near landline phones, fax machines and filing cabinets...'",
+                34: "Passage E: 'For example, buildings will have much more varied shapes than before.'",
+                35: "No direct statement in the passage implies this.",
+                36: "Passage F: 'The park's manager noticed that a lot of visitors were using mobile phones and laptops there, so they installed Wi-Fi and added some chairs and desks. The idea was not to distract people from the flowers but to let them use their little bit of park as they saw fit.'",
+                37: "Passage G: 'As Oldenburg saw it, a good third place makes admission free or cheap—the price of a cup of coffee, say—offers creature comforts, and draws a group of regulars.' Also 'safe, neutral and informal meeting points which would encourage conversation.'",
+                38: "Passage G: 'Society, Oldenburg feared, was at risk of coming unstuck in these areas without third place venues for spreading ideas and forming bonds.'",
+                39: "Passage H: 'James Katz of Rutgers University warns that these cafés are often full of people with headphones on, speaking on their mobile phones and hacking away at their laptop keyboards. They are more engaged with their email inbox than with the people touching their elbows.'",
+                40: "Passage H: 'Many cafés are trying to deal with this problem by, for example, hosting special events such as live jazz and poetry readings and actually turning off their internet connections at this time so that people mingle more.'"
+            };
+            
+            let correctCount = 0;
+            const feedbackBody = document.getElementById('feedback-body');
+            feedbackBody.innerHTML = ''; 
+            
+            for (let i = 27; i <= 40; i++) {
+                let userAnswer, isCorrect, questionHTML, actualQuestionText;
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+                
+                if (i >= 27 && i <= 35) { // Multiple Choice & True/False/Not Given
+                    const questionDiv = document.getElementById(`q${i}`);
+                    actualQuestionText = questionDiv.querySelector('.question-text').textContent;
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer === answers[i];
+                    
+                    let optionsHTML = '';
+                    questionDiv.querySelectorAll('.options label').forEach(label => {
+                        const value = label.querySelector('input').value;
+                        const optionText = label.textContent.trim();
+                        let optionClass = '';
+                        if (value === userAnswer && !isCorrect) {
+                            optionClass = 'incorrect';
+                        } else if (value === answers[i]) {
+                            optionClass = 'correct';
+                        }
+                        optionsHTML += `<span class="${optionClass}">${optionText}</span><br>`;
+                    });
+                    
+                    questionHTML = `<div class="question-title-text">${actualQuestionText}</div><div class="options-feedback">${optionsHTML}</div>`;
+
+                } else if (i >= 36 && i <= 40) { // Table-based matching
+                    const questionRow = document.querySelector(`tr[data-question-id="${i}"]`);
+                    actualQuestionText = questionRow.querySelector('.question-cell').textContent.replace(/^\d+\.\s*/, '');
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer === answers[i];
+
+                    questionHTML = `<div class="question-title-text">${actualQuestionText}</div>`;
+                    questionHTML += `<div class="feedback-table-row">`;
+                    questionHTML += `Your selection: <span class="${isCorrect ? 'correct' : 'incorrect'}"><strong>${userAnswer}</strong></span>`;
+                    if (!isCorrect) {
+                         questionHTML += ` Correct answer: <span class="correct"><strong>${answers[i]}</strong></span>`;
+                    }
+                    questionHTML += `</div>`;
+                }
+                
+                if (isCorrect) correctCount++;
+                
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">
+                        <span class="${isCorrect ? 'correct' : 'incorrect'}">Question ${i}:</span>
+                        ${isCorrect ? `<i class="fas fa-check correct" style="margin-left: 5px;"></i>` : `<i class="fas fa-times incorrect" style="margin-left: 5px;"></i>`}
+                    </div>
+                    <p>${questionHTML}</p>
+                    <div class="feedback-explanation">
+                        <strong>Explanation:</strong> ${explanations[i]}
+                    </div>
+                    <div class="feedback-passage">
+                        <strong>Relevant passage:</strong> "${passageReferences[i]}"
+                    </div>
+                `;
+                
+                feedbackBody.appendChild(feedbackItem);
+            }
+            
+            document.getElementById('score-display').textContent = `${correctCount}/14`; 
+            feedbackOverlay.style.display = 'flex';
+        });
+
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackOverlay.style.display = 'none';
+        });
+
+        feedbackOverlay.addEventListener('click', (e) => {
+            if (e.target === feedbackOverlay) {
+                feedbackOverlay.style.display = 'none';
+            }
+        });
+
+        // Initialize timer display and progress
+        updateTimer();
+        updateProgress();
+    </script>
+</body>
+</html>

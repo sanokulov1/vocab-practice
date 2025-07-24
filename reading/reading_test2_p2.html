@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice - The City of Great Zimbabwe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --highlight-color: #87CEEB; /* Azure Blue for highlight */
+            
+            /* Header & Controls Colors (Azure themed) */
+            --header-bg: #F0F8FF; /* Very light azure for header background */
+            --header-text: #333333; /* Dark text for light header */
+
+            /* Button Colors (Azure themed) */
+            --button-bg: #007FFF; /* Primary button azure */
+            --button-hover: #005fbe; /* Darker azure on hover */
+            
+            --correct-color: #28a745; /* Standard green */
+            --incorrect-color: #dc3545; /* Standard red */
+            --progress-complete: #007FFF; /* Azure for completed progress */
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Azure themed) */
+            --timer-bg: #e0f2f7; /* Very light azure/cyan */
+            --timer-text: #0288d1; /* Darker azure/cyan */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0047AB; /* Darker Azure for night mode */
+            
+            /* Night Mode Header & Controls Colors */
+            --header-bg: #1a1a1a; /* Dark gray for header background */
+            --header-text: #ffffff; /* White text for dark header */
+
+            /* Night Mode Button Colors */
+            --button-bg: #0047AB; /* Darker primary button azure */
+            --button-hover: #002e70; /* Even darker azure on hover */
+            
+            --correct-color: #218838; /* Darker green */
+            --incorrect-color: #c82333; /* Darker red */
+            --progress-complete: #0047AB; /* Darker azure for completed progress */
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #002b4d; /* Dark azure */
+            --timer-text: #81d4fa; /* Lighter azure */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-end; /* Align to the right since logo area is gone */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light timer */
+        }
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light header */
+        }
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+        
+        .question-text {
+             font-size: 17px;
+             line-height: 1.8; /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline; /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em; /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px; /* Add some padding */
+            margin: 0 3px; /* Add some margin */
+            vertical-align: baseline; /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Styles for Matching questions */
+        .matching-options-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            background-color: var(--questions-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .matching-options-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .matching-options-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Styles for Flowchart display */
+        .flowchart-title-main {
+            font-size: 20px; /* Make it bigger */
+            font-weight: 700;
+            text-align: center; /* Center the title */
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .flowchart-group .question {
+            border-left: none; /* Remove left border for flowchart questions */
+            background-color: transparent; /* Make background transparent */
+            padding: 0; /* Remove padding */
+            margin-bottom: 0; /* Adjust margin */
+        }
+        .flowchart-group .question-title {
+            margin-bottom: 5px;
+        }
+        .flowchart-arrow-container {
+            display: flex;
+            justify-content: center; /* Center the arrow horizontally */
+            margin: 10px 0; /* Space above and below arrow */
+        }
+        .flowchart-arrow {
+            font-size: 2em; /* Make arrow bigger */
+            color: var(--text-color);
+        }
+
+        /* Table styles for new matching questions */
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .matching-table th, .matching-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .matching-table th {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table td {
+            background-color: var(--passage-bg);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .matching-table td:hover:not(.question-cell) {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .matching-table td:hover:not(.question-cell) {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+        .matching-table .question-cell {
+            text-align: left;
+            font-weight: 500;
+            background-color: var(--questions-bg); /* Keep question cells distinct */
+        }
+
+        .matching-table .selected {
+            background-color: var(--highlight-color);
+        }
+
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg); /* Use primary button color for border */
+            color: var(--button-bg); /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg); /* Use primary button color for explanation border */
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .progress-container {
+                max-width: 50%;
+            }
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-controls">
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <span id="timer">20:00</span>
+                <div class="timer-controls">
+                    <button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+                    <button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+                    <button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+            <button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="passage-container" id="passage-container">
+            <div class="passage-content">
+                <div class="passage-title">The city of Great Zimbabwe</div>
+                <div class="passage-text" id="passage-text">
+                    <p><strong>A</strong> The ruins of the city of Great Zimbabwe in southern Africa are a unique testimony to the civilisation of the Shona1 people. The Shona word 'zimbabwe' means a large stone house, but the ruins consist of the largest stone complex in of Africa ancient built before modem of era, aside from the monumental architecture of ancient Egypt. Their method of construction is unique to African architecture and, although there are examples of similar work elsewhere, none are as distinguished and imposing as Great Zimbabwe. The city was an important trading centre and has been renowned for centuries. The modem country of Zimbabwe, where the ruins are situated, was named after it, and in 1986 Great Zimbabwe was designated both a national monument and a World Heritage site.</p>
+                    <p><strong>B</strong> Great Zimbabwe is located on a plain at an altitude of some 1,100 metres in a sparsely populated region. The city, built between 1100 and 1450 AD, extends over seven square kilometres, and is divided into three areas: the Hill Complex, the Great Enclosure and the Valley Complex.</p>
+                    <p>The Hill Complex, forming a huge granite mass on top of a north-east/southwest-facing ridge, was continuously occupied from the 12th to the 15th century, and traces of human settlements are found in numerous layers. Rough granite rubble-stone blocks form distinct enclosures, accessed by narrow, partly covered passageways. This complex is generally considered a 'royal city'; the west enclosure is thought to have been the residence of successive chiefs and the east enclosure, where six soapstone posts topped with figurines of birds were found, is considered to have served a ritual purpose.</p>
+                    <p><strong>C</strong> The Great Enclosure, which is oval shaped, is located to the south of the hills, and dates to the 13th century. The external walls were built of cut granite blocks, laid in regular courses, and within these walls there are community and living areas, and a narrow passage leading to a high conical tower, which may have functioned as a granary warehouse. Interior walls mark off each family's area, generally comprising a kitchen, two living huts and a yard. Huts were made of mud bricks, composed of a mixture of granitic sand and clay.</p>
+                    <p>____________________<br>[1] Shona: an ethnic group native to Zimbabwe neighbouring countries</p>
+                    <p><strong>D</strong> The Valley Complex, which dates back to the 15th century, is a series of living quarters scattered throughout the valley. Each one has similar characteristics: many of the structures are in brick (huts, indoor flooring, benches, basins, etc.) and dry stone walls provide insulation. Construction work was carried out to a high standard of craftsmanship, incorporating an impressive display of V-shaped and checked wall decorations.</p>
+                    <p><strong>E</strong> Scientific research has shown that Great Zimbabwe was founded around 1100 on a site which had been sparsely occupied in the prehistoric period by the Shona. By the 14th century, it was the principal city of a major state extending over the gold-rich area; its population exceeded 10,000. However, in about 1450 the capital was abandoned. The reasons for this are debated, but suggestions include a shortage of food for the overpopulated city, and deforestation. The resulting migration benefited Khami, which then became the most influential city in the region, and signalled Great Zimbabwe's waning political power.</p>
+                    <p><strong>F</strong> Archaeological excavations at Great Zimbabwe have revealed glass beads and porcelain from China and Persia, and gold and Arab coins from the Indian Ocean island of Kilwa, which testify to long-standing trade with the outer world. Other evidence, including fragments of pottery and ironware, gives a further insight into the city's socio-economic complexity and into farming and pastoral activities in the surrounding area. A monumental granite cross, located at a traditionally revered and sacred site, also illustrates contact with Christian missionaries.</p>
+                    <p>In the late 19th century, numerous soapstone figurines in the form of birds were found mounted on columns, buried among the ruins. These are testimony to the use of the site as a place of worship from the 12th century to the present day. The birds, which had some human features, were subsequently described as the Zimbabwe Birds, and a design based on them became a national symbol, incorporated into the Zimbabwe flag and shown in other prestigious contexts.</p>
+                    <p><strong>G</strong> Despite the importance of the site, it has suffered some deterioration due to variations in temperature and soil moisture content, as well as pressure from tourism, encroaching invasive vegetation, and incorrect preservation methods. The site would benefit if attention was given to conservation techniques and the materials employed, as well as to the need for conservation standards that meet the international benchmark, but which are balanced with the traditional activities still taking place there.</p>
+                    <p>The site has been legally protected since 1893, and today is managed by the Zimbabwean Ministry of Home Affairs. Funding for the management and conservation of the site comes mainly from central government, with limited revenue generated by the sale of publications and charging an entrance fee for the site.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <div class="section-title">Questions 14–19</div>
+            <div class="instructions">Reading passage 2 has seven sections, A–G.<br>Which section contains the following information?<br>Write the correct letter, A–G, in boxes 14–19 on your answer sheet. <br>NB You may use any letter more than once.</div>
+            
+            <div class="question-group" id="q-group-14-19">
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>C</th>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>F</th>
+                            <th>G</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-question-id="14">
+                            <td class="question-cell">14. a list of factors which have resulted in some damage to Great Zimbabwe</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="15">
+                            <td class="question-cell">15. proof of the former commercial significance of Great Zimbabwe</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="16">
+                            <td class="question-cell">16. an indication of the global importance attached to Great Zimbabwe nowadays</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="17">
+                            <td class="question-cell">17. an overview of the layout of the archaeological site</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="18">
+                            <td class="question-cell">18. a reference to the quality of comparable buildings in other places</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="19">
+                            <td class="question-cell">19. theories about the eventual desertion of Great Zimbabwe</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section-title">Questions 20–23</div>
+            <div class="instructions">Look at the following aspects of Great Zimbabwe and the list of areas below.<br>Match each aspect with the correct area, A, B or C.<br>Write the correct letter, A, B or C, in boxes 20-23 on your answer sheet.<br>NB You may use any letter more than once.</div>
+            
+            <div class="matching-options-list">
+                <strong>List of Areas</strong>
+                <ul>
+                    <li>A &ndash; Hill Complex</li>
+                    <li>B &ndash; Great Enclosure</li>
+                    <li>C &ndash; Valley Complex</li>
+                </ul>
+            </div>
+
+            <div class="question-group" id="q-group-20-23">
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>C</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-question-id="20">
+                            <td class="question-cell">20. Its outer walls are curved.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                        </tr>
+                        <tr data-question-id="21">
+                            <td class="question-cell">21. Part of it may have been used for ceremonies.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                        </tr>
+                        <tr data-question-id="22">
+                            <td class="question-cell">22. Some of its buildings feature geometric patterns.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                        </tr>
+                        <tr data-question-id="23">
+                            <td class="question-cell">23. It includes a structure that could have been used for storage.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-title">Questions 24–26</div>
+            <div class="instructions">Complete the sentences below.<br>Choose ONE WORD ONLY from the passage for each answer.<br>Write your answers in boxes 24–26 on your answer sheet.</div>
+            
+            <div class="question-group">
+                <div class="question" id="q24">
+                    <div class="question-title">
+                        <div class="question-number">24</div>
+                        <div class="question-text">An image based on the bird sculptures found at Great Zimbabwe now appears on the national <input type="text" name="q24" class="fill-in-the-blank">.</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="q25">
+                    <div class="question-title">
+                        <div class="question-number">25</div>
+                        <div class="question-text">The impact of nature on Great Zimbabwe, as well as that of <input type="text" name="q25" class="fill-in-the-blank"> needs to be carefully managed.</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="q26">
+                    <div class="question-title">
+                        <div class="question-number">26</div>
+                        <div class="question-text">A small part of Great Zimbabwe's income comes from selling tickets and <input type="text" name="q26" class="fill-in-the-blank">.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="progress-container" id="progress-container">
+            </div>
+        <div class="action-buttons">
+            <button class="btn-secondary" id="reset-btn">Reset Answers</button>
+            <button class="btn-primary" id="submit-btn">Submit Answers</button>
+        </div>
+    </footer>
+
+    <div class="feedback-overlay" id="feedback-overlay">
+        <div class="feedback-container" id="feedback-container">
+            <div class="feedback-header">
+                <div class="feedback-title">
+                    <i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/13</span>
+                </div>
+                <button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="feedback-body" id="feedback-body">
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let seconds = 1200; // 20 minutes
+        let timerRunning = false;
+        
+        const timerDisplay = document.getElementById('timer');
+        const startTimer = document.getElementById('start-timer');
+        const pauseTimer = document.getElementById('pause-timer');
+        const resetTimer = document.getElementById('reset-timer');
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+        
+        function updateTimer() {
+            timerDisplay.textContent = formatTime(seconds);
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                document.getElementById('submit-btn').click();
+            }
+        }
+        
+        startTimer.addEventListener('click', () => {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimer();
+                }, 1000);
+            }
+        });
+        
+        pauseTimer.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            }
+        });
+        
+        resetTimer.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            seconds = 1200;
+            updateTimer();
+        });
+        
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        nightModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            const icon = nightModeToggle.querySelector('i');
+            if (document.body.classList.contains('night-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Create progress indicators
+        const progressContainer = document.getElementById('progress-container');
+        for (let i = 1; i <= 26; i++) { // Update total questions to 26
+            const progressItem = document.createElement('div');
+            progressItem.className = 'progress-item';
+            progressItem.textContent = i;
+            progressItem.dataset.question = i;
+            progressContainer.appendChild(progressItem);
+            
+            progressItem.addEventListener('click', () => {
+                const questionElement = document.getElementById(`q${i}`);
+                if (questionElement) {
+                    questionElement.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // For table-based questions, find the row and scroll to it
+                    const tableRow = document.querySelector(`[data-question-id="${i}"]`);
+                    if (tableRow) {
+                        tableRow.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+        
+        // Text highlighting functionality
+        let highlightTooltip = null;
+
+        function handleMouseUp(e) {
+            const container = e.currentTarget;
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '' && container.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+
+                if (highlightTooltip) {
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                }
+
+                highlightTooltip = document.createElement('div');
+                highlightTooltip.className = 'highlight-tooltip';
+                highlightTooltip.innerHTML = '<i class="fas fa-highlighter"></i> Highlight';
+                highlightTooltip.style.position = 'fixed';
+                highlightTooltip.style.top = `${rect.top - 40}px`;
+                highlightTooltip.style.left = `${rect.left}px`;
+                document.body.appendChild(highlightTooltip);
+
+                highlightTooltip.addEventListener('click', () => {
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    selection.removeAllRanges();
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                });
+            }
+        }
+
+        document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+        document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+        
+        document.addEventListener('mousedown', (e) => {
+            if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+                highlightTooltip.remove();
+                highlightTooltip = null;
+                window.getSelection().removeAllRanges();
+            }
+        });
+        
+        // Store user answers for table-based questions
+        const userTableAnswers = {}; // { questionId: selectedAnswer }
+
+        // Handle table cell clicks for questions 14-19 and 20-23
+        document.querySelectorAll('.matching-table td:not(.question-cell)').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const questionId = parseInt(row.dataset.questionId);
+                const answer = this.dataset.answer;
+
+                // Remove 'selected' class from all cells in the same row
+                row.querySelectorAll('td').forEach(td => td.classList.remove('selected'));
+
+                // Add 'selected' class to the clicked cell
+                this.classList.add('selected');
+
+                // Store the answer
+                userTableAnswers[questionId] = answer;
+                updateProgress();
+            });
+        });
+
+        // Track answered questions
+        const questions = document.querySelectorAll('.question'); // For fill-in-the-blank
+        const progressItems = document.querySelectorAll('.progress-item');
+        
+        function updateProgress() {
+            let answeredCount = 0;
+            
+            // Update progress for table-based questions (14-23)
+            for (let i = 14; i <= 23; i++) {
+                const questionNumber = i;
+                const row = document.querySelector(`[data-question-id="${questionNumber}"]`);
+                if (row && userTableAnswers[questionNumber]) {
+                    // Mark question as answered in the progress bar
+                    progressItems[questionNumber - 1].classList.add('completed');
+                    answeredCount++;
+                } else if (row) {
+                    progressItems[questionNumber - 1].classList.remove('completed');
+                }
+            }
+
+            // Update progress for fill-in-the-blank questions (24-26)
+            for (let i = 24; i <= 26; i++) {
+                const questionNumber = i;
+                const questionElement = document.getElementById(`q${questionNumber}`);
+                if (questionElement) {
+                    const input = questionElement.querySelector('input[type="text"]');
+                    let answered = input.value.trim() !== '';
+
+                    if (answered) {
+                        questionElement.classList.add('answered');
+                        progressItems[questionNumber - 1].classList.add('completed');
+                        answeredCount++;
+                    } else {
+                        questionElement.classList.remove('answered');
+                        progressItems[questionNumber - 1].classList.remove('completed');
+                    }
+                }
+            }
+            return answeredCount;
+        }
+        
+        // Listen for changes on fill-in-the-blank inputs
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+        
+        // Reset button
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            // Reset table answers
+            document.querySelectorAll('.matching-table td').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            for (let key in userTableAnswers) {
+                delete userTableAnswers[key];
+            }
+
+            // Reset fill-in-the-blank inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset highlights
+            document.querySelectorAll('.highlight').forEach(highlight => {
+                const parent = highlight.parentNode;
+                while (highlight.firstChild) {
+                    parent.insertBefore(highlight.firstChild, highlight);
+                }
+                parent.removeChild(highlight);
+                parent.normalize();
+            });
+            
+            updateProgress();
+            document.getElementById('feedback-overlay').style.display = 'none';
+        });
+        
+        // Submit and Feedback functionality
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const closeFeedbackBtn = document.getElementById('close-feedback');
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            console.log("Submit button clicked!"); // Debugging log
+            pauseTimer.click();
+            
+            // Define the correct answers and explanations for the "Great Zimbabwe" passage
+            const answers = {
+                14: 'G', 15: 'F', 16: 'A', 17: 'B', 18: 'A', 19: 'E',
+                20: 'B', 21: 'A', 22: 'D', 23: 'B', // Note: Correct answer for Q22 is 'D' (Valley Complex for geometric patterns)
+                24: 'flag', 25: 'tourism', 26: 'publications'
+            };
+            
+            const explanations = {
+                14: "Section G lists 'variations in temperature and soil moisture content, as well as pressure from tourism, encroaching invasive vegetation, and incorrect preservation methods' as factors causing deterioration.",
+                15: "Section F mentions 'glass beads and porcelain from China and Persia, and gold and Arab coins from the Indian Ocean island of Kilwa, which testify to long-standing trade'.",
+                16: "Section A states that in '1986 Great Zimbabwe was designated both a national monument and a World Heritage site,' indicating global importance.",
+                17: "Section B describes the city's division into 'three areas: the Hill Complex, the Great Enclosure and the Valley Complex,' providing an overview of its layout.",
+                18: "Section A states that 'although there are examples of similar work elsewhere, none are as distinguished and imposing as Great Zimbabwe,' referring to the quality of comparable buildings.",
+                19: "Section E discusses theories about the abandonment in 'about 1450,' suggesting 'a shortage of food for the overpopulated city, and deforestation'.",
+                20: "Section C describes 'The Great Enclosure, which is oval shaped', implying curved outer walls.",
+                21: "Section B states that the 'east enclosure, where six soapstone posts topped with figurines of birds were found, is considered to have served a ritual purpose'.",
+                22: "Section D notes that the Valley Complex incorporates 'an impressive display of V-shaped and checked wall decorations', which are geometric patterns.",
+                23: "Section C mentions a 'narrow passage leading to a high conical tower, which may have functioned as a granary warehouse' in the Great Enclosure.",
+                24: "Section F states 'a design based on them became a national symbol, incorporated into the Zimbabwe flag'.",
+                25: "Section G states 'it has suffered some deterioration due to variations in temperature and soil moisture content, as well as pressure from tourism'.",
+                26: "Section G mentions 'limited revenue generated by the sale of publications and charging an entrance fee for the site'."
+            };
+            
+            const passageReferences = {
+                14: "Section G: 'Despite the importance of the site, it has suffered some deterioration due to variations in temperature and soil moisture content, as well as pressure from tourism, encroaching invasive vegetation, and incorrect preservation methods.'",
+                15: "Section F: 'Archaeological excavations at Great Zimbabwe have revealed glass beads and porcelain from China and Persia, and gold and Arab coins from the Indian Ocean island of Kilwa, which testify to long-standing trade with the outer world.'",
+                16: "Section A: 'The modem country of Zimbabwe, where the ruins are situated, was named after it, and in 1986 Great Zimbabwe was designated both a national monument and a World Heritage site.'",
+                17: "Section B: 'The city, built between 1100 and 1450 AD, extends over seven square kilometres, and is divided into three areas: the Hill Complex, the Great Enclosure and the Valley Complex.'",
+                18: "Section A: 'Their method of construction is unique to African architecture and, although there are examples of similar work elsewhere, none are as distinguished and imposing as Great Zimbabwe.'",
+                19: "Section E: 'However, in about 1450 the capital was abandoned. The reasons for this are debated, but suggestions include a shortage of food for the overpopulated city, and deforestation.'",
+                20: "Section C: 'The Great Enclosure, which is oval shaped, is located to the south of the hills...'",
+                21: "Section B: 'the east enclosure, where six soapstone posts topped with figurines of birds were found, is considered to have served a ritual purpose.'",
+                22: "Section D: 'Construction work was carried out to a high standard of craftsmanship, incorporating an impressive display of V-shaped and checked wall decorations.'",
+                23: "Section C: 'a narrow passage leading to a high conical tower, which may have functioned as a granary warehouse.'",
+                24: "Section F: 'a design based on them became a national symbol, incorporated into the Zimbabwe flag and shown in other prestigious contexts.'",
+                25: "Section G: 'Despite the importance of the site, it has suffered some deterioration due to variations in temperature and soil moisture content, as well as pressure from tourism, encroaching invasive vegetation, and incorrect preservation methods.'",
+                26: "Section G: 'limited revenue generated by the sale of publications and charging an entrance fee for the site.'"
+            };
+            
+            let correctCount = 0;
+            const feedbackBody = document.getElementById('feedback-body');
+            feedbackBody.innerHTML = ''; 
+            
+            for (let i = 14; i <= 26; i++) {
+                let userAnswer, isCorrect, questionHTML;
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+                
+                let questionTextElement;
+                if (i >=14 && i <= 23) {
+                     questionTextElement = document.querySelector(`[data-question-id="${i}"] .question-cell`);
+                } else {
+                     questionTextElement = document.querySelector(`#q${i} .question-text`);
+                }
+                
+                if (i >= 14 && i <= 23) { // Matching questions using table
+                    userAnswer = userTableAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer === answers[i];
+                    questionHTML = questionTextElement ? questionTextElement.textContent.replace(/^\d+\.\s*/, '') : `Question ${i} text not found`; // Remove number
+                } else if (i >= 24 && i <= 26) { // Fill-in-the-blank questions
+                    const input = document.querySelector(`input[name="q${i}"]`);
+                    userAnswer = input ? input.value.trim() : 'Not answered';
+                    isCorrect = userAnswer.toLowerCase() === answers[i].toLowerCase(); // Case-insensitive check
+                    let originalQuestionText = questionTextElement.innerHTML;
+                    questionHTML = originalQuestionText.replace(/<input[^>]*>/, `<strong><em>${answers[i]}</em></strong>`);
+                }
+                
+                if (isCorrect) correctCount++;
+                
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">
+                        <span class="${isCorrect ? 'correct' : 'incorrect'}">Question ${i}:</span>
+                        ${isCorrect ? `<i class="fas fa-check correct" style="margin-left: 5px;"></i>` : `<i class="fas fa-times incorrect" style="margin-left: 5px;"></i>`}
+                    </div>
+                    <p><em>${questionHTML}</em></p>
+                    <div class="feedback-answer">
+                        <strong>Your answer:</strong> ${userAnswer || 'Not answered'}<br>
+                        ${!isCorrect ? `<strong>Correct answer:</strong> ${answers[i]}` : ''}
+                    </div>
+                    <div class="feedback-explanation">
+                        <strong>Explanation:</strong> ${explanations[i]}
+                    </div>
+                    <div class="feedback-passage">
+                        <strong>Relevant passage:</strong> "${passageReferences[i]}"
+                    </div>
+                `;
+                
+                feedbackBody.appendChild(feedbackItem);
+            }
+            
+            document.getElementById('score-display').textContent = `${correctCount}/13`; // Update score display total to match the number of questions in this passage (26-14+1 = 13)
+            feedbackOverlay.style.display = 'flex';
+        });
+
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackOverlay.style.display = 'none';
+        });
+
+        feedbackOverlay.addEventListener('click', (e) => {
+            if (e.target === feedbackOverlay) {
+                feedbackOverlay.style.display = 'none';
+            }
+        });
+
+        // Initialize timer display and progress
+        updateTimer();
+        updateProgress();
+    </script>
+</body>
+</html>

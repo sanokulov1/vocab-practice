@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice - A mechanical friend for children</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --highlight-color: #87CEEB; /* Azure Blue for highlight */
+            
+            /* Header & Controls Colors (Azure themed) */
+            --header-bg: #F0F8FF; /* Very light azure for header background */
+            --header-text: #333333; /* Dark text for light header */
+
+            /* Button Colors (Azure themed) */
+            --button-bg: #007FFF; /* Primary button azure */
+            --button-hover: #005fbe; /* Darker azure on hover */
+            
+            --correct-color: #28a745; /* Standard green */
+            --incorrect-color: #dc3545; /* Standard red */
+            --progress-complete: #007FFF; /* Azure for completed progress */
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Azure themed) */
+            --timer-bg: #e0f2f7; /* Very light azure/cyan */
+            --timer-text: #0288d1; /* Darker azure/cyan */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0047AB; /* Darker Azure for night mode */
+            
+            /* Night Mode Header & Controls Colors */
+            --header-bg: #1a1a1a; /* Dark gray for header background */
+            --header-text: #ffffff; /* White text for dark header */
+
+            /* Night Mode Button Colors */
+            --button-bg: #0047AB; /* Darker primary button azure */
+            --button-hover: #002e70; /* Even darker azure on hover */
+            
+            --correct-color: #218838; /* Darker green */
+            --incorrect-color: #c82333; /* Darker red */
+            --progress-complete: #0047AB; /* Darker azure for completed progress */
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #002b4d; /* Dark azure */
+            --timer-text: #81d4fa; /* Lighter azure */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-end; /* Align to the right since logo area is gone */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light timer */
+        }
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0,0,0,0.1); /* Darker hover for light header */
+        }
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255,255,255,0.2); /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+        
+        .question-text {
+             font-size: 17px;
+             line-height: 1.8; /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline; /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        /* Adjusted options for vertical display */
+        .options {
+            display: flex;
+            flex-direction: column; /* Force vertical stacking */
+            gap: 8px; /* Space between options */
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em; /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px; /* Add some padding */
+            margin: 0 3px; /* Add some margin */
+            vertical-align: baseline; /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Styles for Matching questions (A-G) for Q14-18 */
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .matching-table th, .matching-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .matching-table th {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table td {
+            background-color: var(--passage-bg);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .matching-table td:hover:not(.question-cell):not(.header-cell) {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+        .matching-table .question-cell {
+            text-align: left;
+            font-weight: 500;
+            background-color: var(--questions-bg); /* Keep question cells distinct */
+        }
+        .matching-table .header-cell {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            font-weight: 600;
+        }
+
+        .matching-table .selected {
+            background-color: var(--highlight-color);
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg); /* Use primary button color for border */
+            color: var(--button-bg); /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(0, 127, 255, 0.1); /* Light azure tint on hover */
+        }
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(0, 71, 171, 0.2); /* Darker azure tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg); /* Use primary button color for explanation border */
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .progress-container {
+                max-width: 50%;
+            }
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-controls">
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <span id="timer">20:00</span>
+                <div class="timer-controls">
+                    <button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+                    <button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+                    <button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+            <button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="passage-container" id="passage-container">
+            <div class="passage-content">
+                <div class="passage-title">A mechanical friend for children</div>
+                <div class="passage-text" id="passage-text">
+                    <p><strong>A</strong> The development of robots that interact socially with people and assist them in everyday life has been an elusive goal of modern science. Despite impressive advances in the mechanical aspects of this problem, producing robots that bond and socialize with people for sustained periods of time has proven difficult. The most successful robots so far have been storytellers, but they have only been able to maintain human interest for a limited time and typically rely on the robot telling stories that change over time. In practice, commercially available robots seldom cross the 10-hour barrier (i.e. individual users tend to spend less than a combined total of 10 hours with the robots before losing interest). This observation is in sharp contrast to the long-term interactions and bonding that commonly develop between humans and their pets.</p>
+                    <p><strong>B</strong> In a recent study, researchers from the Institute for Neural Computation in California introduced a state-of-the-art social robot into a classroom of 18- to 24-month-olds for five months as a way of studying human/robot interactions. The researchers, including Fumihide Tanaka and Javier R Movellan, introduced a toddler-sized humanoid robot into a classroom at a childhood education center. One of the QRIO series of robots, the 58cm machine, was originally developed by Sony. 'Children of toddler age were chosen because they have no preconceived notions of robots, according to Tanaka. One of the goals of the study was to establish whether it was possible for social robots to maintain the interest of children beyond the 10-hour barrier.</p>
+                    <p><strong>C</strong> The researchers sent instructions to the robot about every two minutes to do things like giggle, dance, sit down, fall down or walk in a certain direction. The 45 sessions were videotaped, and interactions between toddlers and the robot were later analyzed. The results showed that the quality of those interactions improved steadily over 27 sessions. The interactions deteriorated quickly over the next 15 sessions, when the robot was ordered to behave in a more limited, predictable manner. Finally, the human/robot relations improved in the last three sessions, after the robot had been instructed to display its full range of behaviors.</p>
+                    <p><strong>D</strong> 'Initially the children treated the robot very differently from the way they treated each other,' Tanaka said. 'Early in the study some children cried when QRIO fell. But a month into the study, the toddlers helped QRIO stand up by pushing its back or pulling its hands.' The most important aspect of interaction was touch, Tanaka said. At first the toddlers would touch the robot on its face, but later on they would touch it only on its hands and arms, like they would with other humans. Another robot-like toy named Robby, which resembled QRIO but did not move, was used as a control in the study. While hugging of QRIO increased, hugging of Robby decreased throughout the study. Furthermore, when QRIO laid down on the floor as its batteries ran down, a toddler would put a blanket over his silver-colored 'friend' and say 'night-night'. Care- taking behaviors were frequently observed toward QRIO but seldom toward Robby.</p>
+                    <p><strong>E</strong> The study concluded that after 45 days of immersion in a childcare center over a period of five months, long-term bonding and socialization occurred between toddlers and a state-of-the-art social robot. Overall, the interaction between children and the robot improved over time and the children progressively treated it more as a peer than a plaything. 'To my knowledge, this is the first long-term study of this sort,' said Ronald Arkin, a roboticist at the Georgia Institute of Technology in the US.</p>
+                    <p><strong>F</strong> Tanaka and Movellan are now developing autonomous robots for the toddler classroom. 'It could have great potential in educational settings assisting teachers and enriching the classroom environment,' Tanaka said. The researchers hope that more advanced versions of robots like QRIO could become personalized tutors to assist teachers in classrooms. A robotic tutor could react on the spot to social cues and approximate social skills like facial expression and eye gaze, they said. 'It is becoming clear that, to achieve this goal, we are going to [need to] endow machines with something similar to emotion, not just traditional forms of intelligence,' said Movellan.</p>
+                    <p><strong>G</strong> Associate professor David Powers, an expert in artificial intelligence and cognitive science at Flinders University in South Australia, commented, 'In this study it is clearly demonstrated that a limited range of robot behaviors, however impressive, is nowhere near as important to human/robot interaction as being able to make appropriate responses from a broad repertoire of behaviors. Ronald Arkin was not surprised by the affection demonstrated by the toddlers toward the robot. 'Humans have a tremendous propensity to bond with artifacts, whether it be a car, a doll, or a robot,' he said. But he also cautioned that researchers do not yet understand the consequences of increased human/robot interaction. 'Studying how robots and humans work together can give us insight into whether this is a good thing or a bad thing for society,' Arkin said. "We need to find out what the consequences are of introducing a robot into a cadre of children. How will that enhance, or potentially interfere with, their social development? Do we really understand the long-term impact of having a robot as a childhood friend?'</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <div class="section-title">Questions 14–18</div>
+            <div class="instructions">Reading Passage 2 has seven paragraphs, A-G<br>Which paragraph contains the following information?<br>Write the correct letter, A-G, in boxes 14-18 on your answer sheet.<br>NB You may use any letter more than once.</div>
+            
+            <div class="question-group" id="q-group-14-18">
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th class="header-cell"></th> <th class="header-cell">A</th>
+                            <th class="header-cell">B</th>
+                            <th class="header-cell">C</th>
+                            <th class="header-cell">D</th>
+                            <th class="header-cell">E</th>
+                            <th class="header-cell">F</th>
+                            <th class="header-cell">G</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-question-id="14">
+                            <td class="question-cell">14. a comparison of children's reactions towards different robots</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="15">
+                            <td class="question-cell">15. a speculation about ways robots may be able to communicate</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="16">
+                            <td class="question-cell">16. a description of changes in the way the children physically handled a robot</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="17">
+                            <td class="question-cell">17. a comparison between people's connections with animals and their connections with robots</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                        <tr data-question-id="18">
+                            <td class="question-cell">18. an account of the way one robot was programmed</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                            <td data-answer="E"></td>
+                            <td data-answer="F"></td>
+                            <td data-answer="G"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-title">Questions 19–23</div>
+            <div class="instructions">Look at the following statements (Questions 19-23) and the list of people below.<br>Match each statement with the correct person, A, B, C or D.<br>Write the correct letter, A, B, C or D, in boxes 19-23 on your answer sheet.<br>NB You may use any letter more than once.</div>
+            
+            <div class="matching-options-list">
+                <strong>List of People</strong>
+                <ul>
+                    <li>A. Fumihide Tanaka</li>
+                    <li>B. Javier R Movellan</li>
+                    <li>C. Ronald Arkin</li>
+                    <li>D. David Powers</li>
+                </ul>
+            </div>
+
+            <div class="question-group" id="q-group-19-23">
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th class="header-cell"></th> <th class="header-cell">A</th>
+                            <th class="header-cell">B</th>
+                            <th class="header-cell">C</th>
+                            <th class="header-cell">D</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-question-id="19">
+                            <td class="question-cell">19. In future, robots will not only have to think, but also to show feelings.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                        </tr>
+                        <tr data-question-id="20">
+                            <td class="question-cell">20. It is uncertain whether more contact between people and robots will be beneficial.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                        </tr>
+                        <tr data-question-id="21">
+                            <td class="question-cell">21. Very young children have not yet developed ideas about robots.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                        </tr>
+                        <tr data-question-id="22">
+                            <td class="question-cell">22. Robots need to perform a wide variety of actions for people to relate to them.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                        </tr>
+                        <tr data-question-id="23">
+                            <td class="question-cell">23. Using robots as an aid in schools may have many benefits.</td>
+                            <td data-answer="A"></td>
+                            <td data-answer="B"></td>
+                            <td data-answer="C"></td>
+                            <td data-answer="D"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section-title">Questions 24–26</div>
+            <div class="instructions">Complete the sentences below.<br>Choose ONE WORD ONLY from the passage for each answer.<br>Write your answers in boxes 24-26 on your answer sheet.</div>
+            
+            <div class="question-group">
+                <div class="question" id="q24">
+                    <div class="question-title">
+                        <div class="question-number">24</div>
+                        <div class="question-text">Until recently, robots that were best at holding people's attention were those that acted as <input type="text" name="q24" class="fill-in-the-blank">.</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="q25">
+                    <div class="question-title">
+                        <div class="question-number">25</div>
+                        <div class="question-text">The children responded to the QRIO robot as a friend or a <input type="text" name="q25" class="fill-in-the-blank">, rather than as a toy.</div>
+                    </div>
+                </div>
+                
+                <div class="question" id="q26">
+                    <div class="question-title">
+                        <div class="question-number">26</div>
+                        <div class="question-text">Arkin expected that the children would show <input type="text" name="q26" class="fill-in-the-blank"> towards the QRIO robot.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="progress-container" id="progress-container">
+            </div>
+        <div class="action-buttons">
+            <button class="btn-secondary" id="reset-btn">Reset Answers</button>
+            <button class="btn-primary" id="submit-btn">Submit Answers</button>
+        </div>
+    </footer>
+
+    <div class="feedback-overlay" id="feedback-overlay">
+        <div class="feedback-container" id="feedback-container">
+            <div class="feedback-header">
+                <div class="feedback-title">
+                    <i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/13</span>
+                </div>
+                <button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="feedback-body" id="feedback-body">
+                </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let seconds = 1200; // 20 minutes
+        let timerRunning = false;
+        
+        const timerDisplay = document.getElementById('timer');
+        const startTimer = document.getElementById('start-timer');
+        const pauseTimer = document.getElementById('pause-timer');
+        const resetTimer = document.getElementById('reset-timer');
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+        
+        function updateTimer() {
+            timerDisplay.textContent = formatTime(seconds);
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                document.getElementById('submit-btn').click();
+            }
+        }
+        
+        startTimer.addEventListener('click', () => {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimer();
+                }, 1000);
+            }
+        });
+        
+        pauseTimer.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            }
+        });
+        
+        resetTimer.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            seconds = 1200;
+            updateTimer();
+        });
+        
+        // Night mode toggle
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        nightModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+            const icon = nightModeToggle.querySelector('i');
+            if (document.body.classList.contains('night-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Create progress indicators for questions 14-26
+        const progressContainer = document.getElementById('progress-container');
+        for (let i = 14; i <= 26; i++) { 
+            const progressItem = document.createElement('div');
+            progressItem.className = 'progress-item';
+            progressItem.textContent = i;
+            progressItem.dataset.question = i;
+            progressContainer.appendChild(progressItem);
+            
+            progressItem.addEventListener('click', () => {
+                const questionElement = document.getElementById(`q${i}`);
+                if (questionElement) {
+                    questionElement.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // For table-based questions, find the row and scroll to it
+                    const tableRow = document.querySelector(`[data-question-id="${i}"]`);
+                    if (tableRow) {
+                        tableRow.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+        
+        // Text highlighting functionality
+        let highlightTooltip = null;
+
+        function handleMouseUp(e) {
+            const container = e.currentTarget;
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '' && container.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+
+                if (highlightTooltip) {
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                }
+
+                highlightTooltip = document.createElement('div');
+                highlightTooltip.className = 'highlight-tooltip';
+                highlightTooltip.innerHTML = '<i class="fas fa-highlighter"></i> Highlight';
+                highlightTooltip.style.position = 'fixed';
+                highlightTooltip.style.top = `${rect.top - 40}px`;
+                highlightTooltip.style.left = `${rect.left}px`;
+                document.body.appendChild(highlightTooltip);
+
+                highlightTooltip.addEventListener('click', () => {
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    selection.removeAllRanges();
+                    highlightTooltip.remove();
+                    highlightTooltip = null;
+                });
+            }
+        }
+
+        document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+        document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+        
+        document.addEventListener('mousedown', (e) => {
+            if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+                highlightTooltip.remove();
+                highlightTooltip = null;
+                window.getSelection().removeAllRanges();
+            }
+        });
+        
+        // Store user answers for all questions
+        const userAnswers = {}; 
+
+        // Handle table cell clicks for questions 14-18 and 19-23
+        document.querySelectorAll('.matching-table td:not(.question-cell):not(.header-cell)').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const questionId = parseInt(row.dataset.questionId);
+                const answer = this.dataset.answer;
+
+                // Remove 'selected' class from all selectable cells in the same row
+                row.querySelectorAll('td:not(.question-cell):not(.header-cell)').forEach(td => td.classList.remove('selected'));
+
+                // Add 'selected' class to the clicked cell
+                this.classList.add('selected');
+
+                // Store the answer
+                userAnswers[questionId] = answer;
+                updateProgress();
+            });
+        });
+
+        // Track answered questions and update progress bar
+        const progressItems = document.querySelectorAll('.progress-item');
+        
+        function updateProgress() {
+            let answeredCount = 0;
+            
+            for (let i = 14; i <= 26; i++) {
+                const questionNumber = i;
+                let answered = false;
+
+                if (questionNumber >= 14 && questionNumber <= 23) { // Matching (table-based)
+                    answered = userAnswers[questionNumber] !== undefined;
+                } else if (questionNumber >= 24 && questionNumber <= 26) { // Fill-in-the-blank
+                    const input = document.querySelector(`input[name="q${questionNumber}"]`);
+                    answered = input.value.trim() !== '';
+                    if (answered) {
+                        userAnswers[questionNumber] = input.value.trim(); // Store fill-in-the-blank answer
+                    } else {
+                        delete userAnswers[questionNumber]; // Clear if empty
+                    }
+                }
+                
+                // Update the visual progress item
+                const progressItem = progressItems[questionNumber - 14]; // Adjust index for 14-26 range
+                if (answered) {
+                    progressItem.classList.add('completed');
+                    answeredCount++;
+                } else {
+                    progressItem.classList.remove('completed');
+                }
+            }
+            return answeredCount;
+        }
+        
+        // Listen for input on fill-in-the-blank fields
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+        
+        // Reset button
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            // Reset table answers
+            document.querySelectorAll('.matching-table td').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            
+            // Reset fill-in-the-blank inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Clear all stored answers
+            for (let key in userAnswers) {
+                delete userAnswers[key];
+            }
+
+            // Reset highlights
+            document.querySelectorAll('.highlight').forEach(highlight => {
+                const parent = highlight.parentNode;
+                while (highlight.firstChild) {
+                    parent.insertBefore(highlight.firstChild, highlight);
+                }
+                parent.removeChild(highlight);
+                parent.normalize();
+            });
+            
+            updateProgress();
+            document.getElementById('feedback-overlay').style.display = 'none';
+        });
+        
+        // Submit and Feedback functionality
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const closeFeedbackBtn = document.getElementById('close-feedback');
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            console.log("Submit button clicked!"); // Debugging log
+            pauseTimer.click();
+            
+            // Define the correct answers and explanations for "A mechanical friend for children"
+            const answers = {
+                14: 'D', 15: 'F', 16: 'D', 17: 'A', 18: 'C',
+                19: 'B', 20: 'C', 21: 'A', 22: 'D', 23: 'A',
+                24: 'storytellers', 25: 'peer', 26: 'affection'
+            };
+            
+            const explanations = {
+                14: "Paragraph D compares how children treated QRIO versus Robby (another robot-like toy) including hugging behaviors and care-taking.",
+                15: "Paragraph F discusses how researchers hope 'A robotic tutor could react on the spot to social cues and approximate social skills like facial expression and eye gaze,' which are ways robots might communicate.",
+                16: "Paragraph D describes how 'At first the toddlers would touch the robot on its face, but later on they would touch it only on its hands and arms, like they would with other humans.'",
+                17: "Paragraph A states, 'This observation is in sharp contrast to the long-term interactions and bonding that commonly develop between humans and their pets.'",
+                18: "Paragraph C details how 'The researchers sent instructions to the robot about every two minutes to do things like giggle, dance, sit down, fall down or walk in a certain direction.'",
+                19: "Javier R Movellan states in Paragraph F: 'It is becoming clear that, to achieve this goal, we are going to [need to] endow machines with something similar to emotion, not just traditional forms of intelligence.'",
+                20: "Ronald Arkin cautions in Paragraph G: 'But he also cautioned that researchers do not yet understand the consequences of increased human/robot interaction. 'Studying how robots and humans work together can give us insight into whether this is a good thing or a bad thing for society...'",
+                21: "Fumihide Tanaka is quoted in Paragraph B saying, 'Children of toddler age were chosen because they have no preconceived notions of robots'.",
+                22: "David Powers comments in Paragraph G: 'a limited range of robot behaviors, however impressive, is nowhere near as important to human/robot interaction as being able to make appropriate responses from a broad repertoire of behaviors.'",
+                23: "Fumihide Tanaka states in Paragraph F: 'It could have great potential in educational settings assisting teachers and enriching the classroom environment.'",
+                24: "Paragraph A states, 'The most successful robots so far have been storytellers, but they have only been able to maintain human interest for a limited time'.",
+                25: "Paragraph E concludes, 'the children progressively treated it more as a peer than a plaything.'",
+                26: "Paragraph G states, 'Ronald Arkin was not surprised by the affection demonstrated by the toddlers toward the robot. 'Humans have a tremendous propensity to bond with artifacts...'"
+            };
+            
+            const passageReferences = {
+                14: "Paragraph D: 'Another robot-like toy named Robby... was used as a control in the study. While hugging of QRIO increased, hugging of Robby decreased... Care- taking behaviors were frequently observed toward QRIO but seldom toward Robby.'",
+                15: "Paragraph F: 'A robotic tutor could react on the spot to social cues and approximate social skills like facial expression and eye gaze, they said.'",
+                16: "Paragraph D: 'At first the toddlers would touch the robot on its face, but later on they would touch it only on its hands and arms, like they would with other humans.'",
+                17: "Paragraph A: 'This observation is in sharp contrast to the long-term interactions and bonding that commonly develop between humans and their pets.'",
+                18: "Paragraph C: 'The researchers sent instructions to the robot about every two minutes to do things like giggle, dance, sit down, fall down or walk in a certain direction.'",
+                19: "Paragraph F: 'It is becoming clear that, to achieve this goal, we are going to [need to] endow machines with something similar to emotion, not just traditional forms of intelligence,' said Movellan.",
+                20: "Paragraph G: 'But he also cautioned that researchers do not yet understand the consequences of increased human/robot interaction.' (Ronald Arkin)",
+                21: "Paragraph B: 'Children of toddler age were chosen because they have no preconceived notions of robots, according to Tanaka.'",
+                22: "Paragraph G: 'In this study it is clearly demonstrated that a limited range of robot behaviors, however impressive, is nowhere near as important to human/robot interaction as being able to make appropriate responses from a broad repertoire of behaviors.' (David Powers)",
+                23: "Paragraph F: 'It could have great potential in educational settings assisting teachers and enriching the classroom environment,' Tanaka said.",
+                24: "Paragraph A: 'The most successful robots so far have been storytellers, but they have only been able to maintain human interest for a limited time...'",
+                25: "Paragraph E: 'Overall, the interaction between children and the robot improved over time and the children progressively treated it more as a peer than a plaything.'",
+                26: "Paragraph G: 'Ronald Arkin was not surprised by the affection demonstrated by the toddlers toward the robot. 'Humans have a tremendous propensity to bond with artifacts, whether it be a car, a doll, or a robot,' he said.'"
+            };
+            
+            let correctCount = 0;
+            const feedbackBody = document.getElementById('feedback-body');
+            feedbackBody.innerHTML = ''; 
+            
+            for (let i = 14; i <= 26; i++) {
+                let userAnswer, isCorrect, questionHTML, actualQuestionText;
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+                
+                if (i >= 14 && i <= 23) { // Matching (table-based)
+                    const questionRow = document.querySelector(`tr[data-question-id="${i}"]`);
+                    actualQuestionText = questionRow.querySelector('.question-cell').textContent.replace(/^\d+\.\s*/, '');
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer === answers[i];
+
+                    questionHTML = `<div class="question-title-text">${actualQuestionText}</div>`;
+                    questionHTML += `<div class="feedback-table-row">`;
+                    questionHTML += `Your selection: <span class="${isCorrect ? 'correct' : 'incorrect'}"><strong>${userAnswer}</strong></span>`;
+                    if (!isCorrect) {
+                         questionHTML += ` Correct answer: <span class="correct"><strong>${answers[i]}</strong></span>`;
+                    }
+                    questionHTML += `</div>`;
+
+                } else if (i >= 24 && i <= 26) { // Fill-in-the-blank
+                    const questionDiv = document.getElementById(`q${i}`);
+                    actualQuestionText = questionDiv.querySelector('.question-text').textContent.replace(/<input[^>]*>/, '_______'); // Display blank for context
+                    userAnswer = userAnswers[i] || 'Not answered';
+                    isCorrect = userAnswer.toLowerCase() === answers[i].toLowerCase();
+
+                    questionHTML = `<div class="question-title-text">${actualQuestionText.replace('_______', `<strong><em>${userAnswer}</em></strong>`)}</div>`; // Show user's answer in context
+                }
+                
+                if (isCorrect) correctCount++;
+                
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">
+                        <span class="${isCorrect ? 'correct' : 'incorrect'}">Question ${i}:</span>
+                        ${isCorrect ? `<i class="fas fa-check correct" style="margin-left: 5px;"></i>` : `<i class="fas fa-times incorrect" style="margin-left: 5px;"></i>`}
+                    </div>
+                    <p>${questionHTML}</p>
+                    <div class="feedback-answer">
+                        <strong>Your answer:</strong> ${userAnswer || 'Not answered'}<br>
+                        ${!isCorrect ? `<strong>Correct answer:</strong> ${answers[i]}` : ''}
+                    </div>
+                    <div class="feedback-explanation">
+                        <strong>Explanation:</strong> ${explanations[i]}
+                    </div>
+                    <div class="feedback-passage">
+                        <strong>Relevant passage:</strong> "${passageReferences[i]}"
+                    </div>
+                `;
+                
+                feedbackBody.appendChild(feedbackItem);
+            }
+            
+            document.getElementById('score-display').textContent = `${correctCount}/13`; 
+            feedbackOverlay.style.display = 'flex';
+        });
+
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackOverlay.style.display = 'none';
+        });
+
+        feedbackOverlay.addEventListener('click', (e) => {
+            if (e.target === feedbackOverlay) {
+                feedbackOverlay.style.display = 'none';
+            }
+        });
+
+        // Initialize timer display and progress
+        updateTimer();
+        updateProgress();
+    </script>
+</body>
+</html>
