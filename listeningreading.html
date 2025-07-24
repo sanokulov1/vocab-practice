@@ -258,7 +258,8 @@
     }
 
     .passage-buttons.active {
-        max-height: 300px; /* Increased max-height to ensure content visibility */
+        /* Increased max-height significantly to ensure content visibility */
+        max-height: 500px; /* A very large value to accommodate content */
         padding-top: 15px; /* Padding when active */
     }
 
@@ -493,6 +494,8 @@
                     console.log('Passage container active state:', passageContainer.classList.contains('active')); // Debugging: Log active state
 
                     if (passageContainer.classList.contains('active')) {
+                        // Temporarily remove max-height to get accurate scrollHeight for the passage container
+                        passageContainer.style.maxHeight = 'none'; 
                         // Set max-height to scrollHeight for smooth expansion
                         // Add a small buffer to scrollHeight to prevent clipping in some browsers
                         passageContainer.style.maxHeight = (passageContainer.scrollHeight + 10) + "px"; 
@@ -503,8 +506,7 @@
                         console.log('Collapsed.'); // Debugging: Log collapse
                     }
 
-                    // *** IMPORTANT FIX: Recalculate parent main accordion's height ***
-                    // Find the closest parent accordion-content for the main "Reading" tab
+                    // Recalculate parent main accordion's height after nested accordion state changes
                     const parentAccordionContent = button.closest('.accordion-content');
                     if (parentAccordionContent) {
                         // Temporarily remove max-height to get accurate scrollHeight
