@@ -199,6 +199,35 @@
         padding: 25px 0;
     }
 
+    /* Styling for direct navigation links (Listening section) */
+    .test-button {
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        background: var(--light);
+        color: var(--dark);
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        border: 2px solid #e0e0e0;
+        transition: var(--transition);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    .test-button:hover {
+        transform: translateY(-5px);
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
+    }
+    
+    .test-button i {
+        margin-right: 8px;
+    }
+
+    /* Wrapper for Reading test buttons (to contain toggle button and passages) */
     .test-button-wrapper {
         display: flex;
         flex-direction: column; /* Stack test button and passages vertically */
@@ -220,7 +249,8 @@
         box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
     }
 
-    .test-button {
+    /* Styling for the toggle button inside the Reading section's test-button-wrapper */
+    .test-button-toggle {
         display: flex; /* Use flex for icon and text alignment */
         align-items: center;
         text-decoration: none;
@@ -236,11 +266,11 @@
         justify-content: space-between; /* Space out text and icon */
     }
     
-    .test-button i {
+    .test-button-toggle i {
         margin-right: 8px;
     }
 
-    .test-button.active {
+    .test-button-toggle.active {
         color: var(--primary); /* Optional: Change text color when active */
     }
 
@@ -370,6 +400,7 @@
           </button>
           <div class="accordion-content">
             <div class="test-buttons">
+              <!-- Listening Test links - these are direct links -->
               <a href="/Listening_test1/test1.html" class="test-button"><i class="fas fa-play-circle"></i> Test 1</a>
               <a href="/Listening_test2/test2.html" class="test-button"><i class="fas fa-play-circle"></i> Test 2</a>
               <a href="/Listening_test3/test3.html" class="test-button"><i class="fas fa-play-circle"></i> Test 3</a>
@@ -386,7 +417,7 @@
             <div class="test-buttons">
               <!-- Reading Test 1 -->
               <div class="test-button-wrapper">
-                <button class="test-button" data-target="passage-buttons-test1">
+                <button class="test-button-toggle" data-target="passage-buttons-test1">
                     <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 1</span>
                     <i class="fas fa-chevron-down icon"></i>
                 </button>
@@ -399,7 +430,7 @@
               
               <!-- Reading Test 2 -->
               <div class="test-button-wrapper">
-                <button class="test-button" data-target="passage-buttons-test2">
+                <button class="test-button-toggle" data-target="passage-buttons-test2">
                     <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 2</span>
                     <i class="fas fa-chevron-down icon"></i>
                 </button>
@@ -412,7 +443,7 @@
 
               <!-- Reading Test 3 -->
               <div class="test-button-wrapper">
-                <button class="test-button" data-target="passage-buttons-test3">
+                <button class="test-button-toggle" data-target="passage-buttons-test3">
                     <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 3</span>
                     <i class="fas fa-chevron-down icon"></i>
                 </button>
@@ -471,11 +502,12 @@
         });
 
         // Nested accordion logic for Reading Test passages
-        const testButtons = document.querySelectorAll('.test-button');
+        // Now targets 'test-button-toggle' to avoid conflict with Listening section's 'test-button'
+        const testToggleButtons = document.querySelectorAll('.test-button-toggle');
 
-        testButtons.forEach(button => {
+        testToggleButtons.forEach(button => {
             button.addEventListener('click', (event) => {
-                console.log('Test button clicked:', button.textContent.trim()); // Debugging: Log button click
+                console.log('Test toggle button clicked:', button.textContent.trim()); // Debugging: Log button click
                 event.preventDefault(); // Prevent default button behavior (e.g., form submission)
 
                 // Find the corresponding passage buttons container using data-target
@@ -490,7 +522,7 @@
 
                     // Toggle the 'active' class on the passage container for visibility
                     passageContainer.classList.toggle('active');
-                    console.log('Test button active state:', button.classList.contains('active')); // Debugging: Log active state
+                    console.log('Test toggle button active state:', button.classList.contains('active')); // Debugging: Log active state
                     console.log('Passage container active state:', passageContainer.classList.contains('active')); // Debugging: Log active state
 
                     if (passageContainer.classList.contains('active')) {
