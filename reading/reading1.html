@@ -68,7 +68,7 @@
             background-color: #EF4444; /* Red for incomplete in night mode */
         }
 
-        /* Highlight tooltip and highlighted text styles - NEW/UPDATED */
+        /* Highlight tooltip and highlighted text styles */
         .highlight-tooltip {
             position: absolute;
             background-color: #333; /* Dark background for visibility */
@@ -89,7 +89,6 @@
             background-color: #555;
         }
         
-        /* Using the class name from Diyorbek's file for consistency */
         .highlighted-text {
             background-color: springgreen; /* Original highlight color from Diyorbek's file */
             cursor: pointer; /* To indicate it's a highlighted area */
@@ -509,7 +508,7 @@
                     </div>
                     <p class="mb-2">saffron (a yellow dye)</p>
                     <p class="mb-2">initially made from crocuses found on the island of Crete</p>
-                    <p class="mb-2">indigo (a blue dye)</p>
+                    <p class="mb-4">indigo (a blue dye)</p>
                     <p class="mb-4">made from plant leaves from India</p>
 
                     <h5 class="font-semibold mb-2">17th century Europe</h5>
@@ -924,6 +923,7 @@
     <div id="questionProgressBar" class="question-progress-bar shadow-inner">
         </div>
 
+    <!-- The highlight tooltip will be appended to the body -->
     <div class="highlight-tooltip hidden" id="highlightTooltip">
         <i class="fas fa-highlighter"></i> Highlight
     </div>
@@ -1055,11 +1055,68 @@
             }
         });
 
-        // Highlight functionality (New Implementation - based on Diyorbeks IELTS LC.html)
+        // Highlight functionality (Robust Implementation)
         const passagePanel = document.getElementById('passagePanel');
-        const questionsPanel = document.getElementById('questionsPanel');
         const highlightTooltip = document.getElementById('highlightTooltip');
         let currentSelectionRange = null;
+
+        /**
+         * Applies a highlight to the given DOM Range. This function handles selections
+         * that might span multiple text nodes or partial text nodes within a single
+         * block-level element (like a paragraph).
+         * @param {Range} range The DOM Range object to highlight.
+         */
+        function applyHighlightToRange(range) {
+            const startNode = range.startContainer;
+            const endNode = range.endContainer;
+            const startOffset = range.startOffset;
+            const endOffset = range.endOffset;
+
+            // If the selection is entirely within a single text node
+            if (startNode === endNode && startNode.nodeType === Node.TEXT_NODE) {
+                const span = document.createElement('span');
+                span.classList.add('highlighted-text');
+                try {
+                    range.surroundContents(span);
+                } catch (e) {
+                    console.error("Error surrounding contents in single text node:", e);
+                    // Fallback for unexpected surroundContents failure
+                    const text = range.toString();
+                    const newSpan = document.createElement('span');
+                    newSpan.classList.add('highlighted-text');
+                    newSpan.textContent = text;
+                    range.deleteContents();
+                    range.insertNode(newSpan);
+                }
+            } else {
+                // Selection spans multiple nodes or is partial across elements
+                const fragment = range.extractContents();
+                const walker = document.createTreeWalker(
+                    fragment,
+                    NodeFilter.SHOW_TEXT,
+                    null, // No custom filter, accept all text nodes
+                    false // Not expandEntityReferences (not relevant here)
+                );
+
+                let node;
+                const nodesToWrap = [];
+                while ((node = walker.nextNode())) {
+                    // Only wrap non-empty text nodes
+                    if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
+                        nodesToWrap.push(node);
+                    }
+                }
+
+                nodesToWrap.forEach(textNode => {
+                    const span = document.createElement('span');
+                    span.classList.add('highlighted-text');
+                    textNode.parentNode.insertBefore(span, textNode);
+                    span.appendChild(textNode);
+                });
+
+                range.insertNode(fragment); // Insert the modified fragment back
+            }
+        }
 
         function showHighlightTooltip(range) {
             currentSelectionRange = range;
@@ -1107,12 +1164,12 @@
                     // If selection starts in a text node, use its parent element
                     const containerElement = commonAncestor.nodeType === Node.TEXT_NODE ? commonAncestor.parentElement : commonAncestor;
 
-                    // Check if the selection is within either the passage or questions panel
-                    if (passagePanel.contains(containerElement) || questionsPanel.contains(containerElement)) {
+                    // *** ONLY CHECK FOR SELECTION WITHIN THE PASSAGE PANEL ***
+                    if (passagePanel.contains(containerElement)) {
                         // Avoid showing tooltip for selections within interactive elements (inputs, selects)
                         if (containerElement.closest('input, select, .feedback-item')) {
-                            hideHighlightTooltip();
-                            return;
+                             hideHighlightTooltip();
+                             return;
                         }
                         showHighlightTooltip(range);
                         return; // Keep tooltip visible for this valid selection
@@ -1126,18 +1183,7 @@
         // Event listener for clicking the highlight button
         highlightTooltip.addEventListener('click', () => {
             if (currentSelectionRange) {
-                const span = document.createElement('span');
-                span.classList.add('highlighted-text');
-                try {
-                    // Extract contents from the range and put them into the new span
-                    span.appendChild(currentSelectionRange.extractContents());
-                    // Insert the new span back into the document
-                    currentSelectionRange.insertNode(span);
-                } catch (e) {
-                    console.error("Error highlighting text (likely selection crossed element boundaries):", e);
-                    // For more robust highlighting across complex structures, especially within paragraphs
-                    // or mixed content, a more advanced text manipulation library might be needed.
-                }
+                applyHighlightToRange(currentSelectionRange);
             }
             hideHighlightTooltip(); // Hide tooltip after highlighting
         });
@@ -1151,20 +1197,12 @@
         });
 
         // When resetting answers, also remove highlights
-        // IMPORTANT: Ensure this reset button listener is compatible with the new highlighting.
-        // It needs to remove elements with class 'highlighted-text'
         document.getElementById('quizForm').addEventListener('reset', (event) => {
-            // This is added to allow reset button to work if its type is not 'reset'
-            // If you have type="reset" on the button, this event listener will fire automatically before the form is reset.
-            // If not, you might need to manually reset form fields here too.
-            
             document.querySelectorAll('.highlighted-text').forEach(highlight => {
                 const parent = highlight.parentNode;
-                // Move all child nodes of the highlight span back to its parent
                 while (highlight.firstChild) {
                     parent.insertBefore(highlight.firstChild, highlight);
                 }
-                // Remove the empty highlight span
                 parent.removeChild(highlight);
                 parent.normalize(); // Merge adjacent text nodes after removing the span
             });
