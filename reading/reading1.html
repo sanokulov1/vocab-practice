@@ -68,27 +68,36 @@
             background-color: #EF4444; /* Red for incomplete in night mode */
         }
 
-        /* Highlight button and text styles */
-        #highlightButton {
+        /* Highlight tooltip and highlighted text styles - NEW/UPDATED */
+        .highlight-tooltip {
             position: absolute;
-            z-index: 1000;
-            background-color: #007FFF; /* Azure */
+            background-color: #333; /* Dark background for visibility */
             color: white;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
             cursor: pointer;
-            display: none; /* Hidden by default */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; /* Use flex to center icon and text */
+            align-items: center;
+            gap: 5px;
             transition: background-color 0.2s;
+            white-space: nowrap; /* Prevent text wrapping */
         }
 
-        #highlightButton:hover {
-            background-color: #0066CC; /* Darker azure on hover */
+        .highlight-tooltip:hover {
+            background-color: #555;
         }
         
+        /* Using the class name from Diyorbek's file for consistency */
         .highlighted-text {
-             background-color: rgba(0, 255, 127, 0.4); /* Spring green with transparency for both modes */
+            background-color: springgreen; /* Original highlight color from Diyorbek's file */
+            cursor: pointer; /* To indicate it's a highlighted area */
+        }
+
+        /* Night mode specific highlight color */
+        body.night-mode .highlighted-text {
+            background-color: #2E8B57; /* Darker springgreen for night mode */
         }
 
 
@@ -277,12 +286,12 @@
 
         .question-type-true-false input[type="radio"]:checked + label,
         .question-type-multiple-choice input[type="radio"]:checked + label,
+        body.night-mode .question-type-true-false input[type="radio"]:checked + label,
+        body.night-mode .question-type-multiple-choice input[type="radio"]:checked + label,
         .question-type-yes-no-not-given input[type="radio"]:checked + label {
             background-color: #90CDF4; /* Blue-300 for checked radio */
             border-color: #2B6CB0; /* Blue-700 border */
         }
-        body.night-mode .question-type-true-false input[type="radio"]:checked + label,
-        body.night-mode .question-type-multiple-choice input[type="radio"]:checked + label,
         body.night-mode .question-type-yes-no-not-given input[type="radio"]:checked + label {
             background-color: #004D99; /* Darker azure for checked radio */
             border-color: #4F88C0; /* Muted blue border */
@@ -384,26 +393,6 @@
                     <p class="mb-4"><strong>E</strong> The study concluded that after 45 days of immersion in a childcare center over a period of five months, long-term bonding and socialization occurred between toddlers and a state-of-the-art social robot. Overall, the interaction between children and the robot improved over time and the children progressively treated it more as a peer than a plaything. 'To my knowledge, this is the first long-term study of this sort,' said Ronald Arkin, a roboticist at the Georgia Institute of Technology in the US.</p>
                     <p class="mb-4"><strong>F</strong> Tanaka and Movellan are now developing autonomous robots for the toddler classroom. 'It could have great potential in educational settings assisting teachers and enriching the classroom environment,' Tanaka said. The researchers hope that more advanced versions of robots like QRIO could become personalized tutors to assist teachers in classrooms. A robotic tutor could react on the spot to social cues and approximate social skills like facial expression and eye gaze, they said. 'It is becoming clear that, to achieve this goal, we are going to [need to] endow machines with something similar to emotion, not just traditional forms of intelligence,' said Movellan.</p>
                     <p class="mb-4"><strong>G</strong> Associate professor David Powers, an expert in artificial intelligence and cognitive science at Flinders University in South Australia, commented, 'In this study it is clearly demonstrated that a limited range of robot behaviors, however impressive, is nowhere near as important to human/robot interaction as being able to make appropriate responses from a broad repertoire of behaviors. Ronald Arkin was not surprised by the affection demonstrated by the toddlers toward the robot. 'Humans have a tremendous propensity to bond with artifacts, whether it be a car, a doll, or a robot,' he said. But he also cautioned that researchers do not yet understand the consequences of increased human/robot interaction. 'Studying how robots and humans work together can give us insight into whether this is a good thing or a bad thing for society,' Arkin said. "We need to find out what the consequences are of introducing a robot into a cadre of children. How will that enhance, or potentially interfere with, their social development? Do we really understand the long-term impact of having a robot as a childhood friend?'</p>
-                </div>
-
-                <div class="passage-separator"></div>
-
-                <h2 class="text-2xl font-semibold mb-4 mt-8">READING PASSAGE 3</h2>
-                <div class="prose max-w-none">
-                    <h3 class="text-xl font-medium mb-2">Animals predicting earthquakes?</h3>
-                    <p class="mb-4">Surely it is too much to believe that animals can predict earthquakes when we haven't worked out how to do it ourselves?</p>
-                    <p class="mb-4">On 26 December 2004, villagers from Bang Koey in Thailand noticed buffalo on the beach lift their heads, look out to sea, then stampede to the top of a nearby hill. Minutes later, the tsunami* struck. Could these creatures have been sensing early warning signs of the earthquake that triggered the Asian tsunami? It is a strange assertion but the possibility that animals might hold the answer cannot be ignored, as a warning system could save many lives. The idea that animals can predict earthquakes has ancient origins. From 373 BC there are stories of rats, dogs and snakes deserting the Greek city of Helice before an earthquake hit. It was the first in a long line of such anecdotes. What has been lacking is any real scientific data linking animal behaviour with earthquakes.</p>
-                    <p class="mb-4">In late 2000, however, Stanley Coren from the University of British Columbia started a study to discover whether dogs suffer from 'seasonal affective disorder.'** Twice weekly, he emailed 200 dog owners in Vancouver, asking them to rate their pets' activity and anxiety levels using a nine-point scale. In general there was little daily variability; Coren's initial analysis of many months' worth of information strongly refuted his suspicion that dogs become depressed during winter, and he abandoned the project. When he finally went through the figures in detail several years later however, he noticed that on 27 February 2001, nearly 50 per cent were well above their usual baseline for activity and anxiety. The likelihood of such a difference was remote and Coren searched through the newspaper archives for a cause. He found that on 28 February a quake of magnitude 6.8 shook the Pacific north-west, with an epicentre at Nisqually about 240 kilometres south of Vancouver. Coren wondered what the dogs could have sensed. There was little to guide him.</p>
-                    <p class="mb-4">Even the most comprehensive earthquake research project in the world, the Parkfield experiment in California, couldn't help. Since 1985, researchers from the US Geological Survey (USGS) have monitored a section of the San Andreas fault near the town of Parkfield. They have analysed every tremor, and measured tiny movements of the fault at 10-minute intervals, but to date the project has revealed nothing that would reliably indicate that an earthquake is imminent.</p>
-                    <p class="mb-4">There is still much speculation about animals predicting earthquakes. For example, one idea is that some animals detect changes in the Earth's electrical field. Another theory is that animals are responding to gas such as radon released from rocks before a quake, despite the fact that few experts accept such gas is produced. Rupert Sheldrake, a British researcher, suggests that 'people notice unusual animal behaviour before disasters. I think animals are picking up on something that we can't, perhaps by using a sixth sense.'</p>
-                    <p class="mb-4">Coren, however, had read about rescue dogs hearing avalanche victims under the snow, and suspected the dogs in his study might also be hearing vibrations. So he returned to his data to search for supporting evidence. He discovered that only one of the 14 hearing-impaired dogs in his study had shown any significant increase in anxiety on 27 February, and it was living with a hearing dog that had become anxious. Dogs with floppy ears showed only half the change in activity and one-third the change in anxiety level of dogs with pricked ears. Not only would an ear flap reduce the amount of sound reaching the inner ear; Coren also realised that it would weaken high frequency sounds more than low frequency ones. Further, dogs with smaller heads were significantly more likely to behave strangely than those with larger heads, which was interesting, given that smaller-headed dogs are more sensitive to higher frequencies.</p>
-                    <p class="mb-4">Taken together, Coren's results present an alluring hypothesis. He suggests that the kind of high frequency sounds that many dogs can hear are emitted before an earthquake, perhaps from rocks scraping underground. Admittedly this is only one study. Even if Coren is right, is it still possible that other animals could predict quakes in different ways? Eric Wikramanayake, a conservation scientist who used radio collars and happened to be studying elephants in Sri Lanka when the tsunami struck, is entirely sceptical.</p>
-                    <p class="mb-4">What he found was precisely nothing. One herd was only 100 metres away from the beach when the tsunami arrived and they just took cover behind a large sand dune when the wave came in sight. The other herd was safely located about 5 kilometres inland and did not show any unusual movements.</p>
-                    <p class="mb-4">Even if some quakes are preceded by high-frequency vibrations, is it feasible that dogs in Vancouver could detect sounds emitted near Nisqually? USGS seismologist Andy Michael points out that the epicentre was over 240 kilometres south of Vancouver. 'It is physically implausible for seismic waves in the kilohertz range to travel that far,' he says. Although unconvinced by Coren's ideas, Michael adds a cautionary tale. 'When Alfred Wegener presented his theory of continental drift, his core ideas about tectonics were right but nobody listened because the mechanisms were wrong.</p>
-                    <p class="mb-4">So if animals are able to foretell earthquakes, does it matter how? In fact, while western society has been reluctant to use animals as earthquake predictors, China has already embraced the idea. Experts there use a video link to keep a 24-hour watch on snakes in farms nationwide. If they try to escape from their enclosure, observers raise a warning.</p>
-                    <p class="mb-4">Other governments may not be willing to go that far just yet, but Coren believes that a centre that people could call when they see unusual things would be useful. 'We would be able to collect much more data and give warnings when we get hundreds of calls from a single area,' he says. It could cost little more than the price of setting up a phone line. Put that way, what have we got to lose?</p>
-                    <p class="mb-4 text-sm text-gray-600">* tsunami: large, destructive wave caused by earthquakes</p>
-                    <p class="mb-4 text-sm text-gray-600">** seasonal affective disorder, emotional and psychological changes created by changes in the amount of daylight in winter</p>
                 </div>
             </div>
         </div>
@@ -935,7 +924,9 @@
     <div id="questionProgressBar" class="question-progress-bar shadow-inner">
         </div>
 
-    <button id="highlightButton" class="hidden">Highlight</button>
+    <div class="highlight-tooltip hidden" id="highlightTooltip">
+        <i class="fas fa-highlighter"></i> Highlight
+    </div>
 
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
@@ -960,9 +951,9 @@
             '8': { answer: 'TRUE', type: 'true-false', explanation: "The passage concludes: '...now the use of natural dyes on a commercial scale only exists in a few remote areas where people have either little access to synthetic dyes or a vested interest in retaining their ancient dyeing customs.'" },
             '9': { answer: 'shellfish', type: 'fill-in-the-blank', explanation: "The passage states: 'Both of these colors came from animals; the mucus found in certain species of shellfish produced the deep rich Tyrian purple...'" },
             '10': { answer: 'insects', type: 'fill-in-the-blank', explanation: "The passage states: '...and cochineal was extracted from insects.'" },
-            '11': { answer: 'blackberries', type: 'fill-in-the-blank', explanation: "The passage states: 'People who picked blackberries to make jam soon recognized this wild fruit as a source for a blue dye.'" },
-            '12': { answer: 'beehives', type: 'fill-in-the-blank', explanation: "The passage states: 'Washing beehives in preparation for making mead (a popular drink containing honey) yielded a liquid that could be used as a yellow dye.'" },
-            '13': { answer: 'chemistry', type: 'fill-in-the-blank', explanation: "The passage states: 'With the tremendous rise of interest in chemistry in the mid-19th century, several important innovations in dyeing came about.'" },
+            '11': { answer: 'blackberries', type: 'fill-in-the-blank', explanation: "People who picked blackberries to make jam soon recognized this wild fruit as a source for a blue dye." },
+            '12': { answer: 'beehives', type: 'fill-in-the-blank', explanation: "Washing beehives in preparation for making mead (a popular drink containing honey) yielded a liquid that could be used as a yellow dye." },
+            '13': { answer: 'chemistry', type: 'fill-in-the-blank', explanation: "With the tremendous rise of interest in chemistry in the mid-19th century, several important innovations in dyeing came about." },
             '14': { answer: 'D', type: 'paragraph-matching', explanation: "Paragraph D compares children's reactions to QRIO and Robby: 'While hugging of QRIO increased, hugging of Robby decreased throughout the study.'" },
             '15': { answer: 'F', type: 'paragraph-matching', explanation: "Paragraph F discusses how robots 'could react on the spot to social cues and approximate social skills like facial expression and eye gaze'." },
             '16': { answer: 'D', type: 'paragraph-matching', explanation: "Paragraph D describes how 'At first the toddlers would touch the robot on its face, but later on they would touch it only on its hands and arms, like they would with other humans.'" },
@@ -1064,69 +1055,125 @@
             }
         });
 
-        // Highlight functionality (FIXED)
+        // Highlight functionality (New Implementation - based on Diyorbeks IELTS LC.html)
         const passagePanel = document.getElementById('passagePanel');
         const questionsPanel = document.getElementById('questionsPanel');
-        const highlightButton = document.getElementById('highlightButton');
-        let lastSelectedRange = null;
+        const highlightTooltip = document.getElementById('highlightTooltip');
+        let currentSelectionRange = null;
 
-        document.addEventListener('mouseup', (event) => {
-            // If the click was on the highlight button itself, do nothing.
-            if (event.target === highlightButton) {
-                return;
+        function showHighlightTooltip(range) {
+            currentSelectionRange = range;
+            highlightTooltip.style.display = 'flex'; // Make button visible
+            
+            const rect = range.getBoundingClientRect();
+            let topPos = rect.top + window.scrollY - highlightTooltip.offsetHeight - 5; // 5px above selection
+            let leftPos = rect.left + window.scrollX;
+
+            // Adjust if tooltip goes above the top of the viewport
+            if (topPos < window.scrollY) {
+                topPos = rect.bottom + window.scrollY + 5; // 5px below selection
             }
 
+            // Simple boundary check for left/right (can be more sophisticated)
+            if (leftPos + highlightTooltip.offsetWidth > window.innerWidth - 20) {
+                leftPos = window.innerWidth - highlightTooltip.offsetWidth - 20;
+            }
+            if (leftPos < 20) {
+                leftPos = 20;
+            }
+
+            highlightTooltip.style.left = `${leftPos}px`;
+            highlightTooltip.style.top = `${topPos}px`;
+        }
+
+        function hideHighlightTooltip() {
+            highlightTooltip.style.display = 'none';
+            currentSelectionRange = null;
+            window.getSelection().removeAllRanges(); // Clear selection when tooltip hides
+        }
+
+        // Event listener for mouseup on document to detect text selection
+        document.addEventListener('mouseup', (e) => {
+            // Give a small delay to ensure selection is finalized
             setTimeout(() => {
                 const selection = window.getSelection();
-                if (selection.rangeCount > 0 && selection.toString().trim().length > 0) {
+                
+                // Check if there's a selection and it's not empty
+                if (selection.rangeCount > 0 && selection.toString().trim() !== '') {
                     const range = selection.getRangeAt(0);
                     const commonAncestor = range.commonAncestorContainer;
                     
-                    // Correctly identify the container element, even if the selection starts in a text node.
+                    // Determine the relevant container element for checking inclusion
+                    // If selection starts in a text node, use its parent element
                     const containerElement = commonAncestor.nodeType === Node.TEXT_NODE ? commonAncestor.parentElement : commonAncestor;
 
+                    // Check if the selection is within either the passage or questions panel
                     if (passagePanel.contains(containerElement) || questionsPanel.contains(containerElement)) {
-                        lastSelectedRange = range;
-                        const rect = range.getBoundingClientRect();
-                        
-                        highlightButton.style.display = 'block'; // Make button visible to measure it
-                        
-                        // Position button above the selection
-                        let topPos = rect.top + window.scrollY - highlightButton.offsetHeight - 5;
-                        // If it would go off-screen, position it below instead
-                        if (topPos < window.scrollY) {
-                            topPos = rect.bottom + window.scrollY + 5;
+                        // Avoid showing tooltip for selections within interactive elements (inputs, selects)
+                        if (containerElement.closest('input, select, .feedback-item')) {
+                            hideHighlightTooltip();
+                            return;
                         }
-
-                        highlightButton.style.left = `${rect.left + window.scrollX}px`;
-                        highlightButton.style.top = `${topPos}px`;
-                        return; // Exit to keep the button visible
+                        showHighlightTooltip(range);
+                        return; // Keep tooltip visible for this valid selection
                     }
                 }
-
-                // If no valid selection, hide the button
-                highlightButton.style.display = 'none';
-                lastSelectedRange = null;
-            }, 10);
+                // If no valid selection, or selection is outside target areas, hide tooltip
+                hideHighlightTooltip();
+            }, 10); // Small delay
         });
 
-        highlightButton.addEventListener('click', () => {
-            if (lastSelectedRange) {
+        // Event listener for clicking the highlight button
+        highlightTooltip.addEventListener('click', () => {
+            if (currentSelectionRange) {
                 const span = document.createElement('span');
                 span.classList.add('highlighted-text');
                 try {
-                    lastSelectedRange.surroundContents(span);
-                    window.getSelection().removeAllRanges();
+                    // Extract contents from the range and put them into the new span
+                    span.appendChild(currentSelectionRange.extractContents());
+                    // Insert the new span back into the document
+                    currentSelectionRange.insertNode(span);
                 } catch (e) {
-                    console.error("Highlighting failed, likely because the selection crossed complex element boundaries.", e);
+                    console.error("Error highlighting text (likely selection crossed element boundaries):", e);
+                    // For more robust highlighting across complex structures, especially within paragraphs
+                    // or mixed content, a more advanced text manipulation library might be needed.
                 }
             }
-            highlightButton.style.display = 'none';
-            lastSelectedRange = null;
+            hideHighlightTooltip(); // Hide tooltip after highlighting
+        });
+
+        // Event listener to hide tooltip if user clicks elsewhere
+        document.addEventListener('mousedown', (e) => {
+            // If the click is not on the tooltip itself and the tooltip is visible
+            if (highlightTooltip.style.display === 'flex' && !highlightTooltip.contains(e.target)) {
+                hideHighlightTooltip();
+            }
+        });
+
+        // When resetting answers, also remove highlights
+        // IMPORTANT: Ensure this reset button listener is compatible with the new highlighting.
+        // It needs to remove elements with class 'highlighted-text'
+        document.getElementById('quizForm').addEventListener('reset', (event) => {
+            // This is added to allow reset button to work if its type is not 'reset'
+            // If you have type="reset" on the button, this event listener will fire automatically before the form is reset.
+            // If not, you might need to manually reset form fields here too.
+            
+            document.querySelectorAll('.highlighted-text').forEach(highlight => {
+                const parent = highlight.parentNode;
+                // Move all child nodes of the highlight span back to its parent
+                while (highlight.firstChild) {
+                    parent.insertBefore(highlight.firstChild, highlight);
+                }
+                // Remove the empty highlight span
+                parent.removeChild(highlight);
+                parent.normalize(); // Merge adjacent text nodes after removing the span
+            });
+            hideHighlightTooltip(); // Ensure tooltip is hidden
+            updateProgressBar(); // Update progress bar after reset
         });
 
 
-        // --- EXISTING QUIZ AND PROGRESS BAR LOGIC ---
+        // --- EXISTING QUIZ AND PROGRESS BAR LOGIC (UNCHANGED) ---
         const quizForm = document.getElementById('quizForm');
         const questionProgressBar = document.getElementById('questionProgressBar');
         const totalQuestions = Object.keys(answerKey).length;
