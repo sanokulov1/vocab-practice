@@ -199,31 +199,90 @@
         padding: 25px 0;
     }
 
-    .test-button {
-        display: block;
-        text-decoration: none;
-        text-align: center;
+    .test-button-wrapper {
+        display: flex;
+        flex-direction: column; /* Stack test button and passages vertically */
         background: var(--light);
         color: var(--dark);
         padding: 15px 20px;
         border-radius: 12px;
-        font-weight: 600;
-        font-size: 1rem;
         border: 2px solid #e0e0e0;
-        transition: var(--transition);
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: var(--transition);
+        overflow: hidden; /* Ensure content within is clipped when collapsed */
     }
-    
-    .test-button:hover {
+
+    .test-button-wrapper:hover {
         transform: translateY(-5px);
         background: var(--primary);
         color: white;
         border-color: var(--primary);
         box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
     }
+
+    .test-button {
+        display: flex; /* Use flex for icon and text alignment */
+        align-items: center;
+        text-decoration: none;
+        text-align: left; /* Align text to left */
+        color: inherit; /* Inherit color from parent wrapper */
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer; /* Indicate it's clickable */
+        padding: 0; /* Remove default padding as wrapper has it */
+        background: none; /* No background for the button itself */
+        border: none; /* No border for the button itself */
+        width: 100%; /* Take full width of wrapper */
+        justify-content: space-between; /* Space out text and icon */
+    }
     
     .test-button i {
         margin-right: 8px;
+    }
+
+    .test-button.active {
+        color: var(--primary); /* Optional: Change text color when active */
+    }
+
+    /* New styles for horizontal passage buttons */
+    .passage-buttons {
+        max-height: 0; /* Initially hidden */
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.5s ease;
+        padding: 0 0; /* Initial padding */
+        display: flex; /* Use flexbox for horizontal layout */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        gap: 10px; /* Space between passage buttons */
+        padding-top: 0; /* Initial padding top */
+        justify-content: center; /* Center the buttons */
+    }
+
+    .passage-buttons.active {
+        max-height: 300px; /* Increased max-height to ensure content visibility */
+        padding-top: 15px; /* Padding when active */
+    }
+
+    .passage-button {
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        background: #e9ecef; /* Lighter background for passage buttons */
+        color: var(--dark);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        border: 1px solid #ced4da;
+        transition: var(--transition);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .passage-button:hover {
+        transform: translateY(-2px);
+        background: var(--secondary); /* Highlight on hover */
+        color: white;
+        border-color: var(--secondary);
+        box-shadow: 0 4px 8px rgba(251, 176, 59, 0.3);
     }
 
     /* Footer styles - copied from index.html for consistency */
@@ -269,6 +328,13 @@
       .accordion-button {
           font-size: 1.2rem;
           padding: 20px 25px;
+      }
+      .test-buttons {
+          grid-template-columns: 1fr; /* Stack test buttons on small screens */
+      }
+      .passage-buttons {
+          flex-direction: column; /* Stack passage buttons on small screens */
+          align-items: center; /* Center stacked buttons */
       }
     }
   </style>
@@ -317,9 +383,44 @@
           </button>
           <div class="accordion-content">
             <div class="test-buttons">
-              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 1</a>
-              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 2</a>
-              <a href="#" class="test-button"><i class="fas fa-file-alt"></i> Test 3</a>
+              <!-- Reading Test 1 -->
+              <div class="test-button-wrapper">
+                <button class="test-button" data-target="passage-buttons-test1">
+                    <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 1</span>
+                    <i class="fas fa-chevron-down icon"></i>
+                </button>
+                <div id="passage-buttons-test1" class="passage-buttons">
+                    <a href="reading_test1_p1.html" class="passage-button">Passage 1</a>
+                    <a href="reading_test1_p2.html" class="passage-button">Passage 2</a>
+                    <a href="reading_test1_p3.html" class="passage-button">Passage 3</a>
+                </div>
+              </div>
+              
+              <!-- Reading Test 2 -->
+              <div class="test-button-wrapper">
+                <button class="test-button" data-target="passage-buttons-test2">
+                    <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 2</span>
+                    <i class="fas fa-chevron-down icon"></i>
+                </button>
+                <div id="passage-buttons-test2" class="passage-buttons">
+                    <a href="reading_test2_p1.html" class="passage-button">Passage 1</a>
+                    <a href="reading_test2_p2.html" class="passage-button">Passage 2</a>
+                    <a href="reading_test2_p3.html" class="passage-button">Passage 3</a>
+                </div>
+              </div>
+
+              <!-- Reading Test 3 -->
+              <div class="test-button-wrapper">
+                <button class="test-button" data-target="passage-buttons-test3">
+                    <span class="test-button-text"><i class="fas fa-file-alt"></i> Test 3</span>
+                    <i class="fas fa-chevron-down icon"></i>
+                </button>
+                <div id="passage-buttons-test3" class="passage-buttons">
+                    <a href="#" class="passage-button">Passage 1</a>
+                    <a href="#" class="passage-button">Passage 2</a>
+                    <a href="#" class="passage-button">Passage 3</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -338,12 +439,13 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const accordionButtons = document.querySelectorAll('.accordion-button');
+        // Main accordion logic for Listening and Reading sections
+        const mainAccordionButtons = document.querySelectorAll('.accordion-button');
 
-        accordionButtons.forEach(button => {
+        mainAccordionButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Close other open items
-                accordionButtons.forEach(otherButton => {
+                // Close other open main accordion items
+                mainAccordionButtons.forEach(otherButton => {
                     if (otherButton !== button && otherButton.classList.contains('active')) {
                         otherButton.classList.remove('active');
                         const otherContent = otherButton.nextElementSibling;
@@ -352,11 +454,12 @@
                     }
                 });
 
-                // Toggle current item
+                // Toggle current main accordion item
                 button.classList.toggle('active');
                 const accordionContent = button.nextElementSibling;
 
                 if (button.classList.contains('active')) {
+                    // Set a very large max-height to ensure it covers all nested content
                     accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
                     accordionContent.style.padding = '0 30px';
                 } else {
@@ -365,7 +468,58 @@
                 }
             });
         });
+
+        // Nested accordion logic for Reading Test passages
+        const testButtons = document.querySelectorAll('.test-button');
+
+        testButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                console.log('Test button clicked:', button.textContent.trim()); // Debugging: Log button click
+                event.preventDefault(); // Prevent default button behavior (e.g., form submission)
+
+                // Find the corresponding passage buttons container using data-target
+                const targetId = button.dataset.target;
+                const passageContainer = document.getElementById(targetId);
+                console.log('Target ID:', targetId); // Debugging: Log target ID
+                console.log('Passage Container found:', passageContainer ? true : false); // Debugging: Confirm container exists
+
+                if (passageContainer) {
+                    // Toggle the 'active' class on the test button for icon rotation
+                    button.classList.toggle('active');
+
+                    // Toggle the 'active' class on the passage container for visibility
+                    passageContainer.classList.toggle('active');
+                    console.log('Test button active state:', button.classList.contains('active')); // Debugging: Log active state
+                    console.log('Passage container active state:', passageContainer.classList.contains('active')); // Debugging: Log active state
+
+                    if (passageContainer.classList.contains('active')) {
+                        // Set max-height to scrollHeight for smooth expansion
+                        // Add a small buffer to scrollHeight to prevent clipping in some browsers
+                        passageContainer.style.maxHeight = (passageContainer.scrollHeight + 10) + "px"; 
+                        console.log('Expanded. ScrollHeight:', passageContainer.scrollHeight); // Debugging: Log scrollHeight
+                    } else {
+                        // Collapse by setting max-height to null
+                        passageContainer.style.maxHeight = null;
+                        console.log('Collapsed.'); // Debugging: Log collapse
+                    }
+
+                    // *** IMPORTANT FIX: Recalculate parent main accordion's height ***
+                    // Find the closest parent accordion-content for the main "Reading" tab
+                    const parentAccordionContent = button.closest('.accordion-content');
+                    if (parentAccordionContent) {
+                        // Temporarily remove max-height to get accurate scrollHeight
+                        parentAccordionContent.style.maxHeight = 'none';
+                        // Set max-height to its new scrollHeight
+                        parentAccordionContent.style.maxHeight = parentAccordionContent.scrollHeight + "px";
+                        console.log('Parent accordion content new scrollHeight:', parentAccordionContent.scrollHeight);
+                    }
+
+                } else {
+                    console.error('Passage container not found for target ID:', targetId); // Debugging: Error if container is missing
+                }
+            });
+        });
     });
   </script>
 </body>
-</html> 
+</html>
