@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - sanokulov.uz</title>
+    <link rel="icon" type="image/png" href="sanokulov_favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF; /* Original primary color */
+            --primary-dark: #5a52e0;
+            --secondary: #fbb03b; /* Original secondary color */
+            --secondary-dark: #e69a2b;
+            --accent: #4CAF50;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, #8e6bff 100%);
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+        }
+
+        /* Light Theme (Default) - Azure Blue inspired */
+        body.light-theme {
+            background-color: #F0F8FF; /* AliceBlue - a very light azure */
+            color: #343a40; /* Dark gray for text */
+        }
+        body.light-theme .container {
+            /* For the main content container, not the article cards themselves */
+            background-color: transparent; /* Keep transparent if it's just holding other elements */
+            color: #343a40;
+            box-shadow: none; /* No shadow for the main container wrapper */
+        }
+        body.light-theme .header-text,
+        body.light-theme h1,
+        body.light-theme h2 {
+            color: #1a202c; /* Darker text for headings */
+        }
+        body.light-theme .article-card {
+            background-color: #ffffff;
+            color: var(--dark);
+            box-shadow: var(--shadow);
+        }
+        body.light-theme .article-card h3 {
+            color: var(--primary); /* Azure blue for headings on cards */
+        }
+        body.light-theme .article-card p {
+            color: var(--gray);
+        }
+        body.light-theme .article-card i {
+            color: var(--primary);
+        }
+
+
+        /* Dark Theme - Azure Blue inspired */
+        body.dark-theme {
+            background-color: #1a2b3c; /* Darker bluish-gray */
+            color: #e2e8f0; /* Light gray for text */
+        }
+        body.dark-theme .container {
+            background-color: transparent; /* Keep transparent */
+            color: #e2e8f0;
+            box-shadow: none;
+        }
+        body.dark-theme .header-text,
+        body.dark-theme h1,
+        body.dark-theme h2 {
+            color: #e2e8f0; /* Light text for headings */
+        }
+        body.dark-theme .article-card {
+            background-color: #2d3e50; /* Slightly lighter dark card */
+            color: #e2e8f0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        body.dark-theme .article-card h3 {
+            color: #90cdf4; /* Lighter blue for headings on cards */
+        }
+        body.dark-theme .article-card p {
+            color: #cbd5e0; /* Lighter gray text */
+        }
+        body.dark-theme .article-card i {
+            color: #90cdf4;
+        }
+        body.dark-theme .article-card:hover {
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+
+
+        /* Global & Component-Specific Styles */
+        .container {
+            max-width: 800px; /* Adjusted max-width for this page's content */
+            margin: 0 auto;
+            padding: 0 20px;
+            padding-top: 100px; /* Adjusted padding-top for fixed header */
+        }
+
+        /* Fixed Header */
+        header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 40px;
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: var(--shadow);
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1000;
+          backdrop-filter: blur(10px);
+        }
+
+        .logo {
+          font-family: 'Quicksand', sans-serif;
+          font-weight: 700;
+          font-size: 32px;
+          color: var(--primary);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          transition: var(--transition);
+        }
+
+        .logo i {
+          color: var(--secondary);
+        }
+        
+        .logo:hover {
+          transform: translateY(-2px);
+        }
+
+        nav ul {
+          display: flex;
+          list-style: none;
+          gap: 30px;
+        }
+
+        nav a {
+          text-decoration: none;
+          color: var(--dark);
+          font-weight: 600;
+          font-size: 16px;
+          transition: var(--transition);
+          position: relative;
+          padding: 5px 0;
+        }
+
+        nav a::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--primary);
+          border-radius: 2px;
+          transition: var(--transition);
+        }
+
+        nav a:hover {
+          color: var(--primary);
+        }
+
+        nav a:hover::after {
+          width: 100%;
+        }
+
+        /* Article List Grid */
+        .article-list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            padding-bottom: 80px; /* Space before footer */
+        }
+
+        /* Individual Article Card Button Styling */
+        .article-card {
+            display: flex; /* Use flex for content alignment */
+            flex-direction: column;
+            justify-content: space-between; /* Pushes arrow to bottom if text wraps */
+            text-align: left;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-decoration: none; /* Remove underline from link */
+            position: relative;
+            min-height: 160px; /* Ensure cards have a consistent minimum height */
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .article-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .article-card p {
+            font-size: 1rem;
+            margin-bottom: 20px; /* space before the arrow */
+            flex-grow: 1; /* Allows paragraph to take available space */
+        }
+
+        .article-card i {
+            align-self: flex-end; /* Aligns the arrow to the right within the flex container */
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .article-card:hover i {
+            transform: translateX(5px);
+        }
+
+
+        /* Theme Toggle Button Specific Styles (Emojis) - Copied from previous interaction */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it's above everything */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+            font-size: 24px; /* Size for emojis */
+            line-height: 1; /* Center emoji vertically */
+        }
+        #theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Icon display based on theme */
+        body.light-theme #moon-icon { display: none; }
+        body.light-theme #sun-icon { display: block; }
+
+        body.dark-theme #moon-icon { display: block; }
+        body.dark-theme #sun-icon { display: none; }
+        body.dark-theme #theme-toggle {
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        body.dark-theme #theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Footer styles - copied from index.html */
+        footer {
+          background: var(--dark);
+          color: white;
+          padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 40px;
+          margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+          font-size: 1.3rem;
+          margin-bottom: 20px;
+          position: relative;
+          padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 50px;
+          height: 3px;
+          background: var(--primary);
+          border-radius: 3px;
+        }
+
+        .footer-col p {
+          margin-bottom: 20px;
+          opacity: 0.8;
+        }
+
+        .social-links {
+          display: flex;
+          gap: 15px;
+          margin-top: 20px;
+        }
+
+        .social-links a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          transition: var(--transition);
+        }
+
+        .social-links a:hover {
+          background: var(--primary);
+          transform: translateY(-3px);
+        }
+
+        .footer-links {
+          list-style: none;
+        }
+
+        .footer-links li {
+          margin-bottom: 12px;
+        }
+
+        .footer-links a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .footer-links a:hover {
+          color: var(--primary);
+          transform: translateX(5px);
+        }
+
+        .copyright {
+          text-align: center;
+          padding-top: 30px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 0.9rem;
+          opacity: 0.7;
+        }
+
+        /* Mobile adjustments for header/logo */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .logo {
+                font-size: 24px;
+            }
+            nav {
+                display: none; /* Hide nav for mobile, assume hamburger menu would be added elsewhere if needed */
+            }
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+            }
+            .container {
+                padding-top: 80px; /* Adjust for smaller mobile header */
+            }
+            .article-list-grid {
+                grid-template-columns: 1fr; /* Stack cards on mobile */
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 light-theme"> <header>
+        <div class="logo" onclick="location.href='index.html'"> <i class="fas fa-graduation-cap"></i>
+            sanokulov.uz
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="vocab-practice.html">Vocabulary Practice</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="theme-toggle">
+        <span id="sun-icon">☀️</span> <span id="moon-icon" style="display: none;">🌙</span> </div>
+
+    <main class="container">
+        
+        <div class="article-list-grid">
+            <a href="article1.html" class="article-card">
+                <h3>Article 1: Sustainable Fashion</h3>
+                <p>Explore conscious choices in the clothing industry and reduce your environmental footprint.</p>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="article2.html" class="article-card">
+                <h3>Article 2: Social Media</h3>
+                <p>Unpack the benefits and risks of social media use for young people and mental health.</p>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="article3.html" class="article-card">
+                <h3>Article 3: Urban Renewal</h3>
+                <p>Discover how reinventing city spaces can significantly improve the health of city dwellers.</p>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+          <div class="footer-grid">
+            <div class="footer-col">
+              <h3>sanokulov.uz</h3>
+              <p>Your premier destination for effective English language learning. Transform your communication skills with our proven methods.</p>
+              <div class="social-links">
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+              </div>
+            </div>
+            <div class="footer-col">
+              <h3>Quick Links</h3>
+              <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="vocab-practice.html">Vocabulary Practice</a></li>
+                <li><a href="articles.html">Read Articles</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h3>Resources</h3>
+              <ul class="footer-links">
+                <li><a href="#">Learning Materials</a></li>
+                <li><a href="#">Blog & Tips</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h3>Contact</h3>
+              <ul class="footer-links">
+                <li><a href="#">info@sanokulov.uz</a></li>
+                <li><a href="#">+998 99 123 4567</a></li>
+                <li><a href="#">Tashkent, Uzbekistan</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="copyright">&copy; 2025 sanokulov.uz – All rights reserved</div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Elements
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const body = document.body;
+
+            // --- Theme Toggle Logic ---
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-theme');
+                    body.classList.remove('light-theme');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    body.classList.add('light-theme');
+                    body.classList.remove('dark-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // Load theme from localStorage or set default
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                // Check user's system preference if no theme is saved
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    applyTheme('dark');
+                } else {
+                    applyTheme('light');
+                }
+            }
+
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark-theme')) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

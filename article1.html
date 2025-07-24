@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainable Fashion: Interactive Article</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+        }
+
+        /* Light Theme (Default) - Azure Blue inspired */
+        body.light-theme {
+            background-color: #F0F8FF; /* AliceBlue - a very light azure */
+            color: #343a40; /* Dark gray for text */
+        }
+        body.light-theme .container {
+            background-color: #ffffff; /* White container */
+            color: #343a40;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        body.light-theme h1,
+        body.light-theme .header-text {
+            color: #1a202c; /* Darker text for headings */
+        }
+        body.light-theme .vocab-word {
+            color: #2563eb; /* Blue for vocab words */
+            background-color: #ffff00; /* Yellow highlight in light mode */
+        }
+        body.light-theme .vocab-popup {
+             background-color: #ffffff;
+        }
+        body.light-theme .vocab-popup h4 {
+            color: #1e40af;
+        }
+        body.light-theme .vocab-popup p {
+            color: #4b5563;
+        }
+        body.light-theme .vocab-popup .pronunciation {
+            color: #2563eb;
+        }
+        body.light-theme .vocab-popup .example {
+            color: #6b7280;
+        }
+        body.light-theme .close-button {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        body.light-theme .close-button:hover {
+            background-color: #d1d5db;
+        }
+
+
+        /* Dark Theme - Azure Blue inspired */
+        body.dark-theme {
+            background-color: #1a2b3c; /* Darker bluish-gray */
+            color: #e2e8f0; /* Light gray for text */
+        }
+        body.dark-theme .container {
+            background-color: #2d3e50; /* Slightly lighter dark container */
+            color: #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.2); /* Darker shadow */
+        }
+        body.dark-theme h1,
+        body.dark-theme .header-text {
+            color: #e2e8f0; /* Light text for headings */
+        }
+        body.dark-theme .vocab-word {
+            color: #90cdf4; /* Lighter blue for vocab words in dark mode */
+            background-color: #A49C3D; /* Night-friendly highlighted yellow */
+        }
+        body.dark-theme .vocab-popup {
+            background-color: #3a4a5c; /* Darker background for popup */
+            color: #e2e8f0;
+        }
+        body.dark-theme .vocab-popup h4 {
+            color: #90cdf4; /* Lighter blue for popup heading */
+        }
+        body.dark-theme .vocab-popup p {
+            color: #cbd5e0; /* Lighter gray for popup text */
+        }
+        body.dark-theme .vocab-popup .pronunciation {
+            color: #90cdf4; /* Lighter blue for pronunciation */
+        }
+        body.dark-theme .vocab-popup .example {
+            color: #a0aec0; /* Medium gray for example text */
+        }
+        body.dark-theme .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .close-button:hover {
+            background-color: #64748b;
+        }
+
+
+        /* Common styles for vocab words (not theme specific colors) */
+        .vocab-word {
+            text-decoration: underline;
+            text-decoration-color: #a0c4ff;
+            text-underline-offset: 2px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Modal Overlay for Vocab Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Vocab Popup Box */
+        .vocab-popup {
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            min-width: 300px;
+            max-width: 90%;
+            width: 400px;
+        }
+        .modal-overlay.active .vocab-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .vocab-popup h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .vocab-popup p {
+            margin-bottom: 4px;
+        }
+        .vocab-popup .pronunciation {
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+        .vocab-popup .example {
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border-radius: 9999px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 700;
+            line-height: 1;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Theme Toggle Button Specific Styles (Emojis) */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it's above the modal overlay */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+            font-size: 24px; /* Size for emojis */
+            line-height: 1; /* Center emoji vertically */
+        }
+        #theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Icon display based on theme */
+        body.light-theme #moon-icon { display: none; }
+        body.light-theme #sun-icon { display: block; }
+
+        body.dark-theme #moon-icon { display: block; }
+        body.dark-theme #sun-icon { display: none; }
+        body.dark-theme #theme-toggle {
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        body.dark-theme #theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- NEW: Welcome Modal Styles --- */
+        .welcome-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85); /* Slightly darker overlay for welcome */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1002; /* Higher z-index than vocab modal */
+        }
+
+        .welcome-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .welcome-popup {
+            background-color: #ffffff;
+            padding: 30px; /* Slightly more padding */
+            border-radius: 10px; /* Slightly more rounded */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            position: relative;
+            transform: scale(0.8); /* Starts smaller */
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy transition */
+            min-width: 320px;
+            max-width: 90%;
+            width: 450px; /* Slightly wider */
+            text-align: center;
+        }
+
+        .welcome-modal-overlay.active .welcome-popup {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .welcome-popup .animated-reminder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Space between GIF and fallback text */
+        }
+
+        .welcome-popup .reminder-gif {
+            max-width: 100%; /* Ensure GIF fits within popup */
+            height: auto;
+            border-radius: 5px; /* Optional: subtle rounding for the GIF */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Optional: subtle shadow for the GIF */
+        }
+
+        .welcome-popup .gif-fallback-text {
+            font-size: 1.1rem; /* Adjust size */
+            color: var(--dark); /* Keep consistent */
+            text-align: center;
+            margin-bottom: 0; /* Remove extra margin */
+        }
+
+        /* Dark theme specific for welcome popup */
+        body.dark-theme .welcome-popup {
+            background-color: #3a4a5c;
+            color: #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        body.dark-theme .welcome-popup .gif-fallback-text {
+            color: #cbd5e0;
+        }
+        body.dark-theme .welcome-popup .close-button {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-theme .welcome-popup .close-button:hover {
+            background-color: #64748b;
+        }
+
+    </style>
+</head>
+<body class="p-4 light-theme">
+    <div id="theme-toggle">
+        <span id="sun-icon">☀️</span>
+        <span id="moon-icon" style="display: none;">🌙</span>
+    </div>
+
+    <div class="container mx-auto rounded-lg p-8 my-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 header-text">Sustainable Fashion: How to cut the environmental cost of your clothes</h1>
+            <p class="text-lg header-text">From renting clothes to <span class="vocab-word" data-word="ditching">ditching</span> the tumble drier, there are plenty of things you can do to reduce the <span class="vocab-word" data-word="environmental price tag">environmental price tag</span> of your wardrobe</p>
+        </header>
+
+        <article class="text-base leading-relaxed">
+            <p class="mb-4">If your wardrobe contains items of clothing you bought <span class="vocab-word" data-word="on the high street">on the high street</span> for relatively low cost, you are a participant in the <span class="vocab-word" data-word="fast-fashion industry">fast-fashion industry</span>. But don’t feel too guilty. Everybody needs clothes and <span class="vocab-word" data-word="dressing sustainably">dressing sustainably</span> can be complicated. With a little <span class="vocab-word" data-word="know-how">know-how</span>, however, there are things we can all do to look good without the <span class="vocab-word" data-word="environmental price tag">environmental price tag</span>.</p>
+            <p class="mb-4">The first step is to think long term, says Kirsi Niinimäki at Aalto University in Espoo, Finland: “Short use-time of <span class="vocab-word" data-word="garments">garments</span> is really harmful for the environment.”</p>
+            <p class="mb-4">She suggests you start by liking what you have. Go through your wardrobe and <span class="vocab-word" data-word="dig out">dig out</span> any long forgotten <span class="vocab-word" data-word="garments">garments</span> that you can start to use again.</p>
+            <p class="mb-4">If you want a <span class="vocab-word" data-word="change of look">change of look</span>, or need a particular item, consider using <span class="vocab-word" data-word="flea markets">flea markets</span>, <span class="vocab-word" data-word="buying second-hand">buying second-hand</span> or holding <span class="vocab-word" data-word="clothes swapping events">clothes swapping events</span> with friends. Apps and websites that allow you to lease clothes from others, and <span class="vocab-word" data-word="get more use out of your own pre-loved items">get more use out of your own pre-loved items</span> by renting them out, are increasingly common. Some fashion labels are also working with the makers of the apps, so you can rent clothes directly from them, with the quality control that comes with it.</p>
+            <p class="mb-4">Shopping for new clothes requires a <span class="vocab-word" data-word="shift of mindset">shift of mindset</span> away from the <span class="vocab-word" data-word="budget-friendly">budget-friendly</span> <span class="vocab-word" data-word="lure">lure</span> of fast fashion. “If buying something new, see <span class="vocab-word" data-word="garments">garments</span> as an investment,” says Niinimäki. “Think about the quality and if the style is something we can use for a longer time.” Many companies offer a repair service. “As consumers, I think that we can educate ourselves a bit more about <span class="vocab-word" data-word="garments">garments</span> and the <span class="vocab-word" data-word="fibres">fibres</span> that they are made of,” she says.</p>
+            <p class="mb-4">Once an item is in your wardrobe, how you look after it can <span class="vocab-word" data-word="make a difference">make a difference</span>. “There’s the old adage, buy better, buy less,” says Jaki Love, director of innovation and sustainability at UKFT (the UK Fashion and Textile Association). “But the majority of negative impacts from fashion actually occur post-sale, and so consumers have it within their gift to reduce this impact through how they <span class="vocab-word" data-word="launder">launder</span>.”</p>
+            <p class="mb-4">So, wash clothing <span class="vocab-word" data-word="sparingly">sparingly</span>, avoid <span class="vocab-word" data-word="tumble-drying">tumble-drying</span> and iron only when necessary, to reduce the amounts of water, energy and <span class="vocab-word" data-word="detergent">detergent</span> involved.</p>
+            <p class="mb-4">“And when it comes to disposal, if a <span class="vocab-word" data-word="garment">garment</span> is in a condition that somebody else can wear it, return it to the market. If it’s really like a waste, find a place that accepts the textile waste.”</p>
+            <p class="mb-4">It is also important to question any claims you read on labels or in shops, which can be misleading. A recent report by the Changing Markets Foundation in the Netherlands found that certification programmes designed to clean up the fashion industry can <span class="vocab-word" data-word="backfire">backfire</span>, leading to greater consumption, pollution and use of fossil fuels.</p>
+            <p class="mb-4">There are some <span class="vocab-word" data-word="handy">handy</span> resources to help you <span class="vocab-word" data-word="cut through the hype">cut through the hype</span>. The Fashion Transparency Index ranks 250 of the world’s largest fashion brands and retailers according to what information they <span class="vocab-word" data-word="disclose">disclose</span> about their environmental and social policies. You can also check a clothing brand’s green, social and <span class="vocab-word" data-word="animal welfare">animal welfare</span> <span class="vocab-word" data-word="credentials">credentials</span> at the Good On You directory. Ultimately, when you buy something new you need to ask yourself three questions, says Mart Drake-Knight, founder of sustainable clothing brand Teemill in the UK. “Who made it? What is it made from? And where will it end up when I am done with it?”</p>
+        </article>
+    </div>
+
+    <div id="vocab-modal-overlay" class="modal-overlay">
+        <div id="vocab-popup" class="vocab-popup">
+            <button id="close-popup" class="close-button">X</button>
+            <h4 id="display-word"></h4>
+            <p id="display-pronunciation" class="pronunciation"></p>
+            <p id="display-definition"></p>
+            <p id="display-example" class="example"></p>
+        </div>
+    </div>
+
+    <div id="welcome-modal-overlay" class="welcome-modal-overlay">
+        <div id="welcome-popup" class="welcome-popup">
+            <button id="welcome-popup-close" class="close-button">X</button>
+            <div class="animated-reminder">
+                <img src="vocab_demo.gif" alt="Animated reminder: Click highlighted words for definitions" class="reminder-gif">
+                <p class="gif-fallback-text">Click on the highlighted words to see their definition, pronunciation, and examples!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vocabWords = document.querySelectorAll('.vocab-word');
+            const vocabModalOverlay = document.getElementById('vocab-modal-overlay');
+            const vocabPopup = document.getElementById('vocab-popup');
+            const closePopupButton = document.getElementById('close-popup');
+            const displayWord = document.getElementById('display-word');
+            const displayPronunciation = document.getElementById('display-pronunciation');
+            const displayDefinition = document.getElementById('display-definition');
+            const displayExample = document.getElementById('display-example');
+
+            // Theme Toggle Elements
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const body = document.body;
+
+            // NEW: Welcome Popup Elements
+            const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
+            const welcomePopupCloseButton = document.getElementById('welcome-popup-close');
+
+            const vocabData = {
+                "ditching": {
+                    definition: "To stop using or get rid of something.",
+                    pronunciation: "/ˈdɪtʃɪŋ/",
+                    example: "I decided to ditch my old phone and upgrade to a newer model."
+                },
+                "environmental price tag": {
+                    definition: "The hidden environmental cost of producing and using something.",
+                    pronunciation: "/ɪnˌvaɪrənˈmɛntəl praɪs tæɡ/",
+                    example: "The environmental price tag of driving everywhere includes air pollution and increased carbon emissions."
+                },
+                "on the high street": {
+                    definition: "Refers to popular or mainstream shops, especially in the UK.",
+                    pronunciation: "/ɒn ðə haɪ striːt/",
+                    example: "Many people still prefer to buy groceries on the high street, even though online shopping is more convenient."
+                },
+                "fast-fashion industry": {
+                    definition: "The industry that produces clothing quickly and cheaply, often at the expense of the environment and workers.",
+                    pronunciation: "/fɑːst ˈfæʃən ˈɪndəstri/",
+                    example: "The fast fashion industry has expanded globally, but similar practices exist in other industries, such as electronics."
+                },
+                "dressing sustainably": {
+                    definition: "To choose clothing that has a lower environmental impact.",
+                    pronunciation: "/ˈdrɛsɪŋ səˈsteɪnəbli/",
+                    example: "To dress sustainably, you can buy second-hand clothes or rent clothes instead of buying new ones."
+                },
+                "know-how": {
+                    definition: "Practical knowledge or skills needed to do something.",
+                    pronunciation: "/ˈnoʊˌhaʊ/",
+                    example: "Fixing a car engine requires a lot of know-how and experience."
+                },
+                "garments": {
+                    definition: "An item of clothing.",
+                    pronunciation: "/ˈɡɑːrmənts/",
+                    example: "She wore her favorite garment to the party—a bright red scarf her grandmother had given her."
+                },
+                "dig out": {
+                    definition: "To find something that has been stored or forgotten.",
+                    pronunciation: "/dɪɡ aʊt/",
+                    example: "I had to dig out my old camping gear from the attic for our weekend trip."
+                },
+                "change of look": {
+                    definition: "A new or different style.",
+                    pronunciation: "/tʃeɪndʒ əv lʊk/",
+                    example: "After painting the living room a bold color, the house had a change of look."
+                },
+                "flea markets": {
+                    definition: "A market where second-hand or used items are sold.",
+                    pronunciation: "/fliː ˈmɑːrkɪts/",
+                    example: "We found some vintage vinyl records at a local flea market last weekend."
+                },
+                "buying second-hand": {
+                    definition: "To purchase items that have been previously owned by someone else.",
+                    pronunciation: "/ˈbaɪɪŋ ˈsɛkənd hænd/",
+                    example: "Instead of buying a new car, we decided to buy second-hand to save money."
+                },
+                "clothes swapping events": {
+                    definition: "An event where people exchange clothes with others instead of buying new ones.",
+                    pronunciation: "/kloʊðz ˈswɒpɪŋ ɪˈvɛnts/",
+                    example: "A local group organizes book exchanges, similar to a clothes swapping event, where people trade books they’ve already read."
+                },
+                "get more use out of your own pre-loved items": {
+                    definition: "To use something for a longer time before getting rid of it.",
+                    pronunciation: "/ɡɛt mɔːr juːs aʊt əv jʊər ˈaʊn priː lʌvd ˈaɪtəmz/",
+                    example: "By repairing my old laptop, I was able to get more use out of it instead of replacing it."
+                },
+                "shift of mindset": {
+                    definition: "A change in the way you think about something.",
+                    pronunciation: "/ʃɪft əv ˈmaɪndˌsɛt/",
+                    example: "Adopting a more positive attitude toward challenges requires a shift of mindset."
+                },
+                "budget-friendly": {
+                    definition: "Inexpensive or affordable.",
+                    pronunciation: "/ˈbʌdʒɪt ˈfrɛndli/",
+                    example: "We chose a budget-friendly vacation destination to save money this year."
+                },
+                "lure": {
+                    definition: "The attraction or temptation to do something.",
+                    pronunciation: "/lʊər/",
+                    example: "The lure of staying in bed on a cold morning can be hard to resist."
+                },
+                "fibres": {
+                    definition: "The material that clothes are made from, such as cotton or polyester.",
+                    pronunciation: "/ˈfaɪbərz/",
+                    example: "Natural fibres like cotton and wool are often used in making furniture upholstery."
+                },
+                "make a difference": {
+                    definition: "To have a positive impact or effect.",
+                    pronunciation: "/meɪk ə ˈdɪfərəns/",
+                    example: "Volunteering at the local shelter can really make a difference in the community."
+                },
+                "launder": {
+                    definition: "To wash clothes.",
+                    pronunciation: "/ˈlɔːndər/",
+                    example: "After the camping trip, we had to launder all our gear to get rid of the mud."
+                },
+                "sparingly": {
+                    definition: "In a limited way or not too often.",
+                    pronunciation: "/ˈspɛərɪŋli/",
+                    example: "Use the spices sparingly so you don’t overpower the flavor of the dish."
+                },
+                "tumble-drying": {
+                    definition: "Using a machine to dry clothes by spinning them in hot air.",
+                    pronunciation: "/ˈtʌmbəl ˈdraɪɪŋ/",
+                    example: "Instead of tumble drying, she prefers to hang her clothes outside to dry naturally."
+                },
+                "detergent": {
+                    definition: "A cleaning substance used for washing clothes.",
+                    pronunciation: "/dɪˈtɜːrdʒənt/",
+                    example: "The dishwashing detergent we use is environmentally friendly and biodegradable."
+                },
+                "backfire": {
+                    definition: "To have an unintended and negative effect.",
+                    pronunciation: "/ˈbækˌfaɪər/",
+                    example: "His attempt to help with the project backfired when he accidentally deleted the important files."
+                },
+                "handy": {
+                    definition: "Useful or helpful.",
+                    pronunciation: "/ˈhændi/",
+                    example: "The new app is quite handy for tracking my expenses on the go."
+                },
+                "cut through the hype": {
+                    definition: "To see the truth beyond exaggerated claims or marketing.",
+                    pronunciation: "/kʌt θruː ðə haɪp/",
+                    example: "It’s important to cut through the hype when reading reviews of new tech gadgets."
+                },
+                "disclose": {
+                    definition: "To make information known or public.",
+                    pronunciation: "/dɪsˈkloʊz/",
+                    example: "The company had to disclose all of its financial transactions to the auditors."
+                },
+                "animal welfare": {
+                    definition: "The well-being of animals, especially regarding how they are treated in the production of goods.",
+                    pronunciation: "/ˈænɪməl ˈwɛlˌfɛər/",
+                    example: "Many people support farms that prioritize animal welfare, ensuring animals are treated humanely."
+                },
+                "credentials": {
+                    definition: "A qualification or aspect that proves something is true or reliable.",
+                    pronunciation: "/krɪˈdɛnʃəlz/",
+                    example: "His professional credentials helped him secure the job as a project manager."
+                }
+            };
+
+            // --- Theme Toggle Logic ---
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-theme');
+                    body.classList.remove('light-theme');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    body.classList.add('light-theme');
+                    body.classList.remove('dark-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // Load theme from localStorage or set default
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                // Check user's system preference if no theme is saved
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    applyTheme('dark');
+                } else {
+                    applyTheme('light');
+                }
+            }
+
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark-theme')) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+
+            // --- Vocab Popup Logic (Existing) ---
+            function showPopup(word, data) {
+                displayWord.textContent = word;
+                displayPronunciation.textContent = data.pronunciation;
+                displayDefinition.textContent = data.definition;
+                displayExample.textContent = data.example;
+                vocabModalOverlay.classList.add('active');
+            }
+
+            function hidePopup() {
+                vocabModalOverlay.classList.remove('active');
+            }
+
+            vocabWords.forEach(wordSpan => {
+                wordSpan.addEventListener('click', (e) => {
+                    const word = wordSpan.dataset.word;
+                    const data = vocabData[word];
+                    if (data) {
+                        showPopup(word, data);
+                    } else {
+                        showPopup(word, {
+                            definition: "Definition not found for this word.",
+                            pronunciation: "",
+                            example: ""
+                        });
+                    }
+                });
+            });
+
+            closePopupButton.addEventListener('click', hidePopup);
+
+            vocabModalOverlay.addEventListener('click', (e) => {
+                if (e.target === vocabModalOverlay) {
+                    hidePopup();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && vocabModalOverlay.classList.contains('active')) {
+                    hidePopup();
+                }
+            });
+
+            // --- NEW: Welcome Popup Logic ---
+            function showWelcomePopup() {
+                console.log("Attempting to show welcome popup..."); // Added for debugging
+                // Only show if it hasn't been seen before for this specific article
+                if (!localStorage.getItem('welcomeMessageSeen_article1')) {
+                    if (welcomeModalOverlay) { // Check if element exists before adding class
+                        welcomeModalOverlay.classList.add('active');
+                        console.log("Welcome popup activated. Check 'welcome-modal-overlay' for class 'active' in Elements tab."); // Added for debugging
+                    } else {
+                        console.error("Error: welcomeModalOverlay element not found!"); // Added for debugging
+                    }
+                } else {
+                    console.log("Welcome popup already seen (localStorage flag is set)."); // Added for debugging
+                }
+            }
+
+            function hideWelcomePopup() {
+                console.log("Hiding welcome popup."); // Added for debugging
+                if (welcomeModalOverlay) {
+                    welcomeModalOverlay.classList.remove('active');
+                }
+                localStorage.setItem('welcomeMessageSeen_article1', 'true'); // Mark as seen
+            }
+
+            // Ensure elements exist before adding listeners
+            if (welcomePopupCloseButton) {
+                welcomePopupCloseButton.addEventListener('click', hideWelcomePopup);
+            } else {
+                console.error("Error: welcomePopupCloseButton element not found!"); // Added for debugging
+            }
+
+            if (welcomeModalOverlay) {
+                welcomeModalOverlay.addEventListener('click', (e) => {
+                    // Only close if clicking the overlay itself, not the popup content
+                    if (e.target === welcomeModalOverlay || e.target.classList.contains('animated-reminder') || e.target.classList.contains('reminder-gif') || e.target.classList.contains('gif-fallback-text')) {
+                        hideWelcomePopup();
+                    }
+                });
+            }
+
+
+            // Show welcome popup on page load
+            showWelcomePopup();
+        });
+    </script>
+</body>
+</html>
