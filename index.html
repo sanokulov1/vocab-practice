@@ -14,6 +14,7 @@
       --secondary: #fbb03b;
       --secondary-dark: #e69a2b;
       --accent: #4CAF50;
+      --red: #E53935; /* Red for new badge */
       --dark: #1a1a2e;
       --light: #f8f9fa;
       --gray: #6c757d;
@@ -135,20 +136,20 @@
     /* --- HERO SECTION STYLES --- */
     .hero {
         display: flex;
-        flex-direction: column; /* Changed to column to stack title and grid */
+        flex-direction: column; 
         align-items: center;
         justify-content: center;
         text-align: center;
         min-height: 80vh;
-        padding: 120px 20px 80px; /* Adjusted padding for header */
+        padding: 120px 20px 80px;
         background: linear-gradient(135deg, rgba(108, 99, 255, 0.05) 0%, rgba(251, 176, 59, 0.05) 100%);
     }
 
-    .hero-title { /* Added a class for the new title */
+    .hero-title {
         font-size: 3.5rem;
         font-weight: 700;
         color: var(--dark);
-        margin-bottom: 50px; /* Increased margin for separation */
+        margin-bottom: 50px; 
         line-height: 1.2;
         animation: fadeInUp 1s ease-out;
     }
@@ -183,18 +184,11 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted minmax for smaller cards */
-      gap: 30px;
-      width: 100%; /* Ensure grid takes full width in hero */
-      max-width: 1000px; /* Limit width for aesthetics */
-      margin: 0 auto; /* Center the grid */
-    }
-
-    /* Force 2 columns for 2x2 layout on larger screens */
-    @media (min-width: 769px) {
-      .features-grid {
-        grid-template-columns: repeat(2, 1fr); 
-      }
+      grid-template-columns: repeat(5, 1fr); /* 5 columns in one line */
+      gap: 20px; /* Reduced gap */
+      width: 100%; 
+      max-width: 1200px;
+      margin: 0 auto; 
     }
 
     .feature-card {
@@ -207,9 +201,8 @@
       z-index: 1;
       cursor: pointer;
     }
-
-    /* New "New" badge style */
-    .feature-card .new-badge {
+    
+    .new-badge {
         position: absolute;
         top: 0;
         right: 0;
@@ -220,9 +213,13 @@
         font-weight: bold;
         border-bottom-left-radius: 10px;
         z-index: 10;
-        transform: translate(0px, 0px); /* Adjust position slightly */
         box-shadow: 0 4px 15px rgba(251, 176, 59, 0.3);
-        animation: superBounce 1.5s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55); /* SUPER bouncy effect */
+        animation: superBounce 1.5s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .new-badge.red {
+        background-color: var(--red);
+        box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
     }
 
     .feature-card::before {
@@ -247,11 +244,11 @@
     }
 
     .feature-icon {
-      height: 120px;
+      height: 100px; /* Reduced height */
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3.5rem;
+      font-size: 3rem; /* Reduced icon size */
       color: var(--primary);
       background: rgba(108, 99, 255, 0.05);
       transition: var(--transition);
@@ -263,18 +260,19 @@
     }
 
     .feature-content {
-      padding: 30px;
+      padding: 20px; /* Reduced padding */
     }
 
     .feature-content h3 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
+      font-size: 1.2rem; /* Adjusted font size */
+      margin-bottom: 10px; /* Reduced margin */
       color: var(--dark);
     }
 
     .feature-content p {
       color: var(--gray);
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Reduced margin */
+      font-size: 0.9rem; /* Reduced font size */
     }
 
     .feature-link {
@@ -284,6 +282,7 @@
       text-decoration: none;
       font-weight: 600;
       transition: var(--transition);
+      font-size: 0.9rem;
     }
 
     .feature-link i {
@@ -492,13 +491,19 @@
       }
     }
 
-    /* New Keyframes for SUPER Bouncy/Pulse Effect */
     @keyframes superBounce {
         0% { transform: scale(1) rotate(0deg); }
-        25% { transform: scale(1.15) rotate(5deg); } /* More exaggerated scale and rotation */
+        25% { transform: scale(1.15) rotate(5deg); }
         50% { transform: scale(1) rotate(0deg); }
-        75% { transform: scale(1.15) rotate(-5deg); } /* More exaggerated scale and rotation */
+        75% { transform: scale(1.15) rotate(-5deg); }
         100% { transform: scale(1) rotate(0deg); }
+    }
+
+
+    @media (max-width: 1024px) {
+        .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Revert to responsive grid on tablet */
+        }
     }
 
 
@@ -510,13 +515,13 @@
         font-size: 24px;
       }
       nav {
-        display: none; /* Consider a hamburger menu for mobile */
+        display: none; 
       }
       .hero-title {
         font-size: 2.5rem;
       }
       .features-grid {
-        grid-template-columns: 1fr; /* Stack cards on small screens */
+        grid-template-columns: 1fr; /* Stack on mobile */
       }
     }
   </style>
@@ -544,35 +549,49 @@
           <div class="feature-icon"><i class="fas fa-brain"></i></div>
           <div class="feature-content">
             <h3>Vocabulary Practice</h3>
-            <p>Boost your language skills with curated vocabulary sets and review tasks. Interactive exercises tailored to your learning level.</p>
+            <p>Boost your language skills with curated vocabulary sets and review tasks.</p>
             <a href="vocab-practice.html" class="feature-link" aria-hidden="true" tabindex="-1">Start Practicing <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
+        
+        <div class="feature-card" data-href="writingsamples.html">
+          <span class="new-badge red">NEW</span>
+          <div class="feature-icon"><i class="fas fa-pen-fancy"></i></div>
+          <div class="feature-content">
+            <h3>IELTS Writing Collection</h3>
+            <p>Explore high-scoring sample essays for IELTS Writing Task 2.</p>
+            <a href="writingsamples.html" class="feature-link" aria-hidden="true" tabindex="-1">View Samples <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
         <div class="feature-card" data-href="listeningreading.html">
           <span class="new-badge">NEW</span>
           <div class="feature-icon"><i class="fas fa-book-reader"></i></div>
           <div class="feature-content">
-            <h3>Listening and Reading Practice Tests</h3>
-            <p>Sharpen your comprehension skills with a wide range of practice tests for both listening and reading.</p>
+            <h3>Listening & Reading</h3>
+            <p>Sharpen your comprehension with a wide range of practice tests.</p>
             <a href="listeningreading.html" class="feature-link" aria-hidden="true" tabindex="-1">Start Tests <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
+        
         <div class="feature-card" data-href="articles.html"> <span class="new-badge">NEW</span>
           <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
           <div class="feature-content">
             <h3>Read Articles</h3>
-            <p>Improve your comprehension skills with IELTS-tailored articles and expand your knowledge base.</p>
+            <p>Improve comprehension with IELTS-tailored articles.</p>
             <a href="articles.html" class="feature-link" aria-hidden="true" tabindex="-1">Start Reading <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
+        
         <div class="feature-card" data-href="donation.html">
           <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
           <div class="feature-content">
             <h3>Support My Work</h3>
-            <p>Your contribution helps us continue providing high-quality English learning resources and expand our offerings.</p>
+            <p>Your contribution helps us continue providing high-quality resources.</p>
             <a href="donation.html" class="feature-link" aria-hidden="true" tabindex="-1">Support Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -684,8 +703,6 @@
             });
         });
 
-        // Removed smooth scroll for anchor links as the "Explore Features" button is gone.
-        // If other anchor links are added later, this script might need re-evaluation.
     });
   </script>
 </body>
