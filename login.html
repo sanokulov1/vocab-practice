@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login with Google</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
     /* Universal box-sizing and font */
     * {
       margin: 0;
@@ -390,86 +391,79 @@
     }
   </style>
 <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XWGHZ98G08"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0MJFGRJFR5');
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
-</head>
+  gtag('config', 'G-XWGHZ98G08');
+</script></head>
 <body>
-  <div class="container">
-    <div class="hero-text">
-      <h1>You are a click away from special features</h1>
-      <!-- Removed: <p>Sign in to save and review new words you discover while browsing the web. Your personal vocabulary assistant.</p> -->
-      
-      <div class="features">
-        <div class="feature">
-          <i class="fas fa-chart-line"></i> <!-- Changed icon for "Track your progress" -->
-          <span>Track your progress</span>
-        </div>
-        <div class="feature">
-          <i class="fas fa-sync-alt"></i>
-          <span>Sync across all devices</span>
-        </div>
-        <div class="feature">
-          <i class="fas fa-bell"></i>
-          <span>Daily word reminders</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="login-card">
-      <div class="card-content">
-        <div class="logo">
-          <i class="fas fa-book-open"></i>
-        </div>
-        <!-- Removed: <h2>Sign in to Website Vocabulary</h2> -->
-        <p>Access your saved words and learning progress</p>
-        
-        <button id="signInButton" class="google-btn" onclick="signInWithGoogle()">
-          <div class="google-icon"></div>
+<div class="container">
+<div class="hero-text">
+<h1>You are a click away from special features</h1>
+<!-- Removed: <p>Sign in to save and review new words you discover while browsing the web. Your personal vocabulary assistant.</p> -->
+<div class="features">
+<div class="feature">
+<i class="fas fa-chart-line"></i> <!-- Changed icon for "Track your progress" -->
+<span>Track your progress</span>
+</div>
+<div class="feature">
+<i class="fas fa-sync-alt"></i>
+<span>Sync across all devices</span>
+</div>
+<div class="feature">
+<i class="fas fa-bell"></i>
+<span>Daily word reminders</span>
+</div>
+</div>
+</div>
+<div class="login-card">
+<div class="card-content">
+<div class="logo">
+<i class="fas fa-book-open"></i>
+</div>
+<!-- Removed: <h2>Sign in to Website Vocabulary</h2> -->
+<p>Access your saved words and learning progress</p>
+<button class="google-btn" id="signInButton" onclick="signInWithGoogle()">
+<div class="google-icon"></div>
           Sign in with Google
         </button>
-        
-        <div id="dividerOr" class="divider">
-          <span>or</span>
+<div class="divider" id="dividerOr">
+<span>or</span>
+</div>
+<div class="status-message" id="status-message">
+<i class="fas fa-info-circle"></i> No user is logged in.
         </div>
-        
-        <div id="status-message" class="status-message">
-          <i class="fas fa-info-circle"></i> No user is logged in.
-        </div>
-        
-        <div id="user-info" class="user-info" style="display: none;">
-          <div class="user-header">
-            <div class="avatar" id="user-avatar">U</div>
-            <div class="user-details">
-              <h3 id="user-name">User Name</h3>
-              <p id="user-email">user@example.com</p>
-            </div>
+<div class="user-info" id="user-info" style="display: none;">
+<div class="user-header">
+<div class="avatar" id="user-avatar">U</div>
+<div class="user-details">
+<h3 id="user-name">User Name</h3>
+<p id="user-email">user@example.com</p>
+</div>
+</div>
+<div class="status-message">
+<i class="fas fa-check-circle"></i> You're successfully signed in!
           </div>
-          <div class="status-message">
-            <i class="fas fa-check-circle"></i> You're successfully signed in!
-          </div>
-          <button id="logoutButton" class="logout-btn" onclick="signOutGoogle()">
-            <i class="fas fa-sign-out-alt"></i> Sign Out
+<button class="logout-btn" id="logoutButton" onclick="signOutGoogle()">
+<i class="fas fa-sign-out-alt"></i> Sign Out
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Welcome Pop-up Modal -->
-  <div id="welcomeModal" class="welcome-modal" style="display: none;">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeWelcomeModal()">&times;</span>
-      <h2 id="welcomeUserName">Welcome!</h2>
-      <p>Welcome to sanokulov.uz!<br>Make your IELTS journey much easier with us:)</p>
-    </div>
-  </div>
-
-  <script>
+</div>
+</div>
+</div>
+</div>
+<!-- Welcome Pop-up Modal -->
+<div class="welcome-modal" id="welcomeModal" style="display: none;">
+<div class="modal-content">
+<span class="close-button" onclick="closeWelcomeModal()">×</span>
+<h2 id="welcomeUserName">Welcome!</h2>
+<p>Welcome to sanokulov.uz!<br/>Make your IELTS journey much easier with us:)</p>
+</div>
+</div>
+<script>
     // Firebase configuration (replace with your actual config if different)
     const firebaseConfig = {
       apiKey: "AIzaSyChct6kCeqDlgbAuAJw3wP_tHOYN6gV-n4",

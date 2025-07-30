@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Typing Task</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vocabulary Typing Task</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
         /* Define CSS variables for colors, allowing easy switching between light and dark modes */
         :root {
             /* Light Mode Colors */
@@ -378,8 +379,7 @@
         }
 
     </style>
-
-    <style id="diamond-css-styles">
+<style id="diamond-css-styles">
         /* Diamond Count Display (Top-Left) */
         #diamond-count-container {
             position: fixed;
@@ -489,19 +489,18 @@
             100% { opacity: 0; transform: translateY(-30px); }
         }
     </style>
-
 <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XWGHZ98G08"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0MJFGRJFR5');
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
-</head>
+  gtag('config', 'G-XWGHZ98G08');
+</script></head>
 <body>
-
-    <script type="module" id="firebase-logic-script">
+<script id="firebase-logic-script" type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -655,46 +654,40 @@
         });
 
     </script>
-
-    <div id="firework-overlay" class="firework-overlay"></div>
-
-    <button id="mode-toggle" class="mode-toggle-button" onclick="toggleDarkMode()">
-        <!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
-        </svg>
-        <!-- Moon icon (visible in Day Mode) -->
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>
-    </button>
-
-    <div id="typing-app" class="quiz-container">
-        <div id="typing-content">
-            <h2 id="definition-text" class="question-text"></h2>
-            <input type="text" id="word-input" class="typing-input" placeholder="Type the word here..." onkeyup="handleInput(event)">
-            <div id="feedback-message" class="feedback-message"></div>
-            <div class="navigation-buttons">
-                <button id="prev-button" onclick="previousQuestion()">Previous</button>
-                <button id="next-button" onclick="nextQuestion()">Next</button>
-            </div>
-            <div class="submit-button-container">
-                <button id="submit-button" class="submit-button" style="display: none;" onclick="submitTask()">Submit Task</button>
-            </div>
-        </div>
-
-        <div id="results-container" class="results-container" style="display: none;">
-            <h2 id="results-message"></h2>
-            <h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
-            <ul id="incorrect-answers-list">
-                </ul>
-            <button class="submit-button" onclick="startTask()">Try Again</button>
-        </div>
-    </div>
-
-    <div class="firework-container">
-        <!-- CSS fireworks will be rendered here -->
-    </div>
-
-    <script>
+<div class="firework-overlay" id="firework-overlay"></div>
+<button class="mode-toggle-button" id="mode-toggle" onclick="toggleDarkMode()">
+<!-- Sun icon (visible in Night Mode) - Updated SVG path for better appearance -->
+<svg class="sun-icon" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM18.5 6.5a.5.5 0 0 1-.354.854l-1.5.866a.5.5 0 0 1-.5-.866l1.5-.866a.5.5 0 0 1 .854.354ZM21.5 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM18.5 17.5a.5.5 0 0 1-.854.354l-1.5-.866a.5.5 0 0 1 .5-.866l1.5.866a.5.5 0 0 1 .354.854ZM12 21.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 1 0v2a.5.5 0 0 1-.5.5ZM5.5 17.5a.5.5 0 0 1-.354-.854l1.5-.866a.5.5 0 0 1 .5.866l-1.5.866a.5.5 0 0 1-.146-.001ZM2.5 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5ZM5.5 6.5a.5.5 0 0 1 .854-.354l1.5.866a.5.5 0 0 1-.5.866l-1.5-.866a.5.5 0 0 1-.354-.854ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"></path>
+</svg>
+<!-- Moon icon (visible in Day Mode) -->
+<svg class="moon-icon" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 12 21a10.5 10.5 0 0 1-10.5-10.5c0-4.368 2.667-8.112 6.46-9.675a.75.75 0 0 1 .818.162Z" fill-rule="evenodd"></path></svg>
+</button>
+<div class="quiz-container" id="typing-app">
+<div id="typing-content">
+<h2 class="question-text" id="definition-text"></h2>
+<input class="typing-input" id="word-input" onkeyup="handleInput(event)" placeholder="Type the word here..." type="text"/>
+<div class="feedback-message" id="feedback-message"></div>
+<div class="navigation-buttons">
+<button id="prev-button" onclick="previousQuestion()">Previous</button>
+<button id="next-button" onclick="nextQuestion()">Next</button>
+</div>
+<div class="submit-button-container">
+<button class="submit-button" id="submit-button" onclick="submitTask()" style="display: none;">Submit Task</button>
+</div>
+</div>
+<div class="results-container" id="results-container" style="display: none;">
+<h2 id="results-message"></h2>
+<h3 id="incorrect-answers-heading" style="display: none;">Words you got wrong:</h3>
+<ul id="incorrect-answers-list">
+</ul>
+<button class="submit-button" onclick="startTask()">Try Again</button>
+</div>
+</div>
+<div class="firework-container">
+<!-- CSS fireworks will be rendered here -->
+</div>
+<script>
         // Array of vocabulary words and their definitions, with acceptable answers for smart typing
 
         // Global variable for tracking activity start time
@@ -972,16 +965,14 @@ createFireworkColorStyles(); // Initialize dynamic styles
         };
 
     </script>
-
-    <!-- Diamond Popup Animation -->
-    <div id="diamondPopupAnimation" class="diamond-popup-container">
-        <span class="diamond-icon">💎</span>
-        <span class="plus-one-text">+1</span>
-    </div>
-    <!-- Diamond Count Display (Top-Left) -->
-    <div id="diamond-count-container">
-        <span id="diamond-count">0 💎</span>
-    </div>
-
+<!-- Diamond Popup Animation -->
+<div class="diamond-popup-container" id="diamondPopupAnimation">
+<span class="diamond-icon">💎</span>
+<span class="plus-one-text">+1</span>
+</div>
+<!-- Diamond Count Display (Top-Left) -->
+<div id="diamond-count-container">
+<span id="diamond-count">0 💎</span>
+</div>
 </body>
 </html>

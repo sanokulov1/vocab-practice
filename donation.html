@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support Our Project | Donation Page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Support Our Project | Donation Page</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -362,86 +363,76 @@
     }
   </style>
 <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XWGHZ98G08"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0MJFGRJFR5');
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
-</head>
+  gtag('config', 'G-XWGHZ98G08');
+</script></head>
 <body>
-  <div class="copied-notification" id="copiedNotification">
-    <i class="fas fa-check-circle"></i> Card number copied to clipboard!
+<div class="copied-notification" id="copiedNotification">
+<i class="fas fa-check-circle"></i> Card number copied to clipboard!
   </div>
-  
-  <div class="container">
-    <div class="donation-card">
-      <div class="card-header">
-        <i class="fas fa-heart"></i>
-        <h2>Support Our Project ❤️</h2>
-        <p>Like the site? Your donation helps improve it — and a portion will be donated to charity.</p>
-      </div>
-      
-      <div class="card-info">
-        <h3>Direct Bank Transfer</h3>
-        <div class="card-number" id="cardNumberElement">5614 6818 1203 4217</div>
-        
-        <div class="card-details">
-          <div class="card-detail">
-            <div class="label">Card Holder</div>
-            <div class="value">SANOQULOV JORABEK</div>
-          </div>
-          <div class="card-detail">
-            <div class="label">Card Type</div>
-            <div class="value">Uzcard</div>
-          </div>
-        </div>
-        
-        <button class="copy-btn" id="copyBtn">
-          <i class="fas fa-copy"></i> Copy Card Number
+<div class="container">
+<div class="donation-card">
+<div class="card-header">
+<i class="fas fa-heart"></i>
+<h2>Support Our Project ❤️</h2>
+<p>Like the site? Your donation helps improve it — and a portion will be donated to charity.</p>
+</div>
+<div class="card-info">
+<h3>Direct Bank Transfer</h3>
+<div class="card-number" id="cardNumberElement">5614 6818 1203 4217</div>
+<div class="card-details">
+<div class="card-detail">
+<div class="label">Card Holder</div>
+<div class="value">SANOQULOV JORABEK</div>
+</div>
+<div class="card-detail">
+<div class="label">Card Type</div>
+<div class="value">Uzcard</div>
+</div>
+</div>
+<button class="copy-btn" id="copyBtn">
+<i class="fas fa-copy"></i> Copy Card Number
         </button>
-      </div>
-      
-      <form id="donationForm" action="https://formspree.io/f/xkgzgokq" method="POST"> <!-- Removed enctype="multipart/form-data" -->
-        <div class="form-group">
-          <label for="message"><i class="fas fa-comment"></i> Your message means a lot to me and I will read every one of them ❤️❤️❤️:</label>
-          <textarea name="message" id="message" placeholder="Your kind words mean a lot to us..."></textarea>
-          
-          <!-- Removed photo input field -->
-        </div>
-
-        <div class="form-group">
-          <label for="email"><i class="fas fa-envelope"></i> Your email (optional):</label>
-          <input type="email" name="email" id="email" placeholder="name@example.com">
-        </div>
-        
-        <div class="button-container">
-          <button type="submit">
-            <i class="fas fa-paper-plane"></i> Send Message
+</div>
+<form action="https://formspree.io/f/xkgzgokq" id="donationForm" method="POST"> <!-- Removed enctype="multipart/form-data" -->
+<div class="form-group">
+<label for="message"><i class="fas fa-comment"></i> Your message means a lot to me and I will read every one of them ❤️❤️❤️:</label>
+<textarea id="message" name="message" placeholder="Your kind words mean a lot to us..."></textarea>
+<!-- Removed photo input field -->
+</div>
+<div class="form-group">
+<label for="email"><i class="fas fa-envelope"></i> Your email (optional):</label>
+<input id="email" name="email" placeholder="name@example.com" type="email"/>
+</div>
+<div class="button-container">
+<button type="submit">
+<i class="fas fa-paper-plane"></i> Send Message
           </button>
-        </div>
-      </form>
-      
-      <div id="successMessageContainer" class="success-container">
-          <p class="success-message">
-              <i class="fas fa-check-circle"></i> Your message has been sent successfully!
+</div>
+</form>
+<div class="success-container" id="successMessageContainer">
+<p class="success-message">
+<i class="fas fa-check-circle"></i> Your message has been sent successfully!
           </p>
-          <p class="refresh-prompt">
+<p class="refresh-prompt">
               Please refresh the page to send another message.
           </p>
-          <a href="index.html" class="go-home-btn">
+<a class="go-home-btn" href="index.html">
               Go to Homepage <i class="fas fa-home"></i>
-          </a>
-      </div>
-
-      <p class="footer-note">
-        <i class="fas fa-lock"></i> Your information is secure. This form uses HTTPS encryption.
+</a>
+</div>
+<p class="footer-note">
+<i class="fas fa-lock"></i> Your information is secure. This form uses HTTPS encryption.
       </p>
-    </div>
-  </div>
-
-  <script>
+</div>
+</div>
+<script>
     // Copy card number functionality
     const copyCardNumber = () => {
       const cardNumber = '5614681812034217'; // The actual card number to copy

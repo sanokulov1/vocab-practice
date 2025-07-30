@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary Flashcards</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vocabulary Flashcards</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -295,62 +296,57 @@
         }
     </style>
 <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XWGHZ98G08"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0MJFGRJFR5');
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
-</head>
+  gtag('config', 'G-XWGHZ98G08');
+</script></head>
 <body>
-    <button class="dark-mode-toggle">
-        <i class="fas fa-moon"></i>
-    </button>
-    
-    <div class="container">
-        <header>
-            <h1>Vocabulary Flashcards</h1>
-            <p class="subtitle">Click on the card to flip and learn definitions</p>
-        </header>
-        
-        <div class="card-container">
-            <div class="card">
-                <div class="card-face card-front">
-                    <div class="word" id="word">ruthless</div>
-                    <p class="hint">Click to flip</p>
-                </div>
-                <div class="card-face card-back">
-                    <div class="definition" id="definition">Showing no pity or compassion for others</div>
-                    <div class="synonyms" id="synonyms">Synonyms: merciless, cruel, heartless</div>
-                    <div class="example" id="example">The ruthless dictator showed no mercy to his enemies.</div>
-                    <p class="hint">Click to flip back</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn" id="prev-btn">
-                <i class="fas fa-arrow-left"></i> Previous
+<button class="dark-mode-toggle">
+<i class="fas fa-moon"></i>
+</button>
+<div class="container">
+<header>
+<h1>Vocabulary Flashcards</h1>
+<p class="subtitle">Click on the card to flip and learn definitions</p>
+</header>
+<div class="card-container">
+<div class="card">
+<div class="card-face card-front">
+<div class="word" id="word">ruthless</div>
+<p class="hint">Click to flip</p>
+</div>
+<div class="card-face card-back">
+<div class="definition" id="definition">Showing no pity or compassion for others</div>
+<div class="synonyms" id="synonyms">Synonyms: merciless, cruel, heartless</div>
+<div class="example" id="example">The ruthless dictator showed no mercy to his enemies.</div>
+<p class="hint">Click to flip back</p>
+</div>
+</div>
+</div>
+<div class="progress-container">
+<div class="progress-bar" id="progress-bar"></div>
+</div>
+<div class="controls">
+<button class="btn" id="prev-btn">
+<i class="fas fa-arrow-left"></i> Previous
             </button>
-            <button class="btn shuffle-btn" id="shuffle-btn">
-                <i class="fas fa-random"></i> Shuffle
+<button class="btn shuffle-btn" id="shuffle-btn">
+<i class="fas fa-random"></i> Shuffle
             </button>
-            <button class="btn" id="next-btn">
+<button class="btn" id="next-btn">
                 Next <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-        
-        <div class="counter">
+</button>
+</div>
+<div class="counter">
             Card: <span id="current">1</span> of <span id="total">23</span>
-        </div>
-    </div>
-
-    <script>
+</div>
+</div>
+<script>
         // Vocabulary data
         const vocabulary = [
             {

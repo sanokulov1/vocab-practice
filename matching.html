@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -482,82 +483,73 @@
     }
   </style>
 <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XWGHZ98G08"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0MJFGRJFR5');
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0MJFGRJFR5"></script>
-</head>
+  gtag('config', 'G-XWGHZ98G08');
+</script></head>
 <body>
 <div class="orientation-reminder" id="orientationReminder">
-  <div class="orientation-content">
-    <div class="phone-icon"></div>
-    <h2>📱 Rotate Your Phone!</h2>
-    <p>For the best matching game experience, please rotate your phone to landscape mode.</p>
-    </div>
+<div class="orientation-content">
+<div class="phone-icon"></div>
+<h2>📱 Rotate Your Phone!</h2>
+<p>For the best matching game experience, please rotate your phone to landscape mode.</p>
 </div>
-
+</div>
 <button class="theme-toggle" onclick="toggleTheme()">
-  <svg id="theme-icon" viewBox="0 0 24 24">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-  </svg>
+<svg id="theme-icon" viewbox="0 0 24 24">
+<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+</svg>
 </button>
-
 <div class="container">
-  <h1>Matching Tasks</h1>
-  
-  <button class="accordion">Group 1</button>
-  <div class="panel">
-    <div class="game-area" id="group1-words"></div>
-    <div class="game-area" id="group1-defs"></div>
-    <div id="group1-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 2</button>
-  <div class="panel">
-    <div class="game-area" id="group2-words"></div>
-    <div class="game-area" id="group2-defs"></div>
-    <div id="group2-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 3</button>
-  <div class="panel">
-    <div class="game-area" id="group3-words"></div>
-    <div class="game-area" id="group3-defs"></div>
-    <div id="group3-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 4</button>
-  <div class="panel">
-    <div class="game-area" id="group4-words"></div>
-    <div class="game-area" id="group4-defs"></div>
-    <div id="group4-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 5</button>
-  <div class="panel">
-    <div class="game-area" id="group5-words"></div>
-    <div class="game-area" id="group5-defs"></div>
-    <div id="group5-result" class="result-message"></div>
-  </div>
-
-  <button class="accordion">Group 6</button>
-  <div class="panel">
-    <div class="game-area" id="group6-words"></div>
-    <div class="game-area" id="group6-defs"></div>
-    <div id="group6-result" class="result-message"></div>
-  </div>
+<h1>Matching Tasks</h1>
+<button class="accordion">Group 1</button>
+<div class="panel">
+<div class="game-area" id="group1-words"></div>
+<div class="game-area" id="group1-defs"></div>
+<div class="result-message" id="group1-result"></div>
 </div>
-
+<button class="accordion">Group 2</button>
+<div class="panel">
+<div class="game-area" id="group2-words"></div>
+<div class="game-area" id="group2-defs"></div>
+<div class="result-message" id="group2-result"></div>
+</div>
+<button class="accordion">Group 3</button>
+<div class="panel">
+<div class="game-area" id="group3-words"></div>
+<div class="game-area" id="group3-defs"></div>
+<div class="result-message" id="group3-result"></div>
+</div>
+<button class="accordion">Group 4</button>
+<div class="panel">
+<div class="game-area" id="group4-words"></div>
+<div class="game-area" id="group4-defs"></div>
+<div class="result-message" id="group4-result"></div>
+</div>
+<button class="accordion">Group 5</button>
+<div class="panel">
+<div class="game-area" id="group5-words"></div>
+<div class="game-area" id="group5-defs"></div>
+<div class="result-message" id="group5-result"></div>
+</div>
+<button class="accordion">Group 6</button>
+<div class="panel">
+<div class="game-area" id="group6-words"></div>
+<div class="game-area" id="group6-defs"></div>
+<div class="result-message" id="group6-result"></div>
+</div>
+</div>
 <audio id="correctSound" preload="auto">
-  <source src="correct.mp3" type="audio/mpeg">
+<source src="correct.mp3" type="audio/mpeg"/>
 </audio>
 <audio id="wrongSound" preload="auto">
-  <source src="wrong.mp3" type="audio/mpeg">
+<source src="wrong.mp3" type="audio/mpeg"/>
 </audio>
-
 <script>
 // Sound functions: plays a sound for correct and wrong matches.
 function playCorrectSound() {
